@@ -9,10 +9,11 @@
 </head>
 
 <body>
-    <div id="columnchart_values" style="width: 900px; height: 300px; display:none">
+    <div id="columnchart_values" style="width: 900px; height: 300px;display:none">
     </div>
-    <img src="" id="img-chart" alt="">
-    <p id="text"></p>
+    <img width="500px" height="500px" src="" id="img-chart" alt="">
+    <img width="500px" height="500px" src="data:image/png;base64,{{ $data['url-img'] }}" alt="">
+    <img style="width:400px;height:60px" src="{{ public_path('/images/barcode.png') }}" />
 </body>
 
 </html>
@@ -62,7 +63,7 @@
         var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
         chart.draw(view, options);
         // console.log(chart.getImageURI());
-        document.getElementById('img-chart').setAttribute('src', chart.getImageURI());
+        // document.getElementById('img-chart').setAttribute('src', chart.getImageURI());
         // document.getElementById('text').innerHTML = 'abc';
 
         // let draw_chart = document.getElementById('draw-chart');
@@ -71,6 +72,6 @@
         // });
         setTimeout(() => {
             document.getElementById('img-chart').setAttribute('src', chart.getImageURI());
-        }, 1000);
+        }, 1);
     }
 </script>

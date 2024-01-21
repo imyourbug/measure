@@ -14,6 +14,7 @@ class Contract extends Model
         'start',
         'finish',
         'content',
+        'attachment',
         'customer_id',
         'branch_id',
     ];

@@ -119,9 +119,10 @@ class ContractController extends Controller
                 'start' => 'required|date',
                 'finish' => 'required|date',
                 'content' => 'required|string',
+                'attachment' => 'nullable|string',
                 // 0 - elec, 1 - water, 2 - air
                 'data' => 'nullable|array',
-                'data.*.branch_id' => 'nullable|in:0,1,2',
+                'data.*.branch_id' => 'nullable|numeric',
                 'data.*.task_type.*' => 'nullable|in:0,1,2',
                 'data.*.type_elec' => 'nullable|in:date,day',
                 'data.*.value_elec' => 'nullable',
@@ -133,7 +134,6 @@ class ContractController extends Controller
 
             DB::beginTransaction();
             if (!empty($data['data'])) {
-                DB::disableQueryLog();
                 foreach ($data['data'] as $item) {
                     $contract = Contract::create([
                         'name' =>  $data['name'],
@@ -141,6 +141,7 @@ class ContractController extends Controller
                         'start' =>  $data['start'],
                         'finish' =>  $data['finish'],
                         'content' =>  $data['content'],
+                        'attachment' =>  $data['attachment'],
                         'branch_id' =>  $item['branch_id'],
                     ]);
                     if (!empty($item['task_type'])) {
@@ -164,7 +165,6 @@ class ContractController extends Controller
                         }
                     }
                 }
-                DB::enableQueryLog();
             }
             DB::commit();
 
@@ -174,6 +174,7 @@ class ContractController extends Controller
             ];
         } catch (Throwable $e) {
             DB::rollBack();
+            dd($e->getMessage());
 
             return [
                 'status' => 1,
@@ -187,7 +188,10 @@ class ContractController extends Controller
         $data = $request->validate([
             'customer_id' => 'required|numeric',
             'id' => 'required|numeric',
+            'start' => 'required|date',
+            'finish' => 'required|date',
             'content' => 'required|string',
+            'attachment' => 'nullable|string',
             'name' => 'required|string',
         ]);
         unset($data['id']);

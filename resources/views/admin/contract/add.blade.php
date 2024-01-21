@@ -29,13 +29,15 @@
                 data: form,
                 url: "/api/upload",
                 success: function(response) {
+                    var html = 'Tệp đính kèm ';
                     if (response.status == 0) {
-                        //hiển thị ảnh
-                        $("#image_show").attr('src', response.url);
-                        $("#avatar").val(response.url);
+                        $("#value-attachment").val(response.url);
+                        html += '<i class="fa-solid fa-check btn-success icon"></i>';
                     } else {
-                        toastr.error(response.message, 'Thông báo');
+                        html += '<i class="fa-solid fa-x btn-danger icon"></i>';
                     }
+                    $('.notification').html('');
+                    $('.notification').append(html);
                 },
             });
         });
@@ -88,33 +90,15 @@
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-12">
-                    <div class="form-group">
-                        <label for="menu">Tệp đính kèm</label>
+                    <div class="form-group form-attachment">
+                        <label class="notification" for="menu">Tệp đính kèm</label>
                         <div class="">
                             <input type="file" id="attachment">
+                            <input type="hidden" id="value-attachment">
                         </div>
                     </div>
                 </div>
             </div>
-
-            {{-- <div class="row branch">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-header">
-                            <label for="menu">Chi nhánh Gia Lâm</label>&emsp13;
-                            <button data-id="1" type="button" class="btn btn-success btn-open-modal"
-                                data-target="#modal-task" data-toggle="modal"><i class="fa-solid fa-plus"></i></button>
-                            <div class="card-tools">
-                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                    <i class="fas fa-minus"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="card-body info-branch-1">
-                        </div>
-                    </div>
-                </div>
-            </div> --}}
         </div>
         <div class="card-footer">
             <button class="btn btn-primary btn-create" data-url="{{ route('contracts.store') }}">Lưu</button>

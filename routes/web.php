@@ -3,7 +3,6 @@
 use App\Http\Controllers\Users\TaskController;
 use App\Http\Controllers\Users\UserController;
 use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,7 +15,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/chart', function () {
-    return view('pdf.report');
+    $data = [
+        'url-img' => base64_encode(file_get_contents(storage_path('/app/public/uploads/2024-01-18/02-23-37x1.png'))),
+    ];
+
+    return view('pdf.report', ['data' => $data]);
 });
 
 Route::get('/', function () {

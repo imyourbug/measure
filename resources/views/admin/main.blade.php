@@ -46,6 +46,10 @@
         .form-inline label {
             display: inline !important;
         }
+        .icon {
+            padding: 3px 4px;
+            border-radius: 10px;
+        }
 
         @media (max-width: 600px) {
             .hide-max-600 {

@@ -221,7 +221,12 @@ $(".select-customer").on("change", function () {
             success: function (response) {
                 $(".branch").remove();
                 let html = "";
+                let dataStorage = [];
                 response.data.forEach((e) => {
+                    let data = {
+                        branch_id: e.id,
+                    };
+                    dataStorage.push(data);
                     html += `<div class="row branch">
                     <div class="col-lg-12">
                         <div class="card">
@@ -241,6 +246,7 @@ $(".select-customer").on("change", function () {
                     </div>
                 </div>`;
                 });
+                localStorage.setItem("data", JSON.stringify(dataStorage));
                 $(".form-contract").append(html);
             },
         });
@@ -259,6 +265,7 @@ $(".btn-create").on("click", function () {
             start: $("#start").val(),
             finish: $("#finish").val(),
             content: $("#content").val(),
+            attachment: $("#value-attachment").val(),
             data: data,
         };
         $.ajax({
@@ -266,6 +273,7 @@ $(".btn-create").on("click", function () {
             url: $(this).data("url"),
             data: params,
             success: function (response) {
+                console.log(response.message);
                 response.status == 0
                     ? toastr.success(response.message)
                     : toastr.error(response.message);

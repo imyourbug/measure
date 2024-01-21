@@ -35,37 +35,12 @@ class TaskController extends Controller
 
     public function export(Request $request)
     {
-        // $pdf = PDF::loadView('pdf.order', ['data' => $data]);
-        // $pdf->setOptions([
-        //     'isRemoteEnabled' => true,
-        //     'isHtml5ParserEnabled' => true
-        // ]);
-        // $GLOBALS['bodyHeight'] = 0;
-
-        // $pdf->setCallbacks([
-        //     'myCallbacks' => [
-        //         'event' => 'end_frame',
-        //         'f' => function ($frame) {
-        //             $node = $frame->get_node();
-
-        //             if (strtolower($node->nodeName) === "body") {
-        //                 $padding_box = $frame->get_padding_box();
-        //                 $GLOBALS['bodyHeight'] += $padding_box['h'];
-        //             }
-        //         }
-        //     ]
-        // ]);
-
-        // $pdf->render();
-        // unset($pdf);
-        // $docHeight = (int)$GLOBALS['bodyHeight'] * 1.3;
-        // dd($docHeight);
-
-        $data = [];
+        $data = [
+            'url-img' => base64_encode(file_get_contents(storage_path('/app/public/uploads/2024-01-18/02-23-37x1.png'))),
+        ];
         $pdf = PDF::loadView('pdf.report', ['data' => $data])
             ->setPaper('A4', 'portrait');
-
-        $filename = 'report.pdf';
+        $filename = date('Y-m-d') . date('H-i-s') . 'report.pdf';
         Storage::disk('local')->put('/public/pdf/' . $filename, $pdf->output());
 
         return response()->json([

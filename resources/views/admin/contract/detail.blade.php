@@ -40,7 +40,7 @@
 @section('content')
     <div class="row">
         <div class="col-lg-4 col-md-12 col-sm-12">
-            <div class="card-body">
+            <div class="">
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">
@@ -67,27 +67,37 @@
                         </div>
                     </div>
                 </div>
-                {{-- <div class="row">
-                <div class="col-lg-6 col-md-12">
-                    <div class="form-group">
-                        <label for="menu">Ngày bắt đầu</label>
-                        <input type="date" class="form-control" id="start"
-                            value="{{ old('start') ?? now()->format('Y-m-d') }}">
+                <div class="row">
+                    <div class="col-lg-6 col-md-12">
+                        <div class="form-group">
+                            <label for="menu">Ngày bắt đầu</label>
+                            <input type="date" class="form-control" id="start" value="{{ $contract->start }}">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-12">
+                        <div class="form-group">
+                            <label for="menu">Ngày kết thúc</label>
+                            <input type="date" class="form-control" id="finish" value="{{ $contract->finish }}">
+                        </div>
                     </div>
                 </div>
-                <div class="col-lg-6 col-md-12">
-                    <div class="form-group">
-                        <label for="menu">Ngày kết thúc</label>
-                        <input type="date" class="form-control" id="finish"
-                            value="{{ old('finish') ?? now()->format('Y-m-d') }}">
-                    </div>
-                </div>
-            </div> --}}
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label for="menu">Nội dung</label>
                             <textarea placeholder="Nhập nội dung..." class="form-control" name="content" cols="30" rows="5">{{ old('content') ?? $contract->content }}</textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="form-group form-attachment">
+                            <label class="notification" for="menu">Tệp đính kèm</label>&emsp13;
+                            @if ($contract->attachment)
+                                <a href="{{ $contract->attachment }}" target="_blank">Xem</a>
+                            @else
+                                Trống
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -97,6 +107,38 @@
             </div> --}}
         </div>
         <div class="col-lg-8 col-md-12 col-sm-12">
+            <div class="card direct-chat direct-chat-primary">
+                <div class="card-header ui-sortable-handle" style="cursor: move;">
+                    <h3 class="card-title text-bold">Báo cáo</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body" style="display: block;padding: 10px !important;">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Chọn tháng</label>
+                                <select class="form-control">
+                                    <option value="">--Tháng--</option>
+                                    @for ($i = 1; $i <= 12; $i++)
+                                        <option value="{{ $i }}">{{ $i }}</option>
+                                    @endfor
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Chọn năm</label>
+                                <input class="form-control" type="text" placeholder="Nhập năm..." />
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-danger btn-export" data-target="#modal" data-toggle="modal">Xuất PDF</button>
+                </div>
+            </div>
             @php
                 $elecTasks = $contract->elecTasks;
                 $waterTasks = $contract->waterTasks;
@@ -356,6 +398,28 @@
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
                     <button type="button" type="submit" class="btn btn-primary btn-save-air">Lưu</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal fade show" id="modal" style="display: none;" data-id="123" aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Xem trước</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary btn-save">Xác nhận</button>
                 </div>
             </div>
 
