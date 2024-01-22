@@ -23,13 +23,13 @@ class DatabaseSeeder extends Seeder
         // $this->call([
         // ]);
 
-        // TaskType::create([
+        // Type::create([
         //     'name' => 'Đo nước',
         // ]);
-        // TaskType::create([
+        // Type::create([
         //     'name' => 'Đo không khí',
         // ]);
-        // TaskType::create([
+        // Type::create([
         //     'name' => 'Đo điện',
         // ]);
     }

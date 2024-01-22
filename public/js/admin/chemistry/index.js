@@ -7,7 +7,7 @@ $(document).ready(function () {
             let id = $(this).data("id");
             $.ajax({
                 type: "DELETE",
-                url: `/api/types/${id}/destroy`,
+                url: `/api/chemistries/${id}/destroy`,
                 data: {
                     _token: 1,
                 },

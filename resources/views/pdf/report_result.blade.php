@@ -9,15 +9,11 @@
 </head>
 
 <body>
-    <div id="columnchart_values" style="width: 900px; height: 300px;display:none">
-    </div>
-    <img width="500px" height="500px" src="" id="img-chart" alt="">
-    <img width="500px" height="500px" src="data:image/png;base64,{{ $data['url-img'] }}" alt="">
-    <img style="width:400px;height:60px" src="{{ public_path('/images/barcode.png') }}" />
+    <img src="{{ $data['img_chart'] }}" alt="">
 </body>
 
 </html>
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+{{-- <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
     google.charts.load("current", {
         callback: function() {
@@ -74,4 +70,4 @@
             document.getElementById('img-chart').setAttribute('src', chart.getImageURI());
         }, 1);
     }
-</script>
+</script> --}}

@@ -24,37 +24,36 @@
                 responsive: true
             });
         })
-        $('.btn-export').on('click', function() {
-            $.ajax({
-                type: 'POST',
-                url: '{{ route('tasks.export') }}',
-                data: {},
-                success: function(response) {
-                    if (response.status == 0) {
-                        var url = response.url;
-                        var filename = response.filename;
-                        if ($('a[class*="download"]').length > 0) {
-                            $('.dowload').attr({
-                                href: url,
-                                download: filename,
-                            });
-                        } else {
-                            $('.export').append(`
-                            <a class="download" href="${url}" download="${filename}">Tải xuống</a>
-                            `);
-                        }
-                    }
-                },
-            })
-        });
+        // $('.btn-export').on('click', function() {
+        //     $.ajax({
+        //         type: 'POST',
+        //         url: '{{ route('tasks.export') }}',
+        //         data: {},
+        //         success: function(response) {
+        //             if (response.status == 0) {
+        //                 var url = response.url;
+        //                 var filename = response.filename;
+        //                 if ($('a[class*="download"]').length > 0) {
+        //                     $('.dowload').attr({
+        //                         href: url,
+        //                         download: filename,
+        //                     });
+        //                 } else {
+        //                     $('.export').append(`
+        //                     <a class="download" href="${url}" download="${filename}">Tải xuống</a>
+        //                     `);
+        //                 }
+        //             }
+        //         },
+        //     })
+        // });
     </script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
 @endpush
 @section('content')
-    <div class="form-group mb-3 export">
+    <div class="form-group mb-3">
         <a href="{{ route('admin.contracts.create') }}" class="btn btn-success">Thêm mới</a>
-        <button class="btn btn-danger btn-export">Xuất PDF</button>
     </div>
     <table id="table" class="table display nowrap dataTable dtr-inline collapsed">
         <thead>

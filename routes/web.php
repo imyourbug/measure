@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/chart', function () {
     $data = [
-        'url-img' => base64_encode(file_get_contents(storage_path('/app/public/uploads/2024-01-18/02-23-37x1.png'))),
+        'url-img' => base64_encode(file_get_contents(public_path('images/barcode.png'))),
     ];
 
     return view('pdf.report', ['data' => $data]);
@@ -93,14 +93,32 @@ Route::group(['prefix' => '/admin', 'namespace' => 'App\Http\Controllers\Admin',
         Route::post('/update', 'InfoUserController@update')->name('update');
     });
 
-    #tasktypes
-    // Route::group(['prefix' => 'tasktypes', 'namespace' => 'TaskTypes', 'as' => 'tasktypes.'], function () {
-    //     Route::get('/', 'TaskTypeController@index')->name('index');
-    //     Route::get('/create', 'TaskTypeController@create')->name('create');
-    //     Route::post('/create', 'TaskTypeController@store')->name('store');
-    //     Route::get('/update/{id}', 'TaskTypeController@show')->name('show');
-    //     Route::post('/update', 'TaskTypeController@update')->name('update');
-    // });
+    #types
+    Route::group(['prefix' => 'types', 'namespace' => 'Types', 'as' => 'types.'], function () {
+        Route::get('/', 'TypeController@index')->name('index');
+        Route::get('/create', 'TypeController@create')->name('create');
+        Route::post('/create', 'TypeController@store')->name('store');
+        Route::get('/update/{id}', 'TypeController@show')->name('show');
+        Route::post('/update', 'TypeController@update')->name('update');
+    });
+
+    #maps
+    Route::group(['prefix' => 'maps', 'as' => 'maps.'], function () {
+        Route::get('/', 'MapController@index')->name('index');
+        Route::get('/create', 'MapController@create')->name('create');
+        Route::post('/create', 'MapController@store')->name('store');
+        Route::get('/update/{id}', 'MapController@show')->name('show');
+        Route::post('/update', 'MapController@update')->name('update');
+    });
+
+    #chemistries
+    Route::group(['prefix' => 'chemistries', 'as' => 'chemistries.'], function () {
+        Route::get('/', 'ChemistryController@index')->name('index');
+        Route::get('/create', 'ChemistryController@create')->name('create');
+        Route::post('/create', 'ChemistryController@store')->name('store');
+        Route::get('/update/{id}', 'ChemistryController@show')->name('show');
+        Route::post('/update', 'ChemistryController@update')->name('update');
+    });
 
     #contracts
     Route::group(['prefix' => 'contracts', 'namespace' => 'Contracts', 'as' => 'contracts.'], function () {

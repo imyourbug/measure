@@ -23,6 +23,8 @@
     {{-- <script src="/js/admin/contract/index.js"></script> --}}
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
         $(document).ready(function() {
             var tableElec = $('#table-elec').DataTable({
@@ -34,6 +36,56 @@
             var tableAir = $('#table-air').DataTable({
                 responsive: true
             });
+        });
+        var chart = null;
+        const ctx = $('#myChart');
+        $('#form-export').submit(function(event) {
+            event.preventDefault();
+            let pattern = /^\d{4}$/;
+            let year = $('.select-year').val();
+            let month = $('.select-month').find(':selected')
+                .val();
+            if (!month | !year | !pattern.test(year)) {
+                alert('Kiểm tra thông tin đã nhập!');
+            } else {
+                $(this).unbind('submit').submit(); // continue the submit unbind preventDefault
+            }
+        })
+
+        $('.btn-preview').on('click', function() {
+            if (chart && chart.toBase64Image()) {
+                chart.destroy();
+            }
+
+            chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                    datasets: [{
+                        label: '# of Votes',
+                        data: [12, 19, 3, 5, 2, 3],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            setTimeout(() => {
+                $('#img-chart').attr('src', chart.toBase64Image('image/png', 1));
+                $('.img-chart').val(chart.toBase64Image('image/png', 1));
+                $('.month').val($('.select-month')
+                    .find(':selected')
+                    .val());
+                $('.year').val($('.select-year').val());
+                $('.type').val($('.select-type').val());
+                console.log($('.month').val(), $('.year').val(), $('.type').val());
+            }, 1000);
         });
     </script>
 @endpush
@@ -118,13 +170,29 @@
                 </div>
                 <div class="card-body" style="display: block;padding: 10px !important;">
                     <div class="row">
+                        <div class="col-lg-12 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Chọn loại báo cáo</label>
+                                <select class="form-control select-type">
+                                    <option value="0">
+                                        Kế hoạch dịch vụ
+                                    </option>
+                                    <option value="1">
+                                        Kết quả tháng
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
                                 <label for="menu">Chọn tháng</label>
-                                <select class="form-control">
-                                    <option value="">--Tháng--</option>
+                                <select class="form-control select-month">
                                     @for ($i = 1; $i <= 12; $i++)
-                                        <option value="{{ $i }}">{{ $i }}</option>
+                                        <option value="{{ $i }}"
+                                            {{ $i == now()->format('m') ? 'selected' : '' }}>{{ $i }}
+                                        </option>
                                     @endfor
                                 </select>
                             </div>
@@ -132,11 +200,12 @@
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
                                 <label for="menu">Chọn năm</label>
-                                <input class="form-control" type="text" placeholder="Nhập năm..." />
+                                <input class="form-control select-year" type="text" value="{{ now()->format('Y') }}"
+                                    placeholder="Nhập năm..." />
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-danger btn-export" data-target="#modal" data-toggle="modal">Xuất PDF</button>
+                    <button class="btn btn-danger btn-preview" data-target="#modal" data-toggle="modal">Xuất PDF</button>
                 </div>
             </div>
             @php
@@ -286,146 +355,31 @@
             @endif
         </div>
     </div>
-    <div class="modal fade show" id="modal-elec" style="display: none; padding-right: 17px;" data-id="123"
-        aria-modal="true" role="dialog">
-        <div class="modal-dialog modal-lg">
+    <div class="modal fade show" id="modal" style="display:none;" data-id="123" aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Cập nhật nhiệm vụ</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12">
-                            <div class="form-group">
-                                <label for="menu">Số điện</label>
-                                <input type="text" class="form-control" id="amount" value="0"
-                                    placeholder="Nhập số điện">
-                            </div>
-                        </div>
+                <form action="{{ route('tasks.export') }}" method="POST" id="form-export">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Xuất báo cáo?</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
                     </div>
-                </div>
-                <input type="hidden" id="id_electask">
-                <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-primary btn-save-elec">Lưu</button>
-                </div>
+                    <div>
+                        <canvas id="myChart" style="display:none;"></canvas>
+                    </div>
+                    {{-- <img src="" id="img-chart" alt=""> --}}
+                    <input type="hidden" class="img-chart" name="img_chart" />
+                    <input type="hidden" class="month" name="month" />
+                    <input type="hidden" class="year" name="year" />
+                    <input type="hidden" class="type" name="type" />
+                    <div class="modal-footer justify-content-between">
+                        <button class="btn btn-default" data-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-primary btn-export">Xác nhận</button>
+                    </div>
+                </form>
             </div>
 
         </div>
     </div>
-    <div class="modal fade show" id="modal-water" style="display: none; padding-right: 17px;" data-id="123"
-        aria-modal="true" role="dialog">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Cập nhật nhiệm vụ</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12">
-                            <div class="form-group">
-                                <label for="menu">Nồng độ asen</label>
-                                <input type="text" class="form-control" id="asen" value="0"
-                                    placeholder="Nhập nồng độ asen">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12">
-                            <div class="form-group">
-                                <label for="menu">Độ pH</label>
-                                <input type="text" class="form-control" id="ph" value="0"
-                                    placeholder="Nhập độ pH">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12">
-                            <div class="form-group">
-                                <label for="menu">Độ cứng</label>
-                                <input type="text" class="form-control" id="stiffness" value="0"
-                                    placeholder="Nhập độ cứng">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <input type="hidden" id="id_watertask">
-                <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                    <button type="button" type="submit" class="btn btn-primary btn-save-water">Lưu</button>
-                </div>
-            </div>
-
-        </div>
-    </div>
-    <div class="modal fade show" id="modal-air" style="display: none; padding-right: 17px;" data-id="123"
-        aria-modal="true" role="dialog">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Cập nhật nhiệm vụ</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12">
-                            <div class="form-group">
-                                <label for="menu">Tỉ lệ bụi mịn</label>
-                                <input type="text" class="form-control" id="fine_dust" value="0"
-                                    placeholder="Nhập tỉ lệ bụi mịn">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12">
-                            <div class="form-group">
-                                <label for="menu">Độ hòa tan</label>
-                                <input type="text" class="form-control" id="dissolve" value="0"
-                                    placeholder="Nhập độ hòa tan">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <input type="hidden" id="id_airtask">
-                <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                    <button type="button" type="submit" class="btn btn-primary btn-save-air">Lưu</button>
-                </div>
-            </div>
-
-        </div>
-    </div>
-    <div class="modal fade show" id="modal" style="display: none;" data-id="123" aria-modal="true" role="dialog">
-        <div class="modal-dialog modal-xl modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title">Xem trước</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-
-                    </div>
-                </div>
-                <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-primary btn-save">Xác nhận</button>
-                </div>
-            </div>
-
-        </div>
-    </div>
-    <input type="hidden" class="url_update_elec" value="{{ route('tasks.updateElecTask') }}">
-    <input type="hidden" class="url_update_water" value="{{ route('tasks.updateWaterTask') }}">
-    <input type="hidden" class="url_update_air" value="{{ route('tasks.updateAirTask') }}">
 @endsection

@@ -39,8 +39,8 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin'], function () {
         Route::delete('/{id}/destroy', 'CustomerController@destroy')->name('destroy');
     });
 
-    Route::group(['namespace' => 'TaskTypes', 'prefix' => 'tasktypes', 'as' => 'tasktypes.'], function () {
-        Route::delete('/{id}/destroy', 'TaskTypeController@destroy')->name('destroy');
+    Route::group(['namespace' => 'Types', 'prefix' => 'types', 'as' => 'types.'], function () {
+        Route::delete('/{id}/destroy', 'TypeController@destroy')->name('destroy');
     });
 
     #contracts
@@ -54,6 +54,16 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin'], function () {
     Route::group(['namespace' => 'Branches', 'prefix' => 'branches', 'as' => 'branches.'], function () {
         Route::delete('/{id}/destroy', 'BranchController@destroy')->name('destroy');
         Route::get('/getBranchById', 'BranchController@getBranchById')->name('getBranchById');
+    });
+
+    #maps
+    Route::group(['prefix' => 'maps', 'as' => 'maps.'], function () {
+        Route::delete('/{id}/destroy', 'MapController@destroy')->name('destroy');
+    });
+
+    #chemistries
+    Route::group(['prefix' => 'chemistries', 'as' => 'chemistries.'], function () {
+        Route::delete('/{id}/destroy', 'ChemistryController@destroy')->name('destroy');
     });
 
     #staffs

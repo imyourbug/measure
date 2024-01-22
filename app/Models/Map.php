@@ -5,11 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TaskType extends Model
+class Map extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
+        'code',
+        'position',
+        'image',
+        'description',
+        'active',
     ];
 }

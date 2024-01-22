@@ -18,29 +18,37 @@
     </style>
 @endpush
 @push('scripts')
-    <script src="/js/admin/tasktype/index.js"></script>
+    <script src="/js/admin/map/index.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
-    <script></script>
 @endpush
 @section('content')
-    <a href="{{ route('admin.tasktypes.create') }}" class="btn btn-success mb-3">Thêm mới</a>
+    <a href="{{ route('admin.maps.create') }}" class="btn btn-success mb-3">Thêm mới</a>
     <table id="table" class="table display nowrap dataTable dtr-inline collapsed">
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Tên loại</th>
+                <th>Mã sơ đồ</th>
+                <th>Vị trí</th>
+                <th>Ảnh</th>
+                <th>Mô tả</th>
+                <th>Hiệu lực</th>
                 <th>Thao tác</th>
             </tr>
         <tbody>
-            @foreach ($task_types as $key => $task_type)
-                <tr class="row{{ $task_type->id }}">
-                    <th>{{ $task_type->id }}</th>
-                    <td>{{ $task_type->name }}</td>
-                    <td><a class="btn btn-primary btn-sm" href='{{ route('admin.tasktypes.show', ['id' => $task_type->id]) }}'>
+            @foreach ($maps as $key => $map)
+                <tr class="row{{ $map->id }}">
+                    <th>{{ $map->id }}</th>
+                    <td>{{ $map->code }}</td>
+                    <td>{{ $map->position }}</td>
+                    <td><img width="50px" height="50px" src="{{ $map->image }}" alt="image"></td>
+                    <td>{{ $map->description }}</td>
+                    <td>{{ $map->active }}</td>
+                    <td>
+                        <a class="btn btn-primary btn-sm" href='{{ route('admin.maps.show', ['id' => $map->id]) }}'>
                             <i class="fas fa-edit"></i>
                         </a>
-                        <button data-id="{{ $task_type->id }}" class="btn btn-danger btn-sm btn-delete">
+                        <button data-id="{{ $map->id }}" class="btn btn-danger btn-sm btn-delete">
                             <i class="fas fa-trash"></i>
                         </button>
                     </td>

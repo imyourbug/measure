@@ -191,7 +191,13 @@
                                 </li>
                             </ul>
                         </li>
-                        {{-- <li class="nav-item">
+                        <li
+                            class="nav-item  {{ in_array(
+                                request()->route()->getName(),
+                                ['admin.types.index', 'admin.types.create'],
+                            )
+                                ? 'menu-is-opening menu-open'
+                                : '' }}">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fa-solid fa-list"></i>
                                 <p>
@@ -200,20 +206,84 @@
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.tasktypes.create') }}" class="nav-link">
+                                <li
+                                    class="nav-item {{ request()->route()->getName() == 'admin.types.create'? 'option-open': '' }}">
+                                    <a href="{{ route('admin.types.create') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Thêm loại nhiệm vụ</p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.tasktypes.index') }}" class="nav-link">
+                                <li
+                                    class="nav-item {{ request()->route()->getName() == 'admin.types.index'? 'option-open': '' }}">
+                                    <a href="{{ route('admin.types.index') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Danh sách loại nhiệm vụ</p>
                                     </a>
                                 </li>
                             </ul>
-                        </li> --}}
+                        </li>
+                        <li
+                            class="nav-item  {{ in_array(
+                                request()->route()->getName(),
+                                ['admin.maps.index', 'admin.maps.create'],
+                            )
+                                ? 'menu-is-opening menu-open'
+                                : '' }}">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fa-solid fa-map"></i>
+                                <p>
+                                    Sơ đồ
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li
+                                    class="nav-item {{ request()->route()->getName() == 'admin.maps.create'? 'option-open': '' }}">
+                                    <a href="{{ route('admin.maps.create') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Thêm sơ đồ</p>
+                                    </a>
+                                </li>
+                                <li
+                                    class="nav-item {{ request()->route()->getName() == 'admin.maps.index'? 'option-open': '' }}">
+                                    <a href="{{ route('admin.maps.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Danh sách sơ đồ</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li
+                            class="nav-item  {{ in_array(
+                                request()->route()->getName(),
+                                ['admin.chemistries.index', 'admin.chemistries.create'],
+                            )
+                                ? 'menu-is-opening menu-open'
+                                : '' }}">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fa-solid fa-skull-crossbones"></i>
+                                <p>
+                                    Hóa chất
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li
+                                    class="nav-item {{ request()->route()->getName() == 'admin.chemistries.create'? 'option-open': '' }}">
+                                    <a href="{{ route('admin.chemistries.create') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Thêm hóa chất</p>
+                                    </a>
+                                </li>
+                                <li
+                                    class="nav-item {{ request()->route()->getName() == 'admin.chemistries.index'? 'option-open': '' }}">
+                                    <a href="{{ route('admin.chemistries.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Danh sách hóa chất</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                         <li
                             class="nav-item {{ in_array(
                                 request()->route()->getName(),

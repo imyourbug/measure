@@ -4,7 +4,7 @@
 @push('scripts')
 @endpush
 @section('content')
-    <form action="{{ route('admin.tasktypes.store') }}" method="POST">
+    <form action="{{ route('admin.types.store') }}" method="POST">
         <div class="card-body">
             <div class="row">
                 <div class="col-lg-6 col-md-12">
@@ -18,6 +18,7 @@
         </div>
         <div class="card-footer">
             <button type="submit" class="btn btn-primary">Lưu</button>
+            <a href="{{route('admin.types.index')}}" class="btn btn-success">Xem danh sách</a>
         </div>
         @csrf
     </form>
