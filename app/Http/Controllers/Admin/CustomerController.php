@@ -3,39 +3,36 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Item;
-use App\Models\Map;
+use App\Models\Customer;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Throwable;
 use Toastr;
 
-class ItemController extends Controller
+class CustomerController extends Controller
 {
     public function create()
     {
-        return view('admin.item.add', [
-            'title' => 'Thêm vật tư'
+        return view('admin.customer.add', [
+            'title' => 'Thêm khách hàng'
         ]);
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
-            // 'code' => 'required|string',
             'name' => 'required|string',
-            'target' => 'nullable|string',
-            'image' => 'nullable|string',
-            'supplier' => 'nullable|string',
-            'active' => 'required|in:0,1',
+            'address' => 'required|string',
+            'tel' => 'required|string|regex:/^0\d{9,10}$/',
+            'email' => 'required|email:rfc,dns',
         ]);
-        // dd($data);
         try {
-            Item::create($data);
-            Toastr::success('Tạo vật tư thành công', 'Thông báo');
+            Customer::create($data);
+            Toastr::success('Tạo khách hàng thành công', 'Thông báo');
         } catch (Throwable $e) {
             dd($e);
-            Toastr::error('Tạo vật tư thất bại', 'Thông báo');
+            Toastr::error('Tạo khách hàng thất bại', 'Thông báo');
         }
 
         return redirect()->back();
@@ -44,16 +41,14 @@ class ItemController extends Controller
     public function update(Request $request)
     {
         $data = $request->validate([
-            'id' => 'required|numeric',
-            // 'code' => 'required|string',
+            'id' => 'required|int',
             'name' => 'required|string',
-            'target' => 'nullable|string',
-            'image' => 'nullable|string',
-            'supplier' => 'nullable|string',
-            'active' => 'required|in:0,1',
+            'address' => 'required|string',
+            'tel' => 'required|string|regex:/^0\d{9,10}$/',
+            'email' => 'required|email:rfc,dns',
         ]);
         unset($data['id']);
-        $update = Item::where('id', $request->input('id'))->update($data);
+        $update = Customer::where('id', $request->input('id'))->update($data);
         if ($update) {
             Toastr::success(__('message.success.update'), 'Thông báo');
         } else Toastr::error(__('message.fail.update'), __('title.toastr.fail'));
@@ -63,24 +58,24 @@ class ItemController extends Controller
 
     public function index(Request $request)
     {
-        return view('admin.item.list', [
-            'title' => 'Danh sách vật tư',
-            'items' => Item::all()
+        return view('admin.customer.list', [
+            'title' => 'Danh sách khách hàng',
+            'customers' => Customer::all()
         ]);
     }
 
     public function show($id)
     {
-        return view('admin.item.edit', [
-            'title' => 'Chi tiết vật tư',
-            'item' => Item::firstWhere('id', $id)
+        return view('admin.customer.edit', [
+            'title' => 'Chi tiết khách hàng',
+            'customer' => Customer::firstWhere('id', $id)
         ]);
     }
 
     public function destroy($id)
     {
         try {
-            Item::firstWhere('id', $id)->delete();
+            User::firstWhere('id', $id)->delete();
 
             return response()->json([
                 'status' => 0,

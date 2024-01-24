@@ -10,8 +10,11 @@ class Frequency extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'content',
+        'day',
+        'week',
+        'month',
+        'year',
+        'time',
         'active',
     ];
 }

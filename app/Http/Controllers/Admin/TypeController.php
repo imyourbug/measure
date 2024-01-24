@@ -3,39 +3,31 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Item;
-use App\Models\Map;
+use App\Models\Type;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Throwable;
 use Toastr;
 
-class ItemController extends Controller
+class TypeController extends Controller
 {
     public function create()
     {
-        return view('admin.item.add', [
-            'title' => 'Thêm vật tư'
+        return view('admin.type.add', [
+            'title' => 'Thêm loại nhiệm vụ'
         ]);
     }
 
     public function store(Request $request)
     {
         $data = $request->validate([
-            // 'code' => 'required|string',
             'name' => 'required|string',
-            'target' => 'nullable|string',
-            'image' => 'nullable|string',
-            'supplier' => 'nullable|string',
-            'active' => 'required|in:0,1',
         ]);
-        // dd($data);
         try {
-            Item::create($data);
-            Toastr::success('Tạo vật tư thành công', 'Thông báo');
+            Type::create($data);
+            Toastr::success('Tạo loại nhiệm vụ thành công', 'Thông báo');
         } catch (Throwable $e) {
             dd($e);
-            Toastr::error('Tạo vật tư thất bại', 'Thông báo');
+            Toastr::error('Tạo loại nhiệm vụ thất bại', 'Thông báo');
         }
 
         return redirect()->back();
@@ -44,16 +36,11 @@ class ItemController extends Controller
     public function update(Request $request)
     {
         $data = $request->validate([
-            'id' => 'required|numeric',
-            // 'code' => 'required|string',
+            'id' => 'required|int',
             'name' => 'required|string',
-            'target' => 'nullable|string',
-            'image' => 'nullable|string',
-            'supplier' => 'nullable|string',
-            'active' => 'required|in:0,1',
         ]);
         unset($data['id']);
-        $update = Item::where('id', $request->input('id'))->update($data);
+        $update = Type::where('id', $request->input('id'))->update($data);
         if ($update) {
             Toastr::success(__('message.success.update'), 'Thông báo');
         } else Toastr::error(__('message.fail.update'), __('title.toastr.fail'));
@@ -61,26 +48,36 @@ class ItemController extends Controller
         return redirect()->back();
     }
 
+    public function delete($id)
+    {
+        $delete = Type::firstWhere('id', $id)->delete();
+        if ($delete) {
+            Toastr::success(__('message.success.delete'), 'Thông báo');
+        } else Toastr::error(__('message.fail.delete'), __('title.toastr.fail'));
+
+        return redirect()->back();
+    }
+
     public function index(Request $request)
     {
-        return view('admin.item.list', [
-            'title' => 'Danh sách vật tư',
-            'items' => Item::all()
+        return view('admin.type.list', [
+            'title' => 'Danh sách loại nhiệm vụ',
+            'types' => Type::all()
         ]);
     }
 
     public function show($id)
     {
-        return view('admin.item.edit', [
-            'title' => 'Chi tiết vật tư',
-            'item' => Item::firstWhere('id', $id)
+        return view('admin.type.edit', [
+            'title' => 'Chi tiết loại nhiệm vụ',
+            'type' => Type::firstWhere('id', $id)
         ]);
     }
 
     public function destroy($id)
     {
         try {
-            Item::firstWhere('id', $id)->delete();
+            Type::firstWhere('id', $id)->delete();
 
             return response()->json([
                 'status' => 0,

@@ -285,6 +285,99 @@
                             </ul>
                         </li>
                         <li
+                            class="nav-item  {{ in_array(
+                                request()->route()->getName(),
+                                ['admin.solutions.index', 'admin.solutions.create'],
+                            )
+                                ? 'menu-is-opening menu-open'
+                                : '' }}">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fa-solid fa-walkie-talkie"></i>
+                                <p>
+                                    Phương pháp
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li
+                                    class="nav-item {{ request()->route()->getName() == 'admin.solutions.create'? 'option-open': '' }}">
+                                    <a href="{{ route('admin.solutions.create') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Thêm phương pháp</p>
+                                    </a>
+                                </li>
+                                <li
+                                    class="nav-item {{ request()->route()->getName() == 'admin.solutions.index'? 'option-open': '' }}">
+                                    <a href="{{ route('admin.solutions.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Danh sách phương pháp</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li
+                            class="nav-item  {{ in_array(
+                                request()->route()->getName(),
+                                ['admin.items.index', 'admin.items.create'],
+                            )
+                                ? 'menu-is-opening menu-open'
+                                : '' }}">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fa-solid fa-screwdriver-wrench"></i>
+                                <p>
+                                    Vật tư
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li
+                                    class="nav-item {{ request()->route()->getName() == 'admin.items.create'? 'option-open': '' }}">
+                                    <a href="{{ route('admin.items.create') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Thêm vật tư</p>
+                                    </a>
+                                </li>
+                                <li
+                                    class="nav-item {{ request()->route()->getName() == 'admin.items.index'? 'option-open': '' }}">
+                                    <a href="{{ route('admin.items.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Danh sách vật tư</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li
+                            class="nav-item  {{ in_array(
+                                request()->route()->getName(),
+                                ['admin.frequencies.index', 'admin.frequencies.create'],
+                            )
+                                ? 'menu-is-opening menu-open'
+                                : '' }}">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fa-solid fa-wave-square"></i>
+                                <p>
+                                    Tần suất
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li
+                                    class="nav-item {{ request()->route()->getName() == 'admin.frequencies.create'? 'option-open': '' }}">
+                                    <a href="{{ route('admin.frequencies.create') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Thêm tần suất</p>
+                                    </a>
+                                </li>
+                                <li
+                                    class="nav-item {{ request()->route()->getName() == 'admin.frequencies.index'? 'option-open': '' }}">
+                                    <a href="{{ route('admin.frequencies.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Danh sách tần suất</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li
                             class="nav-item {{ in_array(
                                 request()->route()->getName(),
                                 ['admin.branches.index', 'admin.branches.create'],
@@ -349,16 +442,38 @@
                         <li
                             class="nav-item {{ in_array(
                                 request()->route()->getName(),
-                                [
-                                    'admin.electasks.index',
-                                    'admin.electasks.create',
-                                    'admin.watertasks.index',
-                                    'admin.watertasks.create',
-                                    'admin.airtasks.index',
-                                    'admin.airtasks.create',
-                                    'admin.assignments.index',
-                                    'admin.assignments.create',
-                                ],
+                                ['admin.assignments.index', 'admin.assignments.create'],
+                            )
+                                ? 'menu-is-opening menu-open'
+                                : '' }}">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fa-solid fa-bacon"></i>
+                                <p>
+                                    Phân công
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li
+                                    class="nav-item {{ request()->route()->getName() == 'admin.assignments.create'? 'option-open': '' }}">
+                                    <a href="{{ route('admin.assignments.create') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Thêm phân công</p>
+                                    </a>
+                                </li>
+                                {{-- <li
+                                    class="nav-item {{ request()->route()->getName() == 'admin.assignments.index'? 'option-open': '' }}">
+                                    <a href="{{ route('admin.assignments.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Danh sách phân công</p>
+                                    </a>
+                                </li> --}}
+                            </ul>
+                        </li>
+                        <li
+                            class="nav-item {{ in_array(
+                                request()->route()->getName(),
+                                ['admin.tasks.index', 'admin.tasks.create'],
                             )
                                 ? 'menu-is-opening menu-open'
                                 : '' }}">
@@ -369,169 +484,20 @@
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
-                            <ul class="nav nav-treeview"
-                                style="display: in_array(
-                                        request()->route()->getName(),
-                                        [
-                                            'admin.electasks.index',
-                                            'admin.electasks.create',
-                                            'admin.watertasks.index',
-                                            'admin.watertasks.create',
-                                            'admin.airtasks.index',
-                                            'admin.airtasks.create',
-                                            'admin.assignments.index',
-                                            'admin.assignments.create',
-                                        ],
-                                    )
-                                        ? 'block'
-                                        : 'none';">
+                            <ul class="nav nav-treeview">
                                 <li
-                                    class="nav-item {{ in_array(
-                                        request()->route()->getName(),
-                                        ['admin.assignments.index', 'admin.assignments.create'],
-                                    )
-                                        ? 'menu-is-opening menu-open'
-                                        : '' }}">
-                                    <a href="#"
-                                        class="nav-link {{ in_array(
-                                            request()->route()->getName(),
-                                            ['admin.assignments.index', 'admin.assignments.create'],
-                                        )
-                                            ? 'option-open'
-                                            : '' }}">
-                                        <i class="nav-icon fa-solid fa-bacon"></i>
-                                        <p>
-                                            Phân công
-                                            <i class="right fas fa-angle-left"></i>
-                                        </p>
+                                    class="nav-item {{ request()->route()->getName() == 'admin.tasks.create'? 'option-open': '' }}">
+                                    <a href="{{ route('admin.tasks.create') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Thêm nhiệm vụ</p>
                                     </a>
-                                    <ul class="nav nav-treeview ">
-                                        <li
-                                            class="nav-item {{ request()->route()->getName() == 'admin.assignments.create'? 'option-open': '' }}">
-                                            <a href="{{ route('admin.assignments.create') }}" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Phân công nhiệm vụ</p>
-                                            </a>
-                                        </li>
-                                        <li
-                                            class="nav-item {{ request()->route()->getName() == 'admin.assignments.index'? 'option-open': '' }}">
-                                            <a href="{{ route('admin.assignments.index') }}" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Danh sách</p>
-                                            </a>
-                                        </li>
-                                    </ul>
                                 </li>
                                 <li
-                                    class="nav-item {{ in_array(
-                                        request()->route()->getName(),
-                                        ['admin.electasks.index', 'admin.electasks.create'],
-                                    )
-                                        ? 'menu-is-opening menu-open'
-                                        : '' }}">
-                                    <a href="#"
-                                        class="nav-link {{ in_array(
-                                            request()->route()->getName(),
-                                            ['admin.electasks.index', 'admin.electasks.create'],
-                                        )
-                                            ? 'option-open'
-                                            : '' }}">
-                                        <i class="nav-icon fa-solid fa-bolt"></i>
-                                        <p>
-                                            Đo điện
-                                            <i class="right fas fa-angle-left"></i>
-                                        </p>
+                                    class="nav-item {{ request()->route()->getName() == 'admin.tasks.index'? 'option-open': '' }}">
+                                    <a href="{{ route('admin.tasks.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Danh sách nhiệm vụ</p>
                                     </a>
-                                    <ul class="nav nav-treeview ">
-                                        <li
-                                            class="nav-item {{ request()->route()->getName() == 'admin.electasks.create'? 'option-open': '' }}">
-                                            <a href="{{ route('admin.electasks.create') }}" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Thêm mới</p>
-                                            </a>
-                                        </li>
-                                        <li
-                                            class="nav-item {{ request()->route()->getName() == 'admin.electasks.index'? 'option-open': '' }}">
-                                            <a href="{{ route('admin.electasks.index') }}" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Danh sách</p>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li
-                                    class="nav-item {{ in_array(
-                                        request()->route()->getName(),
-                                        ['admin.watertasks.index', 'admin.watertasks.create'],
-                                    )
-                                        ? 'menu-is-opening menu-open'
-                                        : '' }}">
-                                    <a href="#"
-                                        class="nav-link {{ in_array(
-                                            request()->route()->getName(),
-                                            ['admin.watertasks.index', 'admin.watertasks.create'],
-                                        )
-                                            ? 'option-open'
-                                            : '' }}">
-                                        <i class="nav-icon fa-solid fa-water"></i>
-                                        <p>
-                                            Đo nước
-                                            <i class="right fas fa-angle-left"></i>
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview ">
-                                        <li
-                                            class="nav-item {{ request()->route()->getName() == 'admin.watertasks.create'? 'option-open': '' }}">
-                                            <a href="{{ route('admin.watertasks.create') }}" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Thêm mới</p>
-                                            </a>
-                                        </li>
-                                        <li
-                                            class="nav-item {{ request()->route()->getName() == 'admin.watertasks.index'? 'option-open': '' }}">
-                                            <a href="{{ route('admin.watertasks.index') }}" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Danh sách</p>
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li
-                                    class="nav-item {{ in_array(
-                                        request()->route()->getName(),
-                                        ['admin.airtasks.index', 'admin.airtasks.create'],
-                                    )
-                                        ? 'menu-is-opening menu-open'
-                                        : '' }}">
-                                    <a href="#"
-                                        class="nav-link {{ in_array(
-                                            request()->route()->getName(),
-                                            ['admin.airtasks.index', 'admin.airtasks.create'],
-                                        )
-                                            ? 'option-open'
-                                            : '' }}">
-                                        <i class="nav-icon fa-solid fa-temperature-three-quarters"></i>
-                                        <p>
-                                            Đo không khí
-                                            <i class="right fas fa-angle-left"></i>
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview ">
-                                        <li
-                                            class="nav-item {{ request()->route()->getName() == 'admin.airtasks.create'? 'option-open': '' }}">
-                                            <a href="{{ route('admin.airtasks.create') }}" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Thêm mới</p>
-                                            </a>
-                                        </li>
-                                        <li
-                                            class="nav-item {{ request()->route()->getName() == 'admin.airtasks.index'? 'option-open': '' }}">
-                                            <a href="{{ route('admin.airtasks.index') }}" class="nav-link">
-                                                <i class="far fa-circle nav-icon"></i>
-                                                <p>Danh sách</p>
-                                            </a>
-                                        </li>
-                                    </ul>
                                 </li>
                             </ul>
                         </li>

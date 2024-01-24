@@ -58,7 +58,7 @@ Route::group(['prefix' => '/admin', 'namespace' => 'App\Http\Controllers\Admin',
     Route::get('/', 'AdminController@index')->name('index');
 
     #accounts
-    Route::group(['prefix' => 'accounts', 'namespace' => 'Accounts', 'as' => 'accounts.'], function () {
+    Route::group(['prefix' => 'accounts', 'as' => 'accounts.'], function () {
         Route::get('/', 'AccountController@index')->name('index');
         Route::get('/create', 'AccountController@create')->name('create');
         Route::post('/create', 'AccountController@store')->name('store');
@@ -67,7 +67,7 @@ Route::group(['prefix' => '/admin', 'namespace' => 'App\Http\Controllers\Admin',
     });
 
     #customers
-    Route::group(['prefix' => 'customers', 'namespace' => 'Customers', 'as' => 'customers.'], function () {
+    Route::group(['prefix' => 'customers', 'as' => 'customers.'], function () {
         Route::get('/', 'CustomerController@index')->name('index');
         Route::get('/create', 'CustomerController@create')->name('create');
         Route::post('/create', 'CustomerController@store')->name('store');
@@ -76,7 +76,7 @@ Route::group(['prefix' => '/admin', 'namespace' => 'App\Http\Controllers\Admin',
     });
 
     #branches
-    Route::group(['prefix' => 'branches', 'namespace' => 'Branches', 'as' => 'branches.'], function () {
+    Route::group(['prefix' => 'branches', 'as' => 'branches.'], function () {
         Route::get('/', 'BranchController@index')->name('index');
         Route::get('/create', 'BranchController@create')->name('create');
         Route::post('/create', 'BranchController@store')->name('store');
@@ -85,7 +85,7 @@ Route::group(['prefix' => '/admin', 'namespace' => 'App\Http\Controllers\Admin',
     });
 
     #staffs
-    Route::group(['prefix' => 'staffs', 'namespace' => 'Staffs', 'as' => 'staffs.'], function () {
+    Route::group(['prefix' => 'staffs', 'as' => 'staffs.'], function () {
         Route::get('/', 'InfoUserController@index')->name('index');
         // Route::get('/create', 'InfoUserController@create')->name('create');
         // Route::post('/create', 'InfoUserController@store')->name('store');
@@ -94,7 +94,7 @@ Route::group(['prefix' => '/admin', 'namespace' => 'App\Http\Controllers\Admin',
     });
 
     #types
-    Route::group(['prefix' => 'types', 'namespace' => 'Types', 'as' => 'types.'], function () {
+    Route::group(['prefix' => 'types', 'as' => 'types.'], function () {
         Route::get('/', 'TypeController@index')->name('index');
         Route::get('/create', 'TypeController@create')->name('create');
         Route::post('/create', 'TypeController@store')->name('store');
@@ -120,8 +120,35 @@ Route::group(['prefix' => '/admin', 'namespace' => 'App\Http\Controllers\Admin',
         Route::post('/update', 'ChemistryController@update')->name('update');
     });
 
+    #solutions
+    Route::group(['prefix' => 'solutions', 'as' => 'solutions.'], function () {
+        Route::get('/', 'SolutionController@index')->name('index');
+        Route::get('/create', 'SolutionController@create')->name('create');
+        Route::post('/create', 'SolutionController@store')->name('store');
+        Route::get('/update/{id}', 'SolutionController@show')->name('show');
+        Route::post('/update', 'SolutionController@update')->name('update');
+    });
+
+    #items
+    Route::group(['prefix' => 'items', 'as' => 'items.'], function () {
+        Route::get('/', 'ItemController@index')->name('index');
+        Route::get('/create', 'ItemController@create')->name('create');
+        Route::post('/create', 'ItemController@store')->name('store');
+        Route::get('/update/{id}', 'ItemController@show')->name('show');
+        Route::post('/update', 'ItemController@update')->name('update');
+    });
+
+    #frequencies
+    Route::group(['prefix' => 'frequencies', 'as' => 'frequencies.'], function () {
+        Route::get('/', 'FrequencyController@index')->name('index');
+        Route::get('/create', 'FrequencyController@create')->name('create');
+        Route::post('/create', 'FrequencyController@store')->name('store');
+        Route::get('/update/{id}', 'FrequencyController@show')->name('show');
+        Route::post('/update', 'FrequencyController@update')->name('update');
+    });
+
     #contracts
-    Route::group(['prefix' => 'contracts', 'namespace' => 'Contracts', 'as' => 'contracts.'], function () {
+    Route::group(['prefix' => 'contracts', 'as' => 'contracts.'], function () {
         Route::get('/', 'ContractController@index')->name('index');
         Route::get('/create', 'ContractController@create')->name('create');
         Route::get('/update/{id}', 'ContractController@show')->name('show');
@@ -129,31 +156,13 @@ Route::group(['prefix' => '/admin', 'namespace' => 'App\Http\Controllers\Admin',
         Route::post('/update', 'ContractController@update')->name('update');
     });
 
-    #electasks
-    Route::group(['prefix' => 'electasks', 'namespace' => 'ElecTasks', 'as' => 'electasks.'], function () {
-        Route::get('/', 'ElecTaskController@index')->name('index');
-        Route::get('/create', 'ElecTaskController@create')->name('create');
-        Route::post('/create', 'ElecTaskController@store')->name('store');
-        Route::get('/update/{id}', 'ElecTaskController@show')->name('show');
-        Route::post('/update', 'ElecTaskController@update')->name('update');
-    });
-
-    #airtasks
-    Route::group(['prefix' => 'airtasks', 'namespace' => 'AirTasks', 'as' => 'airtasks.'], function () {
-        Route::get('/', 'AirTaskController@index')->name('index');
-        Route::get('/create', 'AirTaskController@create')->name('create');
-        Route::post('/create', 'AirTaskController@store')->name('store');
-        Route::get('/update/{id}', 'AirTaskController@show')->name('show');
-        Route::post('/update', 'AirTaskController@update')->name('update');
-    });
-
-    #watertasks
-    Route::group(['prefix' => 'watertasks', 'namespace' => 'WaterTasks', 'as' => 'watertasks.'], function () {
-        Route::get('/', 'WaterTaskController@index')->name('index');
-        Route::get('/create', 'WaterTaskController@create')->name('create');
-        Route::post('/create', 'WaterTaskController@store')->name('store');
-        Route::get('/update/{id}', 'WaterTaskController@show')->name('show');
-        Route::post('/update', 'WaterTaskController@update')->name('update');
+    #tasks
+    Route::group(['prefix' => 'tasks', 'as' => 'tasks.'], function () {
+        Route::get('/', 'TaskController@index')->name('index');
+        Route::get('/create', 'TaskController@create')->name('create');
+        Route::post('/create', 'TaskController@store')->name('store');
+        Route::get('/update/{id}', 'TaskController@show')->name('show');
+        Route::post('/update', 'TaskController@update')->name('update');
     });
 
     #assignments

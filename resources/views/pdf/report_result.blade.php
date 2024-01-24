@@ -5,69 +5,96 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>KẾ HOẠCH DỊCH VỤ</title>
+    <style>
+        body {
+            font-family: DejaVu Sans, sans-serif;
+        }
+
+        .tbl-plan {
+            border-collapse: collapse;
+
+        }
+
+        .tbl-plan td,
+        .tbl-plan th {
+            border: 1px solid black;
+            padding: 0;
+        }
+    </style>
 </head>
 
 <body>
-    <img src="{{ $data['img_chart'] }}" alt="">
+    <table>
+        <tbody>
+            <tr>
+                <td rowspan="2">
+                    <img width="100px" height="100px" src="{{ public_path('images/logo.png') }}" alt="" />
+                </td>
+                <td style="text-align:center">
+                    <h1>KẾ HOẠCH DỊCH VỤ</h1>
+                </td>
+            </tr>
+            <tr>
+                <td>Tháng {{ $data['month'] }} Năm {{ $data['year'] }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <p style="color:rgb(13, 102, 235)">Kính gửi (Anh/chị) Mr.Dũng</p>
+    <table>
+        <tbody>
+            <tr>
+                <td style="font-weight:bold;">Công ty</td>
+                <td>Tên công ty</td>
+            </tr>
+            <tr>
+                <td style="font-weight:bold;">Chi nhánh</td>
+                <td>Nhà máy Hưng Yên</td>
+            </tr>
+            <tr>
+                <td style="font-weight:bold;">Địa chỉ</td>
+                <td style="color:rgb(13, 102, 235);font-style:italic">KCN Phố Nối A</td>
+            </tr>
+        </tbody>
+    </table>
+    <p style="font-style:italic;text-align:center">Công ty dịch vụ Pestkil Việt Nam gửi kế hoạch tháng như sau:</p>
+    <h3 style="text-decoration: underline; color:rgb(13, 102, 235)">Kiểm soát chuột định kỳ và ĐVGH</h3>
+    <p style="font-weight: bold;text-decoration: underline;">Nhân viên kỹ thuật</p>
+
+    <table style="font-style:italic">
+        <thead>
+            <th>Code</th>
+            <th>Tên kỹ thuật viên</th>
+            <th>Điện thoại</th>
+            <th>Chứng minh thư</th>
+            <th>Chức vụ</th>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Code</td>
+                <td>Tên kỹ tduật viên</td>
+                <td>Điện tdoại</td>
+                <td>Chứng minh thư</td>
+                <td>Chức vụ</td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="tbl-plan" style="float:right">
+        <thead>
+            <th>Ngày kế hoạch</th>
+            <th>Thứ</th>
+            <th>Giờ vào</th>
+            <th>Giờ ra</th>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Ngày kế hoạch</td>
+                <td>Thứ</td>
+                <td>Giờ vào</td>
+                <td>Giờ ra</td>
+            </tr>
+        </tbody>
+    </table>
 </body>
 
 </html>
-{{-- <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-<script type="text/javascript">
-    google.charts.load("current", {
-        callback: function() {
-            drawChart();
-        },
-        packages: ['corechart']
-    });
-    // google.charts.setOnLoadCallback(drawChart);
-
-    function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-            ["Element", "Density", {
-                role: "style"
-            }],
-            ["Copper", 8.94, "#b87333"],
-            ["Silver", 10.49, "silver"],
-            ["Gold", 19.30, "gold"],
-            ["Platinum", 21.45, "color: #e5e4e2"]
-        ]);
-
-        var view = new google.visualization.DataView(data);
-        view.setColumns([0, 1,
-            {
-                calc: "stringify",
-                sourceColumn: 1,
-                type: "string",
-                role: "annotation"
-            },
-            2
-        ]);
-
-        var options = {
-            title: "Density of Precious Metals, in g/cm^3",
-            width: 600,
-            height: 400,
-            bar: {
-                groupWidth: "95%"
-            },
-            legend: {
-                position: "none"
-            },
-        };
-        var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
-        chart.draw(view, options);
-        // console.log(chart.getImageURI());
-        // document.getElementById('img-chart').setAttribute('src', chart.getImageURI());
-        // document.getElementById('text').innerHTML = 'abc';
-
-        // let draw_chart = document.getElementById('draw-chart');
-        // google.visualization.events.addListener(chart, 'ready', function () {
-        //     console.log(chart.getImageURI());
-        // });
-        setTimeout(() => {
-            document.getElementById('img-chart').setAttribute('src', chart.getImageURI());
-        }, 1);
-    }
-</script> --}}

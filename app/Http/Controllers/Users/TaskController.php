@@ -35,13 +35,18 @@ class TaskController extends Controller
 
     public function export(Request $request)
     {
-        $data = $request->validate([
-            'month' => 'required|numeric|between:1,12',
-            'year' => 'required|numeric|min:1900',
-            'type' => 'required|in:0,1',
-        ]);
+        // $data = $request->validate([
+        //     'month' => 'required|numeric|between:1,12',
+        //     'year' => 'required|numeric|min:1900',
+        //     'type' => 'required|in:0,1',
+        // ]);
         $pdf = null;
         $filename = '';
+        $data = [
+            'type' => 1,
+            'month' => 2,
+            'year' => 4,
+        ];
         switch ((int)$data['type']) {
             case 0:
                 $pdf = PDF::loadView('pdf.report_plan', ['data' => $data]);
@@ -58,6 +63,7 @@ class TaskController extends Controller
         $filename .= 'tháng ' . $data['month'] . ' năm ' . $data['year'] . '.pdf';
 
         return $pdf->download($filename);
+        // return $pdf->stream($filename);
     }
 
     public function taskToday()

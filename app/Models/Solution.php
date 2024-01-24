@@ -10,7 +10,7 @@ class Solution extends Model
     use HasFactory;
 
     protected $fillable = [
-        'code',
+        // 'code',
         'name',
         'target',
         'image',

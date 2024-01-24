@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('month')->nullable();
             $table->string('year')->nullable();
             $table->string('time')->nullable();
+            $table->integer('active')->default(0);
             $table->timestamps();
         });
     }
