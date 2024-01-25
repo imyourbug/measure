@@ -14,6 +14,18 @@
                             value="{{ old('name') }}" placeholder="Nhập tên loại">
                     </div>
                 </div>
+                <div class="col-lg-6 col-md-12">
+                    <div class="form-group">
+                        <label for="menu">Danh mục cha</label>
+                        <select class="form-control" name="parent_id">
+                            <option value="0">--Danh mục cha--</option>
+                            @foreach ($types as $type)
+                                <option value="{{ $type->id }}">{{ $type->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="card-footer">

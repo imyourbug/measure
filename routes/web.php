@@ -138,15 +138,6 @@ Route::group(['prefix' => '/admin', 'namespace' => 'App\Http\Controllers\Admin',
         Route::post('/update', 'ItemController@update')->name('update');
     });
 
-    #frequencies
-    Route::group(['prefix' => 'frequencies', 'as' => 'frequencies.'], function () {
-        Route::get('/', 'FrequencyController@index')->name('index');
-        Route::get('/create', 'FrequencyController@create')->name('create');
-        Route::post('/create', 'FrequencyController@store')->name('store');
-        Route::get('/update/{id}', 'FrequencyController@show')->name('show');
-        Route::post('/update', 'FrequencyController@update')->name('update');
-    });
-
     #contracts
     Route::group(['prefix' => 'contracts', 'as' => 'contracts.'], function () {
         Route::get('/', 'ContractController@index')->name('index');

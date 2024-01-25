@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Map;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Throwable;
@@ -62,7 +63,8 @@ class MapController extends Controller
     {
         return view('admin.map.list', [
             'title' => 'Danh sách sơ đồ',
-            'maps' => Map::all()
+            'maps' => Map::all(),
+            'setting' => Setting::firstWhere('key', 'map')
         ]);
     }
 

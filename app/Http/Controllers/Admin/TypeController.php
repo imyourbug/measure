@@ -13,7 +13,8 @@ class TypeController extends Controller
     public function create()
     {
         return view('admin.type.add', [
-            'title' => 'Thêm loại nhiệm vụ'
+            'title' => 'Thêm loại nhiệm vụ',
+            'types' => Type::all()
         ]);
     }
 
@@ -21,6 +22,7 @@ class TypeController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string',
+            'parent_id' => 'required|numeric',
         ]);
         try {
             Type::create($data);
@@ -38,6 +40,7 @@ class TypeController extends Controller
         $data = $request->validate([
             'id' => 'required|int',
             'name' => 'required|string',
+            'parent_id' => 'required|numeric',
         ]);
         unset($data['id']);
         $update = Type::where('id', $request->input('id'))->update($data);
@@ -70,7 +73,8 @@ class TypeController extends Controller
     {
         return view('admin.type.edit', [
             'title' => 'Chi tiết loại nhiệm vụ',
-            'type' => Type::firstWhere('id', $id)
+            'type' => Type::firstWhere('id', $id),
+            'types' => Type::all()
         ]);
     }
 
@@ -88,5 +92,14 @@ class TypeController extends Controller
                 'message' => $e->getMessage()
             ]);
         }
+    }
+
+    public function getTypeByParentId(Request $request)
+    {
+        return response()->json([
+            'status' => 0,
+            'data' => Type::where('parent_id', $request->id)
+                ->get()
+        ]);;
     }
 }

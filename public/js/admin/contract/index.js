@@ -39,107 +39,20 @@ function renderDay() {
             <option value="Sunday">Chủ nhật</option>`;
 }
 
-function renderOption(type, className) {
-    let html = `<div class="option-select-${className}">
+function renderOption(type, id_type) {
+    let html = `<div class="option-select">
         ${type == "day" ? "Chọn thứ (hàng tuần)" : "Chọn ngày (hàng tháng)"}
-        <select multiple="multiple" class="select2 custom-select form-control-border select-${className}">
+        <select multiple="multiple" class="select2 custom-select form-control-border select">
             ${type == "day" ? renderDay() : renderDate()}
             </select>
             </div>`;
-    $(".option-type-" + className).append(html);
-    $('.select2').select2();
+    $(".option-type-" + id_type).append(html);
+    $(".select2").select2();
 }
-
-function changeType(className) {
-    $(".option-select-" + className).remove();
-    renderOption(
-        $(".select-type-" + className)
-            .find(":selected")
-            .val(),
-        className
-    );
-}
-
-//add
-var type_air = $("#type_air");
-var type_elec = $("#type_elec");
-var type_water = $("#type_water");
-//
-type_elec.on("click", function () {
-    if (this.checked) {
-        if (!$("div.option-elec").length) {
-            $(".modal-body").append(`<div class="row option-elec">
-                                        <div class="col-lg-12">
-                                            <div class="form-group option-type-elec" style="align-items: center">
-                                                <label for="menu">Đo điện theo</label>
-                                                <select class="custom-select form-control-borders select-type-elec" onchange="changeType('elec')">
-                                                    <option value="day">Thứ</option>
-                                                    <option value="date" selected>Ngày</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>`);
-            renderOption(
-                $(".select-type-elec").find(":selected").val(),
-                "elec"
-            );
-        }
-    } else {
-        $(".option-elec").remove();
-    }
-});
-//
-type_air.on("click", function () {
-    if (this.checked) {
-        if (!$("div.option-air").length) {
-            $(".modal-body").append(`
-                <div class="row option-air">
-                    <div class="col-lg-12">
-                        <div class="form-group option-type-air" style="align-items: center">
-                            <label for="menu">Đo không khí theo</label>
-                            <select class="custom-select form-control-borders select-type-air" onchange="changeType('air')">
-                                <option value="day" selected>Thứ</option>
-                                <option value="date">Ngày</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>`);
-            renderOption($(".select-type-air").find(":selected").val(), "air");
-        }
-    } else {
-        $(".option-air").remove();
-    }
-});
-//
-type_water.on("click", function () {
-    if (this.checked) {
-        if (!$("div.option-water").length) {
-            $(".modal-body").append(`
-                <div class="row option-water">
-                    <div class="col-lg-12">
-                        <div class="form-group option-type-water" style="align-items: center">
-                            <label for="menu">Đo nước theo</label>
-                            <select class="custom-select form-control-borders select-type-water" onchange="changeType('water')">
-                                <option value="day" selected>Thứ</option>
-                                <option value="date">Ngày</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>`);
-            renderOption(
-                $(".select-type-water").find(":selected").val(),
-                "water"
-            );
-        }
-    } else {
-        $(".option-water").remove();
-    }
-});
 
 //btn open modal
 // $(".btn-open-modal").on("click", function () {
 //     let branch_id = $(this).data("id");
-//     console.log(branch_id, $(".btn-save").data("id"));
 // $(".btn-save").attr("data-id", branch_id);
 // });
 
@@ -183,7 +96,6 @@ $(".btn-save").on("click", function () {
                 return e;
             });
             if (count == 0) {
-                console.log(data);
                 dataStorage.push(data);
             }
         }
@@ -210,7 +122,66 @@ $(".btn-save").on("click", function () {
     $(".info-branch-" + branch_id).html(html);
 });
 
-//select
+$(document).on("click", ".option-type", function () {
+    let name = $(this).data("name");
+    let id = $(this).data("type");
+    if (this.checked) {
+        if (!$("div.option-type").length) {
+            $(".modal-body").append(`<div class="row option option-${id}">
+                                        <div class="col-lg-12">
+                                            <div class="form-group option-type-${id}" style="align-items: center">
+                                                <label for="menu">${name} theo</label>
+                                                <select class="custom-select form-control-borders select-type select-type-${id}" data-type="${id}">
+                                                    <option value="day">Thứ</option>
+                                                    <option value="date" selected>Ngày</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>`);
+            renderOption($(".select-type-" + id).find(":selected").val(), id);
+        }
+    } else {
+        $(".option-" + id).remove();
+    }
+
+});
+
+// select type
+$(document).on("change", ".select-type", function () {
+    let type_time = $(this).find(":selected").val();
+    let id = $(this).data('type');
+    $(".option-type-" + id).find('.option-select').remove();
+    renderOption(type_time, id);
+});
+
+//select parent type
+$(".select-parent-type").on("change", function () {
+    $('.option').remove();
+    let parent_id = $(this).val();
+    if (parent_id) {
+        $.ajax({
+            type: "GET",
+            url: $(this).data("url") + "?id=" + parent_id,
+            success: function (response) {
+                $(".branch").remove();
+                let html = "";
+                response.data.forEach((e) => {
+                    html += `<div class="custom-control custom-checkbox">
+                    <input type="checkbox" data-name="${e.name}" data-type="${e.id}" id="type_${e.id}"
+                        class="option-type custom-control-input">
+                    <label class="custom-control-label" for="type_${e.id}">${e.name}</label>
+                </div>`;
+                });
+                $(".form-type").html("");
+                $(".form-type").append(html);
+            },
+        });
+    } else {
+        $(".form-type").html("");
+    }
+});
+
+//select customer
 $(".select-customer").on("change", function () {
     reset();
     let id_customer = $(this).val();
@@ -233,7 +204,8 @@ $(".select-customer").on("change", function () {
                             <div class="card-header">
                                 <label for="menu">${e.name}</label>&emsp13;
                                 <button data-id="${e.id}" type="button" class="btn btn-success btn-open-modal"
-                                    data-target="#modal-task" data-toggle="modal" onclick="openModal(${e.id})"><i class="fa-solid fa-plus"></i></button>
+                                    data-target="#modal-task" data-toggle="modal" onclick="openModal(${e.id})">
+                                    <i class="fa-solid fa-plus"></i></button>
                                 <div class="card-tools">
                                     <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                         <i class="fas fa-minus"></i>
@@ -273,7 +245,6 @@ $(".btn-create").on("click", function () {
             url: $(this).data("url"),
             data: params,
             success: function (response) {
-                console.log(response.message);
                 response.status == 0
                     ? toastr.success(response.message)
                     : toastr.error(response.message);
@@ -286,6 +257,6 @@ $(".btn-create").on("click", function () {
 //reset localStorage
 function reset() {
     localStorage.removeItem("data");
-    $('.info-branch').html('');
+    $(".info-branch").html("");
 }
 reset();

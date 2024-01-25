@@ -20,7 +20,8 @@ return new class extends Migration
             $table->unsignedBigInteger('solution_id');
             $table->unsignedBigInteger('item_id');
             $table->unsignedBigInteger('contract_id');
-            $table->unsignedBigInteger('frequency_id');
+            $table->string('time_in')->default('07:30:00 AM');
+            $table->string('time_out')->default('11:00:00 AM');
             $table->string('range')->nullable();
             $table->string('note')->nullable();
             $table->foreign('contract_id')->references('id')->on('contracts')->onDelete('cascade');

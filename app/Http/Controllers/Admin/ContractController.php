@@ -8,6 +8,7 @@ use App\Models\Contract;
 use App\Models\Customer;
 use App\Models\ElecTask;
 use App\Models\InfoUser;
+use App\Models\Type;
 use App\Models\User;
 use App\Models\WaterTask;
 use DateInterval;
@@ -46,6 +47,8 @@ class ContractController extends Controller
         return view('admin.contract.add', [
             'title' => 'Thêm hợp đồng',
             'customers' => Customer::all(),
+            'parent_types' => Type::where('parent_id', 0)
+            ->get(),
         ]);
     }
 

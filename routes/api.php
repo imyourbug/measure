@@ -29,6 +29,11 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
 });
 
 Route::group(['namespace' => 'App\Http\Controllers\Admin'], function () {
+    #settings
+    Route::group(['prefix' => 'settings', 'as' => 'settings.'], function () {
+        Route::post('uploadmap', 'SettingController@uploadmap')->name('uploadmap');
+    });
+
     #accounts
     Route::group(['prefix' => 'accounts', 'as' => 'accounts.'], function () {
         Route::delete('/{id}/destroy', 'AccountController@destroy')->name('destroy');
@@ -42,6 +47,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin'], function () {
     #types
     Route::group(['prefix' => 'types', 'as' => 'types.'], function () {
         Route::delete('/{id}/destroy', 'TypeController@destroy')->name('destroy');
+        Route::get('/getTypeByParentId', 'TypeController@getTypeByParentId')->name('getTypeByParentId');
     });
 
     #contracts
@@ -70,11 +76,6 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin'], function () {
     #items
     Route::group(['prefix' => 'items', 'as' => 'items.'], function () {
         Route::delete('/{id}/destroy', 'ItemController@destroy')->name('destroy');
-    });
-
-    #frequencies
-    Route::group(['prefix' => 'frequencies', 'as' => 'frequencies.'], function () {
-        Route::delete('/{id}/destroy', 'FrequencyController@destroy')->name('destroy');
     });
 
     #chemistries

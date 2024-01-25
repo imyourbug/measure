@@ -13,6 +13,7 @@
         "laravel/sanctum": "^3.2",
         "laravel/tinker": "^2.8",
         "maatwebsite/excel": "^3.1",
+        "nwidart/laravel-modules": "^10.0",
         "revolution/laravel-google-sheets": "^6.2",
         "spatie/browsershot": "^3.61",
         "yajra/laravel-datatables": "^10.1",

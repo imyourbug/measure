@@ -347,37 +347,6 @@
                             </ul>
                         </li>
                         <li
-                            class="nav-item  {{ in_array(
-                                request()->route()->getName(),
-                                ['admin.frequencies.index', 'admin.frequencies.create'],
-                            )
-                                ? 'menu-is-opening menu-open'
-                                : '' }}">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fa-solid fa-wave-square"></i>
-                                <p>
-                                    Tần suất
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li
-                                    class="nav-item {{ request()->route()->getName() == 'admin.frequencies.create'? 'option-open': '' }}">
-                                    <a href="{{ route('admin.frequencies.create') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Thêm tần suất</p>
-                                    </a>
-                                </li>
-                                <li
-                                    class="nav-item {{ request()->route()->getName() == 'admin.frequencies.index'? 'option-open': '' }}">
-                                    <a href="{{ route('admin.frequencies.index') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Danh sách tần suất</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li
                             class="nav-item {{ in_array(
                                 request()->route()->getName(),
                                 ['admin.branches.index', 'admin.branches.create'],

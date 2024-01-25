@@ -30,6 +30,7 @@
             <tr>
                 <th>ID</th>
                 <th>Tên loại</th>
+                <th>Danh mục cha</th>
                 <th>Thao tác</th>
             </tr>
         <tbody>
@@ -37,6 +38,7 @@
                 <tr class="row{{ $type->id }}">
                     <th>{{ $type->id }}</th>
                     <td>{{ $type->name }}</td>
+                    <td>{{ $type->parent->name ?? '' }}</td>
                     <td><a class="btn btn-primary btn-sm" href='{{ route('admin.types.show', ['id' => $type->id]) }}'>
                             <i class="fas fa-edit"></i>
                         </a>

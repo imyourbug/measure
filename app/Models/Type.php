@@ -11,5 +11,16 @@ class Type extends Model
 
     protected $fillable = [
         'name',
+        'parent_id',
     ];
+
+    public function parent()
+    {
+        return $this->belongsTo(Type::class, 'parent_id');
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Type::class, 'parent_id');
+    }
 }

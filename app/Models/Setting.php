@@ -5,16 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Frequency extends Model
+class Setting extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'day',
-        'week',
-        'month',
-        'year',
-        'time',
-        'active',
+        'key',
+        'value',
     ];
 }

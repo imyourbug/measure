@@ -117,23 +117,22 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-lg-12">
+                            <label for="menu">Loại nhiệm vụ</label>
                             <div class="form-group">
-                                <label for="menu">Loại nhiệm vụ</label>
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" value="0" id="type_elec"
-                                        class="custom-control-input type_elec">
-                                    <label class="custom-control-label" for="type_elec">Đo điện</label>
-                                </div>
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" value="1" id="type_water"
-                                        class="custom-control-input type_water">
-                                    <label class="custom-control-label" for="type_water">Đo nước</label>
-                                </div>
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" value="2" id="type_air"
-                                        class="custom-control-input type_air">
-                                    <label class="custom-control-label" for="type_air">Đo không khí</label>
-                                </div>
+                                <select class="form-control select-parent-type"
+                                    data-url="{{ route('types.getTypeByParentId') }}" id="parent_type_id">
+                                    <option value="">--Loại nhiệm vụ--</option>
+                                    @foreach ($parent_types as $t)
+                                        <option value="{{ $t->id }}">{{ $t->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label for="menu">Nhiệm vụ</label>
+                            <div class="form-group form-type">
                             </div>
                         </div>
                     </div>
