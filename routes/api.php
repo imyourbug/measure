@@ -34,6 +34,24 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin'], function () {
         Route::post('uploadmap', 'SettingController@uploadmap')->name('uploadmap');
     });
 
+    #taskmaps
+    Route::group(['prefix' => 'taskmaps', 'as' => 'taskmaps.'], function () {
+        Route::post('create', 'TaskMapController@store')->name('store');
+        Route::post('update', 'TaskMapController@update')->name('update');
+        Route::get('/', 'TaskMapController@index')->name('index');
+        Route::get('/{id}/show', 'TaskMapController@show')->name('show');
+        Route::delete('/{id}/destroy', 'TaskMapController@destroy')->name('destroy');
+    });
+
+    #taskstaff
+    Route::group(['prefix' => 'taskstaff', 'as' => 'taskstaff.'], function () {
+        Route::post('create', 'TaskStaffController@store')->name('store');
+        Route::post('update', 'TaskStaffController@update')->name('update');
+        Route::get('/', 'TaskStaffController@index')->name('index');
+        Route::get('/{id}/show', 'TaskStaffController@show')->name('show');
+        Route::delete('/{id}/destroy', 'TaskStaffController@destroy')->name('destroy');
+    });
+
     #accounts
     Route::group(['prefix' => 'accounts', 'as' => 'accounts.'], function () {
         Route::delete('/{id}/destroy', 'AccountController@destroy')->name('destroy');

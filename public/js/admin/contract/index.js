@@ -65,25 +65,40 @@ function openModal(branch_id) {
 $(".btn-save").on("click", function () {
     let dataStorage = JSON.parse(localStorage.getItem("data")) ?? [];
     let branch_id = $(".id-branch").val();
+
+    let types_is_selected = $(".form-type")
+        .find("input")
+        .map(function () {
+            if ($(this).is(":checked")) {
+                return $(this).data("type");
+            }
+        })
+        .get();
+
+    console.log(types_is_selected);
+
+    // get value type time
+    let info_tasks = [];
+    types_is_selected.forEach((e) => {
+        let _info = {
+            task_type: e,
+            time_type: $(".select-type-" + e).val(),
+            value_time_type: $(".option-type-" + e)
+                .find(".select2")
+                .val(),
+        };
+        if (_info.value_time_type.length > 0) {
+            info_tasks.push(_info);
+        }
+    });
+
     let data = {
         branch_id: branch_id,
-        task_type: [
-            ...($(".type_elec").is(":checked") ? [$(".type_elec").val()] : []),
-            ...($(".type_water").is(":checked")
-                ? [$(".type_water").val()]
-                : []),
-            ...($(".type_air").is(":checked") ? [$(".type_air").val()] : []),
-        ],
-        type_elec: $(".select-type-elec").val(),
-        value_elec: $(".select-elec").val(),
-        type_water: $(".select-type-water").val(),
-        value_water: $(".select-water").val(),
-        type_air: $(".select-type-air").val(),
-        value_air: $(".select-air").val(),
+        info_tasks: info_tasks,
     };
 
     //push data to storage
-    if (data.task_type.length > 0) {
+    if (data.info_tasks.length > 0) {
         if (dataStorage.length == 0) {
             dataStorage.push(data);
         } else {
@@ -106,18 +121,10 @@ $(".btn-save").on("click", function () {
 
     // render text info
     let html = "";
-    data.task_type.forEach((task_type) => {
-        switch (task_type) {
-            case "0":
-                html += `Đo điện: ${data.value_elec}<br/>`;
-                break;
-            case "1":
-                html += `Đo nước: ${data.value_water}<br/>`;
-                break;
-            case "2":
-                html += `Đo không khí: ${data.value_air}<br/>`;
-                break;
-        }
+    data.info_tasks.forEach((info) => {
+        html += `${$("#type_" + info.task_type).data("name")}: ${
+            info.value_time_type
+        }<br/>`;
     });
     $(".info-branch-" + branch_id).html(html);
 });
@@ -138,32 +145,37 @@ $(document).on("click", ".option-type", function () {
                                             </div>
                                         </div>
                                     </div>`);
-            renderOption($(".select-type-" + id).find(":selected").val(), id);
+            renderOption(
+                $(".select-type-" + id)
+                    .find(":selected")
+                    .val(),
+                id
+            );
         }
     } else {
         $(".option-" + id).remove();
     }
-
 });
 
 // select type
 $(document).on("change", ".select-type", function () {
     let type_time = $(this).find(":selected").val();
-    let id = $(this).data('type');
-    $(".option-type-" + id).find('.option-select').remove();
+    let id = $(this).data("type");
+    $(".option-type-" + id)
+        .find(".option-select")
+        .remove();
     renderOption(type_time, id);
 });
 
 //select parent type
 $(".select-parent-type").on("change", function () {
-    $('.option').remove();
+    $(".option").remove();
     let parent_id = $(this).val();
     if (parent_id) {
         $.ajax({
             type: "GET",
             url: $(this).data("url") + "?id=" + parent_id,
             success: function (response) {
-                $(".branch").remove();
                 let html = "";
                 response.data.forEach((e) => {
                     html += `<div class="custom-control custom-checkbox">

@@ -13,16 +13,9 @@ return new class extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
-            $table->unsignedBigInteger('user_id')->nullable();
+            // $table->string('name')->nullable();
             $table->unsignedBigInteger('type_id');
-            $table->unsignedBigInteger('chemistry_id');
-            $table->unsignedBigInteger('solution_id');
-            $table->unsignedBigInteger('item_id');
             $table->unsignedBigInteger('contract_id');
-            $table->string('time_in')->default('07:30:00 AM');
-            $table->string('time_out')->default('11:00:00 AM');
-            $table->string('range')->nullable();
             $table->string('note')->nullable();
             $table->foreign('contract_id')->references('id')->on('contracts')->onDelete('cascade');
             $table->foreign('type_id')->references('id')->on('types')->onDelete('cascade');

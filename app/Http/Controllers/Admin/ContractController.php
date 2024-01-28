@@ -8,6 +8,8 @@ use App\Models\Contract;
 use App\Models\Customer;
 use App\Models\ElecTask;
 use App\Models\InfoUser;
+use App\Models\Task;
+use App\Models\TaskDetail;
 use App\Models\Type;
 use App\Models\User;
 use App\Models\WaterTask;
@@ -48,7 +50,7 @@ class ContractController extends Controller
             'title' => 'Thêm hợp đồng',
             'customers' => Customer::all(),
             'parent_types' => Type::where('parent_id', 0)
-            ->get(),
+                ->get(),
         ]);
     }
 
@@ -97,19 +99,20 @@ class ContractController extends Controller
     public function createTask($rangeTime, $taskType, $contractId)
     {
         $data = [];
+        $task = Task::create([
+            'type_id' => $taskType,
+            'contract_id' => $contractId,
+        ]);
         foreach ($rangeTime as $time) {
             $data[] = [
                 'plan_date' => $time,
-                'contract_id' => $contractId,
+                'task_id' => $task->id,
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
         };
         if (count($data) > 0) {
-            dispatch(function () use ($data, $taskType) {
-                $taskType == 0 ?  ElecTask::insert($data) : ($taskType == 1 ?
-                    WaterTask::insert($data) :  AirTask::insert($data));
-            });
+            TaskDetail::insert($data);
         }
     }
 
@@ -123,16 +126,13 @@ class ContractController extends Controller
                 'finish' => 'required|date',
                 'content' => 'required|string',
                 'attachment' => 'nullable|string',
-                // 0 - elec, 1 - water, 2 - air
                 'data' => 'nullable|array',
                 'data.*.branch_id' => 'nullable|numeric',
-                'data.*.task_type.*' => 'nullable|in:0,1,2',
-                'data.*.type_elec' => 'nullable|in:date,day',
-                'data.*.value_elec' => 'nullable',
-                'data.*.type_water' => 'nullable|in:date,day',
-                'data.*.value_water' => 'nullable',
-                'data.*.type_air' => 'nullable|in:date,day',
-                'data.*.value_air' => 'nullable',
+                'data.*.info_tasks.*' => 'nullable|array',
+                'data.*.info_tasks.*.task_type' => 'nullable|numeric',
+                'data.*.info_tasks.*.time_type' => 'nullable|string|in:date,day',
+                'data.*.info_tasks.*.value_time_type' => 'nullable|array',
+                'data.*.info_tasks.*.value_time_type.*' => 'nullable',
             ]);
 
             DB::beginTransaction();
@@ -147,24 +147,10 @@ class ContractController extends Controller
                         'attachment' =>  $data['attachment'],
                         'branch_id' =>  $item['branch_id'],
                     ]);
-                    if (!empty($item['task_type'])) {
-                        foreach ($item['task_type'] as $type) {
-                            $rangeTime = [];
-                            switch (true) {
-                                    // create electric task
-                                case 0 === (int)$type && !empty($item['value_elec']):
-                                    $rangeTime = $this->getRangeTime($item['type_elec'], $item['value_elec'], $data['start'], $data['finish']);
-                                    break;
-                                    // create water task
-                                case 1 === (int)$type && !empty($item['value_water']):
-                                    $rangeTime = $this->getRangeTime($item['type_water'], $item['value_water'], $data['start'], $data['finish']);
-                                    break;
-                                    // create air task
-                                case 2 === (int)$type && !empty($item['value_air']):
-                                    $rangeTime = $this->getRangeTime($item['type_air'], $item['value_air'], $data['start'], $data['finish']);
-                                    break;
-                            };
-                            $this->createTask($rangeTime, $type, $contract->id);
+                    if (!empty($item['info_tasks'])) {
+                        foreach ($item['info_tasks'] as $info) {
+                            $rangeTime = $this->getRangeTime($info['time_type'], $info['value_time_type'], $data['start'], $data['finish']);
+                            $this->createTask($rangeTime, $info['task_type'], $contract->id);
                         }
                     }
                 }
@@ -228,16 +214,21 @@ class ContractController extends Controller
     {
         return view('admin.contract.edit', [
             'title' => 'Cập nhật hợp đồng',
-            'contract' => Contract::with(['elecTasks', 'waterTasks', 'airTasks'])->firstWhere('id', $id),
+            'contract' => Contract::with(['tasks'])->firstWhere('id', $id),
             'customers' => Customer::all(),
         ]);
     }
 
     public function detail($id)
     {
+        // dd(Contract::with([
+        //     'tasks.details', 'tasks.type',
+        // ])->firstWhere('id', $id));
         return view('admin.contract.detail', [
             'title' => 'Chi tiết hợp đồng',
-            'contract' => Contract::with(['task'])->firstWhere('id', $id),
+            'contract' => Contract::with([
+                'tasks.details', 'tasks.type',
+            ])->firstWhere('id', $id),
             'customers' => Customer::all(),
         ]);
     }

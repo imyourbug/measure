@@ -6,6 +6,8 @@ namespace Database\Seeders;
 
 use App\Models\Branch;
 use App\Models\Customer;
+use App\Models\InfoUser;
+use App\Models\Map;
 use App\Models\Setting;
 use App\Models\TaskType;
 use App\Models\Type;
@@ -29,16 +31,62 @@ class DatabaseSeeder extends Seeder
         // $this->call([
         // ]);
 
-        User::create([
-            'email' => 'duongvankhai2022001@gmail.com',
-            'password' => Hash::make(1),
-            'role' => 1,
+        User::insert(
+            [
+                [
+                    'email' => 'duongvankhai2022001@gmail.com',
+                    'password' => Hash::make(1),
+                    'role' => 1,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'email' => 'khachhang1@gmail.com',
+                    'password' => Hash::make(1),
+                    'role' => 2,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'email' => 'nhanvien1@gmail.com',
+                    'password' => Hash::make(1),
+                    'role' => 0,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'email' => 'nhanvien2@gmail.com',
+                    'password' => Hash::make(1),
+                    'role' => 0,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+            ]
+        );
+
+        Customer::create([
+            'name' =>  'Khách hàng 1',
+            'user_id' => 2
         ]);
-        User::create([
-            'email' => 'khachhang1@gmail.com',
-            'password' => Hash::make(1),
-            'role' => 2,
-        ]);
+
+        InfoUser::insert(
+            [
+                [
+                    'name' => 'Nhân viên 1',
+                    'user_id' => 3,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+                [
+                    'name' => 'Nhân viên 2',
+                    'user_id' => 4,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ],
+            ]
+        );
+
+
 
         Type::insert([
             [
@@ -108,13 +156,9 @@ class DatabaseSeeder extends Seeder
 
         Setting::create([
             'key' => 'map',
-            'value' => '/',
+            'value' => '',
         ]);
 
-        Customer::create([
-            'name' =>  'Khách hàng 1',
-            'user_id' => 2
-        ]);
         //
         Branch::insert([
             [
@@ -135,6 +179,21 @@ class DatabaseSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ]
+        ]);
+
+        Map::insert([
+            [
+                'code' => 'SD01',
+                'position' => 2,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'code' => 'SD02',
+                'position' => 2,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 }

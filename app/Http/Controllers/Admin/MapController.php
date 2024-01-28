@@ -24,6 +24,8 @@ class MapController extends Controller
         $data = $request->validate([
             'code' => 'required|string',
             'position' => 'nullable|string',
+            'area' => 'nullable|string',
+            'target' => 'nullable|string',
             'image' => 'nullable|string',
             'description' => 'nullable|string',
             'active' => 'required|in:0,1',
@@ -46,6 +48,8 @@ class MapController extends Controller
             'id' => 'required|numeric',
             'code' => 'required|string',
             'position' => 'nullable|string',
+            'area' => 'nullable|string',
+            'target' => 'nullable|string',
             'image' => 'nullable|string',
             'description' => 'nullable|string',
             'active' => 'required|in:0,1',

@@ -27,15 +27,10 @@
 
     <script>
         $(document).ready(function() {
-            var tableElec = $('#table-elec').DataTable({
+            $('#table').DataTable({
                 responsive: true
             });
-            var tableWater = $('#table-water').DataTable({
-                responsive: true
-            });
-            var tableAir = $('#table-air').DataTable({
-                responsive: true
-            });
+
         });
         var chart = null;
         const ctx = $('#myChart');
@@ -46,12 +41,12 @@
             let month = $('.select-month').find(':selected')
                 .val();
 
-            $(this).unbind('submit').submit();
-            // if (!month | !year | !pattern.test(year)) {
-            //     alert('Kiểm tra thông tin đã nhập!');
-            // } else {
-            //     $(this).unbind('submit').submit();
-            // }
+            // $(this).unbind('submit').submit();
+            if (!month | !year | !pattern.test(year)) {
+                alert('Kiểm tra thông tin đã nhập!');
+            } else {
+                $(this).unbind('submit').submit();
+            }
         })
 
         $('.btn-preview').on('click', function() {
@@ -92,27 +87,7 @@
     </script>
 @endpush
 @section('content')
-    <form action="{{ route('tasks.export') }}" method="POST" id="form-export">
-        <div class="modal-header">
-            <h4 class="modal-title">Xuất báo cáo?</h4>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">×</span>
-            </button>
-        </div>
-        <div>
-            <canvas id="myChart" style="display:none;"></canvas>
-        </div>
-        {{-- <img src="" id="img-chart" alt=""> --}}
-        <input type="hidden" class="img-chart" name="img_chart" />
-        <input type="hidden" class="month" name="month" />
-        <input type="hidden" class="year" name="year" />
-        <input type="hidden" class="type" name="type" />
-        <div class="modal-footer justify-content-between">
-            <button class="btn btn-default" data-dismiss="modal">Đóng</button>
-            <button type="submit" class="btn btn-primary btn-export">Xác nhận</button>
-        </div>
-    </form>
-    {{-- <div class="row">
+    <div class="row">
         <div class="col-lg-4 col-md-12 col-sm-12">
             <div class="">
                 <div class="row">
@@ -227,49 +202,49 @@
                     <button class="btn btn-danger btn-preview" data-target="#modal" data-toggle="modal">Xuất PDF</button>
                 </div>
             </div>
-             @php
-                $elecTasks = $contract->elecTasks;
-                $waterTasks = $contract->waterTasks;
-                $airTasks = $contract->airTasks;
-            @endphp
-            @if ($elecTasks && $elecTasks->count() > 0)
-                <div class="card direct-chat direct-chat-primary">
-                    <div class="card-header ui-sortable-handle" style="cursor: move;">
-                        <h3 class="card-title text-bold">Đo điện</h3>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="card-body" style="display: block;padding: 10px !important;">
-                        <table id="table-elec" class="table display nowrap dataTable dtr-inline collapsed">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Ngày kế hoạch</th>
-                                    <th>Số điện</th>
-                                    <th>Nhân viên đảm nhiệm</th>
-                                    <th>Hợp đồng</th>
-                                </tr>
-                            <tbody>
-                                @foreach ($elecTasks as $key => $electask)
-                                    <tr>
-                                        <th>{{ $electask->id }}</th>
-                                        <td>{{ date('d-m-Y', strtotime($electask->plan_date)) }}</td>
-                                        <td class="amount-{{ $electask->id }}">{{ $electask->amount }}</td>
-                                        <td>{{ $electask?->user?->staff->name ?? 'Chưa có' }}</td>
-                                        <td>{{ $electask->contract->name }}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                            </thead>
-                        </table>
-                    </div>
-                </div>
-            @endif 
         </div>
-    </div> --}}
+    </div>
+    <div class="card direct-chat direct-chat-primary">
+        <div class="card-header ui-sortable-handle" style="cursor: move;">
+            <h3 class="card-title text-bold">Nhiệm vụ</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body" style="display: block;padding: 10px !important;">
+            <table id="table" class="table display nowrap dataTable dtr-inline collapsed">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nhiệm vụ</th>
+                        <th>Ghi chú</th>
+                        <th>Ngày lập</th>
+                        <th>Thao tác</th>
+                    </tr>
+                <tbody>
+                    @foreach ($contract->tasks as $task)
+                        <tr class="row{{ $task->id }}">
+                            <th>{{ $task->id }}</th>
+                            <th>{{ $task->type->name }}</th>
+                            <td>{{ $task->note ?? 'Trống' }}</td>
+                            <td>{{ date('d-m-Y', strtotime($task->created_at)) }}</td>
+                            <td><a class="btn btn-primary btn-sm"
+                                    href='{{ route('admin.tasks.show', ['id' => $task->id]) }}'>
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button data-id="{{ $task->id }}" class="btn btn-danger btn-sm btn-delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+                </thead>
+            </table>
+        </div>
+    </div>
     <div class="modal fade show" id="modal" style="display:none;" data-id="123" aria-modal="true" role="dialog">
         <div class="modal-dialog modal-sm modal-dialog-centered">
             <div class="modal-content">

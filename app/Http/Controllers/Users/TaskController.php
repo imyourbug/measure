@@ -46,6 +46,7 @@ class TaskController extends Controller
             'type' => 1,
             'month' => 2,
             'year' => 4,
+            'img' => base64_encode(file_get_contents(public_path('images/barcode.png'))),
         ];
         switch ((int)$data['type']) {
             case 0:

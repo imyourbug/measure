@@ -13,6 +13,8 @@ use App\Models\Item;
 use App\Models\Map;
 use App\Models\Solution;
 use App\Models\Task;
+use App\Models\TaskMap;
+use App\Models\Type;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -27,7 +29,6 @@ class TaskController extends Controller
             'title' => 'Thêm nhiệm vụ',
             'staffs' => User::with('staff')->where('role', GlobalConstant::ROLE_STAFF)->get(),
             'contracts' => Contract::all(),
-            'frequencies' => Frequency::all(),
             'items' => Item::all(),
             'maps' => Map::all(),
             'solutions' => Solution::all(),
@@ -90,7 +91,7 @@ class TaskController extends Controller
         $to = $request->to;
         $tasks = Task::with([
             'user.staff', 'contract', 'type',
-            'chemistry', 'solution', 'item', 'frequency'
+            'chemistry', 'solution', 'item',
         ])
             ->when($from, function ($q) use ($from) {
                 return $q->where('created_at', '>=', $from . ' 00:00:00');
@@ -106,11 +107,15 @@ class TaskController extends Controller
 
     public function show($id)
     {
+        // dd(User::with('staff')->where('role', GlobalConstant::ROLE_STAFF)->get());
         return view('admin.task.edit', [
             'title' => 'Chi tiết nhiệm vụ',
             'task' => Task::firstWhere('id', $id),
             'staffs' => User::with('staff')->where('role', GlobalConstant::ROLE_STAFF)->get(),
-            'contracts' => Contract::all()
+            'types' => Type::all(),
+            'maps' => Map::all(),
+            'contracts' => Contract::with(['branch'])->get(),
+            'taskMaps' => TaskMap::with(['task', 'map'])->where('task_id', $id)->get(),
         ]);
     }
 

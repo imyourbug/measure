@@ -45,6 +45,22 @@
                     </div>
                 </div>
             </div>
+             <div class="row">
+                <div class="col-lg-6 col-md-12">
+                    <div class="form-group">
+                        <label for="menu">Khu vực</label>
+                        <input type="text" class="form-control" name="area" value="{{ old('area') }}"
+                            placeholder="Nhập khu vực">
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <div class="form-group">
+                        <label for="menu">Đối tượng</label>
+                        <input type="text" class="form-control" name="target" value="{{ old('target') }}"
+                            placeholder="Nhập đối tượng">
+                    </div>
+                </div>
+            </div>
             <div class="row">
                 <div class="col-lg-12">
                     <div class="form-group">

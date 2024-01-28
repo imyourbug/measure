@@ -42,13 +42,27 @@
             white-space: normal !important;
         }
 
+        .dataTables_paginate {
+            float: right;
+        }
+
+        .pagination li {
+            margin-left: 10px;
+        }
+
         .select2-container,
+        .form-inline,
         .form-inline label {
             display: inline !important;
         }
+
         .icon {
             padding: 3px 4px;
             border-radius: 10px;
+        }
+
+        .table {
+            width: 100% !important;
         }
 
         @media (max-width: 600px) {

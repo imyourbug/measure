@@ -29,7 +29,7 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
         });
         $this->renderable(function (Throwable $e, $request) {
-            // dd($e);
+            dd($e);
             if ($e instanceof ValidationException) {
                 foreach ($e->errors() as $err) {
                     Toastr::error($err[0], 'Thông báo');

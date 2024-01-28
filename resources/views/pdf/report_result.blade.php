@@ -28,15 +28,39 @@
     <table>
         <tbody>
             <tr>
-                <td rowspan="2">
+                <td rowspan="3">
                     <img width="100px" height="100px" src="{{ public_path('images/logo.png') }}" alt="" />
                 </td>
                 <td style="text-align:center">
-                    <h1>KẾ HOẠCH DỊCH VỤ</h1>
+                    Công ty
+                </td>
+                <td style="text-align:center">
+                    UNIBEN Hưng Yên
                 </td>
             </tr>
             <tr>
-                <td>Tháng {{ $data['month'] }} Năm {{ $data['year'] }}</td>
+                <td style="text-align:center">
+                    Địa chỉ
+                </td>
+                <td style="text-align:center">
+                    Nhà máy Hưng Yên
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:center">
+                    Số hợp đồng
+                </td>
+                <td style="text-align:center">
+                    01/01/2021 UNIBEN_PETSKIL
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align:center">
+                    Tháng {{ $data['month'] }} Năm {{ $data['year'] }}
+                </td>
+                <td colspan="2">
+                    BÁO CÁO TÓM TẮT DỊCH VỤ VÀ PHÂN TÍCH KỸ THUẬT
+                </td>
             </tr>
         </tbody>
     </table>

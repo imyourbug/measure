@@ -11,44 +11,43 @@ class Task extends Model
 
     protected $fillable = [
         // 'name',
-        'user_id',
-        'type_id',
-        'chemistry_id',
-        'solution_id',
-        'item_id',
-        'contract_id',
-        'frequency_id',
-        'range',
         'note',
+        'type_id',
+        'contract_id',
     ];
+
+    public function details()
+    {
+        return $this->hasMany(TaskDetail::class, 'task_id', 'id');
+    }
 
     public function type()
     {
         return $this->belongsTo(Type::class, 'type_id', 'id');
     }
 
-    public function chemistry()
+    public function taskChemitries()
     {
-        return $this->belongsTo(Chemistry::class, 'chemistry_id', 'id');
+        return $this->hasMany(TaskChemistry::class, 'task_id', 'id');
     }
 
-    public function solution()
+    public function taskMaps()
     {
-        return $this->belongsTo(Solution::class, 'solution_id', 'id');
+        return $this->hasMany(TaskMap::class, 'task_id', 'id');
     }
 
-    public function item()
+    public function taskSolutions()
     {
-        return $this->belongsTo(Item::class, 'item_id', 'id');
+        return $this->hasMany(TaskSolution::class, 'task_id', 'id');
     }
 
-    public function contract()
+    public function taskItems()
     {
-        return $this->belongsTo(Contract::class, 'contract_id', 'id');
+        return $this->hasMany(TaskItem::class, 'task_id', 'id');
     }
 
-    public function frequency()
+    public function taskStaffs()
     {
-        return $this->belongsTo(Frequency::class, 'frequency_id', 'id');
+        return $this->hasMany(TaskStaff::class, 'task_id', 'id');
     }
 }

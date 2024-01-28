@@ -69,6 +69,7 @@
                 <th>Hiệu lực</th>
                 <th>Thao tác</th>
             </tr>
+        </thead>
         <tbody>
             @foreach ($maps as $key => $map)
                 <tr class="row{{ $map->id }}">
@@ -89,6 +90,5 @@
                 </tr>
             @endforeach
         </tbody>
-        </thead>
     </table>
 @endsection

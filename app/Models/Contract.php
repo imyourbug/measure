@@ -29,18 +29,8 @@ class Contract extends Model
         return $this->belongsTo(Branch::class, 'branch_id', 'id');
     }
 
-    public function elecTasks()
+    public function tasks()
     {
-        return $this->hasMany(ElecTask::class, 'contract_id', 'id');
-    }
-
-    public function waterTasks()
-    {
-        return $this->hasMany(WaterTask::class, 'contract_id', 'id');
-    }
-
-    public function airTasks()
-    {
-        return $this->hasMany(AirTask::class, 'contract_id', 'id');
+        return $this->hasMany(Task::class, 'contract_id', 'id');
     }
 }

@@ -11,15 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('maps', function (Blueprint $table) {
+        Schema::create('task_maps', function (Blueprint $table) {
             $table->id();
             $table->string('code')->nullable();
             $table->string('area')->nullable();
             $table->string('position')->nullable();
             $table->string('target')->nullable();
+            $table->string('unit')->nullable();
+            $table->string('kpi')->nullable();
+            $table->string('result')->nullable();
             $table->string('image')->nullable();
-            $table->string('description')->nullable();
-            $table->integer('active')->default(0);
+            $table->string('detail')->nullable();
+            $table->integer('round')->nullable();
+            $table->unsignedBigInteger('task_id');
+            $table->unsignedBigInteger('map_id');
+            $table->foreign('task_id')->references('id')->on('tasks')->onDelete('cascade');
+            $table->foreign('map_id')->references('id')->on('maps')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -29,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('maps');
+        Schema::dropIfExists('task_maps');
     }
 };

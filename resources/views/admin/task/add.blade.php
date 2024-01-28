@@ -9,14 +9,9 @@
             <div class="row">
                 <div class="col-lg-6 col-md-12">
                     <div class="form-group">
-                        <label for="menu">Tần suất</label>
-                        <select class="form-control" name="contract_id">
-                            <option value="">--Tần suất--</option>
-                            @foreach ($frequencies as $frequency)
-                                <option value="{{ $frequency->id }}">{{ $frequency->day }}
-                                </option>
-                            @endforeach
-                        </select>
+                        <label for="menu">Ngày kế hoạch</label>
+                        <input type="date" class="form-control" name="plan_date"
+                            value="{{ old('plan_date') ?? now()->format('Y-m-d') }}" />
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-12">
@@ -101,7 +96,7 @@
         </div>
         <div class="card-footer">
             <button type="submit" class="btn btn-primary">Lưu</button>
-            <a href="{{route('admin.tasks.index')}}" class="btn btn-success">Xem danh sách</a>
+            <a href="{{ route('admin.tasks.index') }}" class="btn btn-success">Xem danh sách</a>
         </div>
         @csrf
     </form>
