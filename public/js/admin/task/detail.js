@@ -7,38 +7,38 @@ function closeModal() {
 }
 
 
-$(document).on("click", ".btn-filter", function () {
-    $.ajax({
-        type: "GET",
-        url: "/api/tasks/" + $(this).data("id") + "/getById",
-        success: function (response) {
-            if (response.status == 0) {
-                let task = response.task;
-                $("#type_id").val(task.type_id);
-                $("#contract_id").val(task.contract_id);
-                $("#note").text(task.note);
-                $("#task_id").val(task.id);
-            } else {
-                toastr.error(response.message);
-            }
-        },
-    });
-});
+// $(document).on("click", ".btn-filter", function () {
+//     $.ajax({
+//         type: "GET",
+//         url: "/api/taskdetails/" + $(this).data("id") + "/show",
+//         success: function (response) {
+//             if (response.status == 0) {
+//                 let task = response.task;
+//                 $("#type_id").val(task.type_id);
+//                 $("#contract_id").val(task.contract_id);
+//                 $("#note").text(task.note);
+//                 $("#task_id").val(task.id);
+//             } else {
+//                 toastr.error(response.message);
+//             }
+//         },
+//     });
+// });
 
 $(document).ready(function () {
     // solution
     dataTable = $("#table").DataTable({
         ajax: {
-            url: "/api/tasks/getAll",
-            dataSrc: "tasks",
+            url: "/api/taskdetails?id=" + $('#task_id').val(),
+            dataSrc: "taskDetails",
         },
         columns: [
             { data: "id" },
-            { data: "type.name" },
-            { data: function (d) {
-                return `${d.contract.name} - ${d.contract.branch.name}`;
-            }, },
-            { data: "note" },
+            { data: "task.type.name" },
+            { data: "plan_date" },
+            { data: "actual_date" },
+            { data: "time_in" },
+            { data: "time_out" },
             { data: "created_at" },
             {
                 data: function (d) {
@@ -61,7 +61,7 @@ $(document).ready(function () {
 $(document).on("click", ".btn-edit", function () {
     $.ajax({
         type: "GET",
-        url: "/api/tasks/" + $(this).data("id") + "/getById",
+        url: "/api/taskdetails/" + $(this).data("id") + "/getById",
         success: function (response) {
             if (response.status == 0) {
                 let task = response.task;

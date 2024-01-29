@@ -9,6 +9,13 @@ class TaskDetail extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        // 'name',
+        'plan_date' => 'datetime:d-m-Y',
+        'actual_date' => 'datetime:d-m-Y',
+        'created_at' => 'datetime:d-m-Y',
+    ];
+
     protected $fillable = [
         // 'name',
         'plan_date',

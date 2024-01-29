@@ -152,7 +152,8 @@ Route::group(['prefix' => '/admin', 'namespace' => 'App\Http\Controllers\Admin',
         Route::get('/', 'TaskController@index')->name('index');
         Route::get('/create', 'TaskController@create')->name('create');
         Route::post('/create', 'TaskController@store')->name('store');
-        Route::get('/update/{id}', 'TaskController@show')->name('show');
+        // Route::get('/update/{id}', 'TaskController@show')->name('show');
+        Route::get('/detail/{id}', 'TaskController@show')->name('detail');
         Route::post('/update', 'TaskController@update')->name('update');
     });
 

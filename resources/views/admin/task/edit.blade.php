@@ -25,14 +25,14 @@
                                 aria-selected="false">Nhân sự</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="custom-tabs-four-messages-tab" data-toggle="pill"
-                                href="#custom-tabs-four-messages" role="tab" aria-controls="custom-tabs-four-messages"
+                            <a class="nav-link" id="custom-tabs-four-items-tab" data-toggle="pill"
+                                href="#custom-tabs-four-items" role="tab" aria-controls="custom-tabs-four-items"
                                 aria-selected="false">Vật tư</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="custom-tabs-four-settings-tab" data-toggle="pill"
-                                href="#custom-tabs-four-settings" role="tab" aria-controls="custom-tabs-four-settings"
-                                aria-selected="true">Hóa chất</a>
+                            <a class="nav-link" id="custom-tabs-four-chemistries-tab" data-toggle="pill"
+                                href="#custom-tabs-four-chemistries" role="tab"
+                                aria-controls="custom-tabs-four-chemistries" aria-selected="true">Hóa chất</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="custom-tabs-four-solutions-tab" data-toggle="pill"
@@ -43,9 +43,11 @@
                 </div>
                 <div class="card-body">
                     <div class="tab-content" id="custom-tabs-four-tabContent">
+                        {{-- Map --}}
                         <div class="tab-pane active show fade" id="custom-tabs-four-home" role="tabpanel"
                             aria-labelledby="custom-tabs-four-home-tab">
-                            <button class="btn btn-success mb-4 btn-open-modal" data-target="#modal-map" data-toggle="modal">Thêm
+                            <button class="btn btn-success mb-4 btn-open-modal" data-target="#modal-map"
+                                data-toggle="modal">Thêm
                                 mới</button>
                             <table id="tableMap" class="table-map table display nowrap dataTable dtr-inline collapsed">
                                 <thead>
@@ -63,9 +65,11 @@
                                 </tbody>
                             </table>
                         </div>
+                        {{-- Staff --}}
                         <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel"
                             aria-labelledby="custom-tabs-four-profile-tab">
-                            <button class="btn btn-success mb-4 btn-open-modal-staff" data-target="#modal-staff" data-toggle="modal">Thêm
+                            <button class="btn btn-success mb-4 btn-open-modal-staff" data-target="#modal-staff"
+                                data-toggle="modal">Thêm
                                 mới</button>
                             <table id="tableStaff" class="table-staff table display nowrap dataTable dtr-inline collapsed">
                                 <thead>
@@ -83,21 +87,178 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="tab-pane fade" id="custom-tabs-four-messages" role="tabpanel"
-                            aria-labelledby="custom-tabs-four-messages-tab">
-                            a
+                        {{-- Item --}}
+                        <div class="tab-pane fade" id="custom-tabs-four-items" role="tabpanel"
+                            aria-labelledby="custom-tabs-four-items-tab">
+                            <button class="btn btn-success mb-4 btn-open-modal-item" data-target="#modal-item"
+                                data-toggle="modal">Thêm
+                                mới</button>
+                            <table id="tableItem" class="table-item table display nowrap dataTable dtr-inline collapsed">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Tên</th>
+                                        <th>Đơn vị</th>
+                                        <th>KPI</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
                         </div>
-                        <div class="tab-pane fade" id="custom-tabs-four-settings" role="tabpanel"
-                            aria-labelledby="custom-tabs-four-settings-tab">
-                            b
+                        {{-- Chemistry --}}
+                        <div class="tab-pane fade" id="custom-tabs-four-chemistries" role="tabpanel"
+                            aria-labelledby="custom-tabs-four-chemistries-tab">
+                            <button class="btn btn-success mb-4 btn-open-modal-chemistry" data-target="#modal-chemistry"
+                                data-toggle="modal">Thêm
+                                mới</button>
+                            <table id="tableChemistry"
+                                class="table-chemistry table display nowrap dataTable dtr-inline collapsed">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Tên</th>
+                                        <th>Đơn vị</th>
+                                        <th>KPI</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
                         </div>
+                        {{-- Solution --}}
                         <div class="tab-pane fade" id="custom-tabs-four-solutions" role="tabpanel"
                             aria-labelledby="custom-tabs-four-solutions-tab">
-                            b
+                            <button class="btn btn-success mb-4 btn-open-modal-solution" data-target="#modal-solution"
+                                data-toggle="modal">Thêm
+                                mới</button>
+                            <table id="tableSolution" class="table-solution table display nowrap dataTable dtr-inline collapsed">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Tên</th>
+                                        <th>Đơn vị</th>
+                                        <th>KPI</th>
+                                        <th>Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
 
+            </div>
+        </div>
+    </div>
+    {{-- add solution --}}
+    <div class="modal fade show" id="modal-solution" style="display: none;" aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title modal-title-solution">Thêm phương pháp</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="">
+                    <div class="">
+                        <div class=""></div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Phương pháp</label>
+                                <select class="form-control" name="" id="solution_id">
+                                    @foreach ($solutions as $solution)
+                                        <option value="{{ $solution->id }}">
+                                            {{ $solution->id . '-' . $solution->name ?? '' }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Đơn vị</label>
+                                <input class="form-control" type="text" id="solution_unit" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">KPI</label>
+                                <input class="form-control" type="text" id="solution_kpi" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    <button type="button" data-url="{{ route('tasksolutions.store') }}"
+                        class="btn btn-primary btn-add-solution">Lưu</button>
+                    <button style="display: none" type="button" data-url="{{ route('tasksolutions.update') }}"
+                        class="btn btn-primary btn-update-solution">Lưu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {{-- add item --}}
+    <div class="modal fade show" id="modal-item" style="display: none;" aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title modal-title-item">Thêm vật tư</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="">
+                    <div class="">
+                        <div class=""></div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Vật tư</label>
+                                <select class="form-control" name="" id="item_id">
+                                    @foreach ($items as $item)
+                                        <option value="{{ $item->id }}">
+                                            {{ $item->id . '-' . $item->name ?? '' }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Đơn vị</label>
+                                <input class="form-control" type="text" id="item_unit" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">KPI</label>
+                                <input class="form-control" type="text" id="item_kpi" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    <button type="button" data-url="{{ route('taskitems.store') }}"
+                        class="btn btn-primary btn-add-item">Lưu</button>
+                    <button style="display: none" type="button" data-url="{{ route('taskitems.update') }}"
+                        class="btn btn-primary btn-update-item">Lưu</button>
+                </div>
             </div>
         </div>
     </div>
@@ -167,7 +328,8 @@
                                 <label for="menu">Nhân sự</label>
                                 <select class="form-control" name="" id="staff_id">
                                     @foreach ($staffs as $staff)
-                                        <option value="{{ $staff->id }}">{{ $staff->id . '-' . $staff->staff->name ?? '' }}</option>
+                                        <option value="{{ $staff->id }}">
+                                            {{ $staff->id . '-' . $staff->staff->name ?? '' }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -180,6 +342,61 @@
                         class="btn btn-primary btn-add-staff">Lưu</button>
                     <button style="display: none" type="button" data-url="{{ route('taskstaff.update') }}"
                         class="btn btn-primary btn-update-staff">Lưu</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    {{-- add chemistry --}}
+    <div class="modal fade show" id="modal-chemistry" style="display: none;" aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title modal-title-chemistry">Thêm hóa chất</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="">
+                    <div class="">
+                        <div class=""></div>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Hóa chất</label>
+                                <select class="form-control" name="" id="chemistry_id">
+                                    @foreach ($chemistries as $chemistry)
+                                        <option value="{{ $chemistry->id }}">
+                                            {{ $chemistry->id . '-' . $chemistry->name ?? '' }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Đơn vị</label>
+                                <input class="form-control" type="text" id="chemistry_unit" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">KPI</label>
+                                <input class="form-control" type="text" id="chemistry_kpi" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    <button type="button" data-url="{{ route('taskchemistries.store') }}"
+                        class="btn btn-primary btn-add-chemistry">Lưu</button>
+                    <button style="display: none" type="button" data-url="{{ route('taskchemistries.update') }}"
+                        class="btn btn-primary btn-update-chemistry">Lưu</button>
                 </div>
             </div>
 
@@ -232,4 +449,7 @@
     <input type="hidden" name="" value="{{ $task->id }}" id="task_id">
     <input type="hidden" name="" value="" id="taskmap_id">
     <input type="hidden" name="" value="" id="taskstaff_id">
+    <input type="hidden" name="" value="" id="taskchemistry_id">
+    <input type="hidden" name="" value="" id="taskitem_id">
+    <input type="hidden" name="" value="" id="tasksolution_id">
 @endsection

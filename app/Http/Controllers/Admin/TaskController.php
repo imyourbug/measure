@@ -6,18 +6,15 @@ use App\Constant\GlobalConstant;
 use App\Http\Controllers\Controller;
 use App\Models\Chemistry;
 use App\Models\Contract;
-use App\Models\Customer;
-use App\Models\Frequency;
-use App\Models\InfoUser;
 use App\Models\Item;
 use App\Models\Map;
 use App\Models\Solution;
 use App\Models\Task;
+use App\Models\TaskDetail;
 use App\Models\TaskMap;
 use App\Models\Type;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Throwable;
 use Toastr;
 
@@ -28,9 +25,10 @@ class TaskController extends Controller
         return view('admin.task.add', [
             'title' => 'Thêm nhiệm vụ',
             'staffs' => User::with('staff')->where('role', GlobalConstant::ROLE_STAFF)->get(),
-            'contracts' => Contract::all(),
+            'contracts' => Contract::with(['branch'])->get(),
             'items' => Item::all(),
             'maps' => Map::all(),
+            'types' => Type::all(),
             'solutions' => Solution::all(),
             'chemistries' => Chemistry::all(),
         ]);
@@ -39,15 +37,9 @@ class TaskController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => 'required|string',
+            // 'name' => 'required|string',
             'type_id' => 'required|numeric',
-            'chemistry_id' => 'required|numeric',
-            'solution_id' => 'required|numeric',
-            'item_id' => 'required|numeric',
-            'frequency_id' => 'required|numeric',
             'contract_id' => 'required|numeric',
-            'user_id' => 'nullable|numeric',
-            'range' => 'nullable|string',
             'note' => 'nullable|string',
         ]);
         try {
@@ -65,24 +57,23 @@ class TaskController extends Controller
     {
         $data = $request->validate([
             'id' => 'required|numeric',
-            'name' => 'required|string',
+            'note' => 'required|string',
             'type_id' => 'required|numeric',
-            'chemistry_id' => 'required|numeric',
-            'solution_id' => 'required|numeric',
-            'item_id' => 'required|numeric',
-            'frequency_id' => 'required|numeric',
             'contract_id' => 'required|numeric',
-            'user_id' => 'nullable|numeric',
-            'range' => 'nullable|string',
-            'note' => 'nullable|string',
         ]);
         unset($data['id']);
-        $update = Task::where('id', $request->input('id'))->update($data);
-        if ($update) {
-            Toastr::success(__('message.success.update'), 'Thông báo');
-        } else Toastr::error(__('message.fail.update'), __('title.toastr.fail'));
-
-        return redirect()->back();
+        try {
+            Task::where('id', $request->input('id'))->update($data);
+            return response()->json([
+                'status' => 0,
+                'message' => 'Cập nhật nhiệm vụ thành công'
+            ]);
+        } catch (Throwable $e) {
+            return response()->json([
+                'status' => 1,
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 
     public function index(Request $request)
@@ -90,8 +81,7 @@ class TaskController extends Controller
         $from = $request->from;
         $to = $request->to;
         $tasks = Task::with([
-            'user.staff', 'contract', 'type',
-            'chemistry', 'solution', 'item',
+            'contract.branch', 'type',
         ])
             ->when($from, function ($q) use ($from) {
                 return $q->where('created_at', '>=', $from . ' 00:00:00');
@@ -101,21 +91,55 @@ class TaskController extends Controller
 
         return view('admin.task.list', [
             'title' => 'Danh sách nhiệm vụ',
+            'tasks' => $tasks,
+            'contracts' => Contract::with(['branch'])->get(),
+            'types' => Type::all(),
+        ]);
+    }
+
+    public function getAll(Request $request)
+    {
+        $from = $request->from;
+        $to = $request->to;
+        $tasks = Task::with([
+            'contract.branch', 'type',
+        ])
+            ->when($from, function ($q) use ($from) {
+                return $q->where('created_at', '>=', $from . ' 00:00:00');
+            })->when($to, function ($q) use ($to) {
+                return $q->where('created_at', '<=', $to . ' 23:59:59');
+            })->get();
+        return response()->json([
+            'status' => 0,
             'tasks' => $tasks
         ]);
     }
 
-    public function show($id)
+    public function getById($id)
     {
-        // dd(User::with('staff')->where('role', GlobalConstant::ROLE_STAFF)->get());
-        return view('admin.task.edit', [
-            'title' => 'Chi tiết nhiệm vụ',
-            'task' => Task::firstWhere('id', $id),
-            'staffs' => User::with('staff')->where('role', GlobalConstant::ROLE_STAFF)->get(),
-            'types' => Type::all(),
-            'maps' => Map::all(),
+        return response()->json([
+            'status' => 0,
+            'task' => Task::with(['contract', 'type',])->firstWhere('id', $id)
+        ]);
+    }
+
+    public function show($id, Request $request)
+    {
+        $from = $request->from;
+        $to = $request->to;
+        $tasks = TaskDetail::with([
+            'task',
+        ])
+            ->when($from, function ($q) use ($from) {
+                return $q->where('created_at', '>=', $from . ' 00:00:00');
+            })->when($to, function ($q) use ($to) {
+                return $q->where('created_at', '<=', $to . ' 23:59:59');
+            })->get();
+        return view('admin.task.detail', [
+            'title' => 'Danh sách nhiệm vụ',
+            'tasks' => $tasks,
             'contracts' => Contract::with(['branch'])->get(),
-            'taskMaps' => TaskMap::with(['task', 'map'])->where('task_id', $id)->get(),
+            'types' => Type::all(),
         ]);
     }
 

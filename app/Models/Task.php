@@ -9,6 +9,10 @@ class Task extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'created_at' => 'datetime:d-m-Y',
+    ];
+
     protected $fillable = [
         // 'name',
         'note',
@@ -24,6 +28,11 @@ class Task extends Model
     public function type()
     {
         return $this->belongsTo(Type::class, 'type_id', 'id');
+    }
+
+    public function contract()
+    {
+        return $this->belongsTo(Contract::class, 'contract_id', 'id');
     }
 
     public function taskChemitries()

@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Admin\Accounts\AccountController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -34,6 +33,24 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin'], function () {
         Route::post('uploadmap', 'SettingController@uploadmap')->name('uploadmap');
     });
 
+    #tasks
+    Route::group(['prefix' => 'tasks', 'as' => 'tasks.'], function () {
+        Route::get('/getAll', 'TaskController@getAll')->name('getAll');
+        Route::post('update', 'TaskController@update')->name('update');
+        Route::get('/{id}/getById', 'TaskController@getById')->name('getById');
+        Route::delete('/{id}/destroy', 'TaskController@destroy')->name('destroy');
+    });
+
+    #taskdetails
+    Route::group(['prefix' => 'taskdetails', 'as' => 'taskdetails.'], function () {
+        Route::post('create', 'TaskDetailController@store')->name('store');
+        Route::post('update', 'TaskDetailController@update')->name('update');
+        Route::get('/', 'TaskDetailController@index')->name('index');
+        Route::get('/{id}/show', 'TaskDetailController@show')->name('show');
+        Route::delete('/{id}/destroy', 'TaskDetailController@destroy')->name('destroy');
+        Route::get('/{id}/getById', 'TaskDetailController@getById')->name('getById');
+    });
+
     #taskmaps
     Route::group(['prefix' => 'taskmaps', 'as' => 'taskmaps.'], function () {
         Route::post('create', 'TaskMapController@store')->name('store');
@@ -50,6 +67,33 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin'], function () {
         Route::get('/', 'TaskStaffController@index')->name('index');
         Route::get('/{id}/show', 'TaskStaffController@show')->name('show');
         Route::delete('/{id}/destroy', 'TaskStaffController@destroy')->name('destroy');
+    });
+
+    #taskchemistries
+    Route::group(['prefix' => 'taskchemistries', 'as' => 'taskchemistries.'], function () {
+        Route::post('create', 'TaskChemistryController@store')->name('store');
+        Route::post('update', 'TaskChemistryController@update')->name('update');
+        Route::get('/', 'TaskChemistryController@index')->name('index');
+        Route::get('/{id}/show', 'TaskChemistryController@show')->name('show');
+        Route::delete('/{id}/destroy', 'TaskChemistryController@destroy')->name('destroy');
+    });
+
+    #taskitems
+    Route::group(['prefix' => 'taskitems', 'as' => 'taskitems.'], function () {
+        Route::post('create', 'TaskItemController@store')->name('store');
+        Route::post('update', 'TaskItemController@update')->name('update');
+        Route::get('/', 'TaskItemController@index')->name('index');
+        Route::get('/{id}/show', 'TaskItemController@show')->name('show');
+        Route::delete('/{id}/destroy', 'TaskItemController@destroy')->name('destroy');
+    });
+
+    #tasksolutions
+    Route::group(['prefix' => 'tasksolutions', 'as' => 'tasksolutions.'], function () {
+        Route::post('create', 'TaskSolutionController@store')->name('store');
+        Route::post('update', 'TaskSolutionController@update')->name('update');
+        Route::get('/', 'TaskSolutionController@index')->name('index');
+        Route::get('/{id}/show', 'TaskSolutionController@show')->name('show');
+        Route::delete('/{id}/destroy', 'TaskSolutionController@destroy')->name('destroy');
     });
 
     #accounts

@@ -231,7 +231,7 @@
                             <td>{{ $task->note ?? 'Trống' }}</td>
                             <td>{{ date('d-m-Y', strtotime($task->created_at)) }}</td>
                             <td><a class="btn btn-primary btn-sm"
-                                    href='{{ route('admin.tasks.show', ['id' => $task->id]) }}'>
+                                    href='{{ route('admin.tasks.detail', ['id' => $task->id]) }}'>
                                     <i class="fas fa-edit"></i>
                                 </a>
                                 <button data-id="{{ $task->id }}" class="btn btn-danger btn-sm btn-delete">

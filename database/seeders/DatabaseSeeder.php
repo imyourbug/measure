@@ -5,10 +5,13 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use App\Models\Branch;
+use App\Models\Chemistry;
 use App\Models\Customer;
 use App\Models\InfoUser;
+use App\Models\Item;
 use App\Models\Map;
 use App\Models\Setting;
+use App\Models\Solution;
 use App\Models\TaskType;
 use App\Models\Type;
 use App\Models\User;
@@ -191,6 +194,47 @@ class DatabaseSeeder extends Seeder
             [
                 'code' => 'SD02',
                 'position' => 2,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
+
+        Chemistry::insert([
+            [
+                'code' => 'HC01',
+                'name' => 'Hóa chất 1',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'code' => 'HC02',
+                'name' => 'Hóa chất 2',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
+
+        Item::insert([
+            [
+                'name' => 'Vật tư 1',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'Vật tư 2',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
+
+        Solution::insert([
+            [
+                'name' => 'Phương pháp 1',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'Phương pháp 2',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
