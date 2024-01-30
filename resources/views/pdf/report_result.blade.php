@@ -29,7 +29,7 @@
         <tbody>
             <tr>
                 <td rowspan="3">
-                    <img width="100px" height="100px" src="{{ public_path('images/logo.png') }}" alt="" />
+                    <img width="200px" height="100px" src="{{ public_path('images/logo.png') }}" alt="" />
                 </td>
                 <td style="text-align:center">
                     Công ty

@@ -2,9 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Constant\GlobalConstant;
 use App\Http\Controllers\Controller;
+use App\Models\Chemistry;
+use App\Models\Contract;
+use App\Models\Item;
+use App\Models\Map;
+use App\Models\Solution;
 use App\Models\TaskDetail;
-use App\Models\TaskItem;
+use App\Models\TaskMap;
+use App\Models\Type;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Throwable;
 
@@ -13,13 +21,14 @@ class TaskDetailController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'unit' => 'required|string',
-            'kpi' => 'required|numeric',
+            'time_in' => 'required|string',
+            'time_out' => 'required|string',
+            'plan_date' => 'required|date',
+            'actual_date' => 'nullable|date',
             'task_id' => 'required|numeric',
-            'item_id' => 'required|numeric',
         ]);
         try {
-            TaskItem::create($data);
+            TaskDetail::create($data);
             return response()->json([
                 'status' => 0,
                 'message' => 'Tạo thành công'
@@ -36,14 +45,14 @@ class TaskDetailController extends Controller
     {
         $data = $request->validate([
             'id' => 'required|numeric',
-            'unit' => 'required|string',
-            'kpi' => 'required|numeric',
-            // 'task_id' => 'required|numeric',
-            'item_id' => 'required|numeric',
+            'time_in' => 'required|string',
+            'time_out' => 'required|string',
+            'plan_date' => 'required|date',
+            'actual_date' => 'nullable|date',
         ]);
         unset($data['id']);
         try {
-            TaskItem::where('id', $request->input('id'))->update($data);
+            TaskDetail::where('id', $request->input('id'))->update($data);
             return response()->json([
                 'status' => 0,
                 'message' => 'Cập nhật thành công'
@@ -74,9 +83,9 @@ class TaskDetailController extends Controller
 
     public function show($id)
     {
-        return view('admin.task.edit', [
+        return view('admin.taskdetail.edit', [
             'title' => 'Chi tiết nhiệm vụ',
-            'task' => Task::firstWhere('id', $id),
+            'taskDetail' => TaskDetail::with(['task.type'])->firstWhere('id', $id),
             'staffs' => User::with('staff')->where('role', GlobalConstant::ROLE_STAFF)->get(),
             'types' => Type::all(),
             'chemistries' => Chemistry::all(),
@@ -91,7 +100,7 @@ class TaskDetailController extends Controller
     public function destroy($id)
     {
         try {
-            TaskItem::firstWhere('id', $id)->delete();
+            TaskDetail::firstWhere('id', $id)->delete();
 
             return response()->json([
                 'status' => 0,

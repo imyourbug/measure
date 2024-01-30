@@ -57,6 +57,17 @@ Route::group(['prefix' => 'user', 'namespace' => 'App\Http\Controllers\Users', '
 Route::group(['prefix' => '/admin', 'namespace' => 'App\Http\Controllers\Admin', 'as' => 'admin.', 'middleware' => 'admin'], function () {
     Route::get('/', 'AdminController@index')->name('index');
 
+    #reports
+    Route::group(['prefix' => 'reports', 'as' => 'reports.'], function () {
+        Route::get('/', 'ReportController@index')->name('index');
+        Route::get('/task/{id}', 'ReportController@task')->name('task');
+        Route::get('/task/detail/{id}', 'ReportController@detail')->name('detail');
+        // Route::get('/create', 'ReportController@create')->name('create');
+        // Route::post('/create', 'ReportController@store')->name('store');
+        // Route::get('/update/{id}', 'ReportController@show')->name('show');
+        // Route::post('/update', 'ReportController@update')->name('update');
+    });
+
     #accounts
     Route::group(['prefix' => 'accounts', 'as' => 'accounts.'], function () {
         Route::get('/', 'AccountController@index')->name('index');
@@ -155,6 +166,11 @@ Route::group(['prefix' => '/admin', 'namespace' => 'App\Http\Controllers\Admin',
         // Route::get('/update/{id}', 'TaskController@show')->name('show');
         Route::get('/detail/{id}', 'TaskController@show')->name('detail');
         Route::post('/update', 'TaskController@update')->name('update');
+    });
+
+    #taskdetails
+    Route::group(['prefix' => 'taskdetails', 'as' => 'taskdetails.'], function () {
+        Route::get('/update/{id}', 'TaskDetailController@show')->name('show');
     });
 
     #assignments

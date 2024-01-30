@@ -3,19 +3,19 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
 @endpush
 @push('scripts')
-    <script src="/js/admin/task/detail.js"></script>
+    <script src="/js/admin/report/task/index.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
 @endpush
 @section('content')
     <div class="mb-3">
-        {{-- <a href="{{ route('admin.tasks.create') }}" class="btn btn-success">Thêm mới</a> --}}
+        <a href="{{ route('admin.reports.index') }}" class="btn btn-danger"><i class="fa-solid fa-arrow-left"></i></a>
         {{-- <input class="" style="" type="date" name="from"
             value="{{ Request::get('from') ?? now()->format('Y-m-01') }}" />
         <input class="" style="" type="date" name="to"
             value="{{ Request::get('to') ?? now()->format('Y-m-t') }}" />
         <button class="btn btn-warning btn-filter" type="submit">Lọc</button> --}}
-        <button class="btn btn-success mb-4 btn-open-modal" data-target="#modal" data-toggle="modal">Thêm
+        <button class="btn btn-success btn-open-modal" data-target="#modal" data-toggle="modal">Thêm
             mới</button>
     </div>
     <table id="table" class="table display nowrap dataTable dtr-inline collapsed">

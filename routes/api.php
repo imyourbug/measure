@@ -19,8 +19,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::group(['namespace' => 'App\Http\Controllers\Users'], function () {
     Route::group(['prefix' => 'tasks', 'as' => 'tasks.'], function () {
-        Route::post('export', 'TaskController@export')->name('export');
     });
+});
+
+Route::group(['namespace' => 'App\Http\Controllers', 'prefix' => 'exports', 'as' => 'exports.'], function () {
+    Route::post('plan', 'ExportController@plan')->name('plan');
 });
 
 Route::group(['namespace' => 'App\Http\Controllers'], function () {

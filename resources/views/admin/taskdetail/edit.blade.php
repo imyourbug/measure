@@ -3,12 +3,45 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
 @endpush
 @push('scripts')
-    <script src="/js/admin/task/edit.js"></script>
+    <script src="/js/admin/taskdetail/edit.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
     <script></script>
 @endpush
 @section('content')
+    <div class="card-body">
+        <div class="row">
+            <div class="col-lg-6 col-md-12">
+                <label for="">Nhiệm vụ</label>
+                <p class="form-control">{{$taskDetail->task->type->name}}</p>
+            </div>
+            <div class="col-lg-6 col-md-12">
+                <label for="">Phạm vi</label>
+                <p class="form-control">{{$taskDetail->range}}</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-12">
+                <label for="">Giờ vào</label>
+                <p class="form-control">{{$taskDetail->time_in}}</p>
+            </div>
+            <div class="col-lg-6 col-md-12">
+                <label for="">Giờ ra</label>
+                <p class="form-control">{{$taskDetail->time_out}}</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-md-12">
+                <label for="">Ngày kế hoạch</label>
+                <p class="form-control">{{date('d-m-Y', strtotime($taskDetail->plan_date))}}</p>
+
+            </div>
+            <div class="col-lg-6 col-md-12">
+                <label for="">Ngày thực hiện</label>
+                <p class="form-control">{{!$taskDetail->actual_date ? '' : date('d-m-Y', strtotime($taskDetail->actual_date))}}</p>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-lg-12 col-sm-12">
             <div class="card card-primary card-outline card-outline-tabs">
@@ -134,7 +167,8 @@
                             <button class="btn btn-success mb-4 btn-open-modal-solution" data-target="#modal-solution"
                                 data-toggle="modal">Thêm
                                 mới</button>
-                            <table id="tableSolution" class="table-solution table display nowrap dataTable dtr-inline collapsed">
+                            <table id="tableSolution"
+                                class="table-solution table display nowrap dataTable dtr-inline collapsed">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
@@ -446,7 +480,7 @@
         </div>
         @csrf
     </form> --}}
-    <input type="hidden" name="" value="{{ $task->id }}" id="task_id">
+    <input type="hidden" name="" value="{{ $taskDetail->id }}" id="task_id">
     <input type="hidden" name="" value="" id="taskmap_id">
     <input type="hidden" name="" value="" id="taskstaff_id">
     <input type="hidden" name="" value="" id="taskchemistry_id">

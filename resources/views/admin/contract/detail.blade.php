@@ -80,8 +80,8 @@
                     .find(':selected')
                     .val());
                 $('.year').val($('.select-year').val());
-                $('.type').val($('.select-type').val());
-                console.log($('.month').val(), $('.year').val(), $('.type').val());
+                $('.type_report').val($('.select-type').val());
+                console.log($('.month').val(), $('.year').val(), $('.type_report').val());
             }, 1000);
         });
     </script>
@@ -230,9 +230,9 @@
                             <th>{{ $task->type->name }}</th>
                             <td>{{ $task->note ?? 'Trống' }}</td>
                             <td>{{ date('d-m-Y', strtotime($task->created_at)) }}</td>
-                            <td><a class="btn btn-primary btn-sm"
+                            <td><a class="btn btn-success btn-sm" style="padding: 4px 15px"
                                     href='{{ route('admin.tasks.detail', ['id' => $task->id]) }}'>
-                                    <i class="fas fa-edit"></i>
+                                    <i class="fa-solid fa-info"></i>
                                 </a>
                                 <button data-id="{{ $task->id }}" class="btn btn-danger btn-sm btn-delete">
                                     <i class="fas fa-trash"></i>
@@ -248,7 +248,7 @@
     <div class="modal fade show" id="modal" style="display:none;" data-id="123" aria-modal="true" role="dialog">
         <div class="modal-dialog modal-sm modal-dialog-centered">
             <div class="modal-content">
-                <form action="{{ route('tasks.export') }}" method="POST" id="form-export">
+                <form action="{{ route('exports.plan') }}" method="POST" id="form-export">
                     <div class="modal-header">
                         <h4 class="modal-title">Xuất báo cáo?</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -262,7 +262,8 @@
                     <input type="hidden" class="img-chart" name="img_chart" />
                     <input type="hidden" class="month" name="month" />
                     <input type="hidden" class="year" name="year" />
-                    <input type="hidden" class="type" name="type" />
+                    <input type="hidden" class="type_report" name="type_report" />
+                    <input type="hidden" name="contract_id" value="{{ request()->id }}" />
                     <div class="modal-footer justify-content-between">
                         <button class="btn btn-default" data-dismiss="modal">Đóng</button>
                         <button type="submit" class="btn btn-primary btn-export">Xác nhận</button>

@@ -1,11 +1,13 @@
 @extends('admin.main')
 @push('styles')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 @endpush
 @push('scripts')
-    <script src="/js/admin/task/detail.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+    <script src="/js/admin/report/index.js"></script>
 @endpush
 @section('content')
     <div class="mb-3">
@@ -15,18 +17,25 @@
         <input class="" style="" type="date" name="to"
             value="{{ Request::get('to') ?? now()->format('Y-m-t') }}" />
         <button class="btn btn-warning btn-filter" type="submit">Lọc</button> --}}
-        <button class="btn btn-success mb-4 btn-open-modal" data-target="#modal" data-toggle="modal">Thêm
-            mới</button>
+        <div class="row">
+            <div class="col-lg-6 col-md-12">
+                <label for="">Lựa chọn hợp đồng</label>
+                <select multiple="multiple" class="select2 custom-select form-control-border select">
+                    @foreach ($contracts as $contract)
+                        <option value="{{ $contract->id }}">{{ $contract->name . '-' . $contract->branch->name ?? '' }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
     </div>
     <table id="table" class="table display nowrap dataTable dtr-inline collapsed">
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Nhiệm vụ</th>
-                <th>Ngày kế hoạch</th>
-                <th>Ngày thực hiện</th>
-                <th>Giờ vào</th>
-                <th>Giờ ra</th>
+                <th>Hợp đồng</th>
+                <th>Ghi chú</th>
                 <th>Ngày lập</th>
                 <th>Thao tác</th>
             </tr>
@@ -38,7 +47,7 @@
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title modal-title">Cập nhật chi tiết nhiệm vụ</h4>
+                    <h4 class="modal-title modal-title">Cập nhật nhiệm vụ</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -47,42 +56,45 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Ngày kế hoạch</label>
-                                <input type="date" id="plan_date" class="form-control" />
+                                <label for="menu">Loại nhiệm vụ</label>
+                                <select class="form-control" id="type_id">
+                                    @foreach ($types as $type)
+                                        <option value="{{ $type->id }}">
+                                            {{ $type->id . '-' . $type->name ?? '' }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Ngày thực hiện</label>
-                                <input type="date" id="actual_date" class="form-control" />
+                                <label for="menu">Hợp đồng</label>
+                                <select class="form-control select-contract" id="contract_id">
+                                    <option value="">--Hợp đồng--</option>
+                                    @foreach ($contracts as $contract)
+                                        <option value="{{ $contract->id }}">
+                                            {{ $contract->name . '-' . $contract->branch->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-6 col-md-12">
+                        <div class="col-lg-12 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Giờ vào</label>
-                                <input type="text" id="time_in" class="form-control" />
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-12">
-                            <div class="form-group">
-                                <label for="menu">Giờ ra</label>
-                                <input type="text" id="time_out" class="form-control" />
+                                <label for="menu">Ghi chú</label>
+                                <textarea placeholder="Nhập ghi chú..." class="form-control" id="note" cols="30" rows="5"></textarea>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                    <button type="button" data-url="{{ route('taskdetails.store') }}"
-                        class="btn btn-primary btn-add">Lưu</button>
-                    <button style="display: none" type="button" data-url="{{ route('taskdetails.update') }}"
+                    <button type="button" data-url="{{ route('tasks.update') }}"
                         class="btn btn-primary btn-update">Lưu</button>
                 </div>
             </div>
         </div>
     </div>
-    <input type="hidden" id="task_id" value="{{ request()->id }}" />
-    <input type="hidden" id="taskdetail_id" />
+    <input type="hidden" id="task_id">
 @endsection

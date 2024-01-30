@@ -78,7 +78,7 @@ $(document).ready(function () {
                     return `<a class="btn btn-primary btn-sm btn-edit" data-id="${d.id}" data-target="#modal" data-toggle="modal">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <a class="btn btn-success btn-sm" style="padding: 4px 15px" href="/admin/taskdetails/update/${d.id}">
+                                                <a class="btn btn-success btn-sm" style="padding: 4px 15px" href="/admin/reports/task/detail/${d.id}">
                                                     <i class="fa-solid fa-info"></i>
                                                 </a>
                                                 <button data-id="${d.id}"

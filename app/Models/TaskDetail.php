@@ -10,10 +10,9 @@ class TaskDetail extends Model
     use HasFactory;
 
     protected $casts = [
-        // 'name',
-        'plan_date' => 'datetime:d-m-Y',
-        'actual_date' => 'datetime:d-m-Y',
-        'created_at' => 'datetime:d-m-Y',
+        'plan_date' => 'datetime:Y-m-d',
+        'actual_date' => 'datetime:Y-m-d',
+        'created_at' => 'datetime:Y-m-d',
     ];
 
     protected $fillable = [
@@ -30,5 +29,30 @@ class TaskDetail extends Model
     public function task()
     {
         return $this->belongsTo(Task::class, 'task_id', 'id');
+    }
+
+    public function taskChemitries()
+    {
+        return $this->hasMany(TaskChemistry::class, 'task_id', 'id');
+    }
+
+    public function taskMaps()
+    {
+        return $this->hasMany(TaskMap::class, 'task_id', 'id');
+    }
+
+    public function taskSolutions()
+    {
+        return $this->hasMany(TaskSolution::class, 'task_id', 'id');
+    }
+
+    public function taskItems()
+    {
+        return $this->hasMany(TaskItem::class, 'task_id', 'id');
+    }
+
+    public function taskStaffs()
+    {
+        return $this->hasMany(TaskStaff::class, 'task_id', 'id');
     }
 }

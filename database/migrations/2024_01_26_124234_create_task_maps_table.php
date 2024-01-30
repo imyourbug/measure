@@ -25,7 +25,7 @@ return new class extends Migration
             $table->integer('round')->nullable();
             $table->unsignedBigInteger('task_id');
             $table->unsignedBigInteger('map_id');
-            $table->foreign('task_id')->references('id')->on('tasks')->onDelete('cascade');
+            $table->foreign('task_id')->references('id')->on('task_details')->onDelete('cascade');
             $table->foreign('map_id')->references('id')->on('maps')->onDelete('cascade');
             $table->timestamps();
         });

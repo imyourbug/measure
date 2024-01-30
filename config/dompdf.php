@@ -279,6 +279,7 @@ return array(
          * @var bool
          */
         "enable_html5_parser" => true,
+        'default_charset' => 'UTF-8',
     ),
 
 

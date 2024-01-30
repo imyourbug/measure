@@ -408,7 +408,7 @@
                                 </li>
                             </ul>
                         </li>
-                        <li
+                        {{-- <li
                             class="nav-item {{ in_array(
                                 request()->route()->getName(),
                                 ['admin.assignments.index', 'admin.assignments.create'],
@@ -430,15 +430,15 @@
                                         <p>Thêm phân công</p>
                                     </a>
                                 </li>
-                                {{-- <li
+                                 <li
                                     class="nav-item {{ request()->route()->getName() == 'admin.assignments.index'? 'option-open': '' }}">
                                     <a href="{{ route('admin.assignments.index') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Danh sách phân công</p>
                                     </a>
-                                </li> --}}
+                                </li> 
                             </ul>
-                        </li>
+                        </li> --}}
                         <li
                             class="nav-item {{ in_array(
                                 request()->route()->getName(),
@@ -466,6 +466,38 @@
                                     <a href="{{ route('admin.tasks.index') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Danh sách nhiệm vụ</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        {{-- report --}}
+                        <li
+                            class="nav-item {{ in_array(
+                                request()->route()->getName(),
+                                ['admin.reports.index', 'admin.reports.create'],
+                            )
+                                ? 'menu-is-opening menu-open'
+                                : '' }}">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fa-solid fa-flag"></i>
+                                <p>
+                                    Báo cáo
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                {{-- <li
+                                    class="nav-item {{ request()->route()->getName() == 'admin.reports.create'? 'option-open': '' }}">
+                                    <a href="{{ route('admin.reports.create') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Thêm báo cáo</p>
+                                    </a>
+                                </li> --}}
+                                <li
+                                    class="nav-item {{ request()->route()->getName() == 'admin.reports.index'? 'option-open': '' }}">
+                                    <a href="{{ route('admin.reports.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Báo cáo</p>
                                     </a>
                                 </li>
                             </ul>

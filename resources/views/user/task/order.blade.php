@@ -84,7 +84,7 @@
             } else {
                 $.ajax({
                     type: 'POST',
-                    url: '{{ route('tasks.export') }}',
+                    url: '{{ route('exports.plan') }}',
                     data: {
                         products: products,
                         market_name: $('.market_name').val(),

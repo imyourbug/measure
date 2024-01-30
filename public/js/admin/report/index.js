@@ -6,26 +6,33 @@ function closeModal() {
     $(".modal-backdrop").remove();
 }
 
-
-$(document).on("click", ".btn-filter", function () {
-    $.ajax({
-        type: "GET",
-        url: "/api/tasks/" + $(this).data("id") + "/getById",
-        success: function (response) {
-            if (response.status == 0) {
-                let task = response.task;
-                $("#type_id").val(task.type_id);
-                $("#contract_id").val(task.contract_id);
-                $("#note").text(task.note);
-                $("#task_id").val(task.id);
-            } else {
-                toastr.error(response.message);
-            }
-        },
-    });
+$(document).on("change", ".select2", function () {
+    //
+    console.log($(this).val());
+    let contracts = $(this).val();
+    dataTable.ajax.url('/api/tasks/getAll?contracts=' + contracts.join(',')).load();
+    // if (contracts.length > 0) {
+    //     $.ajax({
+    //         type: "GET",
+    //         url: "/api/tasks/" + $(this).data("id") + "/getById",
+    //         success: function (response) {
+    //             if (response.status == 0) {
+    //                 let task = response.task;
+    //                 $("#type_id").val(task.type_id);
+    //                 $("#contract_id").val(task.contract_id);
+    //                 $("#note").text(task.note);
+    //                 $("#task_id").val(task.id);
+    //             } else {
+    //                 toastr.error(response.message);
+    //             }
+    //         },
+    //     });
+    // }
 });
 
 $(document).ready(function () {
+    // select 2
+    $('.select2').select2();
     // solution
     dataTable = $("#table").DataTable({
         ajax: {
@@ -35,9 +42,11 @@ $(document).ready(function () {
         columns: [
             { data: "id" },
             { data: "type.name" },
-            { data: function (d) {
-                return `${d.contract.name} - ${d.contract.branch.name}`;
-            }, },
+            {
+                data: function (d) {
+                    return `${d.contract.name} - ${d.contract.branch.name}`;
+                },
+            },
             { data: "note" },
             { data: "created_at" },
             {
@@ -45,7 +54,7 @@ $(document).ready(function () {
                     return `<a class="btn btn-primary btn-sm btn-edit" data-id="${d.id}" data-target="#modal" data-toggle="modal">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <a class="btn btn-success btn-sm" style="padding: 4px 15px" href="/admin/tasks/detail/${d.id}">
+                                                <a class="btn btn-success btn-sm" style="padding: 4px 15px" href="/admin/reports/task/${d.id}">
                                                     <i class="fa-solid fa-info"></i>
                                                 </a>
                                                 <button data-id="${d.id}"

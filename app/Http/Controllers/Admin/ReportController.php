@@ -18,11 +18,11 @@ use Illuminate\Http\Request;
 use Throwable;
 use Toastr;
 
-class TaskController extends Controller
+class ReportController extends Controller
 {
     public function create()
     {
-        return view('admin.task.add', [
+        return view('admin.report.add', [
             'title' => 'Thêm nhiệm vụ',
             'staffs' => User::with('staff')->where('role', GlobalConstant::ROLE_STAFF)->get(),
             'contracts' => Contract::with(['branch'])->get(),
@@ -89,8 +89,31 @@ class TaskController extends Controller
                 return $q->where('created_at', '<=', $to . ' 23:59:59');
             })->get();
 
-        return view('admin.task.list', [
-            'title' => 'Danh sách nhiệm vụ',
+        return view('admin.report.list', [
+            'title' => 'Báo cáo nhiệm vụ',
+            'tasks' => $tasks,
+            'contracts' => Contract::with(['branch'])->get(),
+            'types' => Type::all(),
+        ]);
+    }
+
+    public function task($id, Request $request)
+    {
+        $from = $request->from;
+        $to = $request->to;
+        $tasks = TaskDetail::with([
+            'task',
+        ])
+            ->when($from, function ($q) use ($from) {
+                return $q->where('created_at', '>=', $from . ' 00:00:00');
+            })->when($to, function ($q) use ($to) {
+                return $q->where('created_at', '<=', $to . ' 23:59:59');
+            })
+            ->where('task_id', $id)
+            ->get();
+
+        return view('admin.report.task.index', [
+            'title' => 'Danh sách báo cáo chi tiết nhiệm vụ',
             'tasks' => $tasks,
             'contracts' => Contract::with(['branch'])->get(),
             'types' => Type::all(),
@@ -101,7 +124,6 @@ class TaskController extends Controller
     {
         $from = $request->from;
         $to = $request->to;
-        $contracts = !empty($request->contracts) ? explode(",", $request->contracts) : [];
         $tasks = Task::with([
             'contract.branch', 'type',
         ])
@@ -109,12 +131,7 @@ class TaskController extends Controller
                 return $q->where('created_at', '>=', $from . ' 00:00:00');
             })->when($to, function ($q) use ($to) {
                 return $q->where('created_at', '<=', $to . ' 23:59:59');
-            })->when($contracts, function ($q) use ($contracts) {
-                return $q->whereHas('contract', function ($q) use ($contracts) {
-                    $q->whereIn('id', $contracts);
-                });
-            })
-            ->get();
+            })->get();
         return response()->json([
             'status' => 0,
             'tasks' => $tasks
@@ -129,23 +146,39 @@ class TaskController extends Controller
         ]);
     }
 
-    public function show($id, Request $request)
+    // public function show($id, Request $request)
+    // {
+    //     $from = $request->from;
+    //     $to = $request->to;
+    //     $tasks = TaskDetail::with([
+    //         'task',
+    //     ])
+    //         ->when($from, function ($q) use ($from) {
+    //             return $q->where('created_at', '>=', $from . ' 00:00:00');
+    //         })->when($to, function ($q) use ($to) {
+    //             return $q->where('created_at', '<=', $to . ' 23:59:59');
+    //         })->get();
+    //     return view('admin.report.detail', [
+    //         'title' => 'Danh sách chi tiết nhiệm vụ',
+    //         'tasks' => $tasks,
+    //         'contracts' => Contract::with(['branch'])->get(),
+    //         'types' => Type::all(),
+    //     ]);
+    // }
+
+    public function detail($id, Request $request)
     {
-        $from = $request->from;
-        $to = $request->to;
-        $tasks = TaskDetail::with([
-            'task',
-        ])
-            ->when($from, function ($q) use ($from) {
-                return $q->where('created_at', '>=', $from . ' 00:00:00');
-            })->when($to, function ($q) use ($to) {
-                return $q->where('created_at', '<=', $to . ' 23:59:59');
-            })->get();
-        return view('admin.task.detail', [
-            'title' => 'Danh sách chi tiết nhiệm vụ',
-            'tasks' => $tasks,
-            'contracts' => Contract::with(['branch'])->get(),
+        return view('admin.report.task.detail', [
+            'title' => 'Chi tiết nhiệm vụ',
+            'taskDetail' => TaskDetail::with(['task.type'])->firstWhere('id', $id),
+            'staffs' => User::with('staff')->where('role', GlobalConstant::ROLE_STAFF)->get(),
             'types' => Type::all(),
+            'chemistries' => Chemistry::all(),
+            'solutions' => Solution::all(),
+            'items' => Item::all(),
+            'maps' => Map::all(),
+            'contracts' => Contract::with(['branch'])->get(),
+            'taskMaps' => TaskMap::with(['task', 'map'])->where('task_id', $id)->get(),
         ]);
     }
 

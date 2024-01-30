@@ -33,40 +33,6 @@ class TaskController extends Controller
         ]);
     }
 
-    public function export(Request $request)
-    {
-        // $data = $request->validate([
-        //     'month' => 'required|numeric|between:1,12',
-        //     'year' => 'required|numeric|min:1900',
-        //     'type' => 'required|in:0,1',
-        // ]);
-        $pdf = null;
-        $filename = '';
-        $data = [
-            'type' => 1,
-            'month' => 2,
-            'year' => 4,
-            'img' => base64_encode(file_get_contents(public_path('images/barcode.png'))),
-        ];
-        switch ((int)$data['type']) {
-            case 0:
-                $pdf = PDF::loadView('pdf.report_plan', ['data' => $data]);
-                $filename = 'Báo cáo kế hoạch ';
-                break;
-            case 1:
-                $pdf = PDF::loadView('pdf.report_result', ['data' => $data]);
-                $filename = 'Báo cáo kết quả ';
-                break;
-            default:
-                break;
-        }
-        $pdf->setPaper('A4', 'portrait');
-        $filename .= 'tháng ' . $data['month'] . ' năm ' . $data['year'] . '.pdf';
-
-        return $pdf->download($filename);
-        // return $pdf->stream($filename);
-    }
-
     public function taskToday()
     {
         $id = Auth::id();

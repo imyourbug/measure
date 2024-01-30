@@ -34,29 +34,4 @@ class Task extends Model
     {
         return $this->belongsTo(Contract::class, 'contract_id', 'id');
     }
-
-    public function taskChemitries()
-    {
-        return $this->hasMany(TaskChemistry::class, 'task_id', 'id');
-    }
-
-    public function taskMaps()
-    {
-        return $this->hasMany(TaskMap::class, 'task_id', 'id');
-    }
-
-    public function taskSolutions()
-    {
-        return $this->hasMany(TaskSolution::class, 'task_id', 'id');
-    }
-
-    public function taskItems()
-    {
-        return $this->hasMany(TaskItem::class, 'task_id', 'id');
-    }
-
-    public function taskStaffs()
-    {
-        return $this->hasMany(TaskStaff::class, 'task_id', 'id');
-    }
 }

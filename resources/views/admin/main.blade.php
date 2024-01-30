@@ -56,6 +56,14 @@
             display: inline !important;
         }
 
+        .select2-search__field {
+            border: none !important;
+        }
+
+        .select2-selection__choice__display {
+            color: black;
+        }
+
         .icon {
             padding: 3px 4px;
             border-radius: 10px;

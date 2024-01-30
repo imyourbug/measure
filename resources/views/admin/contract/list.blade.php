@@ -27,7 +27,7 @@
         // $('.btn-export').on('click', function() {
         //     $.ajax({
         //         type: 'POST',
-        //         url: '{{ route('tasks.export') }}',
+        //         url: '{{ route('exports.plan') }}',
         //         data: {},
         //         success: function(response) {
         //             if (response.status == 0) {
