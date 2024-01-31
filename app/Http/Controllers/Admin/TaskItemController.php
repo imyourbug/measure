@@ -37,6 +37,9 @@ class TaskItemController extends Controller
             'id' => 'required|numeric',
             'unit' => 'required|string',
             'kpi' => 'required|numeric',
+            'result' => 'nullable|numeric',
+            'image' => 'nullable|string',
+            'detail' => 'nullable|string',
             // 'task_id' => 'required|numeric',
             'item_id' => 'required|numeric',
         ]);

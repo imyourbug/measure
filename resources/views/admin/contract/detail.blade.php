@@ -245,32 +245,4 @@
             </table>
         </div>
     </div>
-    <div class="modal fade show" id="modal" style="display:none;" data-id="123" aria-modal="true" role="dialog">
-        <div class="modal-dialog modal-sm modal-dialog-centered">
-            <div class="modal-content">
-                <form action="{{ route('exports.plan') }}" method="POST" id="form-export">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Xuất báo cáo?</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                    <div>
-                        <canvas id="myChart" style="display:none;"></canvas>
-                    </div>
-                    {{-- <img src="" id="img-chart" alt=""> --}}
-                    <input type="hidden" class="img-chart" name="img_chart" />
-                    <input type="hidden" class="month" name="month" />
-                    <input type="hidden" class="year" name="year" />
-                    <input type="hidden" class="type_report" name="type_report" />
-                    <input type="hidden" name="contract_id" value="{{ request()->id }}" />
-                    <div class="modal-footer justify-content-between">
-                        <button class="btn btn-default" data-dismiss="modal">Đóng</button>
-                        <button type="submit" class="btn btn-primary btn-export">Xác nhận</button>
-                    </div>
-                </form>
-            </div>
-
-        </div>
-    </div>
 @endsection

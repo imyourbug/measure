@@ -6,40 +6,63 @@
     <script src="/js/admin/report/task/detail.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
-    <script></script>
+    <script>
+        $(".upload").change(function() {
+            const form = new FormData();
+            form.append("file", $(this)[0].files[0]);
+            let type = $(this).data('type');
+            console.log(form);
+            $.ajax({
+                processData: false,
+                contentType: false,
+                type: "POST",
+                data: form,
+                url: "/api/upload",
+                success: function(response) {
+                    if (response.status == 0) {
+                        //hiển thị ảnh
+                        $("#image_show_" + type).attr('src', response.url);
+                        $("#image_" + type).val(response.url);
+                    } else {
+                        toastr.error(response.message, 'Thông báo');
+                    }
+                },
+            });
+        });
+    </script>
 @endpush
 @section('content')
-<div class="card-body">
-        {{-- <a href="{{ route('admin.reports.index') }}" class="btn btn-danger"><i class="fa-solid fa-arrow-left"></i></a> --}}
+    <div class="card-body">
         <div class="row">
             <div class="col-lg-6 col-md-12">
                 <label for="">Nhiệm vụ</label>
-                <p class="form-control">{{$taskDetail->task->type->name}}</p>
+                <p class="form-control">{{ $taskDetail->task->type->name }}</p>
             </div>
             <div class="col-lg-6 col-md-12">
                 <label for="">Phạm vi</label>
-                <p class="form-control">{{$taskDetail->range}}</p>
+                <p class="form-control">{{ $taskDetail->range }}</p>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-6 col-md-12">
                 <label for="">Giờ vào</label>
-                <p class="form-control">{{$taskDetail->time_in}}</p>
+                <p class="form-control">{{ $taskDetail->time_in }}</p>
             </div>
             <div class="col-lg-6 col-md-12">
                 <label for="">Giờ ra</label>
-                <p class="form-control">{{$taskDetail->time_out}}</p>
+                <p class="form-control">{{ $taskDetail->time_out }}</p>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-6 col-md-12">
                 <label for="">Ngày kế hoạch</label>
-                <p class="form-control">{{date('d-m-Y', strtotime($taskDetail->plan_date))}}</p>
+                <p class="form-control">{{ date('d-m-Y', strtotime($taskDetail->plan_date)) }}</p>
 
             </div>
             <div class="col-lg-6 col-md-12">
                 <label for="">Ngày thực hiện</label>
-                <p class="form-control">{{!$taskDetail->actual_date ? '' : date('d-m-Y', strtotime($taskDetail->actual_date))}}</p>
+                <p class="form-control">
+                    {{ !$taskDetail->actual_date ? '' : date('d-m-Y', strtotime($taskDetail->actual_date)) }}</p>
             </div>
         </div>
     </div>
@@ -80,9 +103,9 @@
                         {{-- Map --}}
                         <div class="tab-pane active show fade" id="custom-tabs-four-home" role="tabpanel"
                             aria-labelledby="custom-tabs-four-home-tab">
-                            <button class="btn btn-success mb-4 btn-open-modal" data-target="#modal-map"
+                            {{-- <button class="btn btn-success mb-4 btn-open-modal" data-target="#modal-map"
                                 data-toggle="modal">Thêm
-                                mới</button>
+                                mới</button> --}}
                             <table id="tableMap" class="table-map table display nowrap dataTable dtr-inline collapsed">
                                 <thead>
                                     <tr>
@@ -92,6 +115,9 @@
                                         <th>Đối tượng</th>
                                         <th>Đơn vị</th>
                                         <th>KPI</th>
+                                        <th>Kết quả</th>
+                                        <th>Ảnh</th>
+                                        <th>Chi tiết</th>
                                         <th>Thao tác</th>
                                     </tr>
                                 </thead>
@@ -102,9 +128,9 @@
                         {{-- Staff --}}
                         <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel"
                             aria-labelledby="custom-tabs-four-profile-tab">
-                            <button class="btn btn-success mb-4 btn-open-modal-staff" data-target="#modal-staff"
+                            {{-- <button class="btn btn-success mb-4 btn-open-modal-staff" data-target="#modal-staff"
                                 data-toggle="modal">Thêm
-                                mới</button>
+                                mới</button> --}}
                             <table id="tableStaff" class="table-staff table display nowrap dataTable dtr-inline collapsed">
                                 <thead>
                                     <tr>
@@ -124,9 +150,9 @@
                         {{-- Item --}}
                         <div class="tab-pane fade" id="custom-tabs-four-items" role="tabpanel"
                             aria-labelledby="custom-tabs-four-items-tab">
-                            <button class="btn btn-success mb-4 btn-open-modal-item" data-target="#modal-item"
+                            {{-- <button class="btn btn-success mb-4 btn-open-modal-item" data-target="#modal-item"
                                 data-toggle="modal">Thêm
-                                mới</button>
+                                mới</button> --}}
                             <table id="tableItem" class="table-item table display nowrap dataTable dtr-inline collapsed">
                                 <thead>
                                     <tr>
@@ -134,6 +160,9 @@
                                         <th>Tên</th>
                                         <th>Đơn vị</th>
                                         <th>KPI</th>
+                                        <th>Kết quả</th>
+                                        <th>Ảnh</th>
+                                        <th>Chi tiết</th>
                                         <th>Thao tác</th>
                                     </tr>
                                 </thead>
@@ -144,9 +173,9 @@
                         {{-- Chemistry --}}
                         <div class="tab-pane fade" id="custom-tabs-four-chemistries" role="tabpanel"
                             aria-labelledby="custom-tabs-four-chemistries-tab">
-                            <button class="btn btn-success mb-4 btn-open-modal-chemistry" data-target="#modal-chemistry"
+                            {{-- <button class="btn btn-success mb-4 btn-open-modal-chemistry" data-target="#modal-chemistry"
                                 data-toggle="modal">Thêm
-                                mới</button>
+                                mới</button> --}}
                             <table id="tableChemistry"
                                 class="table-chemistry table display nowrap dataTable dtr-inline collapsed">
                                 <thead>
@@ -155,6 +184,9 @@
                                         <th>Tên</th>
                                         <th>Đơn vị</th>
                                         <th>KPI</th>
+                                        <th>Kết quả</th>
+                                        <th>Ảnh</th>
+                                        <th>Chi tiết</th>
                                         <th>Thao tác</th>
                                     </tr>
                                 </thead>
@@ -165,9 +197,9 @@
                         {{-- Solution --}}
                         <div class="tab-pane fade" id="custom-tabs-four-solutions" role="tabpanel"
                             aria-labelledby="custom-tabs-four-solutions-tab">
-                            <button class="btn btn-success mb-4 btn-open-modal-solution" data-target="#modal-solution"
+                            {{-- <button class="btn btn-success mb-4 btn-open-modal-solution" data-target="#modal-solution"
                                 data-toggle="modal">Thêm
-                                mới</button>
+                                mới</button> --}}
                             <table id="tableSolution"
                                 class="table-solution table display nowrap dataTable dtr-inline collapsed">
                                 <thead>
@@ -176,6 +208,9 @@
                                         <th>Tên</th>
                                         <th>Đơn vị</th>
                                         <th>KPI</th>
+                                        <th>Kết quả</th>
+                                        <th>Ảnh</th>
+                                        <th>Chi tiết</th>
                                         <th>Thao tác</th>
                                     </tr>
                                 </thead>
@@ -189,6 +224,9 @@
             </div>
         </div>
     </div>
+    <a href="{{ route('admin.reports.task', ['id' => $taskDetail->task_id]) }}" class="btn btn-danger"><i
+            class="fa-solid fa-arrow-left"></i></a>
+
     {{-- add solution --}}
     <div class="modal fade show" id="modal-solution" style="display: none;" aria-modal="true" role="dialog">
         <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -198,11 +236,6 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
-                </div>
-                <div class="">
-                    <div class="">
-                        <div class=""></div>
-                    </div>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -232,6 +265,33 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Kết quả</label>
+                                <input class="form-control" type="text" id="solution_result" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="file">Chọn ảnh</label><br>
+                                <div class="">
+                                    <img id="image_show_solution" style="width: 100px;height:100px" src=""
+                                        alt="image" />
+                                    <input type="file" class="upload" data-type="solution">
+                                </div>
+                                <input type="hidden" id="image_solution" value="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Chi tiết</label>
+                                <textarea placeholder="Nhập chi tiết..." class="form-control" id="solution_detail" cols="30" rows="5"></textarea>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
@@ -252,11 +312,6 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
-                </div>
-                <div class="">
-                    <div class="">
-                        <div class=""></div>
-                    </div>
                 </div>
                 <div class="modal-body">
                     <div class="row">
@@ -283,6 +338,33 @@
                             <div class="form-group">
                                 <label for="menu">KPI</label>
                                 <input class="form-control" type="text" id="item_kpi" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Kết quả</label>
+                                <input class="form-control" type="text" id="item_result" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="file">Chọn ảnh</label><br>
+                                <div class="">
+                                    <img id="image_show_item" style="width: 100px;height:100px" src=""
+                                        alt="image" />
+                                    <input type="file" class="upload" data-type="item">
+                                </div>
+                                <input type="hidden" id="image_item" value="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Chi tiết</label>
+                                <textarea placeholder="Nhập chi tiết..." class="form-control" id="item_detail" cols="30" rows="5"></textarea>
                             </div>
                         </div>
                     </div>
@@ -331,6 +413,33 @@
                             <div class="form-group">
                                 <label for="menu">KPI</label>
                                 <input class="form-control" type="text" id="kpi" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Kết quả</label>
+                                <input class="form-control" type="text" id="result" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="file">Chọn ảnh</label><br>
+                                <div class="">
+                                    <img id="image_show_map" style="width: 100px;height:100px" src=""
+                                        alt="image" />
+                                    <input type="file" class="upload" data-type="map">
+                                </div>
+                                <input type="hidden" id="image_map" value="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Chi tiết</label>
+                                <textarea placeholder="Nhập chi tiết..." class="form-control" id="detail" cols="30" rows="5"></textarea>
                             </div>
                         </div>
                     </div>
@@ -392,11 +501,6 @@
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
-                <div class="">
-                    <div class="">
-                        <div class=""></div>
-                    </div>
-                </div>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-lg-12 col-md-12">
@@ -425,6 +529,33 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Kết quả</label>
+                                <input class="form-control" type="text" id="chemistry_result" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="file">Chọn ảnh</label><br>
+                                <div class="">
+                                    <img id="image_show_chemistry" style="width: 100px;height:100px" src=""
+                                        alt="image" />
+                                    <input type="file" class="upload" data-type="chemistry">
+                                </div>
+                                <input type="hidden" id="image_chemistry" value="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Chi tiết</label>
+                                <textarea placeholder="Nhập chi tiết..." class="form-control" id="chemistry_detail" cols="30" rows="5"></textarea>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
@@ -437,50 +568,6 @@
 
         </div>
     </div>
-    {{-- <form action="{{ route('admin.tasks.store') }}" method="POST">
-        <div class="card-body">
-            <div class="row">
-                <div class="col-lg-6 col-md-12">
-                    <div class="form-group">
-                        <label for="menu">Hợp đồng</label>
-                        <select class="form-control" name="contract_id">
-                            <option value="">--Hợp đồng--</option>
-                            @foreach ($contracts as $contract)
-                                <option value="{{ $contract->id }}">{{ $contract->name . '-' . $contract->branch->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-12">
-                    <div class="form-group">
-                        <label for="menu">Loại nhiệm vụ</label>
-                        <select class="form-control" name="contract_id">
-                            <option value="">--Loại nhiệm vụ--</option>
-                            @foreach ($types as $type)
-                                <option value="{{ $type->id }}">{{ $type->name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12 col-md-12">
-                    <div class="form-group">
-                        <label for="menu">Ghi chú</label>
-                        <textarea placeholder="Nhập lưu ý an toàn..." class="form-control" name="note" cols="30" rows="5">{{ old('note') }}</textarea>
-                    </div>
-                </div>
-            </div>
-        </div>
-        </div>
-        <div class="card-footer">
-            <button type="submit" class="btn btn-primary">Lưu</button>
-            <a href="{{ route('admin.tasks.index') }}" class="btn btn-success">Xem danh sách</a>
-        </div>
-        @csrf
-    </form> --}}
     <input type="hidden" name="" value="{{ $taskDetail->id }}" id="task_id">
     <input type="hidden" name="" value="" id="taskmap_id">
     <input type="hidden" name="" value="" id="taskstaff_id">

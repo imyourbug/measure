@@ -7,9 +7,132 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="/js/admin/report/index.js"></script>
+    <script>
+        var chart = null;
+        const ctx = $('#myChart');
+        $('#form-export').submit(function(event) {
+            event.preventDefault();
+            let pattern = /^\d{4}$/;
+            let year = $('.select-year').val();
+            let month = $('.select-month').find(':selected')
+                .val();
+
+            // $(this).unbind('submit').submit();
+            if (!month | !year | !pattern.test(year)) {
+                alert('Kiểm tra thông tin đã nhập!');
+            } else {
+                $(this).unbind('submit').submit();
+            }
+        })
+
+        $('.btn-preview').on('click', function() {
+            if (chart && chart.toBase64Image()) {
+                chart.destroy();
+            }
+
+            chart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+                    datasets: [{
+                        label: '# of Votes',
+                        data: [12, 19, 3, 5, 2, 3],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            setTimeout(() => {
+                $('#img-chart').attr('src', chart.toBase64Image('image/png', 1));
+                $('.img-chart').val(chart.toBase64Image('image/png', 1));
+                $('.month').val($('.select-month')
+                    .find(':selected')
+                    .val());
+                $('.year').val($('.select-year').val());
+                $('.type_report').val($('.select-type').val());
+                $('.contract_id').val($('.select-contract').val());
+                console.log($('.contract_id')
+                    .val());
+            }, 1000);
+        });
+    </script>
 @endpush
 @section('content')
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card direct-chat direct-chat-primary">
+                <div class="card-header ui-sortable-handle" style="cursor: move;">
+                    <h3 class="card-title text-bold">Báo cáo</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body" style="display: block;padding: 10px !important;">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Chọn loại báo cáo</label>
+                                <select class="form-control select-type">
+                                    <option value="0">
+                                        Kế hoạch dịch vụ
+                                    </option>
+                                    <option value="1">
+                                        Kết quả tháng
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Chọn hợp đồng</label>
+                                <select class="form-control select-contract">
+                                    @foreach ($contracts as $contract)
+                                        <option value="{{ $contract->id }}">
+                                            {{ $contract->name . '-' . $contract->branch->name ?? '' }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Chọn tháng</label>
+                                <select class="form-control select-month">
+                                    @for ($i = 1; $i <= 12; $i++)
+                                        <option value="{{ $i }}"
+                                            {{ $i == now()->format('m') ? 'selected' : '' }}>{{ $i }}
+                                        </option>
+                                    @endfor
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Chọn năm</label>
+                                <input class="form-control select-year" type="text" value="{{ now()->format('Y') }}"
+                                    placeholder="Nhập năm..." />
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-danger btn-preview" data-target="#modal-export" data-toggle="modal">Xuất
+                        PDF</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="mb-3">
         {{-- <a href="{{ route('admin.tasks.create') }}" class="btn btn-success">Thêm mới</a> --}}
         {{-- <input class="" style="" type="date" name="from"
@@ -94,6 +217,34 @@
                         class="btn btn-primary btn-update">Lưu</button>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="modal fade show" id="modal-export" style="display:none;" aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+                <form action="{{ route('exports.plan') }}" method="POST" id="form-export">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Xuất báo cáo?</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div>
+                        <canvas id="myChart" style="display:none;"></canvas>
+                    </div>
+                    {{-- <img src="" id="img-chart" alt=""> --}}
+                    <input type="hidden" class="img-chart" name="img_chart" />
+                    <input type="hidden" class="month" name="month" />
+                    <input type="hidden" class="year" name="year" />
+                    <input type="hidden" class="type_report" name="type_report" />
+                    <input type="hidden" class="contract_id" name="contract_id" />
+                    <div class="modal-footer justify-content-between">
+                        <button class="btn btn-default" data-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-primary btn-export">Xác nhận</button>
+                    </div>
+                </form>
+            </div>
+
         </div>
     </div>
     <input type="hidden" id="task_id">

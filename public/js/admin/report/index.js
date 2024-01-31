@@ -10,7 +10,9 @@ $(document).on("change", ".select2", function () {
     //
     console.log($(this).val());
     let contracts = $(this).val();
-    dataTable.ajax.url('/api/tasks/getAll?contracts=' + contracts.join(',')).load();
+    dataTable.ajax
+        .url("/api/tasks/getAll?contracts=" + contracts.join(","))
+        .load();
     // if (contracts.length > 0) {
     //     $.ajax({
     //         type: "GET",
@@ -32,7 +34,7 @@ $(document).on("change", ".select2", function () {
 
 $(document).ready(function () {
     // select 2
-    $('.select2').select2();
+    $(".select2").select2();
     // solution
     dataTable = $("#table").DataTable({
         ajax: {
@@ -56,11 +58,17 @@ $(document).ready(function () {
                                                 </a>
                                                 <a class="btn btn-success btn-sm" style="padding: 4px 15px" href="/admin/reports/task/${d.id}">
                                                     <i class="fa-solid fa-info"></i>
-                                                </a>
-                                                <button data-id="${d.id}"
-                                                    class="btn btn-danger btn-sm btn-delete">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>`;
+                                                </a>`;
+                    // return `<a class="btn btn-primary btn-sm btn-edit" data-id="${d.id}" data-target="#modal" data-toggle="modal">
+                    //                             <i class="fas fa-edit"></i>
+                    //                         </a>
+                    //                         <a class="btn btn-success btn-sm" style="padding: 4px 15px" href="/admin/reports/task/${d.id}">
+                    //                             <i class="fa-solid fa-info"></i>
+                    //                         </a>
+                    //                         <button data-id="${d.id}"
+                    //                             class="btn btn-danger btn-sm btn-delete">
+                    //                             <i class="fas fa-trash"></i>
+                    //                         </button>`;
                 },
             },
         ],

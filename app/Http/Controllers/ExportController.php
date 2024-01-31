@@ -3,20 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\AirTask;
 use App\Models\Contract;
-use App\Models\ElecTask;
-use App\Models\Task;
-use App\Models\WaterTask;
-use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use PDF;
-use Throwable;
-use Toastr;
 
 class ExportController extends Controller
 {
