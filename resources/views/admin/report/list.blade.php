@@ -10,14 +10,12 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="/js/admin/report/index.js"></script>
     <script>
-        var chart = null;
-        const ctx = $('#myChart');
+        var mapChart = null;
         $('#form-export').submit(function(event) {
             event.preventDefault();
             let pattern = /^\d{4}$/;
             let year = $('.select-year').val();
-            let month = $('.select-month').find(':selected')
-                .val();
+            let month = $('.select-month').val();
 
             // $(this).unbind('submit').submit();
             if (!month | !year | !pattern.test(year)) {
@@ -28,11 +26,23 @@
         })
 
         $('.btn-preview').on('click', function() {
-            if (chart && chart.toBase64Image()) {
-                chart.destroy();
+            if (mapChart && mapChart.toBase64Image()) {
+                mapChart.destroy();
             }
 
-            chart = new Chart(ctx, {
+            let year = $('.select-year').val();
+            let month = $('.select-month').val();
+            let contract_id = $('.select-contract').val();
+            $.ajax({
+                type: "GET",
+                url: "/api/exports/getDataMapChart?month=" + month + "&year=" + year + "&contract_id=" +
+                    contract_id,
+                success: function(response) {
+                    console.log(response);
+                },
+            })
+
+            mapChart = new Chart($('#mapChart'), {
                 type: 'bar',
                 data: {
                     labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
@@ -52,16 +62,13 @@
             });
 
             setTimeout(() => {
-                $('#img-chart').attr('src', chart.toBase64Image('image/png', 1));
-                $('.img-chart').val(chart.toBase64Image('image/png', 1));
-                $('.month').val($('.select-month')
-                    .find(':selected')
-                    .val());
+                $('#img-chart').attr('src', mapChart.toBase64Image('image/png', 1));
+                $('.img-chart').val(mapChart.toBase64Image('image/png', 1));
+                $('.month').val($('.select-month').val());
                 $('.year').val($('.select-year').val());
                 $('.type_report').val($('.select-type').val());
                 $('.contract_id').val($('.select-contract').val());
-                console.log($('.contract_id')
-                    .val());
+                console.log($('.contract_id').val());
             }, 1000);
         });
     </script>
@@ -220,7 +227,7 @@
         </div>
     </div>
     <div class="modal fade show" id="modal-export" style="display:none;" aria-modal="true" role="dialog">
-        <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <form action="{{ route('exports.plan') }}" method="POST" id="form-export">
                     <div class="modal-header">
@@ -229,8 +236,8 @@
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
-                    <div>
-                        <canvas id="myChart" style="display:none;"></canvas>
+                    <div class="groupChart">
+                        <canvas id="mapChart" style="display:block;"></canvas>
                     </div>
                     {{-- <img src="" id="img-chart" alt=""> --}}
                     <input type="hidden" class="img-chart" name="img_chart" />

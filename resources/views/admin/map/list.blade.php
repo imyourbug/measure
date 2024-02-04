@@ -63,6 +63,7 @@
             <tr>
                 <th>ID</th>
                 <th>Mã sơ đồ</th>
+                <th>Khu vực</th>
                 <th>Vị trí</th>
                 <th>Ảnh</th>
                 <th>Mô tả</th>
@@ -74,7 +75,8 @@
             @foreach ($maps as $key => $map)
                 <tr class="row{{ $map->id }}">
                     <th>{{ $map->id }}</th>
-                    <td>{{ $map->code }}</td>
+                    <td>{{ $map->area . '-' . ($map->id > 100 ?: str_pad($map->id, 3, '0', STR_PAD_LEFT)) }}</td>
+                    <td>{{ $map->area }}</td>
                     <td>{{ $map->position }}</td>
                     <td><img width="50px" height="50px" src="{{ $map->image }}" alt="image"></td>
                     <td>{{ $map->description }}</td>

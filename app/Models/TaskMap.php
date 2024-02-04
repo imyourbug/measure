@@ -26,7 +26,7 @@ class TaskMap extends Model
 
     public function task()
     {
-        return $this->belongsTo(Task::class, 'task_id', 'id');
+        return $this->belongsTo(TaskDetail::class, 'task_id', 'id');
     }
 
     public function map()

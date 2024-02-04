@@ -21,7 +21,7 @@ class TaskChemistryController extends Controller
             TaskChemistry::create($data);
             return response()->json([
                 'status' => 0,
-                'message' => 'Tạo nhiệm vụ thành công'
+                'message' => 'Tạo thành công'
             ]);
         } catch (Throwable $e) {
             return response()->json([

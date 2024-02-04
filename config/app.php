@@ -171,6 +171,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+        Mccarlosen\LaravelMpdf\LaravelMpdfServiceProvider::class
         // Barryvdh\Snappy\ServiceProvider::class,
     ])->toArray(),
 
@@ -191,6 +192,7 @@ return [
         'Toastr'  => Brian2694\Toastr\Facades\Toastr::class,
         'DataTables' => \Yajra\DataTables\Facades\DataTables::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
+        'MPDF' => Mccarlosen\LaravelMpdf\Facades\LaravelMpdf::class
         // 'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
         // 'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
     ])->toArray(),

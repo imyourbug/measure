@@ -23,30 +23,27 @@
             var dataTable = $('#table').DataTable({
                 responsive: true
             });
+            $(".btn-delete").on("click", function() {
+                if (confirm("Bạn có muốn xóa")) {
+                    let id = $(this).data("id");
+                    $.ajax({
+                        type: "DELETE",
+                        url: `/api/contracts/${id}/destroy`,
+                        data: {
+                            _token: 1,
+                        },
+                        success: function(response) {
+                            if (response.status == 0) {
+                                toastr.success("Xóa thành công");
+                                $(".row" + id).remove();
+                            } else {
+                                toastr.error(response.message);
+                            }
+                        },
+                    });
+                }
+            });
         })
-        // $('.btn-export').on('click', function() {
-        //     $.ajax({
-        //         type: 'POST',
-        //         url: '{{ route('exports.plan') }}',
-        //         data: {},
-        //         success: function(response) {
-        //             if (response.status == 0) {
-        //                 var url = response.url;
-        //                 var filename = response.filename;
-        //                 if ($('a[class*="download"]').length > 0) {
-        //                     $('.dowload').attr({
-        //                         href: url,
-        //                         download: filename,
-        //                     });
-        //                 } else {
-        //                     $('.export').append(`
-        //                     <a class="download" href="${url}" download="${filename}">Tải xuống</a>
-        //                     `);
-        //                 }
-        //             }
-        //         },
-        //     })
-        // });
     </script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
@@ -65,6 +62,7 @@
                 <th>Ngày kết thúc</th>
                 <th>Nội dung</th>
                 <th>Khách hàng</th>
+                <th>Trạng thái</th>
                 <th>Thao tác</th>
             </tr>
         <tbody>
@@ -77,9 +75,9 @@
                     <td>{{ date('d-m-Y', strtotime($contract->finish)) }}</td>
                     <td>{{ $contract->content }}</td>
                     <td>{{ $contract->customer->name }}</td>
+                    <td>{!! \App\Helper\Helper::getStatusContract($contract->finish) !!}</td>
                     <td>
-                        <a class="btn btn-primary btn-sm"
-                            href='{{ route('admin.contracts.show', ['id' => $contract->id]) }}'>
+                        <a class="btn btn-primary btn-sm" href='{{ route('admin.contracts.show', ['id' => $contract->id]) }}'>
                             <i class="fas fa-edit"></i>
                         </a>
                         <a class="btn btn-success btn-sm" style="padding: 4px 15px"

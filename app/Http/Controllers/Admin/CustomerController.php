@@ -72,6 +72,17 @@ class CustomerController extends Controller
         ]);
     }
 
+    public function detail($id)
+    {
+        return view('admin.customer.detail', [
+            'title' => 'Chi tiết khách hàng',
+            'customer' => Customer::with([
+                'contracts.tasks.details', 'contracts.tasks.type',
+            ])
+                ->firstWhere('id', $id)
+        ]);
+    }
+
     public function destroy($id)
     {
         try {

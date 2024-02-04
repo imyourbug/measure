@@ -79,6 +79,7 @@ Route::group(['prefix' => '/admin', 'namespace' => 'App\Http\Controllers\Admin',
         Route::get('/create', 'CustomerController@create')->name('create');
         Route::post('/create', 'CustomerController@store')->name('store');
         Route::get('/update/{id}', 'CustomerController@show')->name('show');
+        Route::get('/detail/{id}', 'CustomerController@detail')->name('detail');
         Route::post('/update', 'CustomerController@update')->name('update');
     });
 

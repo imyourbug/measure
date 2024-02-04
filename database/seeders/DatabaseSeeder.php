@@ -186,14 +186,16 @@ class DatabaseSeeder extends Seeder
 
         Map::insert([
             [
-                'code' => 'SD01',
-                'position' => 2,
+                'area' => 'A',
+                'position' => 'Cửa ra vào',
+                'target' => 'Ruồi',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'code' => 'SD02',
-                'position' => 2,
+                'area' => 'A',
+                'position' => 'Cửa ra vào',
+                'target' => 'Muỗi',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],

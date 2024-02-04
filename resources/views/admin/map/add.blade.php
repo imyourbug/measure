@@ -30,11 +30,18 @@
     <form action="{{ route('admin.maps.store') }}" method="POST">
         <div class="card-body">
             <div class="row">
-                <div class="col-lg-6 col-md-12">
+                {{-- <div class="col-lg-6 col-md-12">
                     <div class="form-group">
                         <label for="menu">Mã sơ đồ</label>
                         <input type="text" class="form-control" name="code" value="{{ old('code') }}"
                             placeholder="Nhập mã sơ đồ">
+                    </div>
+                </div> --}}
+                <div class="col-lg-6 col-md-12">
+                    <div class="form-group">
+                        <label for="menu">Số lượng sơ đồ</label>
+                        <input type="number" class="form-control" name="number" value="{{ old('number') ?? 1 }}"
+                            placeholder="Nhập số lượng sơ đồ">
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-12">
@@ -45,7 +52,7 @@
                     </div>
                 </div>
             </div>
-             <div class="row">
+            <div class="row">
                 <div class="col-lg-6 col-md-12">
                     <div class="form-group">
                         <label for="menu">Khu vực</label>

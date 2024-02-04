@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helper\Helper;
 use App\Http\Controllers\Controller;
 use App\Models\AirTask;
 use App\Models\Contract;
@@ -204,6 +205,7 @@ class ContractController extends Controller
 
     public function index(Request $request)
     {
+        // dd(Helper::getStatusContract('01-01-2024'));
         return view('admin.contract.list', [
             'title' => 'Danh sách hợp đồng',
             'contracts' => Contract::with('customer')->get(),

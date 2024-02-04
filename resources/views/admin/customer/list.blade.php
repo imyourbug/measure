@@ -45,6 +45,10 @@
                     <td><a class="btn btn-primary btn-sm" href='{{ route('admin.customers.show', ['id' => $customer->id]) }}'>
                             <i class="fas fa-edit"></i>
                         </a>
+                        <a class="btn btn-success btn-sm" style="padding: 4px 15px"
+                            href='{{ route('admin.customers.detail', ['id' => $customer->id]) }}'>
+                            <i class="fa-solid fa-info"></i>
+                        </a>
                         <button data-id="{{ $customer->user_id }}" class="btn btn-danger btn-sm btn-delete">
                             <i class="fas fa-trash"></i>
                         </button>

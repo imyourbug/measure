@@ -19,7 +19,11 @@ $(document).ready(function () {
         },
         columns: [
             { data: "id" },
-            { data: "map.code" },
+            {
+                data: function (d) {
+                    return `${d.map.area}-${d.map.id.toString().padStart(3, "0") }`;
+                },
+            },
             { data: "map.area" },
             { data: "map.target" },
             { data: "unit" },

@@ -88,22 +88,23 @@
 @endpush
 @section('content')
     <div class="row">
-        <div class="col-lg-4 col-md-12 col-sm-12">
+        <div class="col-lg-12 col-md-12 col-sm-12">
             <div class="">
                 <div class="row">
-                    <div class="col-lg-12">
+                    <div class="col-lg-6 col-md-12">
                         <div class="form-group">
                             <label for="menu">Tên hợp đồng</label>
-                            <input class="form-control" type="text" name="name" value="{{ $contract->name }}"disabled />
+                            <p class="form-control">
+                                {{ $contract->name }}
+                            </p>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">
+                    <div class="col-lg-6 col-md-12">
                         <div class="form-group">
                             <label for="menu">Khách hàng</label>
-                            <input class="form-control" type="text" name="name"
-                                value="{{ $contract->customer->name }}"disabled />
+                            <p class="form-control">
+                                {{ $contract->customer->name }}
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -111,8 +112,9 @@
                     <div class="col-lg-12">
                         <div class="form-group">
                             <label for="menu">Chi nhánh</label>
-                            <input class="form-control" type="text" name="name"
-                                value="{{ $contract->branch->name }}"disabled />
+                            <p class="form-control">
+                                {{ $contract->branch->name }}
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -120,13 +122,17 @@
                     <div class="col-lg-6 col-md-12">
                         <div class="form-group">
                             <label for="menu">Ngày bắt đầu</label>
-                            <input type="date" class="form-control" id="start" value="{{ $contract->start }}">
+                            <p class="form-control">
+                                {{ $contract->start }}
+                            </p>
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-12">
                         <div class="form-group">
                             <label for="menu">Ngày kết thúc</label>
-                            <input type="date" class="form-control" id="finish" value="{{ $contract->finish }}">
+                            <p class="form-control">
+                                {{ $contract->finish }}
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -149,57 +155,6 @@
                             @endif
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-8 col-md-12 col-sm-12">
-            <div class="card direct-chat direct-chat-primary">
-                <div class="card-header ui-sortable-handle" style="cursor: move;">
-                    <h3 class="card-title text-bold">Báo cáo</h3>
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="card-body" style="display: block;padding: 10px !important;">
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12">
-                            <div class="form-group">
-                                <label for="menu">Chọn loại báo cáo</label>
-                                <select class="form-control select-type">
-                                    <option value="0">
-                                        Kế hoạch dịch vụ
-                                    </option>
-                                    <option value="1">
-                                        Kết quả tháng
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6 col-md-12">
-                            <div class="form-group">
-                                <label for="menu">Chọn tháng</label>
-                                <select class="form-control select-month">
-                                    @for ($i = 1; $i <= 12; $i++)
-                                        <option value="{{ $i }}"
-                                            {{ $i == now()->format('m') ? 'selected' : '' }}>{{ $i }}
-                                        </option>
-                                    @endfor
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-12">
-                            <div class="form-group">
-                                <label for="menu">Chọn năm</label>
-                                <input class="form-control select-year" type="text" value="{{ now()->format('Y') }}"
-                                    placeholder="Nhập năm..." />
-                            </div>
-                        </div>
-                    </div>
-                    <button class="btn btn-danger btn-preview" data-target="#modal" data-toggle="modal">Xuất PDF</button>
                 </div>
             </div>
         </div>
@@ -234,9 +189,9 @@
                                     href='{{ route('admin.tasks.detail', ['id' => $task->id]) }}'>
                                     <i class="fa-solid fa-info"></i>
                                 </a>
-                                <button data-id="{{ $task->id }}" class="btn btn-danger btn-sm btn-delete">
+                                {{-- <button data-id="{{ $task->id }}" class="btn btn-danger btn-sm btn-delete">
                                     <i class="fas fa-trash"></i>
-                                </button>
+                                </button> --}}
                             </td>
                         </tr>
                     @endforeach

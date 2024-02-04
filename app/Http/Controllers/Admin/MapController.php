@@ -22,17 +22,24 @@ class MapController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'code' => 'required|string',
+            'code' => 'nullable|string',
             'position' => 'nullable|string',
-            'area' => 'nullable|string',
+            'number' => 'required|numeric|min:1',
+            'area' => 'required|string',
             'target' => 'nullable|string',
             'image' => 'nullable|string',
             'description' => 'nullable|string',
             'active' => 'required|in:0,1',
         ]);
         // dd($data);
+        $dataInsert = [];
+        $number = (int)$data['number'];
+        unset($data['number']);
+        for ($i = 0; $i < $number; $i++) {
+            $dataInsert[] = $data;
+        }
         try {
-            Map::create($data);
+            Map::insert($dataInsert);
             Toastr::success('Tạo sơ đồ thành công', 'Thông báo');
         } catch (Throwable $e) {
             dd($e);

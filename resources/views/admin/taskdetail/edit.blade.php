@@ -13,32 +13,33 @@
         <div class="row">
             <div class="col-lg-6 col-md-12">
                 <label for="">Nhiệm vụ</label>
-                <p class="form-control">{{$taskDetail->task->type->name}}</p>
+                <p class="form-control">{{ $taskDetail->task->type->name }}</p>
             </div>
             <div class="col-lg-6 col-md-12">
                 <label for="">Phạm vi</label>
-                <p class="form-control">{{$taskDetail->range}}</p>
+                <p class="form-control">{{ $taskDetail->range }}</p>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-6 col-md-12">
                 <label for="">Giờ vào</label>
-                <p class="form-control">{{$taskDetail->time_in}}</p>
+                <p class="form-control">{{ $taskDetail->time_in }}</p>
             </div>
             <div class="col-lg-6 col-md-12">
                 <label for="">Giờ ra</label>
-                <p class="form-control">{{$taskDetail->time_out}}</p>
+                <p class="form-control">{{ $taskDetail->time_out }}</p>
             </div>
         </div>
         <div class="row">
             <div class="col-lg-6 col-md-12">
                 <label for="">Ngày kế hoạch</label>
-                <p class="form-control">{{date('d-m-Y', strtotime($taskDetail->plan_date))}}</p>
+                <p class="form-control">{{ date('d-m-Y', strtotime($taskDetail->plan_date)) }}</p>
 
             </div>
             <div class="col-lg-6 col-md-12">
                 <label for="">Ngày thực hiện</label>
-                <p class="form-control">{{!$taskDetail->actual_date ? '' : date('d-m-Y', strtotime($taskDetail->actual_date))}}</p>
+                <p class="form-control">
+                    {{ !$taskDetail->actual_date ? '' : date('d-m-Y', strtotime($taskDetail->actual_date)) }}</p>
             </div>
         </div>
     </div>
@@ -313,7 +314,9 @@
                                 <label for="menu">Sơ đồ</label>
                                 <select class="form-control" name="" id="map_id">
                                     @foreach ($maps as $map)
-                                        <option value="{{ $map->id }}">{{ $map->id . '-' . $map->code }}</option>
+                                        <option value="{{ $map->id }}">
+                                            {{ $map->area . '-' . ($map->id > 100 ?: str_pad($map->id, 3, '0', STR_PAD_LEFT)) }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>

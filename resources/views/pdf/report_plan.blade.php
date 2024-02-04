@@ -2,170 +2,335 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>KẾ HOẠCH DỊCH VỤ</title>
     <style>
-        /* @font-face {
-            font-family: 'Times New Roman';
-            src: url('/fonts/times-new-roman.ttf') format('truetype');
-            font-weight: normal;
-            font-style: normal;
-        } */
+        .col9 {
+            width: 90%;
+            float: left;
+        }
+
+        .col8 {
+            width: 80%;
+            float: left;
+        }
+
+        .col7 {
+            width: 70%;
+            float: left;
+        }
+
+        .col6 {
+            width: 60%;
+            float: left;
+        }
+
+        .col5 {
+            width: 50%;
+            float: left;
+        }
+
+        .col4 {
+            width: 40%;
+            float: left;
+        }
+
+        .col3 {
+            width: 30%;
+            float: left;
+        }
+
+        .col2 {
+            width: 20%;
+            float: left;
+        }
+
+        .col1 {
+            width: 10%;
+            float: left;
+        }
+
+        .col10 {
+            width: 100%;
+            float: left;
+        }
+
+        header {
+            border-bottom: 1px solid rgb(15, 22, 168);
+        }
 
         body {
+            font-size: 8px;
             font-family: DejaVu Sans, sans-serif;
             /* font-family:'Times New Roman', Times, serif; */
         }
 
         .tbl-plan {
-            border-collapse: collapse;
 
+            width: 100%;
         }
 
         .tbl-plan td,
         .tbl-plan th {
-            border: 1px solid black;
-            padding: 0px 60px 0px 0px;
+            padding: 2px 10px 2px 5px;
         }
     </style>
 </head>
 
 <body>
-    <table>
+    <header>
+        <table style="width: 100%">
+            <tbody>
+                <tr style="line-height: 4px;">
+                    <td>
+                        <img width="200px" height="100px" src="{{ public_path('images/logo.png') }}" alt="" />
+                    </td>
+                    <td>
+                        <p style="font-size: 14px;font-weight:bold">CÔNG TY TNHH DỊCH VỤ PESTKIL VIỆT NAM</p>
+                        <p style="font-size: 14px;font-weight:bold">CHI NHÁNH: HÀ NỘI</p>
+                        <p>98 Nguyễn Khiêm Ích – Trâu Quỳ - Gia Lâm – TP Hà Nội</p>
+                        <p>MST: 0106021899</p>
+                        <p>Số tài khoản: 1015966850-NN Ngoại thương Việt Nam (Vietcombank)</p>
+
+                    </td>
+                    <td style="align-items:center">
+                        <img width="50px" height="40px" src="{{ public_path('images/phone.png') }}" alt="" />
+                    </td>
+                    <td style="align-items:center">
+                        0986 112 486
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </header>
+    <table style="width: 100%;height:200px;">
         <tbody>
             <tr>
-                <td rowspan="2">
-                    <img width="200px" height="100px" src="{{ public_path('images/logo.png') }}" alt="" />
+                <td>
+                    <img height="100px" src="{{ public_path('images/logo2.png') }}" alt="" />
                 </td>
-                <td style="text-align:center">
-                    <h1>KẾ HOẠCH DỊCH VỤ</h1>
+                <td style="text-align: center;line-height:16px">
+                    <p style="font-size: 14px;font-weight:bold;color:rgb(15, 22, 168)">KẾ HOẠCH CÔNG VIỆC</p>
+                    <p style="font-weight:bold;color:orange">Work Plan</p>
                 </td>
             </tr>
             <tr>
-                <td>Tháng {{ $data['month'] }} Năm {{ $data['year'] }}</td>
-            </tr>
-        </tbody>
-    </table>
-    <p style="color:rgb(13, 102, 235)">Kính gửi (Anh/chị) {{ $data['branch']['manager'] ?? '' }}</p>
-    <table>
-        <tbody>
-            <tr>
-                <td style="font-weight:bold;">Công ty</td>
-                <td>{{ $data['customer']['name'] ?? '' }}</td>
-            </tr>
-            <tr>
-                <td style="font-weight:bold;">Chi nhánh</td>
-                <td>{{ $data['branch']['name'] ?? '' }}</td>
-            </tr>
-            <tr>
-                <td style="font-weight:bold;">Địa chỉ</td>
-                <td style="color:rgb(13, 102, 235);font-style:italic">{{ $data['branch']['address'] ?? '' }}</td>
-            </tr>
-        </tbody>
-    </table>
-    <p style="font-style:italic;text-align:center">Công ty dịch vụ Petskil Việt Nam gửi kế hoạch tháng như sau:</p>
-    @if (!empty($data['tasks']))
-        @foreach ($data['tasks'] as $info)
-            <h3 style="text-decoration: underline; color:rgb(13, 102, 235)">{{ $info['type']['name'] }}</h3>
-            <p style="font-weight: bold;text-decoration: underline;">Nhân viên kỹ thuật</p>
-            <table style="font-style:italic;width:100%">
-                <thead style="text-align: left">
-                    <th>Code</th>
-                    <th>Tên kỹ thuật viên</th>
-                    <th>Điện thoại</th>
-                    <th>Chứng minh thư</th>
-                    <th>Chức vụ</th>
-                </thead>
-                <tbody>
-                    @foreach ($info['details'] as $detail)
-                        @foreach ($detail['task_staffs'] as $staff)
+                <td style="width:100px">Khách hàng</td>
+                <td style="font-weight:bold;width:400px">{{ $data['customer']['name'] ?? '' }}</td>
+                <td rowspan="8" style="width:100px">
+                    <table style="width:200px;margin-bottom:2px;color:white;background-color:#7FA8AE">
+                        <tbody>
                             <tr>
-                                {{-- <td>{{$staff['code'] ?? ''}}</td> --}}
-                                <td>{{ $staff['id'] > 10 ? $staff['id'] : 'NV0' . $staff['id'] }}</td>
-                                <td>{{ $staff['user']['staff']['name'] ?? '' }}</td>
-                                <td>{{ $staff['user']['staff']['tel'] ?? '' }}</td>
-                                <td>{{ $staff['user']['staff']['identification'] ?? '' }}</td>
-                                <td>{{ $staff['user']['staff']['position'] ?? '' }}</td>
+                                <td>
+                                    <img src="{{ public_path('images/idcus.png') }}" width="20px" height="20px"
+                                        alt="">
+                                </td>
+                                <td style="">
+                                    &emsp;Mã khách hàng <br />&emsp;PD {{ $data['customer']['id'] }}
+                                </td>
                             </tr>
-                        @endforeach
-                    @endforeach
-                </tbody>
-            </table>
-            <br />
-            <table class="tbl-plan" style="float:right">
-                <thead>
-                    <th>Ngày kế hoạch</th>
-                    <th>Thứ</th>
-                    <th>Giờ vào</th>
-                    <th>Giờ ra</th>
-                </thead>
-                <tbody>
-                    @foreach ($info['details'] as $task)
-                        <tr>
-                            <td>{{ $task['plan_date'] ?? '' }}</td>
-                            <td>{{ date('l', strtotime($task['plan_date'] ?? '')) ?? '' }}</td>
-                            <td>{{ $task['time_in'] ?? '' }}</td>
-                            <td>{{ $task['time_out'] ?? '' }}</td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            <br /><br /><br />
-        @endforeach
-    @endif
-    <br />
-    <div class="">
-        Lưu ý công việc:
-        <br />
-        + Thông tin Kế hoạch thực hiện và các lưu ý an toàn sức khỏe tới các bộ phận liên quan.
-        <br />
-        + Bố trí nhân sự hướng dẫn, giám sát và xác nhận công việc trong quá trình thực hiện.
-        <br />
-        + Nếu có thay đổi lịch thực hiện thì phải thông tin lại cho Pestkil Việt Nam trước 3 ngày.
-        <br />
-        <br />
-        Liên hệ:
-        <br />
-        <br />
-        Văn phòng: 024 6681 0229
-        <br />
-        Quản lý kỹ thuật: 0983 683 199
-        <br />
-        Kinh doanh: 0986 112 486 - 0838 094 888
-        <br />
-        Email: Admin@pestkil.com.vn
-    </div>
-    <table style="width:100%;line-height:10px">
-        <tbody>
-            <tr>
-                <td style="width:50%"> </td>
-                <td style="" colspan="2">
-                    <p>Trân trọng cảm ơn Quý khách hàng</p>
-                    <p style="font-weight:bold;">Công ty TNHH dịch vụ Pestkil Vietnam</p>
+                        </tbody>
+                    </table>
+                    <table style="width:200px;margin-bottom:2px;color:white;background-color:#7FA8AE">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <img src="{{ public_path('images/nocontract.png') }}" width="20px" height="20px"
+                                        alt="">
+                                </td>
+                                <td>
+                                    Hợp đồng số <br />PD {{ $data['id'] }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table style="width:200px;color:white;background-color:#7FA8AE">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <img src="{{ public_path('images/calendar2.png') }}" width="20px" height="20px"
+                                        alt="">
+                                </td>
+                                <td>
+                                    Thông tin <br />Tháng {{ $data['month'] }}/{{ $data['year'] }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </td>
             </tr>
             <tr>
-                <td style="width:50%"> </td>
-                <td style="">
-                    Ngày lập
-                </td>
-                <td style="">
-                    {{now()->format('d/m/Y')}}
-                </td>
+                <td>Địa chỉ</td>
+                <td style="font-weight:bold;" style="color:orange;font-style:italic">
+                    {{ $data['branch']['address'] ?? '' }}</td>
             </tr>
             <tr>
-                <td style="width:50%"> </td>
-                <td style="">
-                    Lập bởi
-                </td>
-                <td style="">
-                    <p style="font-weight:bold;">Lê Văn Khánh</p>
-                </td>
+                <td>Điện thoại</td>
+                <td style="font-weight:bold;">{{ $data['branch']['tel'] ?? '' }}</td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td style="font-weight:bold;">{{ $data['branch']['email'] ?? '' }}</td>
+            </tr>
+            <tr>
+                <td>Mã số thuế</td>
+                <td style="font-weight:bold;">{{ $data['branch']['name'] ?? '' }}</td>
+            </tr>
+            <tr>
+                <td>Địa chỉ sử dụng dịch vụ</td>
+                <td style="font-weight:bold;">{{ $data['branch']['address'] ?? '' }}</td>
+            </tr>
+            <tr>
+                <td>Dịch vụ</td>
+                <td style="font-weight:bold;">{{ $data['branch']['name'] ?? '' }}</td>
+            </tr>
+            <tr>
+                <td>Số địa điểm</td>
+                <td style="font-weight:bold;">{{ $data['branch']['name'] ?? '' }}</td>
             </tr>
         </tbody>
     </table>
+    <div class="col10">
+        <div class="col8">
+            <p style="font-weight:bold;text-decoration: underline">KẾ HOẠCH THỰC HIỆN CÔNG VIỆC</p>
+            @if (!empty($data['tasks']))
+                @foreach ($data['tasks'] as $info)
+                    <h3 style="text-decoration: underline; color:orange">{{ $info['type']['name'] }}</h3>
+                    <br />
+
+                    @foreach ($info['details'] as $task)
+                        <table class="tbl-plan" cellspacing="0">
+                            <tbody>
+                                <tr>
+                                    <td rowspan="6"><img src="{{ public_path('images/insect.png') }}" width="50px"
+                                            height="50px" alt=""></td>
+                                </tr>
+                                <tr>
+                                    <td style="border-top: 1px solid black;border-left: 1px solid black;">
+                                        <img src="{{ public_path('images/lich.png') }}" width="20px" height="20px"
+                                            alt="">
+                                    </td>
+                                    <td style="border-top: 1px solid black;">
+                                        Lịch
+                                    </td>
+                                    <td style="font-weight:bold;border: 1px solid black;">
+                                        Ngày {{ $task['plan_date'] ?? '' }} Giờ vào:
+                                        {{ $task['time_in'] ?? '' }} Giờ
+                                        ra: {{ $task['time_out'] ?? '' }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border-left: 1px solid black;">
+                                        <img src="{{ public_path('images/staff.png') }}" width="20px" height="20px"
+                                            alt="" />
+                                    </td>
+                                    <td>
+                                        Kỹ thuật
+                                    </td>
+                                    <td style="border: 1px solid black;">
+                                        @if (!empty($task['task_staffs']))
+                                            @foreach ($task['task_staffs'] as $staff)
+                                                <p>{{ $staff['user']['staff']['name'] }} -
+                                                    {{ $staff['user']['staff']['identification'] }} -
+                                                    {{ $staff['user']['staff']['tel'] }}</p>
+                                            @endforeach
+                                        @endif
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border-left: 1px solid black;"><img
+                                            src="{{ public_path('images/item.png') }}" width="20px" height="20px"
+                                            alt=""></td>
+                                    <td>
+                                        Thiết bị
+                                    </td>
+                                    <td style="border: 1px solid black;"></td>
+                                </tr>
+                                <tr>
+                                    <td style="border-left: 1px solid black;"><img
+                                            src="{{ public_path('images/target.png') }}" width="20px" height="20px"
+                                            alt=""></td>
+                                    <td>
+                                        Đối tượng
+                                    </td>
+                                    <td style="border: 1px solid black;">
+                                        @if (!empty($task['task_maps']))
+                                            <p>
+                                                @foreach ($task['task_maps'] as $map)
+                                                    {{ $map['map']['target'] }}
+                                                @endforeach
+                                            </p>
+                                        @endif
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border-bottom: 1px solid black;border-left: 1px solid black;">
+                                        <img src="{{ public_path('images/chem.png') }}" width="20px" height="20px"
+                                            alt="">
+                                    </td>
+                                    <td style="border-bottom: 1px solid black;">
+                                        Thuốc
+                                    </td>
+                                    <td style="border: 1px solid black;"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br />
+                    @endforeach
+                    <br /><br /><br />
+                @endforeach
+            @endif
+        </div>
+        <div class="col2" style="margin-left:10px">
+            <p style="font-style: italic;">Để biết thêm thông tin và hỗ trợ khách hàng, vui lòng liên hệ </p>
+            <p style="font-weight:bold;text-decoration: underline">THÔNG TIN KHÁCH HÀNG</p>
+            <p>Vui lòng truy cập địa chỉ <a href="https://pestkil.com.vn/">https://pestkil.com.vn/</a> và đăng
+                nhập để quản lý và theo dõi trực tuyến</p>
+            <p style="font-weight:bold;text-decoration: underline">THÔNG TIN LIÊN HỆ</p>
+            <p style="font-weight:bold;">Trung tâm CSKH PESTKIL VIỆT NAM</p>
+            <table>
+                <tbody>
+                    <tr>
+                        <td><img src="{{ public_path('images/building.png') }}" width="20px" height="20px"
+                                alt="" /></td>
+                        <td>T118 Lô đất L2 khu 31 Ha, Trâu Quỳ - Gia Lâm - HN</td>
+                    </tr>
+                    <tr>
+                        <td><img src="{{ public_path('images/tel.png') }}" width="20px" height="20px"
+                                alt="" /></td>
+                        <td>0961063486 – 0838 094 888</td>
+                    </tr>
+                    <tr>
+                        <td><img src="{{ public_path('images/email.png') }}" width="20px" height="20px"
+                                alt="" /></td>
+                        <td>Cskh@pestkil.com.vn </td>
+                    </tr>
+                    <tr>
+                        <td><img src="{{ public_path('images/fb.png') }}" width="20px" height="20px"
+                                alt="" /></td>
+                        <td>Facebook: </td>
+                    </tr>
+                    <tr>
+                        <td><img src="{{ public_path('images/down.png') }}" width="20px" height="20px"
+                                alt="" /></td>
+                        <td>Tải ứng dụng CSKH trên IOS và Android</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <br />
+    <div class="col10">
+        <div class="col7">
+            &emsp;
+        </div>
+        <div class="col3" style="text-align: right">
+            <p> <span style="font-weight:bold;">Lập bởi </span>Công ty TNHH dịch vụ Pestkil Việt Nam</p>
+            <div style="font-weight:bold;">Phòng QLKT</div>
+        </div>
+    </div>
 </body>
 
 </html>

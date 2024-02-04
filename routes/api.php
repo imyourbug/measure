@@ -24,6 +24,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Users'], function () {
 
 Route::group(['namespace' => 'App\Http\Controllers', 'prefix' => 'exports', 'as' => 'exports.'], function () {
     Route::post('plan', 'ExportController@plan')->name('plan');
+    Route::get('getDataMapChart', 'ExportController@getDataMapChart')->name('getDataMapChart');
 });
 
 Route::group(['namespace' => 'App\Http\Controllers'], function () {
