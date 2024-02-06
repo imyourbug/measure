@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>KẾ HOẠCH DỊCH VỤ</title>
+    <title>BÁO CÁO CÔNG VIỆC</title>
     <style>
         .col9 {
             width: 90%;
@@ -267,8 +267,8 @@
                                                                     <td>{{ $task_map['kpi'] ?? '' }} </td>
                                                                     <td>{{ $task_map['result'] ?? '' }} </td>
                                                                     <td>
-                                                                        <img src="{{public_path($task_map['image'])}}" width="35px"
-                                                                            height="35px" alt="abc" />
+                                                                        <img src="{{public_path($task_map['image'])}}" width="15px"
+                                                                            height="15px" alt="abc" />
                                                                     </td>
                                                                 </tr>
                                                             @endforeach
@@ -279,7 +279,11 @@
                                             </tbody>
                                         </table>
                                     @endif
-                                    <img src="{{ public_path('images/staff.png') }}" width="100%" height="200px"
+                                    {{-- @php
+                                        // dd($info);
+                                        dd($data['image_charts']);
+                                    @endphp --}}
+                                    <img src="{{ $data['image_charts'][$info['id']] }}"
                                         alt="" />
                                 </td>
                             </tr>

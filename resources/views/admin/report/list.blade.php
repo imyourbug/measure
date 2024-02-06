@@ -10,7 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="/js/admin/report/index.js"></script>
     <script>
-        var mapChart = null;
+        var listMapChart = [];
         $('#form-export').submit(function(event) {
             event.preventDefault();
             let pattern = /^\d{4}$/;
@@ -26,9 +26,9 @@
         })
 
         $('.btn-preview').on('click', function() {
-            if (mapChart && mapChart.toBase64Image()) {
-                mapChart.destroy();
-            }
+            // if (mapChart && mapChart.toBase64Image()) {
+            //     mapChart.destroy();
+            // }
 
             let year = $('.select-year').val();
             let month = $('.select-month').val();
@@ -38,42 +38,101 @@
                 url: "/api/exports/getDataMapChart?month=" + month + "&year=" + year + "&contract_id=" +
                     contract_id,
                 success: function(response) {
-                    console.log(response);
+                    let html = '';
+                    let data = Object.keys(response.data).map((key) => response.data[key]);
+                    data.forEach(e => {
+                        html +=
+                            `<canvas id="mapChart${e.task_id}" style="display:block;"></canvas>`;
+                    });
+                    $('.groupChart').html('');
+                    $('.groupChart').html(html);
+
+                    data.forEach(e => {
+                        let labels = [];
+                        let dataResults = [];
+                        let dataKpi = [];
+                        let backgroundColor = [];
+                        // let dataChart = Object.keys(e).map((key) => key == 'task_id' ? e[key] : e);
+                        let dataChart = [];
+                        Object.keys(e).forEach((key) => {
+                            if (key != 'task_id') {
+                                dataChart.push(e[key]);
+                            }
+                        });
+                        dataChart.forEach(d => {
+                            labels.push(
+                                `${d.area}-${d.map_id.toString().padStart(3, "0") }`
+                            );
+                            dataResults.push(d.all_result);
+                            dataKpi.push(d.all_kpi);
+                            // backgroundColor.push(getRandomRGBColor());
+                            backgroundColor.push('#E50B4E');
+                        });
+                        let map = {
+                            task_id: e.task_id,
+                            chart: new Chart($('#mapChart' + e.task_id), {
+                                type: 'bar',
+                                data: {
+                                    labels: labels,
+                                    datasets: [{
+                                            label: 'Kết quả thực tế',
+                                            data: dataResults,
+                                            backgroundColor: backgroundColor,
+                                            borderWidth: 1,
+                                            order: 2,
+                                        },
+                                        {
+                                            type: 'line',
+                                            label: 'KPI',
+                                            data: dataKpi,
+                                            fill: false,
+                                            borderColor: 'rgb(54, 162, 235)',
+                                            order: 1,
+                                        }
+                                    ]
+                                },
+                                options: {
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true
+                                        }
+                                    }
+                                }
+                            })
+                        }
+                        listMapChart.push(map);
+                    });
                 },
             })
 
-            mapChart = new Chart($('#mapChart'), {
-                type: 'bar',
-                data: {
-                    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                    datasets: [{
-                        label: '# of Votes',
-                        data: [12, 19, 3, 5, 2, 3],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-
             setTimeout(() => {
-                $('#img-chart').attr('src', mapChart.toBase64Image('image/png', 1));
-                $('.img-chart').val(mapChart.toBase64Image('image/png', 1));
+                let listImageChart = [];
+                listMapChart.forEach(e => {
+                    $('.groupImage').append(
+                        `<input type="hidden" name="image_charts[${e.task_id}]" value="${e.chart.toBase64Image('image/png', 1)}" alt="" />`
+                    );
+                });
                 $('.month').val($('.select-month').val());
                 $('.year').val($('.select-year').val());
                 $('.type_report').val($('.select-type').val());
                 $('.contract_id').val($('.select-contract').val());
-                console.log($('.contract_id').val());
             }, 1000);
         });
+
+        function getRandomRGBColor() {
+            const red = Math.floor(Math.random() * 256);
+            const green = Math.floor(Math.random() * 256);
+            const blue = Math.floor(Math.random() * 256);
+
+            return `rgb(${red}, ${green}, ${blue})`;
+        };
     </script>
 @endpush
 @section('content')
+    <div style="position: relative;index:9999">
+        <div class="groupChart" style="display: block;position: absolute;index:-9999;opacity:0">
+        </div>
+    </div>
     <div class="row">
         <div class="col-lg-12">
             <div class="card direct-chat direct-chat-primary">
@@ -236,11 +295,10 @@
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
-                    <div class="groupChart">
-                        <canvas id="mapChart" style="display:block;"></canvas>
+                    <div class="groupImage">
                     </div>
-                    {{-- <img src="" id="img-chart" alt=""> --}}
-                    <input type="hidden" class="img-chart" name="img_chart" />
+                    {{-- <div class="groupChart" style="display: block;">
+                    </div> --}}
                     <input type="hidden" class="month" name="month" />
                     <input type="hidden" class="year" name="year" />
                     <input type="hidden" class="type_report" name="type_report" />
