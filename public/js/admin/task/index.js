@@ -8,25 +8,11 @@ function closeModal() {
 
 
 $(document).on("click", ".btn-filter", function () {
-    $.ajax({
-        type: "GET",
-        url: "/api/tasks/" + $(this).data("id") + "/getById",
-        success: function (response) {
-            if (response.status == 0) {
-                let task = response.task;
-                $("#type_id").val(task.type_id);
-                $("#contract_id").val(task.contract_id);
-                $("#note").text(task.note);
-                $("#task_id").val(task.id);
-            } else {
-                toastr.error(response.message);
-            }
-        },
-    });
+    let requestUrl = "/api/tasks/getAll?from=" + $('#from').val() + "&to=" + $('#to').val()
+    dataTable.ajax.url(requestUrl).load();
 });
 
 $(document).ready(function () {
-    // solution
     dataTable = $("#table").DataTable({
         ajax: {
             url: "/api/tasks/getAll",
@@ -35,9 +21,11 @@ $(document).ready(function () {
         columns: [
             { data: "id" },
             { data: "type.name" },
-            { data: function (d) {
-                return `${d.contract.name} - ${d.contract.branch.name}`;
-            }, },
+            {
+                data: function (d) {
+                    return `${d.contract.name} - ${d.contract.branch.name}`;
+                },
+            },
             { data: "note" },
             { data: "created_at" },
             {

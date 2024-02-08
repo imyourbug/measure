@@ -205,7 +205,13 @@ class ContractController extends Controller
 
     public function index(Request $request)
     {
-        // dd(Helper::getStatusContract('01-01-2024'));
+        if ($request->ajax()) {
+            return response()->json([
+                'status' => 0,
+                'contracts' => Contract::with(['customer', 'branch'])->get()
+            ]);
+        }
+
         return view('admin.contract.list', [
             'title' => 'Danh sách hợp đồng',
             'contracts' => Contract::with('customer')->get(),

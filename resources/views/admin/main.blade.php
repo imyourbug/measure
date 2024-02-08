@@ -146,6 +146,7 @@
     <div class="Toastify"></div>
     <script src="https://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
     {!! Toastr::message() !!}
+    <script src="/js/common/index.js"></script>
     @stack('scripts')
 </body>
 

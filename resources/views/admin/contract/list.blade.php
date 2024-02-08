@@ -2,48 +2,85 @@
 @push('styles')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
 
-    <style>
-        .dataTables_paginate {
-            float: right;
 
-        }
-
-        .form-inline {
-            display: inline;
-        }
-
-        .pagination li {
-            margin-left: 10px;
-        }
-    </style>
 @endpush
 @push('scripts')
     <script>
+        var dataTable = null;
         $(document).ready(function() {
-            var dataTable = $('#table').DataTable({
-                responsive: true
-            });
-            $(".btn-delete").on("click", function() {
-                if (confirm("Bạn có muốn xóa")) {
-                    let id = $(this).data("id");
-                    $.ajax({
-                        type: "DELETE",
-                        url: `/api/contracts/${id}/destroy`,
-                        data: {
-                            _token: 1,
+            dataTable = $("#table").DataTable({
+                ajax: {
+                    url: "/api/contracts/getAll",
+                    dataSrc: "contracts",
+                },
+                columns: [{
+                        data: "id"
+                    },
+                    {
+                        data: "name"
+                    },
+                    {
+                        data: function(d) {
+                            return `${d.branch.name}`;
                         },
-                        success: function(response) {
-                            if (response.status == 0) {
-                                toastr.success("Xóa thành công");
-                                $(".row" + id).remove();
-                            } else {
-                                toastr.error(response.message);
-                            }
+                    },
+                    {
+                        data: "start"
+                    },
+                    {
+                        data: "finish"
+                    },
+                    {
+                        data: "content"
+                    },
+                    {
+                        data: function(d) {
+                            return `${d.customer.name}`;
                         },
-                    });
-                }
+                    },
+                    {
+                        data: function(d) {
+                            return `${getStatusContract(d.finish)}`;
+                        },
+                    },
+                    {
+                        data: function(d) {
+                            return `<a class="btn btn-primary btn-sm" href='admin/contracts/update/${d.id}'>
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a class="btn btn-success btn-sm" style="padding: 4px 15px"
+                                        href='admin/contracts/detail/${d.id}'>
+                                        <i class="fa-solid fa-info"></i>
+                                    </a>
+                                    <button data-id="${d.id }" class="btn btn-danger btn-sm btn-delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>`;
+                        },
+                    },
+                ],
             });
         })
+
+        $(document).on("click", ".btn-delete", function() {
+            if (confirm("Bạn có muốn xóa")) {
+                let id = $(this).data("id");
+                $.ajax({
+                    type: "DELETE",
+                    url: `/api/contracts/${id}/destroy`,
+                    data: {
+                        _token: 1,
+                    },
+                    success: function(response) {
+                        if (response.status == 0) {
+                            toastr.success("Xóa thành công");
+                            dataTable.ajax.reload();
+                        } else {
+                            toastr.error(response.message);
+                        }
+                    },
+                });
+            }
+        });
     </script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
@@ -66,7 +103,7 @@
                 <th>Thao tác</th>
             </tr>
         <tbody>
-            @foreach ($contracts as $key => $contract)
+            {{-- @foreach ($contracts as $key => $contract)
                 <tr class="row{{ $contract->id }}">
                     <th>{{ $contract->id }}</th>
                     <th>{{ $contract->name }}</th>
@@ -89,7 +126,7 @@
                         </button>
                     </td>
                 </tr>
-            @endforeach
+            @endforeach --}}
         </tbody>
         </thead>
     </table>

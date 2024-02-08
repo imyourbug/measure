@@ -75,9 +75,6 @@
                                     href='{{ route('admin.contracts.detail', ['id' => $contract->id]) }}'>
                                     <i class="fa-solid fa-info"></i>
                                 </a>
-                                <button data-id="{{ $contract->id }}" class="btn btn-danger btn-sm btn-delete">
-                                    <i class="fas fa-trash"></i>
-                                </button>
                             </td>
                         </tr>
                     @endforeach

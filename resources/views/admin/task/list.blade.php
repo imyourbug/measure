@@ -10,11 +10,11 @@
 @section('content')
     <div class="mb-3">
         <a href="{{ route('admin.tasks.create') }}" class="btn btn-success">Thêm mới</a>
-        <input class="" style="" type="date" name="from"
+        <input class="" style="" type="date" id="from"
             value="{{ Request::get('from') ?? now()->format('Y-m-01') }}" />
-        <input class="" style="" type="date" name="to"
+        <input class="" style="" type="date" id="to"
             value="{{ Request::get('to') ?? now()->format('Y-m-t') }}" />
-        <button class="btn btn-warning btn-filter" type="submit">Lọc</button>
+        <button class="btn btn-warning btn-filter">Lọc</button>
     </div>
     <table id="table" class="table display nowrap dataTable dtr-inline collapsed">
         <thead>

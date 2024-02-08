@@ -1,22 +1,6 @@
 @extends('admin.main')
 @push('styles')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
-
-    <style>
-        .dataTables_paginate {
-            float: right;
-
-        }
-
-        .form-inline {
-            display: inline;
-        }
-
-        .pagination li {
-            margin-left: 10px;
-        }
-
-    </style>
 @endpush
 @push('scripts')
     <script src="/js/admin/branch/index.js"></script>
