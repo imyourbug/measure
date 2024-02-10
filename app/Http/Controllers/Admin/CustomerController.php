@@ -58,6 +58,13 @@ class CustomerController extends Controller
 
     public function index(Request $request)
     {
+        if ($request->ajax()) {
+            return response()->json([
+                'status' => 0,
+                'customers' => Customer::all()
+            ]);
+        }
+
         return view('admin.customer.list', [
             'title' => 'Danh sách khách hàng',
             'customers' => Customer::all()

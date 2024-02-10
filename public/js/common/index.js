@@ -20,3 +20,19 @@ function getStatusContract(endTime = '') {
 
     return renderStatus;
 }
+
+function getActive(active = '') {
+    let renderActive = '';
+    switch (active) {
+        case 0:
+            renderActive = '<span class="btn btn-danger">Không</span>';
+            break;
+        case 1:
+            renderActive = '<span class="btn btn-success">Có</span>';
+            break;
+        default:
+            break;
+    }
+
+    return renderActive;
+}

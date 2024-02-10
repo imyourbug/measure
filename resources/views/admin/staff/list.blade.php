@@ -20,30 +20,11 @@
                 <th>Chức vụ</th>
                 <th>CCCD</th>
                 <th>Điện thoại</th>
-                <th>Yes/No</th>
+                <th>Hiệu lực</th>
                 <th>Thao tác</th>
             </tr>
-        <tbody>
-            @foreach ($staffs as $key => $staff)
-                <tr class="row{{ $staff->user_id }}">
-                    <th>{{ $staff->id }}</th>
-                    <td> <img id="image_show" style="width: 50px;height:50px" src="{{ $staff->avatar }}" alt="Avatar" />
-                    </td>
-                    <td>{{ $staff->name }}</td>
-                    <td>{{ $staff->position }}</td>
-                    <td>{{ $staff->identification }}</td>
-                    <td>{{ $staff->tel }}</td>
-                    <td>{{ $staff->active }}</td>
-                    <td><a class="btn btn-primary btn-sm" href='{{ route('admin.staffs.show', ['id' => $staff->id]) }}'>
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <button data-id="{{ $staff->user_id }}" class="btn btn-danger btn-sm btn-delete">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
         </thead>
+        <tbody>
+        </tbody>
     </table>
 @endsection

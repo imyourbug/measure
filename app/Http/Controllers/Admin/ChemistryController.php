@@ -63,6 +63,13 @@ class ChemistryController extends Controller
 
     public function index(Request $request)
     {
+        if ($request->ajax()) {
+            return response()->json([
+                'status' => 0,
+                'chemistries' => Chemistry::all()
+            ]);
+        }
+
         return view('admin.chemistry.list', [
             'title' => 'Danh sách hóa chất',
             'chemistries' => Chemistry::all()

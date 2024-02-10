@@ -63,6 +63,13 @@ class ItemController extends Controller
 
     public function index(Request $request)
     {
+        if ($request->ajax()) {
+            return response()->json([
+                'status' => 0,
+                'items' => Item::all()
+            ]);
+        }
+
         return view('admin.item.list', [
             'title' => 'Danh sách vật tư',
             'items' => Item::all()

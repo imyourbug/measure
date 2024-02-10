@@ -22,26 +22,8 @@
                 <th>Hiệu lực</th>
                 <th>Thao tác</th>
             </tr>
-        <tbody>
-            @foreach ($solutions as $key => $solution)
-                <tr class="row{{ $solution->id }}">
-                    <th>{{ $solution->id }}</th>
-                    <td>{{ $solution->code }}</td>
-                    <td>{{ $solution->position }}</td>
-                    <td><img width="50px" height="50px" src="{{ $solution->image }}" alt="image"></td>
-                    <td>{{ $solution->description }}</td>
-                    <td>{{ $solution->active }}</td>
-                    <td>
-                        <a class="btn btn-primary btn-sm" href='{{ route('admin.solutions.show', ['id' => $solution->id]) }}'>
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <button data-id="{{ $solution->id }}" class="btn btn-danger btn-sm btn-delete">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
         </thead>
+        <tbody>
+        </tbody>
     </table>
 @endsection

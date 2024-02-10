@@ -64,9 +64,15 @@ class InfoUserController extends Controller
 
     public function index(Request $request)
     {
+        if ($request->ajax()) {
+            return response()->json([
+                'status' => 0,
+                'staff' => InfoUser::all()
+            ]);
+        }
+
         return view('admin.staff.list', [
             'title' => 'Danh sách nhân viên',
-            'staffs' => InfoUser::all()
         ]);
     }
 

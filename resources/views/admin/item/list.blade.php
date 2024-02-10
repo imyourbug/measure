@@ -22,26 +22,8 @@
                 <th>Hiệu lực</th>
                 <th>Thao tác</th>
             </tr>
-        <tbody>
-            @foreach ($items as $key => $item)
-                <tr class="row{{ $item->id }}">
-                    <th>{{ $item->id }}</th>
-                    <td>{{ $item->name }}</td>
-                    <td>{{ $item->target }}</td>
-                    <td><img width="50px" height="50px" src="{{ $item->image }}" alt="image"></td>
-                    <td>{{ $item->supplier }}</td>
-                    <td>{{ $item->active }}</td>
-                    <td>
-                        <a class="btn btn-primary btn-sm" href='{{ route('admin.items.show', ['id' => $item->id]) }}'>
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <button data-id="{{ $item->id }}" class="btn btn-danger btn-sm btn-delete">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
         </thead>
+        <tbody>
+        </tbody>
     </table>
 @endsection

@@ -1,8 +1,6 @@
 @extends('admin.main')
 @push('styles')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
-
-
 @endpush
 @push('scripts')
     <script>
@@ -102,32 +100,8 @@
                 <th>Trạng thái</th>
                 <th>Thao tác</th>
             </tr>
-        <tbody>
-            {{-- @foreach ($contracts as $key => $contract)
-                <tr class="row{{ $contract->id }}">
-                    <th>{{ $contract->id }}</th>
-                    <th>{{ $contract->name }}</th>
-                    <th>{{ $contract->branch->name }}</th>
-                    <td>{{ date('d-m-Y', strtotime($contract->start)) }}</td>
-                    <td>{{ date('d-m-Y', strtotime($contract->finish)) }}</td>
-                    <td>{{ $contract->content }}</td>
-                    <td>{{ $contract->customer->name }}</td>
-                    <td>{!! \App\Helper\Helper::getStatusContract($contract->finish) !!}</td>
-                    <td>
-                        <a class="btn btn-primary btn-sm" href='{{ route('admin.contracts.show', ['id' => $contract->id]) }}'>
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <a class="btn btn-success btn-sm" style="padding: 4px 15px"
-                            href='{{ route('admin.contracts.detail', ['id' => $contract->id]) }}'>
-                            <i class="fa-solid fa-info"></i>
-                        </a>
-                        <button data-id="{{ $contract->id }}" class="btn btn-danger btn-sm btn-delete">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-            @endforeach --}}
-        </tbody>
         </thead>
+        <tbody>
+        </tbody>
     </table>
 @endsection

@@ -62,7 +62,13 @@ class BranchController extends Controller
 
     public function index(Request $request)
     {
-        // dd(Branch::with(['user.customer'])->get());
+        if ($request->ajax()) {
+            return response()->json([
+                'status' => 0,
+                'branches' => Branch::with(['user.customer'])->get(),
+            ]);
+        }
+
         return view('admin.branch.list', [
             'title' => 'Danh sách chi nhánh',
             'branches' => Branch::with(['user.customer'])->get(),

@@ -169,11 +169,4 @@ Route::group(['prefix' => '/admin', 'namespace' => 'App\Http\Controllers\Admin',
     Route::group(['prefix' => 'taskdetails', 'as' => 'taskdetails.'], function () {
         Route::get('/update/{id}', 'TaskDetailController@show')->name('show');
     });
-
-    #assignments
-    Route::group(['prefix' => 'assignments', 'as' => 'assignments.'], function () {
-        Route::get('/', 'AssignmentController@index')->name('index');
-        Route::get('/create', 'AssignmentController@create')->name('create');
-        Route::post('/update', 'AssignmentController@update')->name('update');
-    });
 });

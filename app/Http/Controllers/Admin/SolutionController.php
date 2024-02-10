@@ -63,6 +63,13 @@ class SolutionController extends Controller
 
     public function index(Request $request)
     {
+        if ($request->ajax()) {
+            return response()->json([
+                'status' => 0,
+                'solutions' => Solution::all()
+            ]);
+        }
+
         return view('admin.solution.list', [
             'title' => 'Danh sách phương pháp',
             'solutions' => Solution::all()

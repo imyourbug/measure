@@ -72,6 +72,13 @@ class MapController extends Controller
 
     public function index(Request $request)
     {
+        if ($request->ajax()) {
+            return response()->json([
+                'status' => 0,
+                'maps' => Map::all(),
+            ]);
+        }
+
         return view('admin.map.list', [
             'title' => 'Danh sách sơ đồ',
             'maps' => Map::all(),

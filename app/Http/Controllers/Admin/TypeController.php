@@ -63,6 +63,13 @@ class TypeController extends Controller
 
     public function index(Request $request)
     {
+        if ($request->ajax()) {
+            return response()->json([
+                'status' => 0,
+                'types' => Type::with(['parent'])->get()
+            ]);
+        }
+
         return view('admin.type.list', [
             'title' => 'Danh sách loại nhiệm vụ',
             'types' => Type::all()

@@ -5,9 +5,7 @@ $(".btn-delete").on("click", function () {
         $.ajax({
             type: "DELETE",
             url: `/api/contracts/${id}/destroy`,
-            data: {
-                _token: 1,
-            },
+
             success: function (response) {
                 if (response.status == 0) {
                     toastr.success("Xóa thành công");

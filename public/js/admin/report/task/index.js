@@ -158,9 +158,7 @@ $(document).on("click", ".btn-delete", function () {
         $.ajax({
             type: "DELETE",
             url: `/api/taskdetails/${id}/destroy`,
-            data: {
-                _token: 1,
-            },
+
             success: function (response) {
                 if (response.status == 0) {
                     toastr.success("Xóa thành công");

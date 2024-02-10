@@ -21,8 +21,9 @@
                 <th>Email</th>
                 <th>Thao tác</th>
             </tr>
+        </thead>
         <tbody>
-            @foreach ($customers as $key => $customer)
+            {{-- @foreach ($customers as $key => $customer)
                 <tr class="row{{ $customer->user_id }}">
                     <th>{{ $customer->id }}</th>
                     <td>{{ $customer->name }}</td>
@@ -41,8 +42,7 @@
                         </button>
                     </td>
                 </tr>
-            @endforeach
+            @endforeach --}}
         </tbody>
-        </thead>
     </table>
 @endsection

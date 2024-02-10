@@ -84,9 +84,15 @@ class AccountController extends Controller
 
     public function index(Request $request)
     {
+        if ($request->ajax()) {
+            return response()->json([
+                'status' => 0,
+                'accounts' => User::all()
+            ]);
+        }
+
         return view('admin.account.list', [
             'title' => 'Danh sách tài khoản',
-            'users' => User::all()
         ]);
     }
 
@@ -111,6 +117,7 @@ class AccountController extends Controller
             ]);
         } catch (Throwable $e) {
             DB::rollBack();
+
             return response()->json([
                 'status' => 1,
                 'message' => $e->getMessage()

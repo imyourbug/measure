@@ -403,9 +403,7 @@ $(document).on("click", ".btn-delete", function () {
         $.ajax({
             type: "DELETE",
             url: `/api/taskmaps/${id}/destroy`,
-            data: {
-                _token: 1,
-            },
+
             success: function (response) {
                 if (response.status == 0) {
                     toastr.success("Xóa thành công");
@@ -499,9 +497,7 @@ $(document).on("click", ".btn-delete-staff", function () {
         $.ajax({
             type: "DELETE",
             url: `/api/taskstaff/${id}/destroy`,
-            data: {
-                _token: 1,
-            },
+
             success: function (response) {
                 if (response.status == 0) {
                     toastr.success("Xóa thành công");

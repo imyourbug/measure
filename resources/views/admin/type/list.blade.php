@@ -20,22 +20,8 @@
                 <th>Danh mục cha</th>
                 <th>Thao tác</th>
             </tr>
-        <tbody>
-            @foreach ($types as $key => $type)
-                <tr class="row{{ $type->id }}">
-                    <th>{{ $type->id }}</th>
-                    <td>{{ $type->name }}</td>
-                    <td>{{ $type->parent->name ?? '' }}</td>
-                    <td><a class="btn btn-primary btn-sm" href='{{ route('admin.types.show', ['id' => $type->id]) }}'>
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <button data-id="{{ $type->id }}" class="btn btn-danger btn-sm btn-delete">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
         </thead>
+        <tbody>
+        </tbody>
     </table>
 @endsection

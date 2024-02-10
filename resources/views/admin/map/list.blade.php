@@ -52,32 +52,14 @@
                 <th>Mã sơ đồ</th>
                 <th>Khu vực</th>
                 <th>Vị trí</th>
-                <th>Ảnh</th>
+                <th>Đối tượng</th>
                 <th>Mô tả</th>
+                <th>Ảnh</th>
                 <th>Hiệu lực</th>
                 <th>Thao tác</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($maps as $key => $map)
-                <tr class="row{{ $map->id }}">
-                    <th>{{ $map->id }}</th>
-                    <td>{{ $map->area . '-' . ($map->id > 100 ?: str_pad($map->id, 3, '0', STR_PAD_LEFT)) }}</td>
-                    <td>{{ $map->area }}</td>
-                    <td>{{ $map->position }}</td>
-                    <td><img width="50px" height="50px" src="{{ $map->image }}" alt="image"></td>
-                    <td>{{ $map->description }}</td>
-                    <td>{{ $map->active }}</td>
-                    <td>
-                        <a class="btn btn-primary btn-sm" href='{{ route('admin.maps.show', ['id' => $map->id]) }}'>
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <button data-id="{{ $map->id }}" class="btn btn-danger btn-sm btn-delete">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-            @endforeach
         </tbody>
     </table>
 @endsection
