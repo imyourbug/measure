@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Contract;
 use App\Models\TaskDetail;
 use App\Models\TaskMap;
+use App\Models\User;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -22,11 +23,12 @@ class ExportController extends Controller
             'type_report' => 'required|in:0,1',
             'contract_id' => 'required|numeric',
             'image_charts' => 'nullable|array',
+            'user_id' => 'required|numeric',
         ]);
-
+        $data['creator'] = User::with(['staff'])->firstWhere('id', $data['user_id'])->toArray();
         $pdf = null;
         $filename = '';
-        // dd($data + $this->getReportWorkByMonthAndYear($data['month'], $data['year'], $data['contract_id']));
+        // dd($this->getReportWorkByMonthAndYear($data['month'], $data['year'], $data['contract_id']));
         switch ((int)$data['type_report']) {
             case 0:
                 $pdf = MPDF::loadView('pdf.report_plan', ['data' => $data
@@ -45,7 +47,7 @@ class ExportController extends Controller
         // $pdf->setPaper('A4', 'portrait');
         $filename .= 'tháng ' . $data['month'] . ' năm ' . $data['year'] . '.pdf';
 
-        // return $pdf->stream($filename);
+        return $pdf->stream($filename);
         return $pdf->download($filename);
     }
 
@@ -54,7 +56,7 @@ class ExportController extends Controller
         return Contract::with([
             'customer',
             'branch',
-            'tasks.type',
+            'tasks.type.parent',
             'tasks.details.taskMaps.map',
             'tasks.details.taskItems.item',
             'tasks.details.taskSolutions.solution',
@@ -75,7 +77,7 @@ class ExportController extends Controller
         return Contract::with([
             'customer',
             'branch',
-            'tasks.type',
+            'tasks.type.parent',
             'tasks.details.taskMaps.map',
             'tasks.details.taskItems.item',
             'tasks.details.taskSolutions.solution',
@@ -84,8 +86,8 @@ class ExportController extends Controller
         ])
             ->where('id', $contract_id)
             ->whereHas('tasks.details', function ($q) use ($month, $year) {
-                $q->whereRaw('year(plan_date) = ?', $year)
-                    ->whereRaw('month(plan_date) = ?', $month);
+                $q->whereRaw('YEAR(plan_date) = ?', $year)
+                    ->whereRaw('MONTH(plan_date) = ?', $month);
             })
             ->first()
             ?->toArray() ?? [];
@@ -130,7 +132,6 @@ class ExportController extends Controller
                 ->get()
                 ?->toArray() ?? [];
             foreach ($data_map as $key => $data) {
-                // dd($data);
                 $data = (array)$data;
                 if (isset($result[$task_detail->task->id][$data['map_id']])) {
                     $result[$task_detail->task->id][$data['map_id']]['all_kpi'] += $data['all_kpi'];

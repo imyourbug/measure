@@ -79,6 +79,10 @@
                 color: white !important;
             }
         }
+        .card-header {
+            background-color: #28a745;
+            color: white;
+        }
     </style>
     @stack('styles')
 </head>

@@ -11,6 +11,7 @@ class Type extends Model
 
     protected $fillable = [
         'name',
+        'image',
         'parent_id',
     ];
 

@@ -40,10 +40,10 @@ class MapController extends Controller
         }
         try {
             Map::insert($dataInsert);
-            Toastr::success('Tạo sơ đồ thành công', 'Thông báo');
+            Toastr::success('Tạo sơ đồ thành công', __('title.toastr.fail'));
         } catch (Throwable $e) {
             dd($e);
-            Toastr::error('Tạo sơ đồ thất bại', 'Thông báo');
+            Toastr::error('Tạo sơ đồ thất bại', __('title.toastr.fail'));
         }
 
         return redirect()->back();
@@ -64,7 +64,7 @@ class MapController extends Controller
         unset($data['id']);
         $update = Map::where('id', $request->input('id'))->update($data);
         if ($update) {
-            Toastr::success(__('message.success.update'), 'Thông báo');
+            Toastr::success(__('message.success.update'), __('title.toastr.fail'));
         } else Toastr::error(__('message.fail.update'), __('title.toastr.fail'));
 
         return redirect()->back();

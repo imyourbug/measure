@@ -44,10 +44,10 @@ class TaskController extends Controller
         ]);
         try {
             Task::create($data);
-            Toastr::success('Tạo thành công', 'Thông báo');
+            Toastr::success('Tạo thành công', __('title.toastr.fail'));
         } catch (Throwable $e) {
             dd($e);
-            Toastr::error('Tạo nhiệm vụ thất bại', 'Thông báo');
+            Toastr::error('Tạo nhiệm vụ thất bại', __('title.toastr.fail'));
         }
 
         return redirect()->back();

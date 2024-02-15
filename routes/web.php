@@ -1,7 +1,6 @@
 <?php
 
-use App\Http\Controllers\Users\TaskController;
-use App\Http\Controllers\Users\UserController;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
@@ -14,12 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/chart', function () {
-    $data = [
-        'url-img' => base64_encode(file_get_contents(public_path('images/barcode.png'))),
-    ];
-
-    return view('pdf.report', ['data' => $data]);
+Route::get('/schedule', function () {
+    Artisan::call('schedule:run');
 });
 
 Route::get('/', function () {
@@ -62,6 +57,7 @@ Route::group(['prefix' => '/admin', 'namespace' => 'App\Http\Controllers\Admin',
         Route::get('/', 'ReportController@index')->name('index');
         Route::get('/task/{id}', 'ReportController@task')->name('task');
         Route::get('/task/detail/{id}', 'ReportController@detail')->name('detail');
+        Route::post('/duplicate', 'ReportController@duplicate')->name('duplicate');
     });
 
     #accounts

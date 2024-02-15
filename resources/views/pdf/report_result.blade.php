@@ -109,8 +109,9 @@
     <table style="width: 100%;height:200px;">
         <tbody>
             <tr>
-                <td>
-                    <img height="100px" src="{{ public_path('images/logo2.png') }}" alt="" />
+                 <td>
+                    <img height="100px" src="{{ public_path($data['tasks'][0]['type']['parent']['image'] ?? '') }}"
+                        alt="" />
                 </td>
                 <td style="text-align: center;line-height:16px">
                     <p style="font-size: 14px;font-weight:bold;color:rgb(15, 22, 168)">BÁO CÁO CÔNG VIỆC</p>
@@ -202,7 +203,7 @@
                         <tbody>
                             <tr>
                                 <td style="width:50px">
-                                    <img src="{{ public_path('images/lich.png') }}" width="50px" height="50px"
+                                    <img src="{{ public_path($info['type']['image']) }}" width="50px" height="50px"
                                         alt="">
                                 </td>
                                 <td colspan="2">
@@ -224,7 +225,7 @@
                             </tr>
                             <tr>
                                 <td style="text-align:center;border-left: 1px solid black;">
-                                    <img src="{{ public_path('images/staff.png') }}" width="35px" height="35px"
+                                    <img src="{{ public_path('images/chart.png') }}" width="35px" height="35px"
                                         alt="" />
                                 </td>
                                 <td>
@@ -237,7 +238,7 @@
                             </tr>
                             <tr>
                                 <td style="text-align:center;border-left: 1px solid black;">
-                                    <img src="{{ public_path('images/staff.png') }}" width="35px" height="35px"
+                                    <img src="{{ public_path('images/detail.png') }}" width="35px" height="35px"
                                         alt="" />
                                 </td>
                                 <td>
@@ -283,7 +284,7 @@
                                         // dd($info);
                                         dd($data['image_charts']);
                                     @endphp --}}
-                                    <img src="{{ $data['image_charts'][$info['id']] }}"
+                                    <img src="{{ $data['image_charts'][$info['id']] ?? public_path('/')}}"
                                         alt="" />
                                 </td>
                             </tr>
@@ -354,7 +355,7 @@
         </div>
         <div class="col3" style="text-align: right">
             <p> <span style="font-weight:bold;">Lập bởi </span>Công ty TNHH dịch vụ Pestkil Việt Nam</p>
-            <div style="font-weight:bold;">Phòng QLKT</div>
+            <div style="font-weight:bold;">{{ $data['creator']['staff']['name'] ?? '' }}</div>
         </div>
     </div>
 </body>

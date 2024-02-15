@@ -13,7 +13,12 @@ $(document).ready(function () {
         },
         {
             data: function (d) {
-                return `${d.parent_id == 0 ? '' : d.parent.name}`;
+                return `<img style="width: 50px;height:50px" src="${d.image}" alt="image" />`;
+            },
+        },
+        {
+            data: function (d) {
+                return `${d.parent_id == 0 ? 'Danh mục cha' : d.parent.name}`;
             },
         },
         {

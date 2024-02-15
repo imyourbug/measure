@@ -25,26 +25,6 @@ use Toastr;
 
 class ContractController extends Controller
 {
-    public function getTypeByContractId(Request $request)
-    {
-        $contract_id = $request->id;
-        $response = [];
-        if (ElecTask::where('contract_id', $contract_id)->get()->count() > 0) {
-            $response[] = 0;
-        }
-        if (WaterTask::where('contract_id', $contract_id)->get()->count() > 0) {
-            $response[] = 1;
-        }
-        if (AirTask::where('contract_id', $contract_id)->get()->count() > 0) {
-            $response[] = 2;
-        }
-
-        return response()->json([
-            'status' => 0,
-            'data' => $response,
-        ]);
-    }
-
     public function create()
     {
         return view('admin.contract.add', [
@@ -57,7 +37,6 @@ class ContractController extends Controller
 
     public function getRangeTime($type, $arrValue, $start, $finish)
     {
-        //
         $start = new DateTime($start);
         $finish = new DateTime($finish);
         $result = [];
@@ -164,7 +143,6 @@ class ContractController extends Controller
             ];
         } catch (Throwable $e) {
             DB::rollBack();
-            dd($e->getMessage());
 
             return [
                 'status' => 1,
@@ -187,7 +165,7 @@ class ContractController extends Controller
         unset($data['id']);
         $update = Contract::firstWhere('id', $request->input('id'))->update($data);
         if ($update) {
-            Toastr::success(__('message.success.update'), 'Thông báo');
+            Toastr::success(__('message.success.update'), __('title.toastr.fail'));
         } else Toastr::error(__('message.fail.update'), __('title.toastr.fail'));
 
         return redirect()->back();
@@ -197,7 +175,7 @@ class ContractController extends Controller
     {
         $delete = Contract::firstWhere('id', $id)->delete();
         if ($delete) {
-            Toastr::success(__('message.success.delete'), 'Thông báo');
+            Toastr::success(__('message.success.delete'), __('title.toastr.fail'));
         } else Toastr::error(__('message.fail.delete'), __('title.toastr.fail'));
 
         return redirect()->back();
@@ -229,9 +207,6 @@ class ContractController extends Controller
 
     public function detail($id)
     {
-        // dd(Contract::with([
-        //     'tasks.details', 'tasks.type',
-        // ])->firstWhere('id', $id));
         return view('admin.contract.detail', [
             'title' => 'Chi tiết hợp đồng',
             'contract' => Contract::with([

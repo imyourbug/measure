@@ -109,7 +109,8 @@
         <tbody>
             <tr>
                 <td>
-                    <img height="100px" src="{{ public_path('images/logo2.png') }}" alt="" />
+                    <img height="100px" src="{{ public_path($data['tasks'][0]['type']['parent']['image'] ?? '') }}"
+                        alt="" />
                 </td>
                 <td style="text-align: center;line-height:16px">
                     <p style="font-size: 14px;font-weight:bold;color:rgb(15, 22, 168)">KẾ HOẠCH CÔNG VIỆC</p>
@@ -128,7 +129,7 @@
                                         alt="">
                                 </td>
                                 <td style="">
-                                    &emsp;Mã khách hàng <br />&emsp;PD {{ $data['customer']['id'] }}
+                                    &emsp;Mã khách hàng <br />&emsp;PD {{ $data['customer']['id'] ?? '' }}
                                 </td>
                             </tr>
                         </tbody>
@@ -141,7 +142,7 @@
                                         alt="">
                                 </td>
                                 <td>
-                                    Hợp đồng số <br />PD {{ $data['id'] }}
+                                    Hợp đồng số <br />PD {{ $data['id'] ?? '' }}
                                 </td>
                             </tr>
                         </tbody>
@@ -201,83 +202,88 @@
                     <br />
 
                     @foreach ($info['details'] as $task)
-                        <table class="tbl-plan" cellspacing="0">
-                            <tbody>
-                                <tr>
-                                    <td rowspan="6"><img src="{{ public_path('images/insect.png') }}" width="50px"
-                                            height="50px" alt=""></td>
-                                </tr>
-                                <tr>
-                                    <td style="border-top: 1px solid black;border-left: 1px solid black;">
-                                        <img src="{{ public_path('images/lich.png') }}" width="20px" height="20px"
-                                            alt="">
-                                    </td>
-                                    <td style="border-top: 1px solid black;">
-                                        Lịch
-                                    </td>
-                                    <td style="font-weight:bold;border: 1px solid black;">
-                                        Ngày {{ $task['plan_date'] ?? '' }} Giờ vào:
-                                        {{ $task['time_in'] ?? '' }} Giờ
-                                        ra: {{ $task['time_out'] ?? '' }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="border-left: 1px solid black;">
-                                        <img src="{{ public_path('images/staff.png') }}" width="20px" height="20px"
-                                            alt="" />
-                                    </td>
-                                    <td>
-                                        Kỹ thuật
-                                    </td>
-                                    <td style="border: 1px solid black;">
-                                        @if (!empty($task['task_staffs']))
-                                            @foreach ($task['task_staffs'] as $staff)
-                                                <p>{{ $staff['user']['staff']['name'] }} -
-                                                    {{ $staff['user']['staff']['identification'] }} -
-                                                    {{ $staff['user']['staff']['tel'] }}</p>
-                                            @endforeach
-                                        @endif
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="border-left: 1px solid black;"><img
-                                            src="{{ public_path('images/item.png') }}" width="20px" height="20px"
-                                            alt=""></td>
-                                    <td>
-                                        Thiết bị
-                                    </td>
-                                    <td style="border: 1px solid black;"></td>
-                                </tr>
-                                <tr>
-                                    <td style="border-left: 1px solid black;"><img
-                                            src="{{ public_path('images/target.png') }}" width="20px" height="20px"
-                                            alt=""></td>
-                                    <td>
-                                        Đối tượng
-                                    </td>
-                                    <td style="border: 1px solid black;">
-                                        @if (!empty($task['task_maps']))
-                                            <p>
-                                                @foreach ($task['task_maps'] as $map)
-                                                    {{ $map['map']['target'] }}
+                        @php
+                            $date = explode('-', $task['plan_date']);
+                        @endphp
+                        @if ($date[0] == $data['year'] && $date[1] == $data['month'])
+                            <table class="tbl-plan" cellspacing="0">
+                                <tbody>
+                                    <tr>
+                                        <td rowspan="6"><img src="{{ public_path($info['type']['image']) }}"
+                                                width="50px" height="50px" alt=""></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-top: 1px solid black;border-left: 1px solid black;">
+                                            <img src="{{ public_path('images/lich.png') }}" width="20px"
+                                                height="20px" alt="">
+                                        </td>
+                                        <td style="border-top: 1px solid black;">
+                                            Lịch
+                                        </td>
+                                        <td style="font-weight:bold;border: 1px solid black;">
+                                            Ngày {{ $task['plan_date'] ?? '' }} Giờ vào:
+                                            {{ $task['time_in'] ?? '' }} Giờ
+                                            ra: {{ $task['time_out'] ?? '' }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-left: 1px solid black;">
+                                            <img src="{{ public_path('images/staff.png') }}" width="20px"
+                                                height="20px" alt="" />
+                                        </td>
+                                        <td>
+                                            Kỹ thuật
+                                        </td>
+                                        <td style="border: 1px solid black;">
+                                            @if (!empty($task['task_staffs']))
+                                                @foreach ($task['task_staffs'] as $staff)
+                                                    <p>{{ $staff['user']['staff']['name'] }} -
+                                                        {{ $staff['user']['staff']['identification'] }} -
+                                                        {{ $staff['user']['staff']['tel'] }}</p>
                                                 @endforeach
-                                            </p>
-                                        @endif
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="border-bottom: 1px solid black;border-left: 1px solid black;">
-                                        <img src="{{ public_path('images/chem.png') }}" width="20px" height="20px"
-                                            alt="">
-                                    </td>
-                                    <td style="border-bottom: 1px solid black;">
-                                        Thuốc
-                                    </td>
-                                    <td style="border: 1px solid black;"></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <br />
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-left: 1px solid black;"><img
+                                                src="{{ public_path('images/item.png') }}" width="20px"
+                                                height="20px" alt=""></td>
+                                        <td>
+                                            Thiết bị
+                                        </td>
+                                        <td style="border: 1px solid black;"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-left: 1px solid black;"><img
+                                                src="{{ public_path('images/target.png') }}" width="20px"
+                                                height="20px" alt=""></td>
+                                        <td>
+                                            Đối tượng
+                                        </td>
+                                        <td style="border: 1px solid black;">
+                                            @if (!empty($task['task_maps']))
+                                                <p>
+                                                    @foreach ($task['task_maps'] as $map)
+                                                        {{ $map['map']['target'] }}
+                                                    @endforeach
+                                                </p>
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border-bottom: 1px solid black;border-left: 1px solid black;">
+                                            <img src="{{ public_path('images/chem.png') }}" width="20px"
+                                                height="20px" alt="">
+                                        </td>
+                                        <td style="border-bottom: 1px solid black;">
+                                            Thuốc
+                                        </td>
+                                        <td style="border: 1px solid black;"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <br />
+                        @endif
                     @endforeach
                     <br /><br /><br />
                 @endforeach
@@ -328,7 +334,7 @@
         </div>
         <div class="col3" style="text-align: right">
             <p> <span style="font-weight:bold;">Lập bởi </span>Công ty TNHH dịch vụ Pestkil Việt Nam</p>
-            <div style="font-weight:bold;">Phòng QLKT</div>
+            <div style="font-weight:bold;">{{ $data['creator']['staff']['name'] ?? '' }}</div>
         </div>
     </div>
 </body>

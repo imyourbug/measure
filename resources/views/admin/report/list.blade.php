@@ -116,6 +116,8 @@
                 $('.year').val($('.select-year').val());
                 $('.type_report').val($('.select-type').val());
                 $('.contract_id').val($('.select-contract').val());
+                $('.user_id').val($('.select-user').val());
+                $('.btn-export').prop('disabled', false);
             }, 1000);
         });
 
@@ -131,6 +133,80 @@
 @section('content')
     <div style="position: relative;index:9999">
         <div class="groupChart" style="display: block;position: absolute;index:-9999;opacity:0">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card direct-chat direct-chat-primary">
+                <div class="card-header ui-sortable-handle" style="cursor: move;">
+                    <h3 class="card-title text-bold">Sao chép dữ liệu</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <form action="{{ route('admin.reports.duplicate') }}" method="post">
+                    @csrf
+                    <div class="card-body" style="display: block;padding: 10px !important;">
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12">
+                                <div class="form-group">
+                                    <label for="menu">Chọn hợp đồng</label>
+                                    <select name="contract_id" class="form-control">
+                                        @foreach ($contracts as $contract)
+                                            <option value="{{ $contract->id }}">
+                                                {{ $contract->name . '-' . $contract->branch->name ?? '' }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 col-md-12">
+                                <div class="form-group">
+                                    <label for="menu">Từ tháng</label>
+                                    <select name="month_from" class="form-control">
+                                        @for ($i = 1; $i <= 12; $i++)
+                                            <option value="{{ $i }}"
+                                                {{ $i == now()->format('m') ? 'selected' : '' }}>{{ $i }}
+                                            </option>
+                                        @endfor
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <div class="form-group">
+                                    <label for="menu">Từ năm</label>
+                                    <input name="year_from" class="form-control" type="text"
+                                        value="{{ now()->format('Y') }}" placeholder="Nhập năm..." />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <div class="form-group">
+                                    <label for="menu">Sang tháng</label>
+                                    <select name="month_to" class="form-control">
+                                        @for ($i = 1; $i <= 12; $i++)
+                                            <option value="{{ $i }}"
+                                                {{ $i == now()->format('m') ? 'selected' : '' }}>{{ $i }}
+                                            </option>
+                                        @endfor
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <div class="form-group">
+                                    <label for="menu">Sang năm</label>
+                                    <input name="year_to" class="form-control" type="text"
+                                        value="{{ now()->format('Y') }}" placeholder="Nhập năm..." />
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn btn-success">Xác nhận</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
     <div class="row">
@@ -193,6 +269,20 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Chọn tháng</label>
+                                <select class="form-control select-user">
+                                    @foreach ($users as $user)
+                                        <option value="{{ $user->id }}">
+                                            {{ $user->staff->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                     <button class="btn btn-danger btn-preview" data-target="#modal-export" data-toggle="modal">Xuất
                         PDF</button>
                 </div>
@@ -200,12 +290,6 @@
         </div>
     </div>
     <div class="mb-3">
-        {{-- <a href="{{ route('admin.tasks.create') }}" class="btn btn-success">Thêm mới</a> --}}
-        {{-- <input class="" style="" type="date" name="from"
-            value="{{ Request::get('from') ?? now()->format('Y-m-01') }}" />
-        <input class="" style="" type="date" name="to"
-            value="{{ Request::get('to') ?? now()->format('Y-m-t') }}" />
-        <button class="btn btn-warning btn-filter" type="submit">Lọc</button> --}}
         <div class="row">
             <div class="col-lg-6 col-md-12">
                 <label for="">Lựa chọn hợp đồng</label>
@@ -286,7 +370,7 @@
         </div>
     </div>
     <div class="modal fade show" id="modal-export" style="display:none;" aria-modal="true" role="dialog">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-dialog modal-md modal-dialog-centered">
             <div class="modal-content">
                 <form action="{{ route('exports.plan') }}" method="POST" id="form-export">
                     <div class="modal-header">
@@ -303,9 +387,10 @@
                     <input type="hidden" class="year" name="year" />
                     <input type="hidden" class="type_report" name="type_report" />
                     <input type="hidden" class="contract_id" name="contract_id" />
+                    <input type="hidden" class="user_id" name="user_id" />
                     <div class="modal-footer justify-content-between">
                         <button class="btn btn-default" data-dismiss="modal">Đóng</button>
-                        <button type="submit" class="btn btn-primary btn-export">Xác nhận</button>
+                        <button type="submit" class="btn btn-primary btn-export" disabled>Xác nhận</button>
                     </div>
                 </form>
             </div>

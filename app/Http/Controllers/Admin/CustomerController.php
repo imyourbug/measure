@@ -29,10 +29,10 @@ class CustomerController extends Controller
         ]);
         try {
             Customer::create($data);
-            Toastr::success('Tạo khách hàng thành công', 'Thông báo');
+            Toastr::success('Tạo khách hàng thành công', __('title.toastr.fail'));
         } catch (Throwable $e) {
             dd($e);
-            Toastr::error('Tạo khách hàng thất bại', 'Thông báo');
+            Toastr::error('Tạo khách hàng thất bại', __('title.toastr.fail'));
         }
 
         return redirect()->back();
@@ -50,7 +50,7 @@ class CustomerController extends Controller
         unset($data['id']);
         $update = Customer::where('id', $request->input('id'))->update($data);
         if ($update) {
-            Toastr::success(__('message.success.update'), 'Thông báo');
+            Toastr::success(__('message.success.update'), __('title.toastr.fail'));
         } else Toastr::error(__('message.fail.update'), __('title.toastr.fail'));
 
         return redirect()->back();

@@ -2,6 +2,29 @@
 @push('styles')
 @endpush
 @push('scripts')
+<script>
+     $("#upload").change(function() {
+            const form = new FormData();
+            form.append("file", $(this)[0].files[0]);
+            console.log(form);
+            $.ajax({
+                processData: false,
+                contentType: false,
+                type: "POST",
+                data: form,
+                url: "/api/upload",
+                success: function(response) {
+                    if (response.status == 0) {
+                        //hiển thị ảnh
+                        $("#image_show").attr('src', response.url);
+                        $("#image").val(response.url);
+                    } else {
+                        toastr.error(response.message, 'Thông báo');
+                    }
+                },
+            });
+        });
+</script>
 @endpush
 @section('content')
     <form action="{{ route('admin.types.update', ['id' => $type->id]) }}" method="POST">
@@ -27,6 +50,18 @@
                                 @endif
                             @endforeach
                         </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+                    <div class="form-group">
+                        <label for="file">Chọn ảnh</label><br>
+                        <div class="">
+                            <img id="image_show" style="width: 100px;height:100px" src="{{ old('image') ?? $type->image }}" alt="image" />
+                            <input type="file" id="upload">
+                        </div>
+                        <input type="hidden" name="image" id="image" value="{{ old('image') ?? $type->image }}">
                     </div>
                 </div>
             </div>

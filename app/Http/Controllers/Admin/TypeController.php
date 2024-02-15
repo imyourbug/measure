@@ -22,14 +22,14 @@ class TypeController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string',
+            'image' => 'nullable|string',
             'parent_id' => 'required|numeric',
         ]);
         try {
             Type::create($data);
-            Toastr::success('Tạo loại nhiệm vụ thành công', 'Thông báo');
+            Toastr::success('Tạo loại nhiệm vụ thành công', __('title.toastr.success'));
         } catch (Throwable $e) {
-            dd($e);
-            Toastr::error('Tạo loại nhiệm vụ thất bại', 'Thông báo');
+            Toastr::error('Tạo loại nhiệm vụ thất bại', __('title.toastr.fail'));
         }
 
         return redirect()->back();
@@ -40,12 +40,13 @@ class TypeController extends Controller
         $data = $request->validate([
             'id' => 'required|int',
             'name' => 'required|string',
+            'image' => 'nullable|string',
             'parent_id' => 'required|numeric',
         ]);
         unset($data['id']);
         $update = Type::where('id', $request->input('id'))->update($data);
         if ($update) {
-            Toastr::success(__('message.success.update'), 'Thông báo');
+            Toastr::success(__('message.success.update'), __('title.toastr.fail'));
         } else Toastr::error(__('message.fail.update'), __('title.toastr.fail'));
 
         return redirect()->back();
@@ -55,7 +56,7 @@ class TypeController extends Controller
     {
         $delete = Type::firstWhere('id', $id)->delete();
         if ($delete) {
-            Toastr::success(__('message.success.delete'), 'Thông báo');
+            Toastr::success(__('message.success.delete'), __('title.toastr.fail'));
         } else Toastr::error(__('message.fail.delete'), __('title.toastr.fail'));
 
         return redirect()->back();

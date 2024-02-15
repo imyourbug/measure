@@ -52,7 +52,7 @@ class UserController extends Controller
     public function recover(RecoverRequest $request)
     {
         if (!$user = User::firstWhere('email', $request->input('email'))) {
-            Toastr::error('Email không tồn tại!', 'Thông báo');
+            Toastr::error('Email không tồn tại!', __('title.toastr.fail'));
 
             return redirect()->back();
         }
@@ -69,7 +69,7 @@ class UserController extends Controller
         if ($reset_password) {
             Mail::to($request->input('email'))->send(new RecoverPasswordMail($new_password));
         }
-        Toastr::success('Lấy mật khẩu thành công! Hãy kiểm tra email của bạn', 'Thông báo');
+        Toastr::success('Lấy mật khẩu thành công! Hãy kiểm tra email của bạn', __('title.toastr.fail'));
 
         return redirect()->back();
     }
@@ -88,12 +88,12 @@ class UserController extends Controller
             is_numeric($tel_or_email) ? 'name' : 'email' => $tel_or_email,
             'password' => $request->input('password')
         ])) {
-            Toastr::success('Đăng nhập thành công', 'Thông báo');
+            Toastr::success('Đăng nhập thành công', __('title.toastr.fail'));
             $user = Auth::user();
 
             return redirect()->route($user->role == 1 ? 'admin.index' : 'users.home');
         }
-        Toastr::error('Tài khoản hoặc mật khẩu không chính xác', 'Thông báo');
+        Toastr::error('Tài khoản hoặc mật khẩu không chính xác', __('title.toastr.fail'));
 
         return redirect()->back();
     }
@@ -104,14 +104,14 @@ class UserController extends Controller
             'password' => Hash::make($request->input('password'))
         ]);
         if ($rs) {
-            Toastr::success('Đổi mật khẩu thành công', 'Thông báo');
+            Toastr::success('Đổi mật khẩu thành công', __('title.toastr.fail'));
 
             return response()->json([
                 'status' => 0,
                 'message' => 'Đổi mật khẩu thành công'
             ]);
         }
-        Toastr::error('Đổi mật khẩu thất bại', 'Thông báo');
+        Toastr::error('Đổi mật khẩu thất bại', __('title.toastr.fail'));
 
         return response()->json([
             'status' => 1,
@@ -147,12 +147,12 @@ class UserController extends Controller
             //     'name' =>  $tel_or_email,
             //     'user_id' => $user->id
             // ]);
-            Toastr::success('Đăng ký thành công', 'Thông báo');
+            Toastr::success('Đăng ký thành công', __('title.toastr.fail'));
             DB::commit();
         } catch (Throwable $e) {
             DB::rollBack();
             dd($e);
-            Toastr::error(__('message.fail.register'), 'Thông báo');
+            Toastr::error(__('message.fail.register'), __('title.toastr.fail'));
 
             return redirect()->back();
         }

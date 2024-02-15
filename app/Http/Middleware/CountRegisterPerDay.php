@@ -22,7 +22,7 @@ class CountRegisterPerDay
         if (!$info_ip) {
             return $next($request);
         }
-        Toastr::error('Mỗi ngày chỉ được đăng ký một tài khoản một lần duy nhất!', 'Thông báo');
+        Toastr::error('Mỗi ngày chỉ được đăng ký một tài khoản một lần duy nhất!', __('title.toastr.fail'));
 
         return redirect()->back();
     }

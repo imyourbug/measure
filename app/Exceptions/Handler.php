@@ -32,12 +32,12 @@ class Handler extends ExceptionHandler
             dd($e);
             if ($e instanceof ValidationException) {
                 foreach ($e->errors() as $err) {
-                    Toastr::error($err[0], 'Thông báo');
+                    Toastr::error($err[0], __('title.toastr.fail'));
                 }
+            } else if ($e instanceof Exception) {
+                Toastr::error($e->getMessage(), __('title.toastr.fail'));
             }
-            else if ($e instanceof Exception) {
-                Toastr::error($e->getMessage(), 'Thông báo');
-            }
+
             return redirect()->back();
         });
     }
