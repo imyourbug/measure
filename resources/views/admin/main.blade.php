@@ -79,7 +79,7 @@
                 color: white !important;
             }
         }
-        .card-header {
+        .header-color {
             background-color: #28a745;
             color: white;
         }

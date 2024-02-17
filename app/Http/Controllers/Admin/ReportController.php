@@ -12,6 +12,7 @@ use App\Models\Solution;
 use App\Models\Task;
 use App\Models\TaskChemistry;
 use App\Models\TaskDetail;
+use App\Models\TaskItem;
 use App\Models\TaskMap;
 use App\Models\TaskSolution;
 use App\Models\TaskStaff;
@@ -69,26 +70,6 @@ class ReportController extends Controller
         ]);
     }
 
-    // public function show($id, Request $request)
-    // {
-    //     $from = $request->from;
-    //     $to = $request->to;
-    //     $tasks = TaskDetail::with([
-    //         'task',
-    //     ])
-    //         ->when($from, function ($q) use ($from) {
-    //             return $q->where('created_at', '>=', $from . ' 00:00:00');
-    //         })->when($to, function ($q) use ($to) {
-    //             return $q->where('created_at', '<=', $to . ' 23:59:59');
-    //         })->get();
-    //     return view('admin.report.detail', [
-    //         'title' => 'Danh sách chi tiết nhiệm vụ',
-    //         'tasks' => $tasks,
-    //         'contracts' => Contract::with(['branch'])->get(),
-    //         'types' => Type::all(),
-    //     ]);
-    // }
-
     public function detail($id, Request $request)
     {
         return view('admin.report.task.detail', [
@@ -119,116 +100,64 @@ class ReportController extends Controller
 
             return redirect()->back();
         }
-        $contract = Contract::with([
-            'tasks.details.taskChemitries',
-            'tasks.details.taskMaps',
-            'tasks.details.taskSolutions',
-            'tasks.details.taskItems',
-            'tasks.details.taskStaffs',
+        $tasks = Task::with([
+            'details.taskChemitries',
+            'details.taskMaps',
+            'details.taskSolutions',
+            'details.taskItems',
+            'details.taskStaffs',
         ])
-            ->whereHas('tasks.details', function ($q) use ($data) {
+            ->whereHas('details', function ($q) use ($data) {
                 $q->whereRaw('MONTH(plan_date) = ?', $data['month_from'])
                     ->whereRaw('YEAR(plan_date) = ?', $data['year_from']);
             })
-            ->firstWhere('id', $data['contract_id']);
+            ->where('contract_id', $data['contract_id'])
+            ->get();
         DB::beginTransaction();
         try {
-            foreach ($contract->tasks as $task) {
+            foreach ($tasks as $task) {
                 foreach ($task->details as $detail) {
-                    $plan_date = $detail->plan_date->format($data['year_to'] . '-' . $data['month_to'] . '-d');
-                    $date = explode( '-', $plan_date);
-                    if (checkdate((int) $date[1], (int) $date[2], (int) $date[0])) {
-                        $newDetail = TaskDetail::create(
-                            [
-                                'plan_date' => $plan_date,
-                                'time_in' => $detail->time_in,
-                                'time_out' => $detail->time_out,
-                                'range' => $detail->range,
-                                'note' => $detail->note,
-                                'task_id' => $detail->task_id,
-                            ]
-                        );
-                        // taskChemitry
-                        foreach ($detail->taskChemitries as $taskChemitry) {
-                            TaskChemistry::create(
-                                [
-                                    'code' => $taskChemitry->code,
-                                    'name' => $taskChemitry->name,
-                                    'unit' => $taskChemitry->unit,
-                                    'kpi' => $taskChemitry->kpi,
-                                    'result' => $taskChemitry->result,
-                                    'image' => $taskChemitry->image,
-                                    'detail' => $taskChemitry->detail,
-                                    'chemistry_id' => $taskChemitry->chemistry_id,
-                                    'task_id' => $newDetail->id,
-                                ]
-                            );
-                        }
-                        // taskMap
-                        foreach ($detail->taskMaps as $taskMap) {
-                            TaskMap::create(
-                                [
-                                    'code' => $taskMap->code,
-                                    'area' => $taskMap->area,
-                                    'position' => $taskMap->position,
-                                    'target' => $taskMap->target,
-                                    'unit' => $taskMap->unit,
-                                    'kpi' => $taskMap->kpi,
-                                    'result' => $taskMap->result,
-                                    'image' => $taskMap->image,
-                                    'detail' => $taskMap->detail,
-                                    'round' => $taskMap->round,
-                                    'map_id' => $taskMap->map_id,
-                                    'task_id' => $newDetail->id,
-                                ]
-                            );
-                        }
-                        // taskSolution
-                        foreach ($detail->taskSolutions as $taskSolution) {
-                            TaskSolution::create(
-                                [
-                                    'code' => $taskSolution->code,
-                                    'name' => $taskSolution->name,
-                                    'position' => $taskSolution->position,
-                                    'unit' => $taskSolution->unit,
-                                    'kpi' => $taskSolution->kpi,
-                                    'result' => $taskSolution->result,
-                                    'image' => $taskSolution->image,
-                                    'detail' => $taskSolution->detail,
-                                    'solution_id' => $taskSolution->solution_id,
-                                    'task_id' => $newDetail->id,
-                                ]
-                            );
-                        }
-                        // taskItem
-                        foreach ($detail->taskItems as $taskItem) {
-                            TaskItem::create(
-                                [
-                                    'code' => $taskItem->code,
-                                    'name' => $taskItem->name,
-                                    'unit' => $taskItem->unit,
-                                    'kpi' => $taskItem->kpi,
-                                    'result' => $taskItem->result,
-                                    'image' => $taskItem->image,
-                                    'detail' => $taskItem->detail,
-                                    'item_id' => $taskItem->item_id,
-                                    'task_id' => $newDetail->id,
-                                ]
-                            );
-                        }
-                        // taskStaff
-                        foreach ($detail->taskStaffs as $taskStaff) {
-                            TaskStaff::create(
-                                [
-                                    'code' => $taskStaff->code,
-                                    'name' => $taskStaff->name,
-                                    'position' => $taskStaff->position,
-                                    'tel' => $taskStaff->tel,
-                                    'identification' => $taskStaff->identification,
-                                    'user_id' => $taskStaff->user_id,
-                                    'task_id' => $newDetail->id,
-                                ]
-                            );
+                    $month = $detail->plan_date->format('m');
+                    $year = $detail->plan_date->format('Y');
+                    if ($month == $data['month_from'] && $year == $data['year_from']) {
+                        $new_plan_date = $detail->plan_date->format($data['year_to'] . '-' . $data['month_to'] . '-d');
+                        $date = explode('-', $new_plan_date);
+                        if (checkdate((int) $date[1], (int) $date[2], (int) $date[0])) {
+                            $newDetail = $detail->replicate()
+                                ->fill([
+                                    'plan_date' => $new_plan_date,
+                                ]);
+                            $newDetail->save();
+                            // taskChemitry
+                            foreach ($detail->taskChemitries as $taskChemitry) {
+                                $taskChemitry->replicate()
+                                    ->fill(['task_id' => $newDetail->id])
+                                    ->save();
+                            }
+                            // taskMap
+                            foreach ($detail->taskMaps as $taskMap) {
+                                $taskMap->replicate()
+                                    ->fill(['task_id' => $newDetail->id])
+                                    ->save();
+                            }
+                            // taskSolution
+                            foreach ($detail->taskSolutions as $taskSolution) {
+                                $taskSolution->replicate()
+                                    ->fill(['task_id' => $newDetail->id])
+                                    ->save();
+                            }
+                            // taskItem
+                            foreach ($detail->taskItems as $taskItem) {
+                                $taskItem->replicate()
+                                    ->fill(['task_id' => $newDetail->id])
+                                    ->save();
+                            }
+                            // taskStaff
+                            foreach ($detail->taskStaffs as $taskStaff) {
+                                $taskStaff->replicate()
+                                    ->fill(['task_id' => $newDetail->id])
+                                    ->save();
+                            }
                         }
                     }
                 }

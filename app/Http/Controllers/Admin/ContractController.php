@@ -2,24 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Helper\Helper;
 use App\Http\Controllers\Controller;
-use App\Models\AirTask;
 use App\Models\Contract;
 use App\Models\Customer;
-use App\Models\ElecTask;
-use App\Models\InfoUser;
 use App\Models\Task;
 use App\Models\TaskDetail;
 use App\Models\Type;
-use App\Models\User;
-use App\Models\WaterTask;
 use DateInterval;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Log;
 use Throwable;
 use Toastr;
 

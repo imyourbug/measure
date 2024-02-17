@@ -1,8 +1,6 @@
 @extends('admin.main')
 @push('styles')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
-
-
 @endpush
 @push('scripts')
     <script src="/js/admin/customer/index.js"></script>
@@ -23,26 +21,6 @@
             </tr>
         </thead>
         <tbody>
-            {{-- @foreach ($customers as $key => $customer)
-                <tr class="row{{ $customer->user_id }}">
-                    <th>{{ $customer->id }}</th>
-                    <td>{{ $customer->name }}</td>
-                    <td>{{ $customer->address }}</td>
-                    <td>{{ $customer->tel }}</td>
-                    <td>{{ $customer->email }}</td>
-                    <td><a class="btn btn-primary btn-sm" href='{{ route('admin.customers.show', ['id' => $customer->id]) }}'>
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <a class="btn btn-success btn-sm" style="padding: 4px 15px"
-                            href='{{ route('admin.customers.detail', ['id' => $customer->id]) }}'>
-                            <i class="fa-solid fa-info"></i>
-                        </a>
-                        <button data-id="{{ $customer->user_id }}" class="btn btn-danger btn-sm btn-delete">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-            @endforeach --}}
         </tbody>
     </table>
 @endsection

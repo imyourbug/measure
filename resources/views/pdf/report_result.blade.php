@@ -74,8 +74,18 @@
 
         .tbl-plan td,
         .tbl-plan th {
-            border: 1px solid black;
             padding: 2px 10px 2px 5px;
+        }
+
+        .tbl-plan td {
+            border: 0.5px solid black;
+            border-bottom: none;
+            border-right: none;
+        }
+
+        .tbl-map td,
+        .tbl-map th {
+            border: 0.5px solid black;
         }
     </style>
 </head>
@@ -109,7 +119,7 @@
     <table style="width: 100%;height:200px;">
         <tbody>
             <tr>
-                 <td>
+                <td>
                     <img height="100px" src="{{ public_path($data['tasks'][0]['type']['parent']['image'] ?? '') }}"
                         alt="" />
                 </td>
@@ -130,7 +140,7 @@
                                         alt="">
                                 </td>
                                 <td style="">
-                                    &emsp;Mã khách hàng <br />&emsp;PD {{ $data['customer']['id'] }}
+                                    &emsp;Mã khách hàng <br />&emsp;PD {{ $data['customer']['id'] ?? '' }}
                                 </td>
                             </tr>
                         </tbody>
@@ -143,7 +153,7 @@
                                         alt="">
                                 </td>
                                 <td>
-                                    Hợp đồng số <br />PD {{ $data['id'] }}
+                                    Hợp đồng số <br />PD {{ $data['id'] ?? '' }}
                                 </td>
                             </tr>
                         </tbody>
@@ -202,51 +212,56 @@
                     <table class="tbl-plan" cellspacing="0">
                         <tbody>
                             <tr>
-                                <td style="width:50px">
+                                <td style="width:50px;">
                                     <img src="{{ public_path($info['type']['image']) }}" width="50px" height="50px"
                                         alt="">
                                 </td>
-                                <td colspan="2">
+                                <td colspan="2" style="border-right: 0.5px solid black;">
                                     <h3 style="text-decoration: underline; color:orange">{{ $info['type']['name'] }}
                                     </h3>
                                 </td>
                             </tr>
                             <tr>
-                                <td style="text-align:center">
+                                <td style="text-align:center;">
                                     <img src="{{ public_path('images/lich.png') }}" width="35px" height="35px"
                                         alt="">
                                 </td>
                                 <td style="">
                                     Lịch
                                 </td>
-                                <td style="">
+                                <td style="border-right: 0.5px solid black;">
                                     Kỳ báo cáo:.... Thời gian: {{ $data['month'] . '/' . $data['year'] }}
                                 </td>
                             </tr>
                             <tr>
-                                <td style="text-align:center;border-left: 1px solid black;">
+                                <td style="text-align:center;border-left: 0.5px solid black;border-bottom: none;">
                                     <img src="{{ public_path('images/chart.png') }}" width="35px" height="35px"
                                         alt="" />
                                 </td>
                                 <td>
                                     Biểu đồ xu hướng
                                 </td>
-                                <td style="border: 1px solid black;">
-                                    <img src="{{ public_path('images/staff.png') }}" width="100%" height="200px"
+                                <td
+                                    style="border: 0.5px solid black;border-bottom: none;border-right: 0.5px solid black;">
+                                    <img src="{{ $data['image_trend_charts'][$info['id']] ?? public_path('/') }}"
                                         alt="" />
+                                    @if ($data['display'])
+                                        <img src="{{ $data['image_annual_charts'][$info['id']] ?? public_path('/') }}"
+                                            alt="" />
+                                    @endif
                                 </td>
                             </tr>
                             <tr>
-                                <td style="text-align:center;border-left: 1px solid black;">
+                                <td style="text-align:center;border-left: 0.5px solid black;border-bottom: none;">
                                     <img src="{{ public_path('images/detail.png') }}" width="35px" height="35px"
                                         alt="" />
                                 </td>
-                                <td>
+                                <td style="border-bottom: none;">
                                     Chi tiết
                                 </td>
-                                <td style="border: 1px solid black;">
+                                <td style="border: 0.5px solid black;border-bottom: none;">
                                     @if (!empty($info['details']))
-                                        <table style="width:100%" cellspacing="0">
+                                        <table class="tbl-map" style="width:100%" cellspacing="0">
                                             <tbody>
                                                 <tr>
                                                     <th>Mã sơ đồ</th>
@@ -268,8 +283,9 @@
                                                                     <td>{{ $task_map['kpi'] ?? '' }} </td>
                                                                     <td>{{ $task_map['result'] ?? '' }} </td>
                                                                     <td>
-                                                                        <img src="{{public_path($task_map['image'])}}" width="15px"
-                                                                            height="15px" alt="abc" />
+                                                                        <img src="{{ public_path($task_map['image']) }}"
+                                                                            width="15px" height="15px"
+                                                                            alt="abc" />
                                                                     </td>
                                                                 </tr>
                                                             @endforeach
@@ -280,11 +296,7 @@
                                             </tbody>
                                         </table>
                                     @endif
-                                    {{-- @php
-                                        // dd($info);
-                                        dd($data['image_charts']);
-                                    @endphp --}}
-                                    <img src="{{ $data['image_charts'][$info['id']] ?? public_path('/')}}"
+                                    <img src="{{ $data['image_charts'][$info['id']] ?? public_path('/') }}"
                                         alt="" />
                                 </td>
                             </tr>
@@ -292,15 +304,15 @@
                                 <td colspan="2" style="text-align:left;">
                                     Nhận xét
                                 </td>
-                                <td>
+                                <td style="border-right: 0.5px solid black;">
                                     abc
                                 </td>
                             </tr>
-                            <tr>
-                                <td colspan="2" style="text-align:left;">
+                            <tr style="">
+                                <td colspan="2" style="text-align:left;border-bottom: 0.5px solid black;">
                                     Đề xuất
                                 </td>
-                                <td>
+                                <td style="border-bottom: 0.5px solid black;border-right: 0.5px solid black;">
                                     abc
                                 </td>
                             </tr>

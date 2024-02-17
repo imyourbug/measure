@@ -142,7 +142,7 @@
         </div>
     </div>
     <div class="card direct-chat direct-chat-primary">
-        <div class="card-header ui-sortable-handle" style="cursor: move;">
+        <div class="card-header ui-sortable-handle header-color" style="cursor: move;">
             <h3 class="card-title text-bold">Nhiệm vụ</h3>
             <div class="card-tools">
                 <button type="button" class="btn btn-tool" data-card-widget="collapse">

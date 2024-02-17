@@ -7,7 +7,8 @@ use App\Models\Contract;
 use App\Models\TaskDetail;
 use App\Models\TaskMap;
 use App\Models\User;
-use Illuminate\Database\Query\JoinClause;
+use DateInterval;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use MPDF;
@@ -23,12 +24,14 @@ class ExportController extends Controller
             'type_report' => 'required|in:0,1',
             'contract_id' => 'required|numeric',
             'image_charts' => 'nullable|array',
+            'image_trend_charts' => 'nullable|array',
+            'image_annual_charts' => 'nullable|array',
             'user_id' => 'required|numeric',
+            'display' => 'required|in:0,1',
         ]);
         $data['creator'] = User::with(['staff'])->firstWhere('id', $data['user_id'])->toArray();
         $pdf = null;
         $filename = '';
-        // dd($this->getReportWorkByMonthAndYear($data['month'], $data['year'], $data['contract_id']));
         switch ((int)$data['type_report']) {
             case 0:
                 $pdf = MPDF::loadView('pdf.report_plan', ['data' => $data
@@ -53,7 +56,7 @@ class ExportController extends Controller
 
     public function getReportPlanByMonthAndYear($month, $year, $contract_id)
     {
-        return Contract::with([
+        $contract = Contract::with([
             'customer',
             'branch',
             'tasks.type.parent',
@@ -64,17 +67,31 @@ class ExportController extends Controller
             'tasks.details.taskStaffs.user.staff',
         ])
             ->where('id', $contract_id)
-            ->whereHas('tasks.details', function ($q) use ($month, $year) {
-                $q->whereRaw('year(plan_date) = ?', $year)
-                    ->whereRaw('month(plan_date) = ?', $month);
-            })
             ->first()
-            ?->toArray() ?? [];
+            ->toArray();
+        $tasks = $contract['tasks'];
+        $result = [];
+        foreach ($tasks as $task) {
+            $tmp = [];
+            foreach ($task['details'] as $detail) {
+                $date = explode('-', $detail['plan_date']);
+                if ((int)$date[0] === (int)$year && (int)$date[1] === (int)$month) {
+                    $tmp[] = $detail;
+                }
+            }
+            unset($task['details']);
+            $result['tasks'][] = [
+                'details' => $tmp,
+                ...$task,
+            ];
+        }
+
+        return $result;
     }
 
     public function getReportWorkByMonthAndYear($month, $year, $contract_id)
     {
-        return Contract::with([
+        $contract = Contract::with([
             'customer',
             'branch',
             'tasks.type.parent',
@@ -85,12 +102,26 @@ class ExportController extends Controller
             'tasks.details.taskStaffs.user.staff',
         ])
             ->where('id', $contract_id)
-            ->whereHas('tasks.details', function ($q) use ($month, $year) {
-                $q->whereRaw('YEAR(plan_date) = ?', $year)
-                    ->whereRaw('MONTH(plan_date) = ?', $month);
-            })
             ->first()
-            ?->toArray() ?? [];
+            ->toArray();
+        $tasks = $contract['tasks'];
+        $result = [];
+        foreach ($tasks as $task) {
+            $tmp = [];
+            foreach ($task['details'] as $detail) {
+                $date = explode('-', $detail['plan_date']);
+                if ((int)$date[0] === (int)$year && (int)$date[1] === (int)$month) {
+                    $tmp[] = $detail;
+                }
+            }
+            unset($task['details']);
+            $result['tasks'][] = [
+                'details' => $tmp,
+                ...$task,
+            ];
+        }
+
+        return $result;
     }
 
     public function getDataMapChart(Request $request)
@@ -123,9 +154,6 @@ class ExportController extends Controller
                 ELSE result
             END) as all_result')
                 ->join('maps', 'maps.id', '=', 'task_maps.map_id')
-                // ->join('task_details', function(JoinClause $join) {
-                //     $join->on('task')
-                // })
                 ->whereRaw('task_id = ?', $task_detail->id)
                 ->groupByRaw('map_id, area')
                 ->orderBy('map_id')
@@ -147,5 +175,127 @@ class ExportController extends Controller
             'status' => 0,
             'data' => $result,
         ];
+    }
+
+    public function getTrendDataMapChart(Request $request)
+    {
+        $contract_id = $request->contract_id;
+
+        $contract = Contract::with(['tasks.details'])->firstWhere('id', $contract_id);
+        $start = new DateTime($contract->start);
+        $finish = new DateTime($contract->finish);
+        $keys = [];
+        for ($date = $start; $date <= $finish; $date->add(new DateInterval('P3W'))) {
+            if (!key_exists($date->format('Y-m'), $keys)) {
+                $keys[$date->format('Y-m')] = [
+                    'month' => $date->format('m'),
+                    'year' => $date->format('Y'),
+                ];
+            }
+        }
+        $result = [];
+        foreach ($contract->tasks as $task) {
+            $tmp = [];
+            foreach ($keys as $key => $date) {
+                $key_task_details = TaskDetail::with(['task', 'taskMaps.map'])
+                    ->whereRaw('MONTH(plan_date) = ?', $date['month'])
+                    ->whereRaw('YEAR(plan_date) = ?', $date['year'])
+                    ->where('task_id', $task->id)
+                    ->get()->pluck('id');
+                $value = DB::table('task_maps')
+                    ->selectRaw('SUM(CASE
+                                    WHEN kpi is NULL THEN 0
+                                    WHEN kpi = "" THEN 0
+                                    ELSE kpi
+                                END) as all_kpi,
+                                SUM(CASE
+                                    WHEN result is NULL THEN 0
+                                    WHEN result = "" THEN 0
+                                    ELSE result
+                                END) as all_result')
+                    ->join('maps', 'maps.id', '=', 'task_maps.map_id')
+                    ->whereIn('task_id', $key_task_details)
+                    ->first();
+
+                $tmp[$key] = [
+                    ...$date,
+                    'kpi' => $value->all_kpi ?? 0,
+                    'result' => $value->all_result ?? 0,
+                ];
+            }
+            $result[$task->id] = [
+                ...$tmp,
+                'task_id' => $task->id
+            ];
+        }
+
+        return [
+            'status' => 0,
+            'data' => $result,
+        ];
+    }
+
+    public function getDataAnnualMapChart(Request $request)
+    {
+        $this_year = now()->format('Y');
+        $last_year = now()->subYear(1)->format('Y');
+        $contract = Contract::with(['tasks.details'])->firstWhere('id', $request->contract_id);
+        $result = [];
+        foreach ($contract->tasks as $task) {
+            $tmp_this_year = [];
+            $tmp_last_year = [];
+            for ($month = 1; $month <= 12; $month++) {
+                $tmp_this_year[$month] = $this->getDataByMonthAndYear($month, $this_year, $task->id);
+                $tmp_last_year[$month] = $this->getDataByMonthAndYear($month, $last_year, $task->id);
+            }
+            $result[$task->id] = [
+                'task_id' => $task->id,
+                'last_year' => [
+                    ...$tmp_last_year,
+                    'year' => $last_year
+                ],
+                'this_year' => [
+                    ...$tmp_this_year,
+                    'year' => $this_year
+                ],
+            ];
+        }
+
+        return [
+            'status' => 0,
+            'data' => $result,
+        ];
+    }
+
+    public function getDataByMonthAndYear($month, $year, $task_id)
+    {
+        $result = [];
+        $key_task_details = TaskDetail::with(['task', 'taskMaps.map'])
+            ->whereRaw('MONTH(plan_date) = ?', $month)
+            ->whereRaw('YEAR(plan_date) = ?', $year)
+            ->where('task_id',  $task_id)
+            ->get()->pluck('id');
+        $value = DB::table('task_maps')
+            ->selectRaw('SUM(CASE
+                            WHEN kpi is NULL THEN 0
+                            WHEN kpi = "" THEN 0
+                            ELSE kpi
+                            END) as all_kpi,
+                        SUM(CASE
+                            WHEN result is NULL THEN 0
+                            WHEN result = "" THEN 0
+                            ELSE result
+                            END) as all_result')
+            ->join('maps', 'maps.id', '=', 'task_maps.map_id')
+            ->whereIn('task_id', $key_task_details)
+            ->first();
+        $result = [
+            'kpi' => $value->all_kpi ?? 0,
+            'result' => $value->all_result ?? 0,
+            'month' => $month,
+            'year' => $year,
+        ];
+
+        return $result;
     }
 }

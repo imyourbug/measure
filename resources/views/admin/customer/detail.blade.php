@@ -4,8 +4,17 @@
 @push('scripts')
 @endpush
 @section('content')
-    <div class="card-body">
-        <div class="row">
+    <div class="card direct-chat direct-chat-primary">
+        <div class="card-header ui-sortable-handle header-color" style="cursor: move;">
+            <h3 class="card-title text-bold">Thông tin hợp đồng</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body" style="display: block;padding: 10px !important;">
+            <div class="row">
             <div class="col-lg-6 col-md-12">
                 <div class="form-group">
                     <label for="menu">Họ tên</label>
@@ -32,19 +41,7 @@
                     <p class="form-control">{{ $customer->email }}</p>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="card direct-chat direct-chat-primary">
-        <div class="card-header ui-sortable-handle" style="cursor: move;">
-            <h3 class="card-title text-bold">Hợp đồng</h3>
-            <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                    <i class="fas fa-minus"></i>
-                </button>
-            </div>
-        </div>
-        <div class="card-body" style="display: block;padding: 10px !important;">
-            <table id="table" class="table display nowrap dataTable dtr-inline collapsed">
+        </div><table id="table" class="table display nowrap dataTable dtr-inline collapsed">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -56,6 +53,7 @@
                         <th>Khách hàng</th>
                         <th>Thao tác</th>
                     </tr>
+                </thead>
                 <tbody>
                     @foreach ($customer->contracts as $key => $contract)
                         <tr class="row{{ $contract->id }}">
@@ -79,7 +77,6 @@
                         </tr>
                     @endforeach
                 </tbody>
-                </thead>
             </table>
         </div>
     </div>

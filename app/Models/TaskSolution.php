@@ -12,7 +12,6 @@ class TaskSolution extends Model
     protected $fillable = [
         'code',
         'name',
-        'position',
         'unit',
         'kpi',
         'result',
