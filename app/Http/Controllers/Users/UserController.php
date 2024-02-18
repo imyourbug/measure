@@ -8,11 +8,8 @@ use App\Http\Requests\Users\LoginRequest;
 use App\Http\Requests\Users\RecoverRequest;
 use App\Http\Requests\Users\RegisterRequest;
 use App\Mail\RecoverPasswordMail;
-use App\Models\AirTask;
-use App\Models\ElecTask;
 use App\Models\InfoUser;
 use App\Models\User;
-use App\Models\WaterTask;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -27,13 +24,8 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $id = Auth::id();
-
         return view('user.task.list', [
             'title' => 'Trang người dùng',
-            'electasks' => ElecTask::where('user_id', $id)->orderByDesc('created_at')->get(),
-            'airtasks' => AirTask::where('user_id', $id)->orderByDesc('created_at')->get(),
-            'watertasks' => WaterTask::where('user_id', $id)->orderByDesc('created_at')->get(),
         ]);
     }
 
@@ -69,7 +61,7 @@ class UserController extends Controller
         if ($reset_password) {
             Mail::to($request->input('email'))->send(new RecoverPasswordMail($new_password));
         }
-        Toastr::success('Lấy mật khẩu thành công! Hãy kiểm tra email của bạn', __('title.toastr.fail'));
+        Toastr::success('Lấy mật khẩu thành công! Hãy kiểm tra email của bạn', __('title.toastr.success'));
 
         return redirect()->back();
     }
@@ -88,7 +80,7 @@ class UserController extends Controller
             is_numeric($tel_or_email) ? 'name' : 'email' => $tel_or_email,
             'password' => $request->input('password')
         ])) {
-            Toastr::success('Đăng nhập thành công', __('title.toastr.fail'));
+            Toastr::success('Đăng nhập thành công', __('title.toastr.success'));
             $user = Auth::user();
 
             return redirect()->route($user->role == 1 ? 'admin.index' : 'users.home');
@@ -143,10 +135,6 @@ class UserController extends Controller
                 'password' => Hash::make($request->input('password')),
                 'role' => 1,
             ]);
-            // InfoUser::create([
-            //     'name' =>  $tel_or_email,
-            //     'user_id' => $user->id
-            // ]);
             Toastr::success('Đăng ký thành công', __('title.toastr.fail'));
             DB::commit();
         } catch (Throwable $e) {
@@ -158,5 +146,35 @@ class UserController extends Controller
         }
 
         return redirect()->route('users.login');
+    }
+
+    public function update(Request $request)
+    {
+        $data = $request->validate([
+            'id' => 'required|int',
+            'avatar' => 'required|string',
+            'name' => 'required|string',
+            'position' => 'required|string',
+            'identification' => 'required|string|regex:/\d{12}$/',
+            'tel' => 'required|string|regex:/^0\d{9,10}$/',
+            'active' => 'required|in:0,1',
+        ]);
+        unset($data['id']);
+        $update = InfoUser::where('id', $request->input('id'))->update($data);
+        if ($update) {
+            Toastr::success(__('message.success.update'), __('title.toastr.fail'));
+        } else Toastr::error(__('message.fail.update'), __('title.toastr.fail'));
+
+        return redirect()->back();
+    }
+
+    public function me(Request $request)
+    {
+        return view('user.me', [
+            'title' => 'Thông tin cá nhân',
+            'staff' => User::with(['staff'])
+                ->firstWhere('id', Auth::id())
+                ->staff
+        ]);
     }
 }

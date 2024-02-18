@@ -223,7 +223,7 @@
                             }
                         });
                         dataThisYearChart.forEach(d => {
-                            dataResultsLastYear.push(d.result);
+                            dataResultsThisYear.push(d.result);
                             // backgroundColor.push('#E50B4E');
                         });
                         //
@@ -287,9 +287,11 @@
                 $('.type_report').val($('.select-type').val());
                 $('.contract_id').val($('.select-contract').val());
                 $('.user_id').val($('.select-user').val());
-                $('.btn-export').prop('disabled', false);
                 $('.display').val($('#select-display').is(':checked') ? $('#select-display').val() : 0);
-            }, 1000);
+                setTimeout(() => {
+                    $('.btn-export').prop('disabled', false);
+                }, 2000);
+            }, 3000);
         });
 
         function getRandomRGBColor() {
@@ -586,10 +588,10 @@
                     <div class="groupAnnualImage">
                     </div>
                     {{-- <div class="groupChart" style="display: block;">
-                    </div> --}}
-                    {{-- <div class="groupTrendChart" style="display: block;">
-                    </div> --}}
-                    {{-- <div class="groupAnnualChart" style="display: block;">
+                    </div>
+                    <div class="groupTrendChart" style="display: block;">
+                    </div>
+                    <div class="groupAnnualChart" style="display: block;">
                     </div> --}}
                     <input type="hidden" class="month" name="month" />
                     <input type="hidden" class="year" name="year" />

@@ -15,33 +15,34 @@
         </div>
         <div class="card-body" style="display: block;padding: 10px !important;">
             <div class="row">
-            <div class="col-lg-6 col-md-12">
-                <div class="form-group">
-                    <label for="menu">Họ tên</label>
-                    <p class="form-control">{{ $customer->name }}</p>
+                <div class="col-lg-6 col-md-12">
+                    <div class="form-group">
+                        <label for="menu">Họ tên</label>
+                        <p class="form-control">{{ $customer->name }}</p>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <div class="form-group">
+                        <label for="menu">Địa chỉ</label>
+                        <p class="form-control">{{ $customer->address }}</p>
+                    </div>
                 </div>
             </div>
-            <div class="col-lg-6 col-md-12">
-                <div class="form-group">
-                    <label for="menu">Địa chỉ</label>
-                    <p class="form-control">{{ $customer->address }}</p>
+            <div class="row">
+                <div class="col-lg-6 col-md-12">
+                    <div class="form-group">
+                        <label for="menu">Số điện thoại</label>
+                        <p class="form-control">{{ $customer->tel }}</p>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <div class="form-group">
+                        <label for="menu">Email</label>
+                        <p class="form-control">{{ $customer->email }}</p>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-6 col-md-12">
-                <div class="form-group">
-                    <label for="menu">Số điện thoại</label>
-                    <p class="form-control">{{ $customer->tel }}</p>
-                </div>
-            </div>
-            <div class="col-lg-6 col-md-12">
-                <div class="form-group">
-                    <label for="menu">Email</label>
-                    <p class="form-control">{{ $customer->email }}</p>
-                </div>
-            </div>
-        </div><table id="table" class="table display nowrap dataTable dtr-inline collapsed">
+            <table id="table" class="table display nowrap dataTable dtr-inline collapsed">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -50,7 +51,6 @@
                         <th>Ngày bắt đầu</th>
                         <th>Ngày kết thúc</th>
                         <th>Nội dung</th>
-                        <th>Khách hàng</th>
                         <th>Thao tác</th>
                     </tr>
                 </thead>
@@ -63,7 +63,6 @@
                             <td>{{ date('d-m-Y', strtotime($contract->start)) }}</td>
                             <td>{{ date('d-m-Y', strtotime($contract->finish)) }}</td>
                             <td>{{ $contract->content }}</td>
-                            <td>{{ $contract->customer->name }}</td>
                             <td>
                                 <a class="btn btn-primary btn-sm"
                                     href='{{ route('admin.contracts.show', ['id' => $contract->id]) }}'>

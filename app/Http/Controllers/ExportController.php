@@ -50,7 +50,7 @@ class ExportController extends Controller
         // $pdf->setPaper('A4', 'portrait');
         $filename .= 'tháng ' . $data['month'] . ' năm ' . $data['year'] . '.pdf';
 
-        return $pdf->stream($filename);
+        // return $pdf->stream($filename);
         return $pdf->download($filename);
     }
 
@@ -71,6 +71,8 @@ class ExportController extends Controller
             ->toArray();
         $tasks = $contract['tasks'];
         $result = [];
+        $result['customer'] = $contract['customer'];
+        $result['branch'] = $contract['branch'];
         foreach ($tasks as $task) {
             $tmp = [];
             foreach ($task['details'] as $detail) {
@@ -106,6 +108,8 @@ class ExportController extends Controller
             ->toArray();
         $tasks = $contract['tasks'];
         $result = [];
+        $result['customer'] = $contract['customer'];
+        $result['branch'] = $contract['branch'];
         foreach ($tasks as $task) {
             $tmp = [];
             foreach ($task['details'] as $detail) {

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Users;
 
 use App\Constant\GlobalConstant;
 use App\Http\Controllers\Controller;
@@ -68,13 +68,17 @@ class TaskDetailController extends Controller
     public function index(Request $request)
     {
         $user_id = $request->user_id;
+        $today = $request->today;
+
         $task_details = TaskDetail::with(['task.type', 'taskStaffs'])
             ->when($user_id, function ($q) use ($user_id) {
                 return $q->whereHas('taskStaffs', function ($q) use ($user_id) {
                     $q->where('user_id', $user_id);
                 });
             })
-            ->where('task_id', $request->id)
+            ->when($today, function ($q) use ($today) {
+                return $q->where('plan_date', $today);
+            })
             ->get();
 
         return response()->json([
@@ -83,17 +87,9 @@ class TaskDetailController extends Controller
         ]);
     }
 
-    public function getById(Request $request)
-    {
-        return response()->json([
-            'status' => 0,
-            'taskDetail' => TaskDetail::with(['task.type'])->firstWhere('id', $request->id),
-        ]);
-    }
-
     public function show($id)
     {
-        return view('admin.taskdetail.edit', [
+        return view('user.taskdetail.edit', [
             'title' => 'Chi tiết nhiệm vụ',
             'taskDetail' => TaskDetail::with(['task.type'])->firstWhere('id', $id),
             'staffs' => User::with('staff')->where('role', GlobalConstant::ROLE_STAFF)->get(),
@@ -105,21 +101,5 @@ class TaskDetailController extends Controller
             'contracts' => Contract::with(['branch'])->get(),
             'taskMaps' => TaskMap::with(['task', 'map'])->where('task_id', $id)->get(),
         ]);
-    }
-
-    public function destroy($id)
-    {
-        try {
-            TaskDetail::firstWhere('id', $id)->delete();
-
-            return response()->json([
-                'status' => 0,
-            ]);
-        } catch (Throwable $e) {
-            return response()->json([
-                'status' => 1,
-                'message' => $e->getMessage()
-            ]);
-        }
     }
 }

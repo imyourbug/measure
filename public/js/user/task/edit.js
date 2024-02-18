@@ -41,15 +41,12 @@ $(document).ready(function () {
     // solution
     dataTable = $("#table").DataTable({
         ajax: {
-            url: "/api/taskdetails?id=" + $("#task_id").val(),
+            url: "/api/taskdetails?user_id=" + $("#user_id").val() +"&id=" + $("#task_id").val(),
             dataSrc: "taskDetails",
         },
         columns: [
             { data: "id" },
             { data: "task.type.name" },
-            // { data: function (d) {
-            //     return `${formatDate(d.plan_date)}`
-            // } },
             { data: "plan_date" },
             { data: "actual_date" },
             { data: "time_in" },
@@ -60,13 +57,19 @@ $(document).ready(function () {
                     return `<a class="btn btn-primary btn-sm btn-edit" data-id="${d.id}" data-target="#modal" data-toggle="modal">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <a class="btn btn-success btn-sm" style="padding: 4px 15px" href="/admin/taskdetails/update/${d.id}">
+                                                <a class="btn btn-success btn-sm" style="padding: 4px 15px" href="/user/taskdetails/update/${d.id}">
                                                     <i class="fa-solid fa-info"></i>
-                                                </a>
-                                                <button data-id="${d.id}"
-                                                    class="btn btn-danger btn-sm btn-delete">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>`;
+                                                </a>`;
+                    // return `<a class="btn btn-primary btn-sm btn-edit" data-id="${d.id}" data-target="#modal" data-toggle="modal">
+                    //                                 <i class="fas fa-edit"></i>
+                    //                             </a>
+                    //                             <a class="btn btn-success btn-sm" style="padding: 4px 15px" href="/admin/taskdetails/update/${d.id}">
+                    //                                 <i class="fa-solid fa-info"></i>
+                    //                             </a>
+                    //                             <button data-id="${d.id}"
+                    //                                 class="btn btn-danger btn-sm btn-delete">
+                    //                                 <i class="fas fa-trash"></i>
+                    //                             </button>`;
                 },
             },
         ],

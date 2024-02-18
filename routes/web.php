@@ -34,18 +34,20 @@ Route::group(['prefix' => 'user', 'namespace' => 'App\Http\Controllers\Users', '
     Route::post('register', 'UserController@checkRegister')->name('checkRegister');
     Route::post('change_password', 'UserController@changePassword')->name('changePassword');
     Route::get('logout', 'UserController@logout')->name('logout');
+    Route::get('me', 'UserController@me')->name('me');
+    Route::post('me/update', 'UserController@update')->name('update');
 
     #task
     Route::group(['prefix' => 'tasks', 'as' => 'tasks.', 'middleware' => 'auth'], function () {
         Route::get('/', 'TaskController@index')->name('index');
         Route::get('/today', 'TaskController@taskToday')->name('taskToday');
-        // Route::post('/download', 'TaskController@download')->name('download');
-        // Route::get('/complete/{id}', 'TaskController@update')->name('update');
-        // Route::get('/delete/{id}', 'TaskController@destroy')->name('destroy');
-        // Route::get('/display/{id}', 'TaskController@display')->name('display');
+        Route::get('/{id}', 'TaskController@show')->name('show');
     });
-    #upload
-    // Route::post('/upload-excel', 'UploadController@upload')->name('upload')->middleware('auth');
+
+    #taskdetails
+    Route::group(['prefix' => 'taskdetails', 'as' => 'taskdetails.', 'middleware' => 'auth'], function () {
+        Route::get('/update/{id}', 'TaskDetailController@show')->name('show');
+    });
 });
 
 #admin

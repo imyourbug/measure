@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Branch;
+use App\Models\Contract;
 use App\Models\Customer;
 use Illuminate\Http\Request;
 use Throwable;
@@ -79,7 +80,7 @@ class BranchController extends Controller
     {
         return view('admin.branch.edit', [
             'title' => 'Chi tiết chi nhánh',
-            'branch' => Branch::firstWhere('id', $id),
+            'branch' => Branch::with(['contracts.customer'])->firstWhere('id', $id),
             'customers' => Customer::all(),
         ]);
     }

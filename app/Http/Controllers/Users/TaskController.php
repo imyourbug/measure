@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
-use App\Models\AirTask;
-use App\Models\ElecTask;
 use App\Models\Task;
-use App\Models\WaterTask;
+use App\Models\TaskDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -20,16 +18,23 @@ class TaskController extends Controller
 {
     public function index(Request $request)
     {
-        // return view('user.task.order', [
-        //     'title' => 'Danh sách nhiệm vụ',
-        // ]);
-        $id = Auth::id();
-
         return view('user.task.list', [
             'title' => 'Danh sách nhiệm vụ',
-            'electasks' => ElecTask::where('user_id', $id)->orderByDesc('created_at')->get(),
-            'airtasks' => AirTask::where('user_id', $id)->orderByDesc('created_at')->get(),
-            'watertasks' => WaterTask::where('user_id', $id)->orderByDesc('created_at')->get(),
+        ]);
+    }
+
+    public function show($task_id)
+    {
+        $tasks = TaskDetail::with([
+            'task',
+        ])->where('task_id', $task_id)
+            ->get();
+
+        return view('user.task.edit', [
+            'title' => 'Danh sách chi tiết nhiệm vụ',
+            'tasks' => $tasks,
+            // 'contracts' => Contract::with(['branch'])->get(),
+            // 'types' => Type::all(),
         ]);
     }
 
@@ -37,73 +42,10 @@ class TaskController extends Controller
     {
         $id = Auth::id();
         $today = now()->format('Y-m-d');
-        $electasks = ElecTask::where('plan_date', $today)
-            ->where('user_id', $id)
-            ->orderByDesc('created_at')
-            ->get();
-        $airtasks = AirTask::where('plan_date', $today)
-            ->where('user_id', $id)
-            ->orderByDesc('created_at')
-            ->get();
-        $watertasks = WaterTask::where('plan_date', $today)
-            ->where('user_id', $id)
-            ->orderByDesc('created_at')
-            ->get();
 
-        return view('user.task.list', [
+        return view('user.task.today', [
             'title' => 'Nhiệm vụ hôm nay: ' . now()->format('d-m-Y'),
-            'electasks' => $electasks,
-            'airtasks' => $airtasks,
-            'watertasks' => $watertasks,
-            'content' => 1,
         ]);
-    }
-
-    public function updateElecTask(Request $request)
-    {
-        try {
-            $data = $request->validate([
-                'id' => 'required|numeric',
-                'amount' => 'required|numeric|min:0',
-            ]);
-            unset($data['id']);
-            ElecTask::where('id', $request->input('id'))->update($data);
-
-            return response()->json([
-                'status' => 0,
-                'message' => 'Cập nhật thành công'
-            ]);
-        } catch (Throwable $e) {
-            return response()->json([
-                'status' => 1,
-                'message' => $e->getMessage()
-            ]);
-        }
-    }
-
-    public function updateWaterTask(Request $request)
-    {
-        try {
-            $data = $request->validate([
-                'id' => 'required|numeric',
-                'asen' => 'required|numeric|min:0',
-                'stiffness' => 'required|numeric|min:0',
-                'ph' => 'required|numeric|min:0',
-            ]);
-            // dd($data);
-            unset($data['id']);
-            WaterTask::where('id', $request->input('id'))->update($data);
-
-            return response()->json([
-                'status' => 0,
-                'message' => 'Cập nhật thành công'
-            ]);
-        } catch (Throwable $e) {
-            return response()->json([
-                'status' => 1,
-                'message' => $e->getMessage()
-            ]);
-        }
     }
 
     public function updateAirTask(Request $request)
@@ -126,15 +68,6 @@ class TaskController extends Controller
                 'status' => 1,
                 'message' => $e->getMessage()
             ]);
-        }
-    }
-
-    public function download()
-    {
-        $storagePath = storage_path('app/public/excel/' . env('NEW_FILE_INPUT', 'new_input.xlsx'));
-
-        if (file_exists($storagePath)) {
-            return response()->download($storagePath);
         }
     }
 }

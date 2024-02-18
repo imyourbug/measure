@@ -62,6 +62,14 @@ class InfoUserController extends Controller
         return redirect()->back();
     }
 
+    public function show($id)
+    {
+        return view('admin.staff.edit', [
+            'title' => 'Chi tiết nhân viên',
+            'staff' => InfoUser::firstWhere('id', $id)
+        ]);
+    }
+
     public function index(Request $request)
     {
         if ($request->ajax()) {
@@ -76,13 +84,7 @@ class InfoUserController extends Controller
         ]);
     }
 
-    public function show($id)
-    {
-        return view('admin.staff.edit', [
-            'title' => 'Chi tiết nhân viên',
-            'staff' => InfoUser::firstWhere('id', $id)
-        ]);
-    }
+
 
     public function destroy($user_id)
     {

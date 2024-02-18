@@ -17,8 +17,10 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::group(['namespace' => 'App\Http\Controllers\Users'], function () {
-    Route::group(['prefix' => 'tasks', 'as' => 'tasks.'], function () {
+Route::group(['namespace' => 'App\Http\Controllers\Users','prefix' => 'users',], function () {
+    #taskdetails
+    Route::group(['prefix' => 'taskdetails', 'as' => 'taskdetails.',], function () {
+        Route::get('', 'TaskDetailController@index')->name('index');
     });
 });
 
@@ -29,6 +31,7 @@ Route::group(['namespace' => 'App\Http\Controllers', 'prefix' => 'exports', 'as'
     Route::get('getDataAnnualMapChart', 'ExportController@getDataAnnualMapChart')->name('getDataAnnualMapChart');
 });
 
+#upload
 Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::post('/upload', 'UploadController@upload')->name('upload');
 });

@@ -102,19 +102,27 @@ class TaskController extends Controller
         $from = $request->from;
         $to = $request->to;
         $contracts = !empty($request->contracts) ? explode(",", $request->contracts) : [];
+        $user_id = $request->user_id;
         $tasks = Task::with([
-            'contract.branch', 'type',
+            'contract.branch',
+            'type',
+            'details.taskStaffs',
         ])
             ->when($from, function ($q) use ($from) {
                 return $q->where('created_at', '>=', $from . ' 00:00:00');
             })->when($to, function ($q) use ($to) {
                 return $q->where('created_at', '<=', $to . ' 23:59:59');
+            })->when($user_id, function ($q) use ($user_id) {
+                return $q->whereHas('details.taskStaffs', function ($q) use ($user_id) {
+                    $q->where('user_id', $user_id);
+                });
             })->when($contracts, function ($q) use ($contracts) {
                 return $q->whereHas('contract', function ($q) use ($contracts) {
                     $q->whereIn('id', $contracts);
                 });
             })
             ->get();
+
         return response()->json([
             'status' => 0,
             'tasks' => $tasks

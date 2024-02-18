@@ -3,7 +3,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
 @endpush
 @push('scripts')
-    <script src="/js/user/task/edit.js"></script>
+    <script src="/js/user/task/today.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
 @endpush
@@ -85,7 +85,7 @@
             </div>
         </div>
     </div>
-    <input type="hidden" id="task_id" value="{{ request()->id }}" />
+    <input type="hidden" id="today" value="{{ now()->format('Y-m-d') }}" />
     <input type="hidden" id="user_id" value="{{ Auth::id() }}" />
     <input type="hidden" id="taskdetail_id" />
 @endsection
