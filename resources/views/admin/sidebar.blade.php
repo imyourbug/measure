@@ -17,7 +17,7 @@
             @break
 
             @case(2)
-                <a href="{{ route('users.home') }}" class="brand-link text-center">
+                <a href="{{ route('customers.me') }}" class="brand-link text-center">
                     <span class="brand-text font-weight-light">Khách hàng</span>
                 </a>
             @break
@@ -42,22 +42,10 @@
                         <a href="{{ route('admin.index') }}" class="d-block">{{ Auth::user()?->email }}</a>
                     @break
 
-                    {{-- @case(2)
-                        <a href="{{ route('admin.index') }}" class="d-block">{{ Auth::user()?->email }}</a>
-                    @break --}}
+                    @case(2)
+                        <a href="{{ route('customers.me') }}" class="d-block">{{ Auth::user()?->email }}</a>
+                    @break
                 @endswitch
-            </div>
-        </div>
-        <!-- SidebarSearch Form -->
-        <div class="form-inline">
-            <div class="input-group" data-widget="sidebar-search">
-                <input class="form-control form-control-sidebar" type="search" placeholder="Search"
-                    aria-label="Search">
-                <div class="input-group-append">
-                    <button class="btn btn-sidebar">
-                        <i class="fas fa-search fa-fw"></i>
-                    </button>
-                </div>
             </div>
         </div>
         <!-- Sidebar Menu -->
@@ -485,6 +473,53 @@
                     @break
 
                     @case(2)
+                        {{-- <li
+                            class="nav-item {{ in_array(request()->route()->getName(), ['customers.home','customers.tasks.index', 'customers.tasks.taskToday'])
+                                ? 'menu-is-opening menu-open'
+                                : '' }}">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-bars"></i>
+                                <p>
+                                    Nhiệm vụ của tôi
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('customers.tasks.index') }}"
+                                        class="nav-link {{ in_array(request()->route()->getName(), ['customers.tasks.index', 'customers.home']) ? 'option-open' : '' }}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Danh sách</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('customers.tasks.taskToday') }}"
+                                        class="nav-link {{ request()->route()->getName() == 'customers.tasks.taskToday' ? 'option-open' : '' }}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Nhiệm vụ cần làm</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li> --}}
+                        <li
+                            class="nav-item {{ in_array(request()->route()->getName(), ['customers.me']) ? 'menu-is-opening menu-open' : '' }}">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fa-solid fa-user"></i>
+                                <p>
+                                    Thông tin cá nhân
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('customers.me') }}"
+                                        class="nav-link {{ request()->route()->getName() == 'customers.me' ? 'option-open' : '' }}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Cập nhật</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                     @break
                 @endswitch
             </ul>
