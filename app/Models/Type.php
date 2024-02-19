@@ -24,4 +24,9 @@ class Type extends Model
     {
         return $this->hasMany(Type::class, 'parent_id');
     }
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
 }
