@@ -24,21 +24,29 @@ Route::get('/', function () {
 });
 
 #customers
-Route::group(['prefix' => 'customer', 'namespace' => 'App\Http\Controllers\Customers', 'as' => 'customers.'], function () {
+Route::group([
+    'prefix' => 'customer', 'namespace' => 'App\Http\Controllers\Customers',
+    'as' => 'customers.', 'middleware' => 'auth'
+], function () {
     Route::get('me', 'CustomerController@me')->name('me');
     Route::post('me/update', 'CustomerController@update')->name('update');
 
-    // #task
-    // Route::group(['prefix' => 'tasks', 'as' => 'tasks.', 'middleware' => 'auth'], function () {
-    //     Route::get('/', 'TaskController@index')->name('index');
-    //     Route::get('/today', 'TaskController@taskToday')->name('taskToday');
-    //     Route::get('/{id}', 'TaskController@show')->name('show');
-    // });
+    #contract
+    Route::group(['prefix' => 'contracts', 'as' => 'contracts.'], function () {
+        Route::get('/', 'ContractController@index')->name('index');
+        Route::get('/detail/{id}', 'ContractController@detail')->name('detail');
+        // Route::get('/{id}', 'contractController@show')->name('show');
+    });
 
-    // #taskdetails
-    // Route::group(['prefix' => 'taskdetails', 'as' => 'taskdetails.', 'middleware' => 'auth'], function () {
-    //     Route::get('/update/{id}', 'TaskDetailController@show')->name('show');
-    // });
+    #tasks
+    Route::group(['prefix' => 'tasks', 'as' => 'tasks.'], function () {
+        Route::get('/detail/{id}', 'TaskController@show')->name('detail');
+    });
+
+    #taskdetails
+    Route::group(['prefix' => 'taskdetails', 'as' => 'taskdetails.'], function () {
+        Route::get('/{id}', 'TaskDetailController@show')->name('show');
+    });
 });
 
 #user
@@ -69,7 +77,10 @@ Route::group(['prefix' => 'user', 'namespace' => 'App\Http\Controllers\Users', '
 });
 
 #admin
-Route::group(['prefix' => '/admin', 'namespace' => 'App\Http\Controllers\Admin', 'as' => 'admin.', 'middleware' => 'admin'], function () {
+Route::group([
+    'prefix' => '/admin', 'namespace' => 'App\Http\Controllers\Admin',
+    'as' => 'admin.', 'middleware' => 'admin'
+], function () {
     Route::get('/', 'AdminController@index')->name('index');
 
     #reports

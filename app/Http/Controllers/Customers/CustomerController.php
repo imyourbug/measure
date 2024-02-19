@@ -23,7 +23,7 @@ class CustomerController extends Controller
         unset($data['id']);
         $update = Customer::where('id', $request->input('id'))->update($data);
         if ($update) {
-            Toastr::success(__('message.success.update'), __('title.toastr.fail'));
+            Toastr::success(__('message.success.update'), __('title.toastr.success'));
         } else Toastr::error(__('message.fail.update'), __('title.toastr.fail'));
 
         return redirect()->back();

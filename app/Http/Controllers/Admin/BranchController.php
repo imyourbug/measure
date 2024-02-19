@@ -32,9 +32,8 @@ class BranchController extends Controller
         ]);
         try {
             Branch::create($data);
-            Toastr::success('Tạo chi nhánh thành công', __('title.toastr.fail'));
+            Toastr::success('Tạo chi nhánh thành công', __('title.toastr.success'));
         } catch (Throwable $e) {
-            dd($e);
             Toastr::error('Tạo chi nhánh thất bại', __('title.toastr.fail'));
         }
 
@@ -55,7 +54,7 @@ class BranchController extends Controller
         unset($data['id']);
         $update = Branch::where('id', $request->input('id'))->update($data);
         if ($update) {
-            Toastr::success(__('message.success.update'), __('title.toastr.fail'));
+            Toastr::success(__('message.success.update'), __('title.toastr.success'));
         } else Toastr::error(__('message.fail.update'), __('title.toastr.fail'));
 
         return redirect()->back();

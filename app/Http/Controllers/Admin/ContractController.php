@@ -157,7 +157,7 @@ class ContractController extends Controller
         unset($data['id']);
         $update = Contract::firstWhere('id', $request->input('id'))->update($data);
         if ($update) {
-            Toastr::success(__('message.success.update'), __('title.toastr.fail'));
+            Toastr::success(__('message.success.update'), __('title.toastr.success'));
         } else Toastr::error(__('message.fail.update'), __('title.toastr.fail'));
 
         return redirect()->back();
@@ -167,7 +167,7 @@ class ContractController extends Controller
     {
         $delete = Contract::firstWhere('id', $id)->delete();
         if ($delete) {
-            Toastr::success(__('message.success.delete'), __('title.toastr.fail'));
+            Toastr::success(__('message.success.delete'), __('title.toastr.success'));
         } else Toastr::error(__('message.fail.delete'), __('title.toastr.fail'));
 
         return redirect()->back();
@@ -176,9 +176,17 @@ class ContractController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
+            $customer_id = $request->customer_id;
+            $contracts = Contract::with(['customer', 'branch'])
+            ->when($customer_id, function ($q) use ($customer_id) {
+                return $q->whereHas('customer', function ($q) use ($customer_id) {
+                    $q->where('id', $customer_id);
+                });
+            })
+            ->get();
             return response()->json([
                 'status' => 0,
-                'contracts' => Contract::with(['customer', 'branch'])->get()
+                'contracts' => $contracts
             ]);
         }
 

@@ -83,7 +83,8 @@ class UserController extends Controller
             Toastr::success('Đăng nhập thành công', __('title.toastr.success'));
             $user = Auth::user();
 
-            return redirect()->route($user->role == 1 ? 'admin.index' : 'users.home');
+            return redirect()->route($user->role == 1 ? 'admin.index'
+                : ($user->role == 2 ? 'customers.me' : 'users.home'));
         }
         Toastr::error('Tài khoản hoặc mật khẩu không chính xác', __('title.toastr.fail'));
 
@@ -96,7 +97,7 @@ class UserController extends Controller
             'password' => Hash::make($request->input('password'))
         ]);
         if ($rs) {
-            Toastr::success('Đổi mật khẩu thành công', __('title.toastr.fail'));
+            Toastr::success('Đổi mật khẩu thành công', __('title.toastr.success'));
 
             return response()->json([
                 'status' => 0,
@@ -135,11 +136,10 @@ class UserController extends Controller
                 'password' => Hash::make($request->input('password')),
                 'role' => 1,
             ]);
-            Toastr::success('Đăng ký thành công', __('title.toastr.fail'));
+            Toastr::success('Đăng ký thành công', __('title.toastr.success'));
             DB::commit();
         } catch (Throwable $e) {
             DB::rollBack();
-            dd($e);
             Toastr::error(__('message.fail.register'), __('title.toastr.fail'));
 
             return redirect()->back();
@@ -162,7 +162,7 @@ class UserController extends Controller
         unset($data['id']);
         $update = InfoUser::where('id', $request->input('id'))->update($data);
         if ($update) {
-            Toastr::success(__('message.success.update'), __('title.toastr.fail'));
+            Toastr::success(__('message.success.update'), __('title.toastr.success'));
         } else Toastr::error(__('message.fail.update'), __('title.toastr.fail'));
 
         return redirect()->back();

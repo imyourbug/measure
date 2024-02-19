@@ -59,7 +59,7 @@ class AccountController extends Controller
                 default:
                     break;
             };
-            Toastr::success('Tạo tài khoản thành công', __('title.toastr.fail'));
+            Toastr::success('Tạo tài khoản thành công', __('title.toastr.success'));
             DB::commit();
         } catch (Throwable $e) {
             DB::rollBack();
@@ -76,7 +76,7 @@ class AccountController extends Controller
         unset($data['id']);
         $update = User::where('id', $request->input('id'))->update($data);
         if ($update) {
-            Toastr::success(__('message.success.update'), __('title.toastr.fail'));
+            Toastr::success(__('message.success.update'), __('title.toastr.success'));
         } else Toastr::error(__('message.fail.update'), __('title.toastr.fail'));
 
         return redirect()->back();

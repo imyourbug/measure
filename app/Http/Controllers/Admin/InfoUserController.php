@@ -33,7 +33,7 @@ class InfoUserController extends Controller
     //     ]);
     //     try {
     //         InfoUser::create($data);
-    //         Toastr::success('Tạo nhân viên thành công', __('title.toastr.fail'));
+    //         Toastr::success('Tạo nhân viên thành công', __('title.toastr.success'));
     //     } catch (Throwable $e) {
     //         dd($e);
     //         Toastr::error('Tạo nhân viên thất bại', __('title.toastr.fail'));
@@ -56,7 +56,7 @@ class InfoUserController extends Controller
         unset($data['id']);
         $update = InfoUser::where('id', $request->input('id'))->update($data);
         if ($update) {
-            Toastr::success(__('message.success.update'), __('title.toastr.fail'));
+            Toastr::success(__('message.success.update'), __('title.toastr.success'));
         } else Toastr::error(__('message.fail.update'), __('title.toastr.fail'));
 
         return redirect()->back();

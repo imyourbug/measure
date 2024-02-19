@@ -473,34 +473,27 @@
                     @break
 
                     @case(2)
-                        {{-- <li
-                            class="nav-item {{ in_array(request()->route()->getName(), ['customers.home','customers.tasks.index', 'customers.tasks.taskToday'])
+                        <li
+                            class="nav-item {{ in_array(request()->route()->getName(), ['customers.contracts.index'])
                                 ? 'menu-is-opening menu-open'
                                 : '' }}">
                             <a href="#" class="nav-link">
-                                <i class="nav-icon fas fa-bars"></i>
+                                <i class="nav-icon fa-solid fa-file-contract"></i>
                                 <p>
-                                    Nhiệm vụ của tôi
+                                    Hợp đồng
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{ route('customers.tasks.index') }}"
-                                        class="nav-link {{ in_array(request()->route()->getName(), ['customers.tasks.index', 'customers.home']) ? 'option-open' : '' }}">
+                                    <a href="{{ route('customers.contracts.index') }}"
+                                        class="nav-link {{ in_array(request()->route()->getName(), ['customers.contracts.index', 'customers.home']) ? 'option-open' : '' }}">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Danh sách</p>
                                     </a>
                                 </li>
-                                <li class="nav-item">
-                                    <a href="{{ route('customers.tasks.taskToday') }}"
-                                        class="nav-link {{ request()->route()->getName() == 'customers.tasks.taskToday' ? 'option-open' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Nhiệm vụ cần làm</p>
-                                    </a>
-                                </li>
                             </ul>
-                        </li> --}}
+                        </li>
                         <li
                             class="nav-item {{ in_array(request()->route()->getName(), ['customers.me']) ? 'menu-is-opening menu-open' : '' }}">
                             <a href="#" class="nav-link">

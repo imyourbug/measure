@@ -44,9 +44,8 @@ class TaskController extends Controller
         ]);
         try {
             Task::create($data);
-            Toastr::success('Tạo thành công', __('title.toastr.fail'));
+            Toastr::success('Tạo thành công', __('title.toastr.success'));
         } catch (Throwable $e) {
-            dd($e);
             Toastr::error('Tạo nhiệm vụ thất bại', __('title.toastr.fail'));
         }
 

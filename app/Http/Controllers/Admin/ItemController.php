@@ -32,7 +32,7 @@ class ItemController extends Controller
         // dd($data);
         try {
             Item::create($data);
-            Toastr::success('Tạo vật tư thành công', __('title.toastr.fail'));
+            Toastr::success('Tạo vật tư thành công', __('title.toastr.success'));
         } catch (Throwable $e) {
             dd($e);
             Toastr::error('Tạo vật tư thất bại', __('title.toastr.fail'));
@@ -55,7 +55,7 @@ class ItemController extends Controller
         unset($data['id']);
         $update = Item::where('id', $request->input('id'))->update($data);
         if ($update) {
-            Toastr::success(__('message.success.update'), __('title.toastr.fail'));
+            Toastr::success(__('message.success.update'), __('title.toastr.success'));
         } else Toastr::error(__('message.fail.update'), __('title.toastr.fail'));
 
         return redirect()->back();

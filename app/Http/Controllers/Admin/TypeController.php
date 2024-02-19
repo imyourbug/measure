@@ -46,7 +46,7 @@ class TypeController extends Controller
         unset($data['id']);
         $update = Type::where('id', $request->input('id'))->update($data);
         if ($update) {
-            Toastr::success(__('message.success.update'), __('title.toastr.fail'));
+            Toastr::success(__('message.success.update'), __('title.toastr.success'));
         } else Toastr::error(__('message.fail.update'), __('title.toastr.fail'));
 
         return redirect()->back();
@@ -56,7 +56,7 @@ class TypeController extends Controller
     {
         $delete = Type::firstWhere('id', $id)->delete();
         if ($delete) {
-            Toastr::success(__('message.success.delete'), __('title.toastr.fail'));
+            Toastr::success(__('message.success.delete'), __('title.toastr.success'));
         } else Toastr::error(__('message.fail.delete'), __('title.toastr.fail'));
 
         return redirect()->back();
