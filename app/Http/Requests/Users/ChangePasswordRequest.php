@@ -13,9 +13,16 @@ class ChangePasswordRequest extends BaseRequest
      */
     public function rules(): array
     {
-        return [
-            'email' => 'required|email:dns,rfc',
-            'password' => 'required|string|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/'
+        $tel_or_email = $this->tel_or_email;
+        $validate = [
+            'tel_or_email' => 'required|email:dns,rfc',
+            'old_password' => 'required|string',
+            'password' => 'required|string',
         ];
+        if (is_numeric($tel_or_email)) {
+            $validate['tel_or_email'] = 'required|string|regex:/^0\d{9,10}$/';
+        }
+
+        return $validate;
     }
 }

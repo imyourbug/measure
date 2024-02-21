@@ -28,270 +28,299 @@
         })
 
         $('.btn-preview').on('click', function() {
+            // reset
+            $('.btn-export').prop('disabled', true);
+            $('.groupAnnualImage').html('');
+            $('.groupTrendImage').html('');
+            $('.groupImage').html('');
             listMapChart.forEach((e) => {
-                if (e.chart) {
+                if (e.chart !== null) {
                     e.chart.destroy();
                 }
             });
+            listTrendMapChart.forEach((e) => {
+                if (e.chart !== null) {
+                    e.chart.destroy();
+                }
+            });
+            listAnnualMapChart.forEach((e) => {
+                if (e.chart !== null) {
+                    e.chart.destroy();
+                }
+            });
+            listMapChart = [];
+            listTrendMapChart = [];
+            listAnnualMapChart = [];
+            // declare
+            let type_report = $('.select-type').val();
+            // $('.blockChart').html('');
             let year = $('.select-year').val();
             let month = $('.select-month').val();
             let contract_id = $('.select-contract').val();
-            $.ajax({
-                type: "GET",
-                url: "/api/exports/getDataMapChart?month=" + month + "&year=" + year + "&contract_id=" +
-                    contract_id,
-                success: function(response) {
-                    let html = '';
-                    let data = Object.keys(response.data).map((key) => response.data[key]);
-                    data.forEach(e => {
-                        html +=
-                            `<canvas id="mapChart${e.task_id}" style="display:block;"></canvas>`;
-                    });
-                    $('.groupChart').html('');
-                    $('.groupChart').html(html);
+            if (type_report == 1) {
+                $.ajax({
+                    type: "GET",
+                    url: "/api/exports/getDataMapChart?month=" + month + "&year=" + year + "&contract_id=" +
+                        contract_id,
+                    success: function(response) {
+                        let html = '';
+                        let data = Object.keys(response.data).map((key) => response.data[key]);
+                        data.forEach(e => {
+                            html +=
+                                `<canvas id="mapChart${e.task_id}" style="display:block;"></canvas>`;
+                        });
+                        $('.groupChart').html('');
+                        $('.groupChart').html(html);
 
-                    data.forEach(e => {
-                        let labels = [];
-                        let dataResults = [];
-                        let dataKpi = [];
-                        let backgroundColor = [];
-                        let dataChart = [];
-                        Object.keys(e).forEach((key) => {
-                            if (key != 'task_id') {
-                                dataChart.push(e[key]);
-                            }
-                        });
-                        dataChart.forEach(d => {
-                            labels.push(
-                                `${d.area}-${d.map_id.toString().padStart(3, "0") }`
-                            );
-                            dataResults.push(d.all_result);
-                            dataKpi.push(d.all_kpi);
-                            // backgroundColor.push(getRandomRGBColor());
-                            backgroundColor.push('#E50B4E');
-                        });
-                        let map = {
-                            task_id: e.task_id,
-                            chart: new Chart($('#mapChart' + e.task_id), {
-                                type: 'bar',
-                                data: {
-                                    labels: labels,
-                                    datasets: [{
-                                            label: 'Kết quả thực tế',
-                                            data: dataResults,
-                                            backgroundColor: backgroundColor,
-                                            borderWidth: 1,
-                                            order: 2,
-                                        },
-                                        {
-                                            type: 'line',
-                                            label: 'KPI',
-                                            data: dataKpi,
-                                            fill: false,
-                                            borderColor: 'rgb(54, 162, 235)',
-                                            order: 1,
-                                        }
-                                    ]
-                                },
-                                options: {
-                                    scales: {
-                                        y: {
-                                            beginAtZero: true
+                        data.forEach(e => {
+                            let labels = [];
+                            let dataResults = [];
+                            let dataKpi = [];
+                            let backgroundColor = [];
+                            let dataChart = [];
+                            Object.keys(e).forEach((key) => {
+                                if (key != 'task_id') {
+                                    dataChart.push(e[key]);
+                                }
+                            });
+                            dataChart.forEach(d => {
+                                labels.push(
+                                    `${d.area}-${d.map_id.toString().padStart(3, "0") }`
+                                );
+                                dataResults.push(d.all_result);
+                                dataKpi.push(d.all_kpi);
+                                // backgroundColor.push(getRandomRGBColor());
+                                backgroundColor.push('#E50B4E');
+                            });
+                            let map = {
+                                task_id: e.task_id,
+                                chart: new Chart($('#mapChart' + e.task_id), {
+                                    type: 'bar',
+                                    data: {
+                                        labels: labels,
+                                        datasets: [{
+                                                label: 'Kết quả thực tế',
+                                                data: dataResults,
+                                                backgroundColor: backgroundColor,
+                                                borderWidth: 1,
+                                                order: 2,
+                                            },
+                                            {
+                                                type: 'line',
+                                                label: 'KPI',
+                                                data: dataKpi,
+                                                fill: false,
+                                                borderColor: 'rgb(54, 162, 235)',
+                                                order: 1,
+                                            }
+                                        ]
+                                    },
+                                    options: {
+                                        scales: {
+                                            y: {
+                                                beginAtZero: true
+                                            }
                                         }
                                     }
-                                }
-                            })
-                        }
-                        listMapChart.push(map);
-                    });
-                },
-            })
-
-            $.ajax({
-                type: "GET",
-                url: "/api/exports/getTrendDataMapChart?contract_id=" +
-                    contract_id,
-                success: function(response) {
-                    let html = '';
-                    let data = Object.keys(response.data).map((key) => response.data[key]);
-                    data.forEach(e => {
-                        html +=
-                            `<canvas id="trendMapChart${e.task_id}" style="display:block;"></canvas>`;
-                    });
-                    $('.groupTrendChart').html('');
-                    $('.groupTrendChart').html(html);
-
-                    data.forEach(e => {
-                        console.log(e);
-                        let labels = [];
-                        let dataResultsTrend = [];
-                        let dataKpiTrend = [];
-                        let backgroundColor = [];
-                        let dataTrendChart = [];
-                        Object.keys(e).forEach((key) => {
-                            if (key != 'task_id') {
-                                dataTrendChart.push(e[key]);
+                                })
                             }
+                            listMapChart.push(map);
                         });
-                        dataTrendChart.forEach(d => {
-                            labels.push(
-                                `${d.month}-${d.year}`
-                            );
-                            dataResultsTrend.push(d.result);
-                            dataKpiTrend.push(d.kpi);
-                            // backgroundColor.push(getRandomRGBColor());
-                            backgroundColor.push('#E50B4E');
+                    },
+                })
+
+                $.ajax({
+                    type: "GET",
+                    url: "/api/exports/getTrendDataMapChart?contract_id=" +
+                        contract_id,
+                    success: function(response) {
+                        let html = '';
+                        let data = Object.keys(response.data).map((key) => response.data[key]);
+                        data.forEach(e => {
+                            html +=
+                                `<canvas id="trendMapChart${e.task_id}" style="display:block;"></canvas>`;
                         });
-                        let map = {
-                            task_id: e.task_id,
-                            chart: new Chart($('#trendMapChart' + e.task_id), {
-                                type: 'bar',
-                                data: {
-                                    labels: labels,
-                                    datasets: [{
-                                            type: 'line',
-                                            label: 'Kết quả thực tế',
-                                            data: dataResultsTrend,
-                                            fill: false,
-                                            borderColor: 'rgb(00, 162, 000)',
-                                            order: 1,
-                                        },
-                                        {
-                                            type: 'line',
-                                            label: 'KPI',
-                                            data: dataKpiTrend,
-                                            fill: false,
-                                            borderColor: 'rgb(54, 162, 235)',
-                                            order: 1,
-                                        }
-                                    ]
-                                },
-                                options: {
-                                    scales: {
-                                        y: {
-                                            beginAtZero: true
+                        $('.groupTrendChart').html('');
+                        $('.groupTrendChart').html(html);
+
+                        data.forEach(e => {
+                            let labels = [];
+                            let dataResultsTrend = [];
+                            let dataKpiTrend = [];
+                            let backgroundColor = [];
+                            let dataTrendChart = [];
+                            Object.keys(e).forEach((key) => {
+                                if (key != 'task_id') {
+                                    dataTrendChart.push(e[key]);
+                                }
+                            });
+                            dataTrendChart.forEach(d => {
+                                labels.push(
+                                    `${d.month}-${d.year}`
+                                );
+                                dataResultsTrend.push(d.result);
+                                dataKpiTrend.push(d.kpi);
+                                // backgroundColor.push(getRandomRGBColor());
+                                backgroundColor.push('#E50B4E');
+                            });
+                            let map = {
+                                task_id: e.task_id,
+                                chart: new Chart($('#trendMapChart' + e.task_id), {
+                                    type: 'line',
+                                    data: {
+                                        labels: labels,
+                                        datasets: [{
+                                                type: 'line',
+                                                label: 'Kết quả thực tế',
+                                                data: dataResultsTrend,
+                                                fill: false,
+                                                borderColor: 'rgb(00, 162, 000)',
+                                                order: 1,
+                                            },
+                                            {
+                                                type: 'line',
+                                                label: 'KPI',
+                                                data: dataKpiTrend,
+                                                fill: false,
+                                                borderColor: 'rgb(54, 162, 235)',
+                                                order: 1,
+                                            }
+                                        ]
+                                    },
+                                    options: {
+                                        scales: {
+                                            y: {
+                                                beginAtZero: true
+                                            }
                                         }
                                     }
+                                })
+                            }
+                            listTrendMapChart.push(map);
+                        });
+                    },
+                })
+
+                $.ajax({
+                    type: "GET",
+                    url: "/api/exports/getDataAnnualMapChart?contract_id=" +
+                        contract_id,
+                    success: function(response) {
+                        let html = '';
+                        let data = Object.keys(response.data).map((key) => response.data[key]);
+                        let this_year = '';
+                        let last_year = '';
+                        data.forEach(e => {
+                            html +=
+                                `<canvas id="annualMapChart${e.task_id}" style="display:block;"></canvas>`;
+                        });
+                        $('.groupAnnualChart').html('');
+                        $('.groupAnnualChart').html(html);
+
+                        data.forEach(e => {
+                            let labels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+                            let dataResultsThisYear = [];
+                            let dataResultsLastYear = [];
+                            let backgroundColor = [];
+                            let dataLastYearChart = [];
+                            let dataThisYearChart = [];
+                            last_year = e.last_year['year'] ?? '';
+                            this_year = e.this_year['year'] ?? '';
+
+                            Object.keys(e.last_year).forEach((key) => {
+                                if (key != 'task_id' && key != 'year') {
+                                    dataLastYearChart.push(e.last_year[key]);
                                 }
-                            })
-                        }
-                        listTrendMapChart.push(map);
-                    });
-                },
-            })
+                            });
+                            dataLastYearChart.forEach(d => {
+                                dataResultsLastYear.push(d.result);
+                                // backgroundColor.push('#E50B4E');
+                            });
+                            //
+                            Object.keys(e.this_year).forEach((key) => {
+                                if (key != 'task_id' && key != 'year') {
+                                    dataThisYearChart.push(e.this_year[key]);
+                                }
+                            });
+                            dataThisYearChart.forEach(d => {
+                                dataResultsThisYear.push(d.result);
+                                // backgroundColor.push('#E50B4E');
+                            });
+                            //
 
-            $.ajax({
-                type: "GET",
-                url: "/api/exports/getDataAnnualMapChart?contract_id=" +
-                    contract_id,
-                success: function(response) {
-                    let html = '';
-                    let data = Object.keys(response.data).map((key) => response.data[key]);
-                    let this_year = '';
-                    let last_year = '';
-                    data.forEach(e => {
-                        html +=
-                            `<canvas id="annualMapChart${e.task_id}" style="display:block;"></canvas>`;
-                    });
-                    $('.groupAnnualChart').html('');
-                    $('.groupAnnualChart').html(html);
-
-                    data.forEach(e => {
-                        let labels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-                        let dataResultsThisYear = [];
-                        let dataResultsLastYear = [];
-                        let backgroundColor = [];
-                        let dataLastYearChart = [];
-                        let dataThisYearChart = [];
-                        last_year = e.last_year['year'] ?? '';
-                        this_year = e.this_year['year'] ?? '';
-
-                        Object.keys(e.last_year).forEach((key) => {
-                            console.log(key);
-                            if (key != 'task_id' && key != 'year') {
-                                dataLastYearChart.push(e.last_year[key]);
-                            }
-                        });
-                        dataLastYearChart.forEach(d => {
-                            dataResultsLastYear.push(d.result);
-                            // backgroundColor.push('#E50B4E');
-                        });
-                        //
-                        Object.keys(e.this_year).forEach((key) => {
-                            if (key != 'task_id' && key != 'year') {
-                                dataThisYearChart.push(e.this_year[key]);
-                            }
-                        });
-                        dataThisYearChart.forEach(d => {
-                            dataResultsThisYear.push(d.result);
-                            // backgroundColor.push('#E50B4E');
-                        });
-                        //
-
-                        let map = {
-                            task_id: e.task_id,
-                            chart: new Chart($('#annualMapChart' + e.task_id), {
-                                type: 'bar',
-                                data: {
-                                    labels: labels,
-                                    datasets: [{
-                                            type: 'line',
-                                            label: this_year,
-                                            data: dataResultsThisYear,
-                                            fill: false,
-                                            borderColor: 'rgb(00, 162, 000)',
-                                            order: 1,
-                                        },
-                                        {
-                                            type: 'line',
-                                            label: last_year,
-                                            data: dataResultsLastYear,
-                                            fill: false,
-                                            borderColor: 'rgb(54, 162, 235)',
-                                            order: 1,
-                                        }
-                                    ]
-                                },
-                                options: {
-                                    scales: {
-                                        y: {
-                                            beginAtZero: true
+                            let map = {
+                                task_id: e.task_id,
+                                chart: new Chart($('#annualMapChart' + e.task_id), {
+                                    type: 'line',
+                                    data: {
+                                        labels: labels,
+                                        datasets: [{
+                                                type: 'line',
+                                                label: this_year,
+                                                data: dataResultsThisYear,
+                                                fill: false,
+                                                borderColor: 'rgb(00, 162, 000)',
+                                                order: 1,
+                                            },
+                                            {
+                                                type: 'line',
+                                                label: last_year,
+                                                data: dataResultsLastYear,
+                                                fill: false,
+                                                borderColor: 'rgb(54, 162, 235)',
+                                                order: 1,
+                                            }
+                                        ]
+                                    },
+                                    options: {
+                                        scales: {
+                                            y: {
+                                                beginAtZero: true
+                                            }
                                         }
                                     }
-                                }
-                            })
-                        }
-                        listAnnualMapChart.push(map);
-                    });
-                },
-            })
+                                })
+                            }
+                            listAnnualMapChart.push(map);
+                        });
+                    },
+                })
+            }
 
             setTimeout(() => {
-                listMapChart.forEach(e => {
-                    $('.groupImage').append(
-                        `<input type="hidden" name="image_charts[${e.task_id}]" value="${e.chart.toBase64Image('image/png', 1)}" alt="" />`
-                    );
-                });
-                listTrendMapChart.forEach(e => {
-                    $('.groupTrendImage').append(
-                        `<input type="hidden" name="image_trend_charts[${e.task_id}]" value="${e.chart.toBase64Image('image/png', 1)}" alt="" />`
-                    );
-                });
-                listAnnualMapChart.forEach(e => {
-                    $('.groupAnnualImage').append(
-                        `<input type="hidden" name="image_annual_charts[${e.task_id}]" value="${e.chart.toBase64Image('image/png', 1)}" alt="" />`
-                    );
-                });
+                if (type_report == 1) {
+                    console.log(listMapChart);
+                    console.log(listTrendMapChart);
+                    console.log(listAnnualMapChart);
+
+                    listMapChart.forEach(e => {
+                        $('.groupImage').append(
+                            `<input type="hidden" name="image_charts[${e.task_id}]" value="${e.chart.toBase64Image('image/png', 1)}" alt="" />`
+                        );
+                    });
+                    listTrendMapChart.forEach(e => {
+                        $('.groupTrendImage').append(
+                            `<input type="hidden" name="image_trend_charts[${e.task_id}]" value="${e.chart.toBase64Image('image/png', 1)}" alt="" />`
+                        );
+                    });
+                    listAnnualMapChart.forEach(e => {
+                        $('.groupAnnualImage').append(
+                            `<input type="hidden" name="image_annual_charts[${e.task_id}]" value="${e.chart.toBase64Image('image/png', 1)}" alt="" />`
+                        );
+                    });
+                }
+
                 $('.month').val($('.select-month').val());
                 $('.year').val($('.select-year').val());
                 $('.type_report').val($('.select-type').val());
+                console.log($('.type_report').val());
                 $('.contract_id').val($('.select-contract').val());
                 $('.user_id').val($('.select-user').val());
                 $('.display').val($('#select-display').is(':checked') ? $('#select-display').val() : 0);
                 setTimeout(() => {
                     $('.btn-export').prop('disabled', false);
                 }, 2000);
-            }, 3000);
+            }, 2000);
         });
 
         function getRandomRGBColor() {
@@ -304,12 +333,18 @@
     </script>
 @endpush
 @section('content')
-    <div style="position: relative;index:1">
-        <div class="groupChart" style="display: block;position: absolute;index:-1;opacity:0">
+    <div style="position: relative;index:1;">
+        {{-- <div class="groupChart blockChart" style="display: block;visibility:hidden;position: absolute;index:-1">
         </div>
-        <div class="groupTrendChart" style="display: block;position: absolute;index:-2;opacity:0">
+        <div class="groupTrendChart blockChart" style="display: block;visibility:hidden;position: absolute;index:-1">
         </div>
-        <div class="groupAnnualChart" style="display: block;position: absolute;index:-3;opacity:0">
+        <div class="groupAnnualChart blockChart" style="display: block;visibility:hidden;position: absolute;index:-1">
+        </div> --}}
+        <div class="groupChart blockChart" style="display: block;position: absolute;index:-1;opacity:0">
+        </div>
+        <div class="groupTrendChart blockChart" style="display: block;position: absolute;index:-2;opacity:0">
+        </div>
+        <div class="groupAnnualChart blockChart" style="display: block;position: absolute;index:-3;opacity:0">
         </div>
     </div>
     <div class="row">

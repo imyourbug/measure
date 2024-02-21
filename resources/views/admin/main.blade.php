@@ -95,33 +95,27 @@
             <img class="animation__shake" src="/template/admin/images/gg.png" alt="Áo đá bóng" height="60"
                 width="120">
         </div> --}}
-        <!-- Navbar -->
         @include('admin.menu')
-        <!-- Main Sidebar Container -->
         @include('admin.sidebar')
 
-        <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
-            <!-- Main content -->
             <section class="content">
                 <div class="container-fluid">
-                    {{-- @include('admin.users.alert') --}}
-                    @if (!in_array(request()->route()->getName(), ['admin.index']))
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="card card-primary mt-3">
-                                    <div class="card-header">
-                                        <h3 class="card-title">{{ $title }}</h3>
-                                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card card-primary mt-3">
+                                <div class="card-header">
+                                    <h3 class="card-title">{{ $title }}</h3>
                                 </div>
                             </div>
                         </div>
-                    @endif
+                    </div>
                     @yield('content')
                 </div>
             </section>
         </div>
     </div>
+    <input type="file" style="opacity: 0" id="file-restore-db" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     {{-- <script src="/template/admin/plugins/jquery/jquery.min.js"></script> --}}
     <!-- Bootstrap 4 -->

@@ -17,7 +17,6 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="/template/admin/dist/css/adminlte.min.css">
     {{--  --}}
-    <link rel="stylesheet" href="/template/admin/css/filter.css">
     {{-- <link rel="stylesheet" href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"> --}}
     <!-- ajax -->
     <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
@@ -83,7 +82,6 @@
     {{-- <script src="/template/admin/js/main.js"></script> --}}
     <div class="Toastify"></div>
     <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
-    <script src="/js/user/login/index.js" type="text/javascript"></script>
     {!! Toastr::message() !!}
 </body>
 

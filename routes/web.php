@@ -14,7 +14,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/schedule', function () {
-    Artisan::call('schedule:run');
+    return Artisan::call('schedule:work');
+});
+
+Route::get('/link', function () {
+    return Artisan::call('storage:link');
 });
 
 Route::get('/', function () {
@@ -58,7 +62,7 @@ Route::group(['prefix' => 'user', 'namespace' => 'App\Http\Controllers\Users', '
     Route::post('login', 'UserController@checkLogin')->name('checkLogin');
     Route::get('register', 'UserController@register')->name('register');
     Route::post('register', 'UserController@checkRegister')->name('checkRegister');
-    Route::post('change_password', 'UserController@changePassword')->name('changePassword');
+    // Route::post('change_password', 'UserController@changePassword')->name('changePassword');
     Route::get('logout', 'UserController@logout')->name('logout');
     Route::get('me', 'UserController@me')->name('me');
     Route::post('me/update', 'UserController@update')->name('update');
@@ -82,6 +86,11 @@ Route::group([
     'as' => 'admin.', 'middleware' => 'admin'
 ], function () {
     Route::get('/', 'AdminController@index')->name('index');
+
+    #settings
+    Route::group(['prefix' => 'settings', 'as' => 'settings.'], function () {
+        Route::get('backup', 'SettingController@backup')->name('backup');
+    });
 
     #reports
     Route::group(['prefix' => 'reports', 'as' => 'reports.'], function () {

@@ -1,9 +1,310 @@
 @extends('admin.main')
 @push('styles')
-
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
 @endpush
 @push('scripts')
+    <script>
+        function closeModal() {
+            $("#modal").css("display", "none");
+            $("body").removeClass("modal-open");
+            $(".modal-backdrop").remove();
+        }
+        var dataTable = null;
+        var dataTableBranch = null;
+        var dataTableTaskDetail = null;
+        $(document).ready(function() {
+            dataTable = $("#table").DataTable({
+                ajax: {
+                    url: "/api/contracts/getAll",
+                    dataSrc: "contracts",
+                },
+                columns: [{
+                        data: "id"
+                    },
+                    {
+                        data: "name"
+                    },
+                    {
+                        data: function(d) {
+                            return `${d.branch.name}`;
+                        },
+                    },
+                    {
+                        data: "start"
+                    },
+                    {
+                        data: "finish"
+                    },
+                    {
+                        data: "content"
+                    },
+                    {
+                        data: function(d) {
+                            return `${d.customer.name}`;
+                        },
+                    },
+                    {
+                        data: function(d) {
+                            return `${getStatusContract(d.finish)}`;
+                        },
+                    },
+                    // {
+                    //     data: function(d) {
+                    //         return `<a class="btn btn-primary btn-sm" href='/admin/contracts/update/${d.id}'>
+                //                     <i class="fas fa-edit"></i>
+                //                 </a>
+                //                 <a class="btn btn-success btn-sm" style="padding: 4px 15px"
+                //                     href='/admin/contracts/detail/${d.id}'>
+                //                     <i class="fa-solid fa-info"></i>
+                //                 </a>
+                //                 <button data-id="${d.id }" class="btn btn-danger btn-sm btn-delete">
+                //                     <i class="fas fa-trash"></i>
+                //                 </button>`;
+                    //     },
+                    // },
+                ],
+            });
+            dataTableBranch = $("#tableBranch").DataTable({
+                ajax: {
+                    url: "/admin/branches",
+                    dataSrc: "branches",
+                },
+                columns: [{
+                        data: "id"
+                    },
+                    {
+                        data: "name"
+                    },
+                    {
+                        data: "address"
+                    },
+                    {
+                        data: "tel"
+                    },
+                    {
+                        data: "email"
+                    },
+                    {
+                        data: "manager"
+                    },
+                    {
+                        data: function(d) {
+                            return d.user.customer.name;
+                        },
+                    },
+                    // {
+                    //     data: function(d) {
+                    //         return `<a class="btn btn-primary btn-sm" href='/admin/branches/update/${d.id}'>
+                //         <i class="fas fa-edit"></i>
+                //     </a>
+                //     <button data-id="${d.id}" class="btn btn-danger btn-sm btn-delete-branch">
+                //         <i class="fas fa-trash"></i>
+                //     </button>`;
+                    //     },
+                    // },
+                ],
+            });
+            dataTableTaskDetail = $("#tableTaskDetail").DataTable({
+                ajax: {
+                    url: "/api/taskdetails",
+                    dataSrc: "taskDetails",
+                },
+                columns: [{
+                        data: "id"
+                    },
+                    {
+                        data: "task.type.name"
+                    },
+                    // { data: function (d) {
+                    //     return `${formatDate(d.plan_date)}`
+                    // } },
+                    {
+                        data: "plan_date"
+                    },
+                    {
+                        data: "actual_date"
+                    },
+                    {
+                        data: "time_in"
+                    },
+                    {
+                        data: "time_out"
+                    },
+                    {
+                        data: "created_at"
+                    },
+                    // {
+                    //     data: function (d) {
+                    //         return `<a class="btn btn-primary btn-sm btn-edit" data-id="${d.id}" data-target="#modal" data-toggle="modal">
+                //                                         <i class="fas fa-edit"></i>
+                //                                     </a>
+                //                                     <a class="btn btn-success btn-sm" style="padding: 4px 15px" href="/admin/taskdetails/update/${d.id}">
+                //                                         <i class="fa-solid fa-info"></i>
+                //                                     </a>
+                //                                     <button data-id="${d.id}"
+                //                                         class="btn btn-danger btn-sm btn-delete">
+                //                                         <i class="fas fa-trash"></i>
+                //                                     </button>`;
+                    //     },
+                    // },
+                ],
+            });
+        })
+        $(document).on('click', '.btn-change-password', function() {
+            $.ajax({
+                type: "POST",
+                data: {
+                    tel_or_email: $('#tel_or_email').val(),
+                    password: $('#password').val(),
+                    old_password: $('#old_password').val(),
+                },
+                url: "/api/users/change_password",
+                success: function(response) {
+                    if (response.status == 0) {
+                        toastr.success(response.message, "Thông báo");
+                        closeModal();
+                    } else {
+                        toastr.error(response.message, "Thông báo");
+                    }
+                },
+            });
+        })
+    </script>
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
 @endpush
 @section('content')
-
+    <div class="card direct-chat direct-chat-primary">
+        <div class="card-header ui-sortable-handle header-color" style="cursor: move;">
+            <h3 class="card-title text-bold">DANH SÁCH THEO DÕI HỢP ĐỒNG - KHÁCH HÀNG</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body" style="display: block;padding: 10px !important;">
+            <table id="table" class="table display nowrap dataTable dtr-inline collapsed">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tên hợp đồng</th>
+                        <th>Chi nhánh</th>
+                        <th>Ngày bắt đầu</th>
+                        <th>Ngày kết thúc</th>
+                        <th>Nội dung</th>
+                        <th>Khách hàng</th>
+                        <th>Trạng thái</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card direct-chat direct-chat-primary">
+        <div class="card-header ui-sortable-handle header-color" style="cursor: move;">
+            <h3 class="card-title text-bold">CHI NHÁNH - ĐỊA ĐIỂM ÁP DỤNG</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body" style="display: block;padding: 10px !important;">
+            <table id="tableBranch" class="table display nowrap dataTable dtr-inline collapsed">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Tên chi nhánh</th>
+                        <th>Email</th>
+                        <th>Số điện thoại</th>
+                        <th>Địa chỉ</th>
+                        <th>Quản lý</th>
+                        <th>Khách hàng</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card direct-chat direct-chat-primary">
+        <div class="card-header ui-sortable-handle header-color" style="cursor: move;">
+            <h3 class="card-title text-bold">CHI TIẾT</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body" style="display: block;padding: 10px !important;">
+            <table id="tableTaskDetail" class="table display nowrap dataTable dtr-inline collapsed">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nhiệm vụ</th>
+                        <th>Ngày kế hoạch</th>
+                        <th>Ngày thực hiện</th>
+                        <th>Giờ vào</th>
+                        <th>Giờ ra</th>
+                        <th>Ngày lập</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="modal fade show" id="modal" style="display: none;" data-id="123" aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Đổi mật khẩu</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="input-group mb-3">
+                        <input name="tel_or_email" id="tel_or_email" type="text" value="" class="form-control"
+                            placeholder="Nhập số điện thoại hoặc email">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-envelope"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="password" name="old_password" id="old_password" value="" class="form-control"
+                            placeholder="Nhập mật khẩu cũ">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <input type="password" name="password" id="password" value="" class="form-control"
+                            placeholder="Nhập mật khẩu mới">
+                        <div class="input-group-append">
+                            <div class="input-group-text">
+                                <span class="fas fa-lock"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <button style="width: 100%" class="btn btn-primary btn-change-password">Đổi mật khẩu</button>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" id="id_electask">
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    {{-- <button type="submit" class="btn btn-primary btn-save">Lưu</button> --}}
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection

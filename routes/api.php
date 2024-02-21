@@ -22,6 +22,8 @@ Route::group(['namespace' => 'App\Http\Controllers\Users','prefix' => 'users',],
     Route::group(['prefix' => 'taskdetails', 'as' => 'taskdetails.',], function () {
         Route::get('', 'TaskDetailController@index')->name('index');
     });
+
+    Route::post('change_password', 'UserController@changePassword')->name('changePassword');
 });
 
 Route::group(['namespace' => 'App\Http\Controllers', 'prefix' => 'exports', 'as' => 'exports.'], function () {
@@ -34,6 +36,7 @@ Route::group(['namespace' => 'App\Http\Controllers', 'prefix' => 'exports', 'as'
 #upload
 Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::post('/upload', 'UploadController@upload')->name('upload');
+    Route::post('/restore', 'UploadController@restore')->name('restore');
 });
 
 Route::group(['namespace' => 'App\Http\Controllers\Admin'], function () {

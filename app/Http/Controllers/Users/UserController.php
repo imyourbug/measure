@@ -91,25 +91,45 @@ class UserController extends Controller
         return redirect()->back();
     }
 
-    public function changePassword(ChangePasswordRequest $request)
+    public function changePassword(Request $request)
     {
-        $rs = User::firstWhere('email', $request->input('email'))->update([
-            'password' => Hash::make($request->input('password'))
-        ]);
-        if ($rs) {
-            Toastr::success('Đổi mật khẩu thành công', __('title.toastr.success'));
+        try {
+            $tel_or_email = $request->input('tel_or_email');
+            $rules = [
+                'tel_or_email' => 'required|email:dns,rfc',
+                'old_password' => 'required|string',
+                'password' => 'required|string',
+            ];
+            if (is_numeric($tel_or_email)) {
+                $rules['tel_or_email'] = 'required|string|regex:/^0\d{9,10}$/';
+            }
+            $request->validate($rules);
+            $type = is_numeric($tel_or_email) ? 'name' : 'email';
+            $user = Auth::attempt([
+                $type => $tel_or_email,
+                'password' => $request->input('password')
+            ]);
+            if (!$user) {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Mật khẩu cũ không chính xác'
+                ]);
+            }
+
+            User::firstWhere($type, $tel_or_email)->update([
+                'password' => Hash::make($request->input('password'))
+            ]);
 
             return response()->json([
                 'status' => 0,
                 'message' => 'Đổi mật khẩu thành công'
             ]);
+        } catch (Throwable $e) {
+            return response()->json([
+                'status' => 1,
+                'message' => $e->getMessage()
+            ]);
         }
-        Toastr::error('Đổi mật khẩu thất bại', __('title.toastr.fail'));
-
-        return response()->json([
-            'status' => 1,
-            'message' => 'Đổi mật khẩu thất bại'
-        ]);
     }
 
     public function register()

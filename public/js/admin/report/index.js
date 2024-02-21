@@ -1,11 +1,5 @@
 var dataTable = null;
 
-function closeModal() {
-    $("#modal").css("display", "none");
-    $("body").removeClass("modal-open");
-    $(".modal-backdrop").remove();
-}
-
 $(document).on("change", ".select2", function () {
     //
     console.log($(this).val());

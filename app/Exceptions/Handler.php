@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Throwable;
 use Toastr;
@@ -29,6 +30,8 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
         });
         $this->renderable(function (Throwable $e, $request) {
+            Log::info('Exception');
+            Log::error($e);
             dd($e);
             if ($e instanceof ValidationException) {
                 foreach ($e->errors() as $err) {

@@ -68,13 +68,16 @@ class TaskDetailController extends Controller
     public function index(Request $request)
     {
         $user_id = $request->user_id;
+        $task_id = $request->id;
         $task_details = TaskDetail::with(['task.type', 'taskStaffs'])
             ->when($user_id, function ($q) use ($user_id) {
                 return $q->whereHas('taskStaffs', function ($q) use ($user_id) {
                     $q->where('user_id', $user_id);
                 });
             })
-            ->where('task_id', $request->id)
+            ->when($task_id, function ($q) use ($task_id) {
+                return $q->where('task_id', $task_id);
+            })
             ->get();
 
         return response()->json([

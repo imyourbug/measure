@@ -38,7 +38,6 @@ $(".btn-open-modal").on("click", function () {
 });
 
 $(document).ready(function () {
-    // solution
     dataTable = $("#table").DataTable({
         ajax: {
             url: "/api/taskdetails?id=" + $("#task_id").val(),
