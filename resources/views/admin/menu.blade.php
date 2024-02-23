@@ -108,10 +108,14 @@
             </a>
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-left" style="left: inherit; right: 0px;">
                 <p class="dropdown-item" style="font-weight: bold;">Cài đặt</p>
-                <a href="#" style="padding-left: 40px" class="dropdown-item" data-target="#modal"
+                {{-- <a href="#" style="padding-left: 40px" class="dropdown-item" data-target="#modalChangePassword"
                     data-toggle="modal">
                     -&emsp;Đổi mật khẩu
-                </a>
+                </a> --}}
+                <button style="padding-left: 40px" class="dropdown-item" data-target="#modalChangePassword"
+                    data-toggle="modal">
+                    -&emsp;Đổi mật khẩu
+                </button>
                 <a href="{{ route('users.logout') }}" style="padding-left: 40px" class="dropdown-item"
                     onclick="return confirm('Bạn có muốn đăng xuất?')" class="nav-link">
                     -&emsp;Đăng xuất
@@ -144,3 +148,55 @@
         </li>
     </ul>
 </nav>
+<div class="modal fade" id="modalChangePassword" style="display: none;" aria-modal="true"
+    role="dialog">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Đổi mật khẩu</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group mb-3">
+                    <input name="tel_or_email" id="tel_or_email" type="text" value="" class="form-control"
+                        placeholder="Nhập số điện thoại hoặc email">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-envelope"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <input type="password" name="old_password" id="old_password" value=""
+                        class="form-control" placeholder="Nhập mật khẩu cũ">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <input type="password" name="password" id="password" value="" class="form-control"
+                        placeholder="Nhập mật khẩu mới">
+                    <div class="input-group-append">
+                        <div class="input-group-text">
+                            <span class="fas fa-lock"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <button style="width: 100%" class="btn btn-primary btn-change-password">Đổi mật khẩu</button>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" id="id_electask">
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                {{-- <button type="submit" class="btn btn-primary btn-save">Lưu</button> --}}
+            </div>
+        </div>
+    </div>
+</div>

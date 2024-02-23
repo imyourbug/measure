@@ -228,11 +228,11 @@
             class="fa-solid fa-arrow-left"></i></a>
 
     {{-- add solution --}}
-    <div class="modal fade show" id="modal-solution" style="display: none;" aria-modal="true" role="dialog">
+    <div class="modal fade" id="modal-solution" style="display: none;" aria-modal="true" role="dialog">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title modal-title-solution">Thêm phương pháp</h4>
+                    <h4 class="modal-title modal-title-solution">Cập nhật phương pháp</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -295,20 +295,18 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                    <button type="button" data-url="{{ route('tasksolutions.store') }}"
-                        class="btn btn-primary btn-add-solution">Lưu</button>
-                    <button style="display: none" type="button" data-url="{{ route('tasksolutions.update') }}"
+                    <button type="button" data-url="{{ route('tasksolutions.update') }}"
                         class="btn btn-primary btn-update-solution">Lưu</button>
                 </div>
             </div>
         </div>
     </div>
     {{-- add item --}}
-    <div class="modal fade show" id="modal-item" style="display: none;" aria-modal="true" role="dialog">
+    <div class="modal fade" id="modal-item" style="display: none;" aria-modal="true" role="dialog">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title modal-title-item">Thêm vật tư</h4>
+                    <h4 class="modal-title modal-title-item">Cập nhật vật tư</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -371,20 +369,18 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                    <button type="button" data-url="{{ route('taskitems.store') }}"
-                        class="btn btn-primary btn-add-item">Lưu</button>
-                    <button style="display: none" type="button" data-url="{{ route('taskitems.update') }}"
+                    <button type="button" data-url="{{ route('taskitems.update') }}"
                         class="btn btn-primary btn-update-item">Lưu</button>
                 </div>
             </div>
         </div>
     </div>
     {{-- add map --}}
-    <div class="modal fade show" id="modal-map" style="display: none;" aria-modal="true" role="dialog">
+    <div class="modal fade" id="modal-map" style="display: none;" aria-modal="true" role="dialog">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title modal-title-map">Thêm sơ đồ</h4>
+                    <h4 class="modal-title modal-title-map">Cập nhật sơ đồ</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -446,9 +442,7 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                    <button type="button" data-url="{{ route('taskmaps.store') }}"
-                        class="btn btn-primary btn-add-map">Lưu</button>
-                    <button style="display: none" type="button" data-url="{{ route('taskmaps.update') }}"
+                    <button type="button" data-url="{{ route('taskmaps.update') }}"
                         class="btn btn-primary btn-update-map">Lưu</button>
                 </div>
             </div>
@@ -456,11 +450,11 @@
         </div>
     </div>
     {{-- add staff --}}
-    <div class="modal fade show" id="modal-staff" style="display: none;" aria-modal="true" role="dialog">
+    <div class="modal fade" id="modal-staff" style="display: none;" aria-modal="true" role="dialog">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title modal-title-staff">Thêm nhân sự</h4>
+                    <h4 class="modal-title modal-title-staff">Cập nhật nhân sự</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -482,9 +476,7 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                    <button type="button" data-url="{{ route('taskstaff.store') }}"
-                        class="btn btn-primary btn-add-staff">Lưu</button>
-                    <button style="display: none" type="button" data-url="{{ route('taskstaff.update') }}"
+                    <button type="button" data-url="{{ route('taskstaff.update') }}"
                         class="btn btn-primary btn-update-staff">Lưu</button>
                 </div>
             </div>
@@ -492,11 +484,11 @@
         </div>
     </div>
     {{-- add chemistry --}}
-    <div class="modal fade show" id="modal-chemistry" style="display: none;" aria-modal="true" role="dialog">
+    <div class="modal fade" id="modal-chemistry" style="display: none;" aria-modal="true" role="dialog">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title modal-title-chemistry">Thêm hóa chất</h4>
+                    <h4 class="modal-title modal-title-chemistry">Cập nhật hóa chất</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -559,9 +551,7 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                    <button type="button" data-url="{{ route('taskchemistries.store') }}"
-                        class="btn btn-primary btn-add-chemistry">Lưu</button>
-                    <button style="display: none" type="button" data-url="{{ route('taskchemistries.update') }}"
+                    <button type="button" data-url="{{ route('taskchemistries.update') }}"
                         class="btn btn-primary btn-update-chemistry">Lưu</button>
                 </div>
             </div>

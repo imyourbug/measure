@@ -553,7 +553,7 @@
             </table>
         </div>
     </div>
-    <div class="modal fade show" id="modal" style="display: none;" aria-modal="true" role="dialog">
+    <div class="modal fade" id="modal" style="display: none;" aria-modal="true" role="dialog">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -606,7 +606,7 @@
             </div>
         </div>
     </div>
-    <div class="modal fade show" id="modal-export" style="display:none;" aria-modal="true" role="dialog">
+    <div class="modal fade" id="modal-export" style="display:none;" aria-modal="true" role="dialog">
         <div class="modal-dialog modal-md modal-dialog-centered">
             <div class="modal-content">
                 <form action="{{ route('exports.plan') }}" method="POST" id="form-export">

@@ -8,18 +8,12 @@
     <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
 @endpush
 @section('content')
-    <div class="mb-3">
-        {{-- <a href="{{ route('admin.tasks.create') }}" class="btn btn-success">Thêm mới</a> --}}
-        {{-- <input class="" style="" type="date" name="from"
+    {{-- <a href="{{ route('admin.tasks.create') }}" class="btn btn-success">Thêm mới</a> --}}
+    {{-- <input class="" style="" type="date" name="from"
             value="{{ Request::get('from') ?? now()->format('Y-m-01') }}" />
         <input class="" style="" type="date" name="to"
             value="{{ Request::get('to') ?? now()->format('Y-m-t') }}" />
         <button class="btn btn-warning btn-filter" type="submit">Lọc</button> --}}
-        <a href="{{ route('users.tasks.index') }}" class="btn btn-danger"><i
-            class="fa-solid fa-arrow-left"></i></a>
-        <button class="btn btn-success btn-open-modal" data-target="#modal" data-toggle="modal">Thêm
-            mới</button>
-    </div>
     <table id="table" class="table display nowrap dataTable dtr-inline collapsed">
         <thead>
             <tr>
@@ -36,7 +30,9 @@
         <tbody>
         </tbody>
     </table>
-    <div class="modal fade show" id="modal" style="display: none;" aria-modal="true" role="dialog">
+    <br>
+    <a href="{{ route('users.tasks.index') }}" class="btn btn-danger"><i class="fa-solid fa-arrow-left"></i></a>
+    <div class="modal fade" id="modal" style="display: none;" aria-modal="true" role="dialog">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">

@@ -199,7 +199,6 @@ $(document).on("click", ".btn-edit-solution", function () {
         success: function (response) {
             if (response.status == 0) {
                 let taskSolution = response.taskSolution;
-                $(".modal-title-solution").text("Cập nhật vật tư");
                 $("#solution_id").val(taskSolution.solution_id);
                 $("#solution_unit").val(taskSolution.unit);
                 $("#solution_kpi").val(taskSolution.kpi);
@@ -209,8 +208,6 @@ $(document).on("click", ".btn-edit-solution", function () {
                 $("#image_show_solution").attr("src", taskSolution.image);
                 $("#image_solution").val(taskSolution.image);
                 //
-                $(".btn-add-solution").css("display", "none");
-                $(".btn-update-solution").css("display", "block");
                 $("#tasksolution_id").val(taskSolution.id);
             } else {
                 toastr.error(response.message);
@@ -220,7 +217,7 @@ $(document).on("click", ".btn-edit-solution", function () {
 });
 
 $(".btn-open-modal-solution").on("click", function () {
-    $(".modal-title-solution").text("Thêm vật tư");
+    $(".modal-title-solution").text("Thêm phương pháp");
     $(".btn-add-solution").css("display", "block");
     $(".btn-update-solution").css("display", "none");
 });

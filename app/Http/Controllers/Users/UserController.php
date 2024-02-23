@@ -38,7 +38,9 @@ class UserController extends Controller
 
     public function forgot()
     {
-        return view('user.forgot.index');
+        return view('user.forgot.index', [
+            'title' => 'Quên mật khẩu'
+        ]);
     }
 
     public function recover(RecoverRequest $request)
@@ -107,7 +109,7 @@ class UserController extends Controller
             $type = is_numeric($tel_or_email) ? 'name' : 'email';
             $user = Auth::attempt([
                 $type => $tel_or_email,
-                'password' => $request->input('password')
+                'password' => $request->input('old_password')
             ]);
             if (!$user) {
                 return response()->json([

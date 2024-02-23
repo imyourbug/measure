@@ -129,6 +129,32 @@
     <script src="https://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
     {!! Toastr::message() !!}
     <script src="/js/common/index.js"></script>
+    <script>
+        function closeModalChangePassword() {
+            $("#modalChangePassword").css("display", "none");
+            $("body").removeClass("modal-open");
+            $(".modal-backdrop").remove();
+        }
+        $(document).on('click', '.btn-change-password', function() {
+            $.ajax({
+                type: "POST",
+                data: {
+                    tel_or_email: $('#tel_or_email').val(),
+                    password: $('#password').val(),
+                    old_password: $('#old_password').val(),
+                },
+                url: "/api/users/change_password",
+                success: function(response) {
+                    if (response.status == 0) {
+                        toastr.success(response.message, "Thông báo");
+                        closeModalChangePassword();
+                    } else {
+                        toastr.error(response.message, "Thông báo");
+                    }
+                },
+            });
+        })
+    </script>
     @stack('scripts')
 </body>
 

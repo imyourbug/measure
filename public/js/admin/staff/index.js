@@ -32,7 +32,7 @@ $(document).ready(function () {
         },
         {
             data: function (d) {
-                return `<a class="btn btn-primary btn-sm" href='/admin/staff/update/${d.id}'>
+                return `<a class="btn btn-primary btn-sm" href='/admin/staffs/update/${d.id}'>
                             <i class="fas fa-edit"></i>
                         </a>
                         <button data-id="${d.user_id}" class="btn btn-danger btn-sm btn-delete">

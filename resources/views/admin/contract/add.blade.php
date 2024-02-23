@@ -96,7 +96,7 @@
             <a href="{{ route('admin.contracts.index') }}" class="btn btn-success">Xem danh sách</a>
         </div>
     </div>
-    <div class="modal fade show" id="modal-task" style="display: none;" aria-modal="true" role="dialog">
+    <div class="modal fade" id="modal-task" style="display: none;" aria-modal="true" role="dialog">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">

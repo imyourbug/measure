@@ -6,37 +6,6 @@ function closeModal() {
     $(".modal-backdrop").remove();
 }
 
-$(document).on("click", ".btn-add", function () {
-    let data = {
-        plan_date: $("#plan_date").val(),
-        actual_date: $("#actual_date").val(),
-        time_in: $("#time_in").val(),
-        time_out: $("#time_out").val(),
-        task_id: $("#task_id").val(),
-    };
-
-    $.ajax({
-        type: "POST",
-        data: data,
-        url: $(this).data("url"),
-        success: function (response) {
-            if (response.status == 0) {
-                closeModal();
-                dataTable.ajax.reload();
-                toastr.success(response.message);
-            } else {
-                toastr.error(response.message);
-            }
-        },
-    });
-});
-
-$(".btn-open-modal").on("click", function () {
-    $(".modal-title").text("Thêm chi tiết nhiệm vụ");
-    $(".btn-add").css("display", "block");
-    $(".btn-update").css("display", "none");
-});
-
 $(document).ready(function () {
     // solution
     dataTable = $("#table").DataTable({
@@ -54,9 +23,9 @@ $(document).ready(function () {
             { data: "created_at" },
             {
                 data: function (d) {
-                    return `<a class="btn btn-primary btn-sm btn-edit" data-id="${d.id}" data-target="#modal" data-toggle="modal">
+                    return `<button class="btn btn-primary btn-sm btn-edit" data-id="${d.id}" data-target="#modal" data-toggle="modal">
                                                     <i class="fas fa-edit"></i>
-                                                </a>
+                                                </button>
                                                 <a class="btn btn-success btn-sm" style="padding: 4px 15px" href="/user/taskdetails/update/${d.id}">
                                                     <i class="fa-solid fa-info"></i>
                                                 </a>`;
@@ -91,7 +60,6 @@ $(document).on("click", ".btn-edit", function () {
                 $("#time_out").val(taskDetail.time_out);
                 $("#taskdetail_id").val(taskDetail.id);
                 //
-                $(".modal-title").text("Cập nhật chi tiết nhiệm vụ");
                 $(".btn-add").css("display", "none");
                 $(".btn-update").css("display", "block");
             } else {

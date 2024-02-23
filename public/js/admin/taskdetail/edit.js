@@ -157,7 +157,7 @@ $(document).on("click", ".btn-edit-solution", function () {
         success: function (response) {
             if (response.status == 0) {
                 let taskSolution = response.taskSolution;
-                $(".modal-title-solution").text("Cập nhật vật tư");
+                $(".modal-title-solution").text("Cập nhật phương pháp");
                 $("#solution_id").val(taskSolution.solution_id);
                 $("#solution_unit").val(taskSolution.unit);
                 $("#solution_kpi").val(taskSolution.kpi);
@@ -173,7 +173,7 @@ $(document).on("click", ".btn-edit-solution", function () {
 });
 
 $(".btn-open-modal-solution").on("click", function () {
-    $(".modal-title-solution").text("Thêm vật tư");
+    $(".modal-title-solution").text("Thêm phương pháp");
     $(".btn-add-solution").css("display", "block");
     $(".btn-update-solution").css("display", "none");
 });

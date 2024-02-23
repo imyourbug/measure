@@ -33,7 +33,7 @@
         <tbody>
         </tbody>
     </table>
-    <div class="modal fade show" id="modal" style="display: none;" aria-modal="true" role="dialog">
+    <div class="modal fade" id="modal" style="display: none;" aria-modal="true" role="dialog">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">

@@ -228,7 +228,7 @@
             class="fa-solid fa-arrow-left"></i></a>
 
     {{-- add solution --}}
-    <div class="modal fade show" id="modal-solution" style="display: none;" aria-modal="true" role="dialog">
+    <div class="modal fade" id="modal-solution" style="display: none;" aria-modal="true" role="dialog">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -304,7 +304,7 @@
         </div>
     </div>
     {{-- add item --}}
-    <div class="modal fade show" id="modal-item" style="display: none;" aria-modal="true" role="dialog">
+    <div class="modal fade" id="modal-item" style="display: none;" aria-modal="true" role="dialog">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -380,7 +380,7 @@
         </div>
     </div>
     {{-- add map --}}
-    <div class="modal fade show" id="modal-map" style="display: none;" aria-modal="true" role="dialog">
+    <div class="modal fade" id="modal-map" style="display: none;" aria-modal="true" role="dialog">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -456,7 +456,7 @@
         </div>
     </div>
     {{-- add staff --}}
-    <div class="modal fade show" id="modal-staff" style="display: none;" aria-modal="true" role="dialog">
+    <div class="modal fade" id="modal-staff" style="display: none;" aria-modal="true" role="dialog">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -492,7 +492,7 @@
         </div>
     </div>
     {{-- add chemistry --}}
-    <div class="modal fade show" id="modal-chemistry" style="display: none;" aria-modal="true" role="dialog">
+    <div class="modal fade" id="modal-chemistry" style="display: none;" aria-modal="true" role="dialog">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
