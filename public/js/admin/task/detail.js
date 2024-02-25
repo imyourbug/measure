@@ -1,6 +1,6 @@
 var dataTable = null;
 
-function closeModal() {
+function closeModalDetail() {
     $("#modal").css("display", "none");
     $("body").removeClass("modal-open");
     $(".modal-backdrop").remove();
@@ -21,7 +21,7 @@ $(document).on("click", ".btn-add", function () {
         url: $(this).data("url"),
         success: function (response) {
             if (response.status == 0) {
-                closeModal();
+                closeModalDetail();
                 dataTable.ajax.reload();
                 toastr.success(response.message);
             } else {
@@ -32,9 +32,9 @@ $(document).on("click", ".btn-add", function () {
 });
 
 $(".btn-open-modal").on("click", function () {
-    $(".modal-title").text("Thêm chi tiết nhiệm vụ");
-    $(".btn-add").css("display", "block");
-    $(".btn-update").css("display", "none");
+    $(".modal-title-taskdetail").text("Thêm chi tiết nhiệm vụ");
+    $(".btn-add-detail").css("display", "block");
+    $(".btn-update-detail").css("display", "none");
 });
 
 $(document).ready(function () {
@@ -56,14 +56,14 @@ $(document).ready(function () {
             { data: "created_at" },
             {
                 data: function (d) {
-                    return `<a class="btn btn-primary btn-sm btn-edit" data-id="${d.id}" data-target="#modal" data-toggle="modal">
+                    return `<a class="btn btn-primary btn-sm btn-edit-detail" data-id="${d.id}" data-target="#modal" data-toggle="modal">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
                                                 <a class="btn btn-success btn-sm" style="padding: 4px 15px" href="/admin/taskdetails/update/${d.id}">
                                                     <i class="fa-solid fa-info"></i>
                                                 </a>
                                                 <button data-id="${d.id}"
-                                                    class="btn btn-danger btn-sm btn-delete">
+                                                    class="btn btn-danger btn-sm btn-delete-detail">
                                                     <i class="fas fa-trash"></i>
                                                 </button>`;
                 },
@@ -72,7 +72,7 @@ $(document).ready(function () {
     });
 });
 
-$(document).on("click", ".btn-edit", function () {
+$(document).on("click", ".btn-edit-detail", function () {
     $.ajax({
         type: "GET",
         url: "/api/taskdetails/" + $(this).data("id") + "/getById",
@@ -87,9 +87,9 @@ $(document).on("click", ".btn-edit", function () {
                 $("#time_out").val(taskDetail.time_out);
                 $("#taskdetail_id").val(taskDetail.id);
                 //
-                $(".modal-title").text("Cập nhật chi tiết nhiệm vụ");
-                $(".btn-add").css("display", "none");
-                $(".btn-update").css("display", "block");
+                $(".modal-title-taskdetail").text("Cập nhật chi tiết nhiệm vụ");
+                $(".btn-add-detail").css("display", "none");
+                $(".btn-update-detail").css("display", "block");
             } else {
                 toastr.error(response.message);
             }
@@ -106,7 +106,7 @@ function formatDate(date) {
     return formattedDate;
 }
 
-$(document).on("click", ".btn-update", function () {
+$(document).on("click", ".btn-update-detail", function () {
     if (confirm("Bạn có muốn sửa")) {
         let data = {
             id: $("#taskdetail_id").val(),
@@ -122,7 +122,7 @@ $(document).on("click", ".btn-update", function () {
             data: data,
             success: function (response) {
                 if (response.status == 0) {
-                    closeModal();
+                    closeModalDetail();
                     toastr.success("Cập nhật thành công");
                     dataTable.ajax.reload();
                 } else {
@@ -133,7 +133,7 @@ $(document).on("click", ".btn-update", function () {
     }
 });
 
-$(document).on("click", ".btn-delete", function () {
+$(document).on("click", ".btn-delete-detail", function () {
     if (confirm("Bạn có muốn xóa")) {
         let id = $(this).data("id");
         $.ajax({

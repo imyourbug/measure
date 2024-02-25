@@ -153,6 +153,11 @@ class TaskController extends Controller
             'tasks' => $tasks,
             'contracts' => Contract::with(['branch'])->get(),
             'types' => Type::all(),
+            'solutions' => Solution::all(),
+            'items' => Item::all(),
+            'chemistries' => Chemistry::all(),
+            'maps' => Map::all(),
+            'staffs' => User::with(['staff'])->where('role', GlobalConstant::ROLE_STAFF)->get(),
         ]);
     }
 

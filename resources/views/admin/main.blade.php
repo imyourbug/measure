@@ -21,6 +21,10 @@
     <link rel="stylesheet" href="https://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
     <meta name="csrf-token" id="csrf-token" content="{{ csrf_token() }}">
     <style>
+        #table_filter {
+            text-align: right;
+        }
+
         .hidden {
             display: none;
         }

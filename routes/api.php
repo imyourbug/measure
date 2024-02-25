@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::group(['namespace' => 'App\Http\Controllers\Users','prefix' => 'users',], function () {
+Route::group(['namespace' => 'App\Http\Controllers\Users', 'prefix' => 'users',], function () {
     #taskdetails
     Route::group(['prefix' => 'taskdetails', 'as' => 'taskdetails.',], function () {
         Route::get('', 'TaskDetailController@index')->name('index');
@@ -40,6 +40,18 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
 });
 
 Route::group(['namespace' => 'App\Http\Controllers\Admin'], function () {
+
+    Route::group(['namespace' => 'Setting'], function () {
+        #settingtaskmaps
+        Route::group(['prefix' => 'settingtaskmaps', 'as' => 'settingtaskmaps.'], function () {
+            Route::post('create', 'SettingTaskMapController@store')->name('store');
+            Route::post('update', 'SettingTaskMapController@update')->name('update');
+            Route::get('/', 'SettingTaskMapController@index')->name('index');
+            Route::get('/{id}/show', 'SettingTaskMapController@show')->name('show');
+            Route::delete('/{id}/destroy', 'SettingTaskMapController@destroy')->name('destroy');
+        });
+    });
+
     #settings
     Route::group(['prefix' => 'settings', 'as' => 'settings.'], function () {
         Route::post('uploadmap', 'SettingController@uploadmap')->name('uploadmap');

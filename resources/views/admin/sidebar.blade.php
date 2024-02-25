@@ -27,7 +27,8 @@
             @switch(Auth::user()?->role)
                 @case(0)
                     <div class="image">
-                        <img src="{{ Auth::user()?->staff->avatar ?? '/images/default.jpg' }}" class="img-circle elevation-2" alt="User Image">
+                        <img src="{{ Auth::user()?->staff->avatar ?? '/images/default.jpg' }}" class="img-circle elevation-2"
+                            alt="User Image">
                     </div>
                 @break
             @endswitch
@@ -53,9 +54,10 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                 data-accordion="false">
                 @switch(Auth::user()?->role)
+                    {{-- Staff --}}
                     @case(0)
                         <li
-                            class="nav-item {{ in_array(request()->route()->getName(), ['users.home','users.tasks.index', 'users.tasks.taskToday'])
+                            class="nav-item {{ in_array(request()->route()->getName(), ['users.home', 'users.tasks.index', 'users.tasks.taskToday'])
                                 ? 'menu-is-opening menu-open'
                                 : '' }}">
                             <a href="#" class="nav-link">
@@ -103,8 +105,9 @@
                         </li>
                     @break
 
+                    {{-- Admin --}}
                     @case(1)
-                        <li
+                        {{-- <li
                             class="nav-item {{ in_array(request()->route()->getName(), ['admin.accounts.index', 'admin.accounts.create'])
                                 ? 'menu-is-opening menu-open'
                                 : '' }}">
@@ -133,33 +136,6 @@
                             </ul>
                         </li>
                         <li
-                            class="nav-item {{ in_array(request()->route()->getName(), ['admin.customers.index', 'admin.customers.create'])
-                                ? 'menu-is-opening menu-open'
-                                : '' }}">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fa-solid fa-person"></i>
-                                <p>
-                                    Khách hàng
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                {{-- <li class="nav-item  {{ request()->route()->getName() == 'admin.customers.create'? 'option-open': '' }}">
-                                <a href="{{ route('admin.customers.create') }}" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Thêm khách hàng</p>
-                                </a>
-                            </li> --}}
-                                <li
-                                    class="nav-item  {{ request()->route()->getName() == 'admin.customers.index' ? 'option-open' : '' }}">
-                                    <a href="{{ route('admin.customers.index') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Danh sách khách hàng</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li
                             class="nav-item {{ in_array(request()->route()->getName(), ['admin.staffs.index', 'admin.staffs.create'])
                                 ? 'menu-is-opening menu-open'
                                 : '' }}">
@@ -171,12 +147,6 @@
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
-                                {{-- <li class="nav-item {{ request()->route()->getName() == 'admin.staffs.create'? 'option-open': '' }}">
-                                <a href="{{ route('admin.staffs.create') }}" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Thêm nhân viên</p>
-                                </a>
-                            </li> --}}
                                 <li
                                     class="nav-item {{ request()->route()->getName() == 'admin.staffs.index' ? 'option-open' : '' }}">
                                     <a href="{{ route('admin.staffs.index') }}" class="nav-link">
@@ -354,6 +324,42 @@
                                 </li>
                             </ul>
                         </li>
+                        <li class="nav-item {{ in_array(request()->route()->getName(), ['admin.tasks.index', 'admin.tasks.create'])
+                                ? 'menu-is-opening menu-open'
+                                : '' }}">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fa-solid fa-list-check"></i>
+                                <p>
+                                    Nhiệm vụ
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li
+                                    class="nav-item {{ request()->route()->getName() == 'admin.tasks.create' ? 'option-open' : '' }}">
+                                    <a href="{{ route('admin.tasks.create') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Thêm nhiệm vụ</p>
+                                    </a>
+                                </li>
+                                <li
+                                    class="nav-item {{ request()->route()->getName() == 'admin.tasks.index' ? 'option-open' : '' }}">
+                                    <a href="{{ route('admin.tasks.index') }}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Danh sách nhiệm vụ</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li> --}}
+                        <li
+                            class="nav-item {{ in_array(request()->route()->getName(), ['admin.plans.index']) ? 'menu-is-opening menu-open' : '' }}">
+                            <a href="{{ route('admin.plans.index') }}" class="nav-link">
+                                <i class="nav-icon fa-solid fa-note-sticky"></i>
+                                <p>
+                                    Kế hoạch
+                                </p>
+                            </a>
+                        </li>
                         <li
                             class="nav-item {{ in_array(request()->route()->getName(), ['admin.contracts.index', 'admin.contracts.create'])
                                 ? 'menu-is-opening menu-open'
@@ -382,61 +388,23 @@
                                 </li>
                             </ul>
                         </li>
-                        {{-- <li
-                            class="nav-item {{ in_array(
-                                request()->route()->getName(),
-                                ['admin.assignments.index', 'admin.assignments.create'],
-                            )
-                                ? 'menu-is-opening menu-open'
-                                : '' }}">
-                            <a href="#" class="nav-link">
-                                <i class="nav-icon fa-solid fa-bacon"></i>
-                                <p>
-                                    Phân công
-                                    <i class="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li
-                                    class="nav-item {{ request()->route()->getName() == 'admin.assignments.create'? 'option-open': '' }}">
-                                    <a href="{{ route('admin.assignments.create') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Thêm phân công</p>
-                                    </a>
-                                </li>
-                                 <li
-                                    class="nav-item {{ request()->route()->getName() == 'admin.assignments.index'? 'option-open': '' }}">
-                                    <a href="{{ route('admin.assignments.index') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Danh sách phân công</p>
-                                    </a>
-                                </li>
-                            </ul>
-                        </li> --}}
                         <li
-                            class="nav-item {{ in_array(request()->route()->getName(), ['admin.tasks.index', 'admin.tasks.create'])
+                            class="nav-item {{ in_array(request()->route()->getName(), ['admin.customers.index', 'admin.customers.create'])
                                 ? 'menu-is-opening menu-open'
                                 : '' }}">
                             <a href="#" class="nav-link">
-                                <i class="nav-icon fa-solid fa-list-check"></i>
+                                <i class="nav-icon fa-solid fa-person"></i>
                                 <p>
-                                    Nhiệm vụ
+                                    Khách hàng
                                     <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
                                 <li
-                                    class="nav-item {{ request()->route()->getName() == 'admin.tasks.create' ? 'option-open' : '' }}">
-                                    <a href="{{ route('admin.tasks.create') }}" class="nav-link">
+                                    class="nav-item  {{ request()->route()->getName() == 'admin.customers.index' ? 'option-open' : '' }}">
+                                    <a href="{{ route('admin.customers.index') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Thêm nhiệm vụ</p>
-                                    </a>
-                                </li>
-                                <li
-                                    class="nav-item {{ request()->route()->getName() == 'admin.tasks.index' ? 'option-open' : '' }}">
-                                    <a href="{{ route('admin.tasks.index') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Danh sách nhiệm vụ</p>
+                                        <p>Danh sách khách hàng</p>
                                     </a>
                                 </li>
                             </ul>
@@ -454,13 +422,6 @@
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
-                                {{-- <li
-                                    class="nav-item {{ request()->route()->getName() == 'admin.reports.create'? 'option-open': '' }}">
-                                    <a href="{{ route('admin.reports.create') }}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Thêm báo cáo</p>
-                                    </a>
-                                </li> --}}
                                 <li
                                     class="nav-item {{ request()->route()->getName() == 'admin.reports.index' ? 'option-open' : '' }}">
                                     <a href="{{ route('admin.reports.index') }}" class="nav-link">
@@ -470,13 +431,48 @@
                                 </li>
                             </ul>
                         </li>
-                    @break
-
-                    @case(2)
                         <li
-                            class="nav-item {{ in_array(request()->route()->getName(), ['customers.contracts.index'])
+                            class="nav-item {{ in_array(request()->route()->getName(), [])
                                 ? 'menu-is-opening menu-open'
                                 : '' }}">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fa-solid fa-money-bill"></i>
+                                <p>
+                                    Báo giá
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                        </li>
+                        <li
+                            class="nav-item {{ in_array(request()->route()->getName(), [])
+                                ? 'menu-is-opening menu-open'
+                                : '' }}">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fa-solid fa-newspaper"></i>
+                                <p>
+                                    Biểu mẫu
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                        </li>
+                        <li
+                            class="nav-item {{ in_array(request()->route()->getName(), [])
+                                ? 'menu-is-opening menu-open'
+                                : '' }}">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fa-solid fa-gear"></i>
+                                <p>
+                                    Hệ thống
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                        </li>
+                    @break
+
+                    {{-- Customer --}}
+                    @case(2)
+                        <li
+                            class="nav-item {{ in_array(request()->route()->getName(), ['customers.contracts.index']) ? 'menu-is-opening menu-open' : '' }}">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fa-solid fa-file-contract"></i>
                                 <p>

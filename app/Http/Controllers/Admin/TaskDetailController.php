@@ -69,6 +69,7 @@ class TaskDetailController extends Controller
     {
         $user_id = $request->user_id;
         $task_id = $request->id;
+        $month = $request->month;
         $task_details = TaskDetail::with(['task.type', 'taskStaffs'])
             ->when($user_id, function ($q) use ($user_id) {
                 return $q->whereHas('taskStaffs', function ($q) use ($user_id) {
@@ -77,6 +78,9 @@ class TaskDetailController extends Controller
             })
             ->when($task_id, function ($q) use ($task_id) {
                 return $q->where('task_id', $task_id);
+            })
+            ->when($month, function ($q) use ($month) {
+                return $q->whereRaw('MONTH(plan_date) = ?', $month);
             })
             ->get();
 

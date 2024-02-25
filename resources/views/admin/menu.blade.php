@@ -65,11 +65,6 @@
                     HỆ THỐNG
                 </a>
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-left" style="left: inherit; right: 0px;">
-                    <p class="dropdown-item" style="font-weight: bold;">DATE/TIME</p>
-                    <a href="{{ route('admin.accounts.index') }}" style="padding-left: 40px" class="dropdown-item">
-                        -&emsp;Quản lý người dùng
-                    </a>
-                    <div class="dropdown-divider"></div>
                     <p class="dropdown-item" style="font-weight: bold;">HỆ THỐNG</p>
                     <a href="{{ route('admin.settings.backup') }}" style="padding-left: 40px" class="dropdown-item">
                         -&emsp;Sao lưu
@@ -77,10 +72,42 @@
                     <a href="#" style="padding-left: 40px" class="dropdown-item btn-restore-db">
                         -&emsp;Phục hồi dữ liệu
                     </a>
-                    {{-- <a href="#" style="padding-left: 40px" class="dropdown-item">
-                    -&emsp;Bảo trì hệ thống
-                </a> --}}
+                    <p class="dropdown-item" style="font-weight: bold;">QUẢN LÝ</p>
+                    <a href="{{ route('admin.accounts.index') }}" style="padding-left: 40px" class="dropdown-item">
+                        -&emsp;Tài khoản
+                    </a>
                     <div class="dropdown-divider"></div>
+                    <a href="{{ route('admin.branches.index') }}" style="padding-left: 40px" class="dropdown-item">
+                        -&emsp;Chi nhánh
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="{{ route('admin.staffs.index') }}" style="padding-left: 40px" class="dropdown-item">
+                        -&emsp;Nhân viên
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="{{ route('admin.types.index') }}" style="padding-left: 40px" class="dropdown-item">
+                        -&emsp;Loại nhiệm vụ
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="{{ route('admin.maps.index') }}" style="padding-left: 40px" class="dropdown-item">
+                        -&emsp;Sơ đồ
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="{{ route('admin.chemistries.index') }}" style="padding-left: 40px" class="dropdown-item">
+                        -&emsp;Hóa chất
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="{{ route('admin.solutions.index') }}" style="padding-left: 40px" class="dropdown-item">
+                        -&emsp;Phương pháp
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="{{ route('admin.items.index') }}" style="padding-left: 40px" class="dropdown-item">
+                        -&emsp;Vật tư
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="{{ route('admin.tasks.index') }}" style="padding-left: 40px" class="dropdown-item">
+                        -&emsp;Nhiệm vụ
+                    </a>
                 </div>
             </li>
         @endif

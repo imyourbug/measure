@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Constant\GlobalConstant;
 use App\Http\Controllers\Controller;
 use App\Models\Contract;
 use App\Models\Customer;
 use App\Models\Task;
 use App\Models\TaskDetail;
 use App\Models\Type;
+use App\Models\User;
 use DateInterval;
 use DateTime;
 use Illuminate\Http\Request;
@@ -177,13 +179,19 @@ class ContractController extends Controller
     {
         if ($request->ajax()) {
             $customer_id = $request->customer_id;
-            $contracts = Contract::with(['customer', 'branch'])
-            ->when($customer_id, function ($q) use ($customer_id) {
-                return $q->whereHas('customer', function ($q) use ($customer_id) {
-                    $q->where('id', $customer_id);
-                });
-            })
-            ->get();
+            $month = $request->month;
+            $contracts = Contract::with(['customer', 'branch', 'tasks.details'])
+                ->when($customer_id, function ($q) use ($customer_id) {
+                    return $q->whereHas('customer', function ($q) use ($customer_id) {
+                        $q->where('id', $customer_id);
+                    });
+                })
+                ->when($month, function ($q) use ($month) {
+                    return $q->whereHas('tasks.details', function ($q) use ($month) {
+                        $q->whereRaw('MONTH(plan_date) = ?', $month);
+                    });
+                })
+                ->get();
             return response()->json([
                 'status' => 0,
                 'contracts' => $contracts
@@ -213,6 +221,7 @@ class ContractController extends Controller
                 'tasks.details', 'tasks.type',
             ])->firstWhere('id', $id),
             'customers' => Customer::all(),
+            'users' => User::with(['staff'])->where('role', GlobalConstant::ROLE_STAFF)->get(),
         ]);
     }
 

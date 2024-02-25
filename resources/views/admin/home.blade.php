@@ -20,6 +20,10 @@
                 },
                 columns: [{
                         data: "id"
+                    }, {
+                        data: function(d) {
+                            return `${d.customer.name}`;
+                        },
                     },
                     {
                         data: "name"
@@ -37,11 +41,6 @@
                     },
                     {
                         data: "content"
-                    },
-                    {
-                        data: function(d) {
-                            return `${d.customer.name}`;
-                        },
                     },
                     {
                         data: function(d) {
@@ -169,6 +168,15 @@
                 },
             });
         })
+        // 
+        $(document).on("change", "#select-month-contract", function() {
+            let requestUrl = "/api/contracts/getAll?month=" + $(this).val();
+            dataTable.ajax.url(requestUrl).load();
+        });
+        $(document).on("change", "#select-month-taskdetail", function() {
+            let requestUrl = "/api/taskdetails?month=" + $(this).val();
+            dataTableTaskDetail.ajax.url(requestUrl).load();
+        });
     </script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
@@ -184,16 +192,29 @@
             </div>
         </div>
         <div class="card-body" style="display: block;padding: 10px !important;">
+            <div class="row ">
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label for="">Tháng</label>
+                        <select name="" class="form-control" id="select-month-contract">
+                            <option value="">--Tất cả--</option>
+                            @for ($i = 1; $i <= 12; $i++)
+                                <option value="{{ $i }}">Tháng {{ $i }}</option>
+                            @endfor
+                        </select>
+                    </div>
+                </div>
+            </div>
             <table id="table" class="table display nowrap dataTable dtr-inline collapsed">
                 <thead>
                     <tr>
                         <th>ID</th>
+                        <th>Khách hàng</th>
                         <th>Tên hợp đồng</th>
                         <th>Chi nhánh</th>
                         <th>Ngày bắt đầu</th>
                         <th>Ngày kết thúc</th>
                         <th>Nội dung</th>
-                        <th>Khách hàng</th>
                         <th>Trạng thái</th>
                     </tr>
                 </thead>
@@ -239,6 +260,19 @@
             </div>
         </div>
         <div class="card-body" style="display: block;padding: 10px !important;">
+            <div class="row ">
+                <div class="col-lg-4 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label for="">Tháng</label>
+                        <select name="" class="form-control" id="select-month-taskdetail">
+                            <option value="">--Tất cả--</option>
+                            @for ($i = 1; $i <= 12; $i++)
+                                <option value="{{ $i }}">Tháng {{ $i }}</option>
+                            @endfor
+                        </select>
+                    </div>
+                </div>
+            </div>
             <table id="tableTaskDetail" class="table display nowrap dataTable dtr-inline collapsed">
                 <thead>
                     <tr>

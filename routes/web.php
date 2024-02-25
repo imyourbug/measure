@@ -87,6 +87,11 @@ Route::group([
 ], function () {
     Route::get('/', 'AdminController@index')->name('index');
 
+    #plan
+    Route::group(['prefix' => 'plans', 'as' => 'plans.'], function () {
+        Route::get('/', 'PlanController@index')->name('index');
+    });
+
     #settings
     Route::group(['prefix' => 'settings', 'as' => 'settings.'], function () {
         Route::get('backup', 'SettingController@backup')->name('backup');
