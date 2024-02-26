@@ -7,6 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class SettingTaskMap extends Model
 {
+
+    protected $casts = [
+        'created_at' => 'datetime:Y-m-d',
+        'updated_at' => 'datetime:Y-m-d',
+    ];
+
     protected $fillable = [
         'code',
         'area',

@@ -67,7 +67,7 @@
             // staff
             dataTableStaff = $("#tableStaff").DataTable({
                 ajax: {
-                    url: "/api/taskstaff?id=" + $("#task_id").val(),
+                    url: "/api/settingtaskstaff?id=" + $("#task_id").val(),
                     dataSrc: "taskStaff",
                 },
                 columns: [{
@@ -110,7 +110,7 @@
             // chemistry
             dataTableChemistry = $("#tableChemistry").DataTable({
                 ajax: {
-                    url: "/api/taskchemistries?id=" + $("#task_id").val(),
+                    url: "/api/settingtaskchemistries?id=" + $("#task_id").val(),
                     dataSrc: "taskChemistries",
                 },
                 columns: [{
@@ -141,7 +141,7 @@
             // item
             dataTableItem = $("#tableItem").DataTable({
                 ajax: {
-                    url: "/api/taskitems?id=" + $("#task_id").val(),
+                    url: "/api/settingtaskitems?id=" + $("#task_id").val(),
                     dataSrc: "taskItems",
                 },
                 columns: [{
@@ -172,7 +172,7 @@
             // solution
             dataTableSolution = $("#tableSolution").DataTable({
                 ajax: {
-                    url: "/api/tasksolutions?id=" + $("#task_id").val(),
+                    url: "/api/settingtasksolutions?id=" + $("#task_id").val(),
                     dataSrc: "taskSolutions",
                 },
                 columns: [{
@@ -206,7 +206,7 @@
         $(document).on("click", ".btn-edit-solution", function() {
             $.ajax({
                 type: "GET",
-                url: "/api/tasksolutions/" + $(this).data("id") + "/show",
+                url: "/api/settingtasksolutions/" + $(this).data("id") + "/show",
                 success: function(response) {
                     if (response.status == 0) {
                         let taskSolution = response.taskSolution;
@@ -217,7 +217,7 @@
                         //
                         $(".btn-add-solution").css("display", "none");
                         $(".btn-update-solution").css("display", "block");
-                        $("#tasksolution_id").val(taskSolution.id);
+                        $("#settingtasksolution_id").val(taskSolution.id);
                     } else {
                         toastr.error(response.message);
                     }
@@ -234,7 +234,7 @@
         $(document).on("click", ".btn-update-solution", function() {
             if (confirm("Bạn có muốn sửa")) {
                 let data = {
-                    id: $("#tasksolution_id").val(),
+                    id: $("#settingtasksolution_id").val(),
                     unit: $("#solution_unit").val(),
                     kpi: $("#solution_kpi").val(),
                     solution_id: $("#solution_id").val(),
@@ -261,7 +261,7 @@
                 let id = $(this).data("id");
                 $.ajax({
                     type: "DELETE",
-                    url: `/api/tasksolutions/${id}/destroy`,
+                    url: `/api/settingtasksolutions/${id}/destroy`,
                     success: function(response) {
                         if (response.status == 0) {
                             toastr.success("Xóa thành công");
@@ -301,7 +301,7 @@
         $(document).on("click", ".btn-edit-item", function() {
             $.ajax({
                 type: "GET",
-                url: "/api/taskitems/" + $(this).data("id") + "/show",
+                url: "/api/settingtaskitems/" + $(this).data("id") + "/show",
                 success: function(response) {
                     if (response.status == 0) {
                         let taskItem = response.taskItem;
@@ -312,7 +312,7 @@
                         //
                         $(".btn-add-item").css("display", "none");
                         $(".btn-update-item").css("display", "block");
-                        $("#taskitem_id").val(taskItem.id);
+                        $("#settingtaskitem_id").val(taskItem.id);
                     } else {
                         toastr.error(response.message);
                     }
@@ -329,7 +329,7 @@
         $(document).on("click", ".btn-update-item", function() {
             if (confirm("Bạn có muốn sửa")) {
                 let data = {
-                    id: $("#taskitem_id").val(),
+                    id: $("#settingtaskitem_id").val(),
                     unit: $("#item_unit").val(),
                     kpi: $("#item_kpi").val(),
                     item_id: $("#item_id").val(),
@@ -356,7 +356,7 @@
                 let id = $(this).data("id");
                 $.ajax({
                     type: "DELETE",
-                    url: `/api/taskitems/${id}/destroy`,
+                    url: `/api/settingtaskitems/${id}/destroy`,
                     success: function(response) {
                         if (response.status == 0) {
                             toastr.success("Xóa thành công");
@@ -497,7 +497,7 @@
         $(document).on("click", ".btn-edit-staff", function() {
             $.ajax({
                 type: "GET",
-                url: "/api/taskstaff/" + $(this).data("id") + "/show",
+                url: "/api/settingtaskstaff/" + $(this).data("id") + "/show",
                 success: function(response) {
                     if (response.status == 0) {
                         let taskStaff = response.taskStaff;
@@ -506,7 +506,7 @@
                         //
                         $(".btn-add-staff").css("display", "none");
                         $(".btn-update-staff").css("display", "block");
-                        $("#taskstaff_id").val(taskStaff.id);
+                        $("#settingtaskstaff_id").val(taskStaff.id);
                     } else {
                         toastr.error(response.message);
                     }
@@ -523,7 +523,7 @@
         $(document).on("click", ".btn-update-staff", function() {
             if (confirm("Bạn có muốn sửa")) {
                 let data = {
-                    id: $("#taskstaff_id").val(),
+                    id: $("#settingtaskstaff_id").val(),
                     task_id: $("#task_id").val(),
                     user_id: $("#staff_id").val(),
                 };
@@ -549,7 +549,7 @@
                 let id = $(this).data("id");
                 $.ajax({
                     type: "DELETE",
-                    url: `/api/taskstaff/${id}/destroy`,
+                    url: `/api/settingtaskstaff/${id}/destroy`,
 
                     success: function(response) {
                         if (response.status == 0) {
@@ -588,7 +588,7 @@
         $(document).on("click", ".btn-edit-chemistry", function() {
             $.ajax({
                 type: "GET",
-                url: "/api/taskchemistries/" + $(this).data("id") + "/show",
+                url: "/api/settingtaskchemistries/" + $(this).data("id") + "/show",
                 success: function(response) {
                     if (response.status == 0) {
                         let taskChemistry = response.taskChemistry;
@@ -599,7 +599,7 @@
                         //
                         $(".btn-add-chemistry").css("display", "none");
                         $(".btn-update-chemistry").css("display", "block");
-                        $("#taskchemistry_id").val(taskChemistry.id);
+                        $("#settingtaskchemistry_id").val(taskChemistry.id);
                     } else {
                         toastr.error(response.message);
                     }
@@ -616,7 +616,7 @@
         $(document).on("click", ".btn-update-chemistry", function() {
             if (confirm("Bạn có muốn sửa")) {
                 let data = {
-                    id: $("#taskchemistry_id").val(),
+                    id: $("#settingtaskchemistry_id").val(),
                     unit: $("#chemistry_unit").val(),
                     kpi: $("#chemistry_kpi").val(),
                     chemistry_id: $("#chemistry_id").val(),
@@ -643,7 +643,7 @@
                 let id = $(this).data("id");
                 $.ajax({
                     type: "DELETE",
-                    url: `/api/taskchemistries/${id}/destroy`,
+                    url: `/api/settingtaskchemistries/${id}/destroy`,
                     success: function(response) {
                         if (response.status == 0) {
                             toastr.success("Xóa thành công");
@@ -870,8 +870,8 @@
                                         {{-- Item --}}
                                         <div class="tab-pane fade" id="custom-tabs-four-items" role="tabpanel"
                                             aria-labelledby="custom-tabs-four-items-tab">
-                                            <button class="mb-2 btn btn-success btn-open-modal-item" data-target="#modal-item"
-                                                data-toggle="modal">Thêm
+                                            <button class="mb-2 btn btn-success btn-open-modal-item"
+                                                data-target="#modal-item" data-toggle="modal">Thêm
                                                 mới</button>
                                             <table id="tableItem"
                                                 class="table-item table display nowrap dataTable dtr-inline collapsed">
@@ -985,9 +985,9 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                    <button type="button" data-url="{{ route('tasksolutions.store') }}"
+                    <button type="button" data-url="{{ route('settingtasksolutions.store') }}"
                         class="btn btn-primary btn-add-solution">Lưu</button>
-                    <button style="display: none" type="button" data-url="{{ route('tasksolutions.update') }}"
+                    <button style="display: none" type="button" data-url="{{ route('settingtasksolutions.update') }}"
                         class="btn btn-primary btn-update-solution">Lưu</button>
                 </div>
             </div>
@@ -1039,9 +1039,9 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                    <button type="button" data-url="{{ route('taskitems.store') }}"
+                    <button type="button" data-url="{{ route('settingtaskitems.store') }}"
                         class="btn btn-primary btn-add-item">Lưu</button>
-                    <button style="display: none" type="button" data-url="{{ route('taskitems.update') }}"
+                    <button style="display: none" type="button" data-url="{{ route('settingtaskitems.update') }}"
                         class="btn btn-primary btn-update-item">Lưu</button>
                 </div>
             </div>
@@ -1125,9 +1125,9 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                    <button type="button" data-url="{{ route('taskstaff.store') }}"
+                    <button type="button" data-url="{{ route('settingtaskstaff.store') }}"
                         class="btn btn-primary btn-add-staff">Lưu</button>
-                    <button style="display: none" type="button" data-url="{{ route('taskstaff.update') }}"
+                    <button style="display: none" type="button" data-url="{{ route('settingtaskstaff.update') }}"
                         class="btn btn-primary btn-update-staff">Lưu</button>
                 </div>
             </div>
@@ -1180,20 +1180,20 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
-                    <button type="button" data-url="{{ route('taskchemistries.store') }}"
+                    <button type="button" data-url="{{ route('settingtaskchemistries.store') }}"
                         class="btn btn-primary btn-add-chemistry">Lưu</button>
-                    <button style="display: none" type="button" data-url="{{ route('taskchemistries.update') }}"
+                    <button style="display: none" type="button" data-url="{{ route('settingtaskchemistries.update') }}"
                         class="btn btn-primary btn-update-chemistry">Lưu</button>
                 </div>
             </div>
 
         </div>
     </div>
-    {{-- <input type="hidden" name="" value="{{ $taskDetail->id }}" id="task_id">
-    <input type="hidden" name="" value="" id="taskstaff_id">
-    <input type="hidden" name="" value="" id="taskchemistry_id">
-    <input type="hidden" name="" value="" id="taskitem_id">
-    <input type="hidden" name="" value="" id="tasksolution_id"> --}}
+    {{-- <input type="hidden" name="" value="{{ $taskDetail->id }}" id="task_id"> --}}
+    <input type="hidden" name="" value="" id="settingtaskstaff_id">
+    <input type="hidden" name="" value="" id="settingtaskchemistry_id">
+    <input type="hidden" name="" value="" id="settingtaskitem_id">
+    <input type="hidden" name="" value="" id="settingtasksolution_id">
     <input type="hidden" name="" value="" id="settingtaskmap_id">
     <input type="hidden" id="task_id" value="{{ request()->id }}" />
     <input type="hidden" id="taskdetail_id" />

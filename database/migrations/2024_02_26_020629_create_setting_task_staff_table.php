@@ -11,19 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('setting_task_items', function (Blueprint $table) {
+        Schema::create('setting_task_staff', function (Blueprint $table) {
             $table->id();
             $table->string('code')->nullable();
             $table->string('name')->nullable();
-            $table->string('unit')->nullable();
-            $table->string('kpi')->nullable();
-            $table->string('result')->nullable();
-            $table->string('image')->nullable();
-            $table->string('detail')->nullable();
+            $table->string('position')->nullable();
+            $table->string('tel')->nullable();
+            $table->string('identification')->nullable();
             $table->unsignedBigInteger('task_id');
-            $table->unsignedBigInteger('item_id');
+            $table->unsignedBigInteger('user_id');
             $table->foreign('task_id')->references('id')->on('tasks')->onDelete('cascade');
-            $table->foreign('item_id')->references('id')->on('items')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -33,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('setting_task_items');
+        Schema::dropIfExists('setting_task_staff');
     }
 };

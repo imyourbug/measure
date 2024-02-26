@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SettingTaskItem extends Model
+class SettingTaskStaff extends Model
 {
     use HasFactory;
 
@@ -17,13 +17,11 @@ class SettingTaskItem extends Model
     protected $fillable = [
         'code',
         'name',
-        'unit',
-        'kpi',
-        'result',
-        'image',
-        'detail',
+        'position',
+        'tel',
+        'identification',
         'task_id',
-        'item_id',
+        'user_id',
     ];
 
     public function task()
@@ -31,8 +29,8 @@ class SettingTaskItem extends Model
         return $this->belongsTo(TaskDetail::class, 'task_id', 'id');
     }
 
-    public function item()
+    public function user()
     {
-        return $this->belongsTo(Item::class, 'item_id', 'id');
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }

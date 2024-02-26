@@ -34,4 +34,29 @@ class Task extends Model
     {
         return $this->belongsTo(Contract::class, 'contract_id', 'id');
     }
+
+    public function settingTaskChemitries()
+    {
+        return $this->hasMany(SettingTaskChemistry::class, 'task_id', 'id');
+    }
+
+    public function settingTaskMaps()
+    {
+        return $this->hasMany(SettingTaskMap::class, 'task_id', 'id');
+    }
+
+    public function settingTaskSolutions()
+    {
+        return $this->hasMany(SettingTaskSolution::class, 'task_id', 'id');
+    }
+
+    public function settingTaskItems()
+    {
+        return $this->hasMany(SettingTaskItem::class, 'task_id', 'id');
+    }
+
+    public function settingTaskStaffs()
+    {
+        return $this->hasMany(SettingTaskStaff::class, 'task_id', 'id');
+    }
 }

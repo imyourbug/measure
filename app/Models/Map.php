@@ -16,6 +16,7 @@ class Map extends Model
         'target',
         'image',
         'description',
+        'range',
         'active',
     ];
 }

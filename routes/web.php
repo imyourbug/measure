@@ -95,6 +95,7 @@ Route::group([
     #settings
     Route::group(['prefix' => 'settings', 'as' => 'settings.'], function () {
         Route::get('backup', 'SettingController@backup')->name('backup');
+        Route::get('reload', 'SettingController@reload')->name('reload');
     });
 
     #reports

@@ -9,6 +9,11 @@
     <script></script>
 @endpush
 @section('content')
+    <div class="">
+        <a href="{{ route('admin.tasks.detail', ['id' => $taskDetail->task->id]) }}" class="btn btn-danger">Quay lại</a>
+        <a class="btn btn-warning" href="{{ route('admin.settings.reload', ['taskdetail_id' => request()->id]) }}"
+            onclick="return confirm('Xác nhận tải lại cài đặt cho nhiệm vụ?')">Tải lại cài đặt</a>
+    </div>
     <div class="card-body">
         <div class="row">
             <div class="col-lg-6 col-md-12">

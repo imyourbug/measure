@@ -11,22 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('task_maps', function (Blueprint $table) {
+        Schema::create('setting_task_solutions', function (Blueprint $table) {
             $table->id();
             $table->string('code')->nullable();
-            $table->string('area')->nullable();
-            $table->string('position')->nullable();
-            $table->string('target')->nullable();
+            $table->string('name')->nullable();
             $table->string('unit')->nullable();
             $table->string('kpi')->nullable();
             $table->string('result')->nullable();
             $table->string('image')->nullable();
             $table->string('detail')->nullable();
-            $table->string('round')->nullable();
             $table->unsignedBigInteger('task_id');
-            $table->unsignedBigInteger('map_id');
-            $table->foreign('task_id')->references('id')->on('task_details')->onDelete('cascade');
-            $table->foreign('map_id')->references('id')->on('maps')->onDelete('cascade');
+            $table->unsignedBigInteger('solution_id');
+            $table->foreign('task_id')->references('id')->on('tasks')->onDelete('cascade');
+            $table->foreign('solution_id')->references('id')->on('solutions')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -36,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('task_maps');
+        Schema::dropIfExists('setting_task_solutions');
     }
 };

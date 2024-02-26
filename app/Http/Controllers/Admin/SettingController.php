@@ -4,11 +4,19 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
+use App\Models\TaskChemistry;
+use App\Models\TaskDetail;
+use App\Models\TaskItem;
+use App\Models\TaskMap;
+use App\Models\TaskSolution;
+use App\Models\TaskStaff;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Throwable;
+use Toastr;
 
 class SettingController extends Controller
 {
@@ -65,5 +73,86 @@ class SettingController extends Controller
         Log::info('Command backup: ' . $command);
 
         return response()->download($filePath);
+    }
+
+    public function reload(Request $request)
+    {
+        $taskdetail_id = $request->taskdetail_id;
+        try {
+            DB::beginTransaction();
+            $task_detail = TaskDetail::with([
+                'task.settingTaskMaps',
+                'task.settingTaskItems',
+                'task.settingTaskSolutions',
+                'task.settingTaskChemitries',
+                'task.settingTaskStaffs',
+                'taskMaps',
+                'taskItems',
+                'taskSolutions',
+                'taskChemitries',
+                'taskStaffs',
+            ])
+                ->firstWhere('id', $taskdetail_id);
+
+            // taskMap
+            $settingTaskMaps = $task_detail->task?->settingTaskMaps?->toArray() ?? [];
+            $settingTaskMaps = array_map(function ($e) use ($taskdetail_id) {
+                $e['task_id'] = $taskdetail_id;
+                return $e;
+            }, $settingTaskMaps);
+            TaskMap::upsert(
+                $settingTaskMaps,
+                ['map_id', 'task_id']
+            );
+            // taskItem
+            $settingTaskItems = $task_detail->task?->settingTaskItems?->toArray() ?? [];
+            $settingTaskItems = array_map(function ($e) use ($taskdetail_id) {
+                $e['task_id'] = $taskdetail_id;
+                return $e;
+            }, $settingTaskItems);
+            TaskItem::upsert(
+                $settingTaskItems,
+                ['map_id', 'task_id']
+            );
+            // taskSolution
+            $settingTaskSolutions = $task_detail->task?->settingTaskSolutions?->toArray() ?? [];
+            $settingTaskSolutions = array_map(function ($e) use ($taskdetail_id) {
+                $e['task_id'] = $taskdetail_id;
+                return $e;
+            }, $settingTaskSolutions);
+            TaskSolution::upsert(
+                $settingTaskSolutions,
+                ['map_id', 'task_id']
+            );
+            // taskStaff
+            $settingTaskStaffs = $task_detail->task?->settingTaskStaffs?->toArray() ?? [];
+            $settingTaskStaffs = array_map(function ($e) use ($taskdetail_id) {
+                $e['task_id'] = $taskdetail_id;
+                return $e;
+            }, $settingTaskStaffs);
+            TaskStaff::upsert(
+                $settingTaskStaffs,
+                ['map_id', 'task_id']
+            );
+            // taskChemistry
+            $settingTaskChemitries = $task_detail->task?->settingTaskChemitries?->toArray() ?? [];
+            $settingTaskChemitries = array_map(function ($e) use ($taskdetail_id) {
+                $e['task_id'] = $taskdetail_id;
+                return $e;
+            }, $settingTaskChemitries);
+            TaskChemistry::upsert(
+                $settingTaskChemitries,
+                ['map_id', 'task_id']
+            );
+            DB::commit();
+            Toastr::success('Tải lên cài đặt thành công', __('title.toastr.success'));
+
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+        }
+        Toastr::error('Tải lên cài đặt thất bại', __('title.toastr.fail'));
+
+        return redirect()->back();
     }
 }

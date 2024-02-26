@@ -50,6 +50,42 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin'], function () {
             Route::get('/{id}/show', 'SettingTaskMapController@show')->name('show');
             Route::delete('/{id}/destroy', 'SettingTaskMapController@destroy')->name('destroy');
         });
+
+        #settingtaskitems
+        Route::group(['prefix' => 'settingtaskitems', 'as' => 'settingtaskitems.'], function () {
+            Route::post('create', 'SettingTaskItemController@store')->name('store');
+            Route::post('update', 'SettingTaskItemController@update')->name('update');
+            Route::get('/', 'SettingTaskItemController@index')->name('index');
+            Route::get('/{id}/show', 'SettingTaskItemController@show')->name('show');
+            Route::delete('/{id}/destroy', 'SettingTaskItemController@destroy')->name('destroy');
+        });
+
+        #settingtaskstaff
+        Route::group(['prefix' => 'settingtaskstaff', 'as' => 'settingtaskstaff.'], function () {
+            Route::post('create', 'SettingTaskStaffController@store')->name('store');
+            Route::post('update', 'SettingTaskStaffController@update')->name('update');
+            Route::get('/', 'SettingTaskStaffController@index')->name('index');
+            Route::get('/{id}/show', 'SettingTaskStaffController@show')->name('show');
+            Route::delete('/{id}/destroy', 'SettingTaskStaffController@destroy')->name('destroy');
+        });
+
+        #settingtasksolutions
+        Route::group(['prefix' => 'settingtasksolutions', 'as' => 'settingtasksolutions.'], function () {
+            Route::post('create', 'SettingTaskSolutionController@store')->name('store');
+            Route::post('update', 'SettingTaskSolutionController@update')->name('update');
+            Route::get('/', 'SettingTaskSolutionController@index')->name('index');
+            Route::get('/{id}/show', 'SettingTaskSolutionController@show')->name('show');
+            Route::delete('/{id}/destroy', 'SettingTaskSolutionController@destroy')->name('destroy');
+        });
+
+        #settingtaskchemistries
+        Route::group(['prefix' => 'settingtaskchemistries', 'as' => 'settingtaskchemistries.'], function () {
+            Route::post('create', 'SettingTaskChemistryController@store')->name('store');
+            Route::post('update', 'SettingTaskChemistryController@update')->name('update');
+            Route::get('/', 'SettingTaskChemistryController@index')->name('index');
+            Route::get('/{id}/show', 'SettingTaskChemistryController@show')->name('show');
+            Route::delete('/{id}/destroy', 'SettingTaskChemistryController@destroy')->name('destroy');
+        });
     });
 
     #settings

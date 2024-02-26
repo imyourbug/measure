@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SettingTaskItem extends Model
+class SettingTaskChemistry extends Model
 {
     use HasFactory;
 
@@ -23,7 +23,7 @@ class SettingTaskItem extends Model
         'image',
         'detail',
         'task_id',
-        'item_id',
+        'chemistry_id',
     ];
 
     public function task()
@@ -31,8 +31,8 @@ class SettingTaskItem extends Model
         return $this->belongsTo(TaskDetail::class, 'task_id', 'id');
     }
 
-    public function item()
+    public function chemistry()
     {
-        return $this->belongsTo(Item::class, 'item_id', 'id');
+        return $this->belongsTo(Chemistry::class, 'chemistry_id', 'id');
     }
 }
