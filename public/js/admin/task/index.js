@@ -15,7 +15,7 @@ $(document).on("click", ".btn-filter", function () {
 $(document).ready(function () {
     dataTable = $("#table").DataTable({
         ajax: {
-            url: "/api/tasks/getAll",
+            url: "/api/tasks/getAll?type_id=" + $('#request_type_id').val(),
             dataSrc: "tasks",
         },
         columns: [

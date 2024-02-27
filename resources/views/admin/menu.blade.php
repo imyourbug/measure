@@ -17,11 +17,13 @@
                 <div class="dropdown-menu dropdown-menu-lg dropdown-menu-left" style="left: inherit; right: 0px;">
                     <p class="dropdown-item" style="font-weight: bold;">DANH SÁCH NHIỆM VỤ</p>
                     @foreach ($types as $type)
-                        <a class="dropdown-item" href="{{ route('admin.tasks.index') }}" style="font-weight:bold;">
+                        <a class="dropdown-item" href="{{ route('admin.tasks.index', ['type_id' => $type->id]) }}"
+                            style="font-weight:bold;">
                             {{ $type->name }}
                         </a>
                         @foreach ($type->children as $child)
-                            <a href="{{ route('admin.tasks.index') }}" style="padding-left: 40px" class="dropdown-item">
+                            <a href="{{ route('admin.tasks.index', ['type_id' => $child->id]) }}"
+                                style="padding-left: 40px" class="dropdown-item">
                                 -&emsp;{{ $child->name }}
                             </a>
                         @endforeach
@@ -175,8 +177,7 @@
         </li>
     </ul>
 </nav>
-<div class="modal fade" id="modalChangePassword" style="display: none;" aria-modal="true"
-    role="dialog">
+<div class="modal fade" id="modalChangePassword" style="display: none;" aria-modal="true" role="dialog">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">

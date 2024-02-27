@@ -100,6 +100,7 @@ class TaskController extends Controller
     {
         $from = $request->from;
         $to = $request->to;
+        $type_id = $request->type_id;
         $contracts = !empty($request->contracts) ? explode(",", $request->contracts) : [];
         $user_id = $request->user_id;
         $tasks = Task::with([
@@ -107,6 +108,9 @@ class TaskController extends Controller
             'type',
             'details.taskStaffs',
         ])
+            ->when($type_id, function ($q) use ($type_id) {
+                return $q->where('type_id', $type_id);
+            })
             ->when($from, function ($q) use ($from) {
                 return $q->where('created_at', '>=', $from . ' 00:00:00');
             })->when($to, function ($q) use ($to) {

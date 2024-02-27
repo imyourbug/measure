@@ -47,20 +47,17 @@
                             return `${getStatusContract(d.finish)}`;
                         },
                     },
-                    // {
-                    //     data: function(d) {
-                    //         return `<a class="btn btn-primary btn-sm" href='/admin/contracts/update/${d.id}'>
-                //                     <i class="fas fa-edit"></i>
-                //                 </a>
-                //                 <a class="btn btn-success btn-sm" style="padding: 4px 15px"
-                //                     href='/admin/contracts/detail/${d.id}'>
-                //                     <i class="fa-solid fa-info"></i>
-                //                 </a>
-                //                 <button data-id="${d.id }" class="btn btn-danger btn-sm btn-delete">
-                //                     <i class="fas fa-trash"></i>
-                //                 </button>`;
-                    //     },
-                    // },
+                    {
+                        data: function(d) {
+                            return `<a class="btn btn-primary btn-sm" href='/admin/contracts/update/${d.id}'>
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a class="btn btn-success btn-sm" style="padding: 4px 15px"
+                                    href='/admin/contracts/detail/${d.id}'>
+                                    <i class="fa-solid fa-info"></i>
+                                </a>`;
+                        },
+                    },
                 ],
             });
             dataTableBranch = $("#tableBranch").DataTable({
@@ -91,16 +88,13 @@
                             return d.user.customer.name;
                         },
                     },
-                    // {
-                    //     data: function(d) {
-                    //         return `<a class="btn btn-primary btn-sm" href='/admin/branches/update/${d.id}'>
-                //         <i class="fas fa-edit"></i>
-                //     </a>
-                //     <button data-id="${d.id}" class="btn btn-danger btn-sm btn-delete-branch">
-                //         <i class="fas fa-trash"></i>
-                //     </button>`;
-                    //     },
-                    // },
+                    {
+                        data: function(d) {
+                            return `<a class="btn btn-primary btn-sm" href='/admin/branches/update/${d.id}'>
+                                        <i class="fas fa-edit"></i>
+                                    </a>`;
+                        },
+                    },
                 ],
             });
             dataTableTaskDetail = $("#tableTaskDetail").DataTable({
@@ -132,20 +126,16 @@
                     {
                         data: "created_at"
                     },
-                    // {
-                    //     data: function (d) {
-                    //         return `<a class="btn btn-primary btn-sm btn-edit" data-id="${d.id}" data-target="#modal" data-toggle="modal">
-                //                                         <i class="fas fa-edit"></i>
-                //                                     </a>
-                //                                     <a class="btn btn-success btn-sm" style="padding: 4px 15px" href="/admin/taskdetails/update/${d.id}">
-                //                                         <i class="fa-solid fa-info"></i>
-                //                                     </a>
-                //                                     <button data-id="${d.id}"
-                //                                         class="btn btn-danger btn-sm btn-delete">
-                //                                         <i class="fas fa-trash"></i>
-                //                                     </button>`;
-                    //     },
-                    // },
+                    {
+                        data: function(d) {
+                            return `<a class="btn btn-primary btn-sm btn-edit" data-id="${d.id}" data-target="#modal" data-toggle="modal">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a class="btn btn-success btn-sm" style="padding: 4px 15px" href="/admin/taskdetails/update/${d.id}">
+                                        <i class="fa-solid fa-info"></i>
+                                    </a>`;
+                        },
+                    },
                 ],
             });
         })
@@ -168,7 +158,7 @@
                 },
             });
         })
-        // 
+        //
         $(document).on("change", "#select-month-contract", function() {
             let requestUrl = "/api/contracts/getAll?month=" + $(this).val();
             dataTable.ajax.url(requestUrl).load();
@@ -216,6 +206,7 @@
                         <th>Ngày kết thúc</th>
                         <th>Nội dung</th>
                         <th>Trạng thái</th>
+                        <th>Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -243,6 +234,7 @@
                         <th>Địa chỉ</th>
                         <th>Quản lý</th>
                         <th>Khách hàng</th>
+                        <th>Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -283,6 +275,7 @@
                         <th>Giờ vào</th>
                         <th>Giờ ra</th>
                         <th>Ngày lập</th>
+                        <th>Thao tác</th>
                     </tr>
                 </thead>
                 <tbody>

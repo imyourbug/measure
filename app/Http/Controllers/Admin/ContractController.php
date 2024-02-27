@@ -222,6 +222,8 @@ class ContractController extends Controller
             ])->firstWhere('id', $id),
             'customers' => Customer::all(),
             'users' => User::with(['staff'])->where('role', GlobalConstant::ROLE_STAFF)->get(),
+            'types' => Type::all(),
+            'contracts' => Contract::with(['branch'])->get(),
         ]);
     }
 

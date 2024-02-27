@@ -2,18 +2,12 @@
 @push('styles')
 @endpush
 @push('scripts')
-    {{-- <script src="/js/admin/contract/index.js"></script> --}}
+    <script src="/js/admin/task/index.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
-        $(document).ready(function() {
-            $('#table').DataTable({
-                responsive: true
-            });
-
-        });
         var listMapChart = [];
         var listTrendMapChart = [];
         var listAnnualMapChart = [];
@@ -509,34 +503,27 @@
             </div>
         </div>
         <div class="card-body" style="display: block;padding: 10px !important;">
+            <div class="mb-3">
+                <a href="{{ route('admin.tasks.create') }}" target="_blank" class="btn btn-success">Thêm mới</a>
+                <input class="" style="" type="date" id="from"
+                    value="{{ Request::get('from') ?? now()->format('Y-m-01') }}" />
+                <input class="" style="" type="date" id="to"
+                    value="{{ Request::get('to') ?? now()->format('Y-m-t') }}" />
+                <button class="btn btn-warning btn-filter">Lọc</button>
+            </div>
             <table id="table" class="table display nowrap dataTable dtr-inline collapsed">
                 <thead>
                     <tr>
                         <th>ID</th>
                         <th>Nhiệm vụ</th>
+                        <th>Hợp đồng</th>
                         <th>Ghi chú</th>
                         <th>Ngày lập</th>
                         <th>Thao tác</th>
                     </tr>
-                <tbody>
-                    @foreach ($contract->tasks as $task)
-                        <tr class="row{{ $task->id }}">
-                            <th>{{ $task->id }}</th>
-                            <th>{{ $task->type->name }}</th>
-                            <td>{{ $task->note ?? 'Trống' }}</td>
-                            <td>{{ date('d-m-Y', strtotime($task->created_at)) }}</td>
-                            <td><a class="btn btn-success btn-sm" style="padding: 4px 15px"
-                                    href='{{ route('admin.tasks.detail', ['id' => $task->id]) }}'>
-                                    <i class="fa-solid fa-info"></i>
-                                </a>
-                                {{-- <button data-id="{{ $task->id }}" class="btn btn-danger btn-sm btn-delete">
-                                    <i class="fas fa-trash"></i>
-                                </button> --}}
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
                 </thead>
+                <tbody>
+                </tbody>
             </table>
         </div>
     </div>
@@ -576,4 +563,58 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modal" style="display: none;" aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title modal-title">Cập nhật nhiệm vụ</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Loại nhiệm vụ</label>
+                                <select class="form-control" id="type_id">
+                                    @foreach ($types as $type)
+                                        <option value="{{ $type->id }}">
+                                            {{ $type->id . '-' . $type->name ?? '' }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Hợp đồng</label>
+                                <select class="form-control select-contract" id="contract_id">
+                                    <option value="">--Hợp đồng--</option>
+                                    @foreach ($contracts as $contract)
+                                        <option value="{{ $contract->id }}">
+                                            {{ $contract->name . '-' . $contract->branch->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Ghi chú</label>
+                                <textarea placeholder="Nhập ghi chú..." class="form-control" id="note" cols="30" rows="5"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+                    <button type="button" data-url="{{ route('tasks.update') }}"
+                        class="btn btn-primary btn-update">Lưu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="task_id">
 @endsection

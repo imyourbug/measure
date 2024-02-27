@@ -84,4 +84,5 @@
         </div>
     </div>
     <input type="hidden" id="task_id">
+    <input type="hidden" id="request_type_id" value="{{ request()->type_id }}">
 @endsection
