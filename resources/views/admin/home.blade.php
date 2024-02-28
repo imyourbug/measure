@@ -26,9 +26,6 @@
                         },
                     },
                     {
-                        data: "name"
-                    },
-                    {
                         data: function(d) {
                             return `${d.branch.name}`;
                         },
@@ -49,12 +46,8 @@
                     },
                     {
                         data: function(d) {
-                            return `<a class="btn btn-primary btn-sm" href='/admin/contracts/update/${d.id}'>
+                            return `<a class="btn btn-primary btn-sm" href='/admin/contracts/detail/${d.id}'>
                                     <i class="fas fa-edit"></i>
-                                </a>
-                                <a class="btn btn-success btn-sm" style="padding: 4px 15px"
-                                    href='/admin/contracts/detail/${d.id}'>
-                                    <i class="fa-solid fa-info"></i>
                                 </a>`;
                         },
                     },
@@ -128,11 +121,8 @@
                     },
                     {
                         data: function(d) {
-                            return `<a class="btn btn-primary btn-sm btn-edit" data-id="${d.id}" data-target="#modal" data-toggle="modal">
+                            return `<a class="btn btn-primary btn-sm btn-edit" href="/admin/taskdetails/update/${d.id}">
                                         <i class="fas fa-edit"></i>
-                                    </a>
-                                    <a class="btn btn-success btn-sm" style="padding: 4px 15px" href="/admin/taskdetails/update/${d.id}">
-                                        <i class="fa-solid fa-info"></i>
                                     </a>`;
                         },
                     },
@@ -200,7 +190,6 @@
                     <tr>
                         <th>ID</th>
                         <th>Khách hàng</th>
-                        <th>Tên hợp đồng</th>
                         <th>Chi nhánh</th>
                         <th>Ngày bắt đầu</th>
                         <th>Ngày kết thúc</th>
