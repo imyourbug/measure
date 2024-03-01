@@ -72,11 +72,18 @@
                 <div class="col-lg-12">
                     <div class="form-group">
                         <label for="menu">Mô tả</label>
-                        <textarea class="form-control" name="description" id="" cols="30" rows="5"></textarea>
+                        <textarea class="form-control" name="description" id="" cols="30" rows="3"></textarea>
                     </div>
                 </div>
             </div>
             <div class="row">
+                <div class="col-lg-6 col-md-12">
+                    <div class="form-group">
+                        <label for="menu">Phạm vi</label>
+                        <input type="text" class="form-control" name="range" value="{{ old('range') }}"
+                            placeholder="Nhập phạm vi">
+                    </div>
+                </div>
                 <div class="col-lg-6 col-md-12">
                     <div class="form-group">
                         <label for="file">Chọn ảnh</label><br>
@@ -87,6 +94,8 @@
                         <input type="hidden" name="image" id="image" value="">
                     </div>
                 </div>
+            </div>
+            <div class="row">
                 <div class="col-lg-6 col-md-12">
                     <div class="form-group">
                         <label>Hiệu lực</label>
@@ -101,7 +110,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
         <div class="card-footer">

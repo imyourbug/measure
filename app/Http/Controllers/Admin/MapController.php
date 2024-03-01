@@ -29,13 +29,15 @@ class MapController extends Controller
             'target' => 'nullable|string',
             'image' => 'nullable|string',
             'description' => 'nullable|string',
+            'range' => 'nullable|string',
             'active' => 'required|in:0,1',
         ]);
-        // dd($data);
         $dataInsert = [];
         $number = (int)$data['number'];
         unset($data['number']);
         for ($i = 0; $i < $number; $i++) {
+            $data['code'] = $data['area'] . '-' .
+                str_pad(((string)($i + 1)), 3, "0", STR_PAD_LEFT);;
             $dataInsert[] = $data;
         }
         try {
@@ -58,6 +60,7 @@ class MapController extends Controller
             'target' => 'nullable|string',
             'image' => 'nullable|string',
             'description' => 'nullable|string',
+            'range' => 'nullable|string',
             'active' => 'required|in:0,1',
         ]);
         unset($data['id']);

@@ -276,7 +276,7 @@
                                                         @if (!empty($detail['task_maps']))
                                                             @foreach ($detail['task_maps'] as $task_map)
                                                                 <tr>
-                                                                    <td>{{ $task_map['map']['area'] . '-' . ((int) $task_map['map']['id'] > 100 ?: str_pad((string) $task_map['map']['id'], 3, '0', STR_PAD_LEFT)) }}
+                                                                    <td>{{ !empty($task_map['map']['code']) ? $task_map['map']['code'] : $task_map['map']['area'] . '-' . ((int) $task_map['map']['id'] > 100 ?: str_pad((string) $task_map['map']['id'], 3, '0', STR_PAD_LEFT)) }}
                                                                     </td>
                                                                     <td>{{ $task_map['map']['position'] ?? '' }} </td>
                                                                     <td>{{ $task_map['unit'] ?? '' }} </td>

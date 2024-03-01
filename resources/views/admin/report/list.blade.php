@@ -330,23 +330,32 @@
 
             return `rgb(${red}, ${green}, ${blue})`;
         };
+
+        $(document).on('click', function(e) {
+            const clickedElement = $(e.target);
+            const clickedElementId = clickedElement.attr('id'); // or use any other identifier
+            const targetElement = $('.modal-content-export'); // Replace with your element's ID
+
+            if (!clickedElement.is(targetElement) && !clickedElement.parents().is(targetElement) && $('body').hasClass('modal-open')) {
+                // Clicked outside the element
+                $('.blockChart').html('');
+            }
+        });
+        $(document).on('click', '.close', function(e) {
+            console.log('close');
+            $('.blockChart').html('');
+        });
+        // setInterval(() => {
+        //     if (!$('body')
+        //         .hasClass('modal-open') && !$('#modal-export')
+        //         .hasClass('show')) {
+        //         console.log("is not open");
+        //         $('.blockChart').html('');
+        //     }
+        // }, 2000);
     </script>
 @endpush
 @section('content')
-    <div style="position: relative;index:1;">
-        {{-- <div class="groupChart blockChart" style="display: block;visibility:hidden;position: absolute;index:-1">
-        </div>
-        <div class="groupTrendChart blockChart" style="display: block;visibility:hidden;position: absolute;index:-1">
-        </div>
-        <div class="groupAnnualChart blockChart" style="display: block;visibility:hidden;position: absolute;index:-1">
-        </div> --}}
-        <div class="groupChart blockChart" style="display: block;position: absolute;index:-1;opacity:0">
-        </div>
-        <div class="groupTrendChart blockChart" style="display: block;position: absolute;index:-2;opacity:0">
-        </div>
-        <div class="groupAnnualChart blockChart" style="display: block;position: absolute;index:-3;opacity:0">
-        </div>
-    </div>
     <div class="row">
         <div class="col-lg-12">
             <div class="card direct-chat direct-chat-primary">
@@ -608,7 +617,7 @@
     </div>
     <div class="modal fade" id="modal-export" style="display:none;" aria-modal="true" role="dialog">
         <div class="modal-dialog modal-md modal-dialog-centered">
-            <div class="modal-content">
+            <div class="modal-content modal-content-export">
                 <form action="{{ route('exports.plan') }}" method="POST" id="form-export">
                     <div class="modal-header">
                         <h4 class="modal-title">Xuất báo cáo?</h4>
@@ -643,4 +652,12 @@
         </div>
     </div>
     <input type="hidden" id="task_id">
+    <div style="" class="allChart">
+        <div class="groupChart blockChart" style="">
+        </div>
+        <div class="groupTrendChart blockChart" style="">
+        </div>
+        <div class="groupAnnualChart blockChart" style="">
+        </div>
+    </div>
 @endsection

@@ -21,7 +21,7 @@ $(document).ready(function () {
             { data: "id" },
             {
                 data: function (d) {
-                    return `${d.map.area}-${d.map.id.toString().padStart(3, "0")}`;
+                    return d.code ? d.code : `${d.map.area}-${d.map.id.toString().padStart(3, "0")}`;
                 },
             },
             { data: "map.area" },

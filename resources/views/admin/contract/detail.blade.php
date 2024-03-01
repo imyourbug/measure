@@ -326,24 +326,33 @@
 
             return `rgb(${red}, ${green}, ${blue})`;
         };
+
+        $(document).on('click', function(e) {
+            const clickedElement = $(e.target);
+            const clickedElementId = clickedElement.attr('id'); // or use any other identifier
+            const targetElement = $('.modal-content-export'); // Replace with your element's ID
+
+            if (!clickedElement.is(targetElement) && !clickedElement.parents().is(targetElement) && $('body')
+                .hasClass('modal-open')) {
+                // Clicked outside the element
+                $('.blockChart').html('');
+            }
+        });
+        $(document).on('click', '.close', function(e) {
+            $('.blockChart').html('');
+        });
+        // setInterval(() => {
+        //     if (!$('body')
+        //         .hasClass('modal-open') && !$('#modal-export')
+        //         .hasClass('show')) {
+        //         console.log("is not open");
+        //         $('.blockChart').html('');
+        //     }
+        // }, 2000);
     </script>
 @endpush
 @section('content')
-    <div style="position: relative;index:1;">
-        {{-- <div class="groupChart blockChart" style="display: block;visibility:hidden;position: absolute;index:-1">
-    </div>
-    <div class="groupTrendChart blockChart" style="display: block;visibility:hidden;position: absolute;index:-1">
-    </div>
-    <div class="groupAnnualChart blockChart" style="display: block;visibility:hidden;position: absolute;index:-1">
-    </div> --}}
-        <div class="groupChart blockChart" style="display: block;position: absolute;index:-1;opacity:0">
-        </div>
-        <div class="groupTrendChart blockChart" style="display: block;position: absolute;index:-2;opacity:0">
-        </div>
-        <div class="groupAnnualChart blockChart" style="display: block;position: absolute;index:-3;opacity:0">
-        </div>
-    </div>
- <div class="row">
+    <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12">
             <form action="{{ route('admin.contracts.update', ['id' => $contract->id]) }}" method="POST" class="form-contract">
                 @csrf
@@ -408,7 +417,8 @@
                                 <label class="notification" for="menu">Tệp đính kèm</label>
                                 <div class="">
                                     <input type="file" id="attachment">
-                                    <input type="hidden" name="attachment" id="value-attachment" value="{{ $contract->attachment }}">
+                                    <input type="hidden" name="attachment" id="value-attachment"
+                                        value="{{ $contract->attachment }}">
                                 </div>
                             </div>
                             @if ($contract->attachment)
@@ -538,42 +548,6 @@
             </table>
         </div>
     </div>
-    <div class="modal fade" id="modal-export" style="display:none;" aria-modal="true" role="dialog">
-        <div class="modal-dialog modal-md modal-dialog-centered">
-            <div class="modal-content">
-                <form action="{{ route('exports.plan') }}" method="POST" id="form-export">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Xuất báo cáo?</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                    <div class="groupImage">
-                    </div>
-                    <div class="groupTrendImage">
-                    </div>
-                    <div class="groupAnnualImage">
-                    </div>
-                    {{-- <div class="groupChart" style="display: block;">
-                    </div>
-                    <div class="groupTrendChart" style="display: block;">
-                    </div>
-                    <div class="groupAnnualChart" style="display: block;">
-                    </div> --}}
-                    <input type="hidden" class="month" name="month" />
-                    <input type="hidden" class="year" name="year" />
-                    <input type="hidden" class="type_report" name="type_report" />
-                    <input type="hidden" class="contract_id" value="{{ $contract->id }}" name="contract_id" />
-                    <input type="hidden" class="user_id" name="user_id" />
-                    <input type="hidden" class="display" name="display" />
-                    <div class="modal-footer justify-content-between">
-                        <button class="btn btn-default" data-dismiss="modal">Đóng</button>
-                        <button type="submit" class="btn btn-primary btn-export" disabled>Xác nhận</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
     <div class="modal fade" id="modal" style="display: none;" aria-modal="true" role="dialog">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
@@ -627,6 +601,50 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modal-export" style="display:none;" aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-md modal-dialog-centered">
+            <div class="modal-content modal-content-export">
+                <form action="{{ route('exports.plan') }}" method="POST" id="form-export">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Xuất báo cáo?</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="groupImage">
+                    </div>
+                    <div class="groupTrendImage">
+                    </div>
+                    <div class="groupAnnualImage">
+                    </div>
+                    {{-- <div class="groupChart" style="display: block;">
+                    </div>
+                    <div class="groupTrendChart" style="display: block;">
+                    </div>
+                    <div class="groupAnnualChart" style="display: block;">
+                    </div> --}}
+                    <input type="hidden" class="month" name="month" />
+                    <input type="hidden" class="year" name="year" />
+                    <input type="hidden" class="type_report" name="type_report" />
+                    <input type="hidden" class="contract_id" value="{{ request()->id }}" name="contract_id" />
+                    <input type="hidden" class="user_id" name="user_id" />
+                    <input type="hidden" class="display" name="display" />
+                    <div class="modal-footer justify-content-between">
+                        <button class="btn btn-default" data-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-primary btn-export" disabled>Xác nhận</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <input type="hidden" id="task_id" />
-    <input type="hidden" id="request_contract_id" value="{{request()->id}}" />
+    <input type="hidden" id="request_contract_id" value="{{ request()->id }}" />
+    <div style="" class="allChart">
+        <div class="groupChart blockChart" style="">
+        </div>
+        <div class="groupTrendChart blockChart" style="">
+        </div>
+        <div class="groupAnnualChart blockChart" style="">
+        </div>
+    </div>
 @endsection

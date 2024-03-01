@@ -9,9 +9,7 @@ $(document).ready(function () {
             data: "id"
         },
         {
-            data: function (d) {
-                return `${d.area}-${d.id.toString().padStart(3, "0")}`;
-            },
+            data: "code"
         },
         {
             data: "area"
