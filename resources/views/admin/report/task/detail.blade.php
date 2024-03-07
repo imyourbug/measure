@@ -103,9 +103,10 @@
                         {{-- Map --}}
                         <div class="tab-pane active show fade" id="custom-tabs-four-home" role="tabpanel"
                             aria-labelledby="custom-tabs-four-home-tab">
-                            {{-- <button class="btn btn-success mb-4 btn-open-modal" data-target="#modal-map"
-                                data-toggle="modal">Thêm
-                                mới</button> --}}
+                            <a href="{{ route('admin.reports.reload', ['id' => request()->id]) }}"
+                                onclick="return confirm('Bạn có chắc muốn tải lên thơi gian dự kiến')"
+                                class="btn btn-success mb-4 btn-open-modal">Tải
+                                lên thời gian dự kiến</a>
                             <table id="tableMap" class="table-map table display nowrap dataTable dtr-inline collapsed">
                                 <thead>
                                     <tr>

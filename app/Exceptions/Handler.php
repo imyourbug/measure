@@ -32,7 +32,6 @@ class Handler extends ExceptionHandler
         $this->renderable(function (Throwable $e, $request) {
             Log::info('Exception');
             Log::error($e);
-            dd($e);
             if ($e instanceof ValidationException) {
                 foreach ($e->errors() as $err) {
                     Toastr::error($err[0], __('title.toastr.fail'));

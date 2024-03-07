@@ -20,14 +20,14 @@ class TaskDetailController extends Controller
 {
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'time_in' => 'required|string',
-            'time_out' => 'required|string',
-            'plan_date' => 'required|date',
-            'actual_date' => 'nullable|date',
-            'task_id' => 'required|numeric',
-        ]);
         try {
+            $data = $request->validate([
+                'time_in' => 'required|string',
+                'time_out' => 'required|string',
+                'plan_date' => 'required|date',
+                'actual_date' => 'nullable|date',
+                'task_id' => 'required|numeric',
+            ]);
             TaskDetail::create($data);
             return response()->json([
                 'status' => 0,
@@ -43,15 +43,15 @@ class TaskDetailController extends Controller
 
     public function update(Request $request)
     {
-        $data = $request->validate([
-            'id' => 'required|numeric',
-            'time_in' => 'required|string',
-            'time_out' => 'required|string',
-            'plan_date' => 'required|date',
-            'actual_date' => 'nullable|date',
-        ]);
-        unset($data['id']);
         try {
+            $data = $request->validate([
+                'id' => 'required|numeric',
+                'time_in' => 'required|string',
+                'time_out' => 'required|string',
+                'plan_date' => 'required|date',
+                'actual_date' => 'nullable|date',
+            ]);
+            unset($data['id']);
             TaskDetail::where('id', $request->input('id'))->update($data);
             return response()->json([
                 'status' => 0,

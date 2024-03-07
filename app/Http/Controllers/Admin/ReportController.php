@@ -10,12 +10,8 @@ use App\Models\Item;
 use App\Models\Map;
 use App\Models\Solution;
 use App\Models\Task;
-use App\Models\TaskChemistry;
 use App\Models\TaskDetail;
-use App\Models\TaskItem;
 use App\Models\TaskMap;
-use App\Models\TaskSolution;
-use App\Models\TaskStaff;
 use App\Models\Type;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -25,6 +21,18 @@ use Toastr;
 
 class ReportController extends Controller
 {
+    public function reload($id, Request $request)
+    {
+        $taskMaps = TaskDetail::with(['taskMaps'])->firstWhere('id', $id)->taskMaps ?? [];
+        foreach ($taskMaps as $taskMap) {
+            $taskMap->update([
+                'result' =>  $taskMap->fake_result
+            ]);
+        }
+
+        return redirect()->back();
+    }
+
     public function index(Request $request)
     {
         $from = $request->from;

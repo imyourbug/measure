@@ -16,9 +16,10 @@
             let pattern = /^\d{4}$/;
             let year = $('.select-year').val();
             let month = $('.select-month').val();
+            let column = $('.select-column').val();
 
             // $(this).unbind('submit').submit();
-            if (!month | !year | !pattern.test(year)) {
+            if (!column | !month | !year | !pattern.test(year)) {
                 alert('Kiểm tra thông tin đã nhập!');
             } else {
                 $(this).unbind('submit').submit();
@@ -55,6 +56,7 @@
             let year = $('.select-year').val();
             let month = $('.select-month').val();
             let contract_id = $('.contract_id').val();
+            let column = $('.select-column').val();
             if (type_report == 1) {
                 $.ajax({
                     type: "GET",
@@ -82,13 +84,15 @@
                                 }
                             });
                             dataChart.forEach(d => {
-                                labels.push(
-                                    `${d.area}-${d.map_id.toString().padStart(3, "0") }`
-                                );
-                                dataResults.push(d.all_result);
-                                dataKpi.push(d.all_kpi);
-                                // backgroundColor.push(getRandomRGBColor());
-                                backgroundColor.push('#E50B4E');
+                                if (dataResults.length < column) {
+                                    labels.push(
+                                        `${d.area}-${d.map_id.toString().padStart(3, "0") }`
+                                    );
+                                    dataResults.push(d.all_result);
+                                    dataKpi.push(d.all_kpi);
+                                    // backgroundColor.push(getRandomRGBColor());
+                                    backgroundColor.push('#E50B4E');
+                                }
                             });
                             let map = {
                                 task_id: e.task_id,
@@ -497,6 +501,13 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Số lượng cột hiển thị</label>
+                                <input value="1" min="1" type="number" id="select-column"
+                                    class="form-control select-column" />
+                            </div>
+                        </div>
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
                                 <label for="menu">Hiển thị biểu đồ năm</label>

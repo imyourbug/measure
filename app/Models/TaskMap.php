@@ -20,6 +20,7 @@ class TaskMap extends Model
         'image',
         'detail',
         'round',
+        'fake_result',
         'task_id',
         'map_id',
     ];

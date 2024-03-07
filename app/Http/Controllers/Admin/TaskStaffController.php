@@ -11,11 +11,11 @@ class TaskStaffController extends Controller
 {
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'task_id' => 'required|numeric',
-            'user_id' => 'required|numeric',
-        ]);
         try {
+            $data = $request->validate([
+                'task_id' => 'required|numeric',
+                'user_id' => 'required|numeric',
+            ]);
             TaskStaff::create($data);
             return response()->json([
                 'status' => 0,
@@ -31,14 +31,13 @@ class TaskStaffController extends Controller
 
     public function update(Request $request)
     {
-        // dd($request->all());
-        $data = $request->validate([
-            'id' => 'required|numeric',
-            'task_id' => 'required|numeric',
-            'user_id' => 'required|numeric',
-        ]);
-        unset($data['id']);
         try {
+            $data = $request->validate([
+                'id' => 'required|numeric',
+                'task_id' => 'required|numeric',
+                'user_id' => 'required|numeric',
+            ]);
+            unset($data['id']);
             TaskStaff::where('id', $request->input('id'))->update($data);
             return response()->json([
                 'status' => 0,

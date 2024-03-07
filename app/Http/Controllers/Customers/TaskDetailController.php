@@ -13,8 +13,6 @@ use App\Models\TaskDetail;
 use App\Models\TaskMap;
 use App\Models\Type;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Throwable;
 
 class TaskDetailController extends Controller
 {

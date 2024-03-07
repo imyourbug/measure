@@ -33,18 +33,18 @@ class TaskChemistryController extends Controller
 
     public function update(Request $request)
     {
-        $data = $request->validate([
-            'id' => 'required|numeric',
-            'unit' => 'required|string',
-            'kpi' => 'required|numeric',
-            'result' => 'nullable|numeric',
-            'image' => 'nullable|string',
-            'detail' => 'nullable|string',
-            // 'task_id' => 'required|numeric',
-            'chemistry_id' => 'required|numeric',
-        ]);
-        unset($data['id']);
         try {
+            $data = $request->validate([
+                'id' => 'required|numeric',
+                'unit' => 'required|string',
+                'kpi' => 'required|numeric',
+                'result' => 'nullable|numeric',
+                'image' => 'nullable|string',
+                'detail' => 'nullable|string',
+                // 'task_id' => 'required|numeric',
+                'chemistry_id' => 'required|numeric',
+            ]);
+            unset($data['id']);
             TaskChemistry::where('id', $request->input('id'))->update($data);
             return response()->json([
                 'status' => 0,

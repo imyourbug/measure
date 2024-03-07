@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Setting;
 
 use App\Http\Controllers\Controller;
+use App\Models\Map;
 use App\Models\SettingTaskMap;
 use Illuminate\Http\Request;
 use Throwable;
@@ -11,14 +12,46 @@ class SettingTaskMapController extends Controller
 {
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'unit' => 'required|string',
-            'kpi' => 'required|numeric',
-            'task_id' => 'required|numeric',
-            'map_id' => 'required|numeric',
-        ]);
         try {
-            SettingTaskMap::create($data);
+            $data = $request->validate([
+                'code' => 'nullable|string',
+                'position' => 'nullable|string',
+                'number' => 'required|numeric|min:1',
+                'area' => 'required|string',
+                'target' => 'nullable|string',
+                'image' => 'nullable|string',
+                'description' => 'nullable|string',
+                'range' => 'nullable|string',
+                'active' => 'required|in:0,1',
+                'unit' => 'required|string',
+                'kpi' => 'required|numeric',
+                'fake_result' => 'nullable|numeric',
+                'task_id' => 'required|numeric',
+            ]);
+            $number = (int)$data['number'];
+            for ($i = 0; $i < $number; $i++) {
+                $data['code'] = $data['area'] . '-' .
+                    str_pad(((string)($i + 1)), 3, "0", STR_PAD_LEFT);;
+                $dataInsert = [
+                    'code' => $data['code'],
+                    'area' => $data['area'],
+                    'position' => $data['position'],
+                    'target' => $data['target'],
+                    'image' => $data['image'],
+                    'description' => $data['description'],
+                    'range' => $data['range'],
+                    'active' => $data['active'],
+                ];
+                $map = Map::create($dataInsert);
+                SettingTaskMap::create([
+                    ...$dataInsert,
+                    'unit' => $data['unit'],
+                    'kpi' => $data['kpi'],
+                    'task_id' => $data['task_id'],
+                    'fake_result' => $data['fake_result'] ?? 0,
+                    'map_id' => $map->id,
+                ]);
+            }
             return response()->json([
                 'status' => 0,
                 'message' => 'Tạo thành công'
@@ -33,18 +66,18 @@ class SettingTaskMapController extends Controller
 
     public function update(Request $request)
     {
-        $data = $request->validate([
-            'id' => 'required|numeric',
-            'unit' => 'required|string',
-            'kpi' => 'required|numeric',
-            'result' => 'nullable|numeric',
-            'image' => 'nullable|string',
-            'detail' => 'nullable|string',
-            'task_id' => 'required|numeric',
-            'map_id' => 'required|numeric',
-        ]);
-        unset($data['id']);
         try {
+            $data = $request->validate([
+                'id' => 'required|numeric',
+                'unit' => 'required|string',
+                'kpi' => 'required|numeric',
+                'result' => 'nullable|numeric',
+                'image' => 'nullable|string',
+                'detail' => 'nullable|string',
+                'task_id' => 'required|numeric',
+                'map_id' => 'required|numeric',
+            ]);
+            unset($data['id']);
             SettingTaskMap::where('id', $request->input('id'))->update($data);
             return response()->json([
                 'status' => 0,

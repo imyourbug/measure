@@ -18,9 +18,10 @@
             let pattern = /^\d{4}$/;
             let year = $('.select-year').val();
             let month = $('.select-month').val();
+            let column = $('.select-column').val();
 
             // $(this).unbind('submit').submit();
-            if (!month | !year | !pattern.test(year)) {
+            if (!column | !month | !year | !pattern.test(year)) {
                 alert('Kiểm tra thông tin đã nhập!');
             } else {
                 $(this).unbind('submit').submit();
@@ -57,6 +58,7 @@
             let year = $('.select-year').val();
             let month = $('.select-month').val();
             let contract_id = $('.select-contract').val();
+            let column = $('.select-column').val();
             if (type_report == 1) {
                 $.ajax({
                     type: "GET",
@@ -84,13 +86,15 @@
                                 }
                             });
                             dataChart.forEach(d => {
-                                labels.push(
-                                    `${d.area}-${d.map_id.toString().padStart(3, "0") }`
-                                );
-                                dataResults.push(d.all_result);
-                                dataKpi.push(d.all_kpi);
-                                // backgroundColor.push(getRandomRGBColor());
-                                backgroundColor.push('#E50B4E');
+                                if (dataResults.length < column) {
+                                    labels.push(
+                                        `${d.area}-${d.map_id.toString().padStart(3, "0") }`
+                                    );
+                                    dataResults.push(d.all_result);
+                                    dataKpi.push(d.all_kpi);
+                                    // backgroundColor.push(getRandomRGBColor());
+                                    backgroundColor.push('#E50B4E');
+                                }
                             });
                             let map = {
                                 task_id: e.task_id,
@@ -289,10 +293,6 @@
 
             setTimeout(() => {
                 if (type_report == 1) {
-                    console.log(listMapChart);
-                    console.log(listTrendMapChart);
-                    console.log(listAnnualMapChart);
-
                     listMapChart.forEach(e => {
                         $('.groupImage').append(
                             `<input type="hidden" name="image_charts[${e.task_id}]" value="${e.chart.toBase64Image('image/png', 1)}" alt="" />`
@@ -336,7 +336,8 @@
             const clickedElementId = clickedElement.attr('id'); // or use any other identifier
             const targetElement = $('.modal-content-export'); // Replace with your element's ID
 
-            if (!clickedElement.is(targetElement) && !clickedElement.parents().is(targetElement) && $('body').hasClass('modal-open')) {
+            if (!clickedElement.is(targetElement) && !clickedElement.parents().is(targetElement) && $('body')
+                .hasClass('modal-open')) {
                 // Clicked outside the element
                 $('.blockChart').html('');
             }
@@ -496,12 +497,9 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Hiển thị biểu đồ năm</label>
-                                <div class="custom-control custom-checkbox">
-                                    <input value="1" type="checkbox" id="select-display"
-                                        class="option-type custom-control-input">
-                                    <label class="custom-control-label" for="select-display">Có</label>
-                                </div>
+                                <label for="menu">Số lượng cột hiển thị</label>
+                                <input value="1" min="1" type="number" id="select-column"
+                                    class="form-control select-column" />
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-12">
@@ -514,6 +512,18 @@
                                         </option>
                                     @endforeach
                                 </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Hiển thị biểu đồ năm</label>
+                                <div class="custom-control custom-checkbox">
+                                    <input value="1" type="checkbox" id="select-display"
+                                        class="option-type custom-control-input">
+                                    <label class="custom-control-label" for="select-display">Có</label>
+                                </div>
                             </div>
                         </div>
 

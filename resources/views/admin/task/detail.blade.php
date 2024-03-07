@@ -17,12 +17,39 @@
         var dataTableItem = null;
         var dataTableChemistry = null;
         var dataTableSolution = null;
+        var listIdMap = [];
+        var listIdStaff = [];
+        var listIdItem = [];
+        var listIdChemistry = [];
+        var listIdSolution = [];
 
         function closeModal(type) {
             $("#modal-" + type).css("display", "none");
             $("body").removeClass("modal-open");
             $(".modal-backdrop").remove();
         }
+
+        $("#upload").change(function() {
+            const form = new FormData();
+            form.append("file", $(this)[0].files[0]);
+            console.log(form);
+            $.ajax({
+                processData: false,
+                contentType: false,
+                type: "POST",
+                data: form,
+                url: "/api/upload",
+                success: function(response) {
+                    if (response.status == 0) {
+                        //hiển thị ảnh
+                        $("#image_show").attr('src', response.url);
+                        $("#image").val(response.url);
+                    } else {
+                        toastr.error(response.message, 'Thông báo');
+                    }
+                },
+            });
+        });
 
         $(document).ready(function() {
             // map
@@ -32,6 +59,11 @@
                     dataSrc: "taskMaps",
                 },
                 columns: [{
+                        data: function(d) {
+                            return `<input class="select-id" data-id="${d.id}" type="checkbox" /> `;
+                        },
+                    },
+                    {
                         data: "id"
                     },
                     {
@@ -394,6 +426,16 @@
         });
 
         // map
+        $(document).on("click", ".select-id", function() {
+            let id = $(this).data('id');
+            if (listIdMap.includes(id)) {
+                listIdMap.push(id);
+            } else {
+                listIdMap = listIdMap.filter(function(item) {
+                    return item !== id
+                })
+            };
+        });
         $(document).on("click", ".btn-edit", function() {
             $.ajax({
                 type: "GET",
@@ -472,10 +514,20 @@
 
         $(document).on("click", ".btn-add-map", function() {
             let data = {
+                code: $("#code").val(),
+                position: $("#position").val(),
+                number: $("#number").val(),
+                area: $("#area").val(),
+                target: $("#target").val(),
+                image: $("#image").val(),
+                description: $("#description").val(),
+                range: $("#range").val(),
+                active: $("#active").val(),
                 unit: $("#unit").val(),
                 kpi: $("#kpi").val(),
                 target: $("#target").val(),
                 task_id: $("#task_id").val(),
+                fake_result: $("#fake_result").val(),
                 map_id: $("#map_id").val(),
             };
             $.ajax({
@@ -627,6 +679,7 @@
                     url: $(this).data("url"),
                     data: data,
                     success: function(response) {
+                        console.log(response);
                         if (response.status == 0) {
                             closeModal("chemistry");
                             toastr.success("Cập nhật thành công");
@@ -832,6 +885,7 @@
                                                 class="table-map table display nowrap dataTable dtr-inline collapsed">
                                                 <thead>
                                                     <tr>
+                                                        <th></th>
                                                         <th>ID</th>
                                                         <th>Mã sơ đồ</th>
                                                         <th>Vị trí</th>
@@ -1060,16 +1114,69 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-lg-12 col-md-12">
+                        {{-- <div class="col-lg-6 col-md-12">
+                    <div class="form-group">
+                        <label for="menu">Mã sơ đồ</label>
+                        <input type="text" class="form-control" name="code" value="{{ old('code') }}"
+                            placeholder="Nhập mã sơ đồ">
+                    </div>
+                </div> --}}
+                        <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Sơ đồ</label>
-                                <select class="form-control" name="" id="map_id">
-                                    @foreach ($maps as $map)
-                                        <option value="{{ $map->id }}">
-                                            {{ $map->area . '-' . ($map->id > 100 ?: str_pad($map->id, 3, '0', STR_PAD_LEFT)) }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                <label for="menu">Số lượng sơ đồ</label>
+                                <input type="number" class="form-control" id="number" value="1"
+                                    placeholder="Nhập số lượng sơ đồ">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Vị trí</label>
+                                <input type="text" class="form-control" id="position" value=""
+                                    placeholder="Nhập vị trí">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Khu vực</label>
+                                <input type="text" class="form-control" id="area" value=""
+                                    placeholder="Nhập khu vực">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Đối tượng</label>
+                                <input type="text" class="form-control" id="target" value=""
+                                    placeholder="Nhập đối tượng">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label for="menu">Mô tả</label>
+                                <textarea class="form-control" id="description" id="" cols="30" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Phạm vi</label>
+                                <input type="text" class="form-control" id="range" value=""
+                                    placeholder="Nhập phạm vi">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="file">Chọn ảnh</label><br>
+                                <div class="">
+                                    <img id="image_show" style="width: 100px;height:100px" src=""
+                                        alt="image" />
+                                    <input type="file" id="upload">
+                                </div>
+                                <input type="hidden" id="image" value="">
                             </div>
                         </div>
                     </div>
@@ -1084,6 +1191,29 @@
                             <div class="form-group">
                                 <label for="menu">KPI</label>
                                 <input class="form-control" type="text" id="kpi" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                         <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Kết quả dự kiến</label>
+                                <input class="form-control" type="text" id="fake_result" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label>Hiệu lực</label>
+                                <div class="custom-control custom-radio">
+                                    <input class="custom-control-input" type="radio" id="active" value="1"
+                                        name="active" checked>
+                                    <label for="active" class="custom-control-label">Có</label>
+                                </div>
+                                <div class="custom-control custom-radio">
+                                    <input class="custom-control-input" type="radio" id="unactive" value="0"
+                                        name="active">
+                                    <label for="unactive" class="custom-control-label">Không</label>
+                                </div>
                             </div>
                         </div>
                     </div>

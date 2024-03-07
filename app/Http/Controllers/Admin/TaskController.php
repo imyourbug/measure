@@ -54,14 +54,14 @@ class TaskController extends Controller
 
     public function update(Request $request)
     {
-        $data = $request->validate([
-            'id' => 'required|numeric',
-            'note' => 'required|string',
-            'type_id' => 'required|numeric',
-            'contract_id' => 'required|numeric',
-        ]);
-        unset($data['id']);
         try {
+            $data = $request->validate([
+                'id' => 'required|numeric',
+                'note' => 'required|string',
+                'type_id' => 'required|numeric',
+                'contract_id' => 'required|numeric',
+            ]);
+            unset($data['id']);
             Task::where('id', $request->input('id'))->update($data);
             return response()->json([
                 'status' => 0,

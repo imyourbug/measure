@@ -34,7 +34,6 @@ class ItemController extends Controller
             Item::create($data);
             Toastr::success('Tạo vật tư thành công', __('title.toastr.success'));
         } catch (Throwable $e) {
-            dd($e);
             Toastr::error('Tạo vật tư thất bại', __('title.toastr.fail'));
         }
 

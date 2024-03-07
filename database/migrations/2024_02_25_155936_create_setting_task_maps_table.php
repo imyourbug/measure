@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('detail')->nullable();
             $table->integer('round')->nullable();
+            $table->string('fake_result')->nullable();
             $table->unsignedBigInteger('task_id');
             $table->unsignedBigInteger('map_id');
             $table->foreign('task_id')->references('id')->on('tasks')->onDelete('cascade');

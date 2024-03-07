@@ -11,13 +11,13 @@ class SettingTaskChemistryController extends Controller
 {
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'unit' => 'required|string',
-            'kpi' => 'required|numeric',
-            'task_id' => 'required|numeric',
-            'chemistry_id' => 'required|numeric',
-        ]);
         try {
+            $data = $request->validate([
+                'unit' => 'required|string',
+                'kpi' => 'required|numeric',
+                'task_id' => 'required|numeric',
+                'chemistry_id' => 'required|numeric',
+            ]);
             SettingTaskChemistry::create($data);
             return response()->json([
                 'status' => 0,
@@ -33,18 +33,18 @@ class SettingTaskChemistryController extends Controller
 
     public function update(Request $request)
     {
-        $data = $request->validate([
-            'id' => 'required|numeric',
-            'unit' => 'required|string',
-            'kpi' => 'required|numeric',
-            'result' => 'nullable|numeric',
-            'image' => 'nullable|string',
-            'detail' => 'nullable|string',
-            // 'task_id' => 'required|numeric',
-            'chemistry_id' => 'required|numeric',
-        ]);
-        unset($data['id']);
         try {
+            $data = $request->validate([
+                'id' => 'required|numeric',
+                'unit' => 'required|string',
+                'kpi' => 'required|numeric',
+                'result' => 'nullable|numeric',
+                'image' => 'nullable|string',
+                'detail' => 'nullable|string',
+                // 'task_id' => 'required|numeric',
+                'chemistry_id' => 'required|numeric',
+            ]);
+            unset($data['id']);
             SettingTaskChemistry::where('id', $request->input('id'))->update($data);
             return response()->json([
                 'status' => 0,

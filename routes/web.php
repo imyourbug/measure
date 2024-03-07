@@ -101,6 +101,7 @@ Route::group([
     #reports
     Route::group(['prefix' => 'reports', 'as' => 'reports.'], function () {
         Route::get('/', 'ReportController@index')->name('index');
+        Route::get('/reload/{id}', 'ReportController@reload')->name('reload');
         Route::get('/task/{id}', 'ReportController@task')->name('task');
         Route::get('/task/detail/{id}', 'ReportController@detail')->name('detail');
         Route::post('/duplicate', 'ReportController@duplicate')->name('duplicate');
