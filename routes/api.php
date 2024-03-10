@@ -49,6 +49,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin'], function () {
             Route::get('/', 'SettingTaskMapController@index')->name('index');
             Route::get('/{id}/show', 'SettingTaskMapController@show')->name('show');
             Route::delete('/{id}/destroy', 'SettingTaskMapController@destroy')->name('destroy');
+            Route::post('/deleteAll', 'SettingTaskMapController@deleteAll')->name('deleteAll');
         });
 
         #settingtaskitems

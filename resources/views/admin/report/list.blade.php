@@ -19,9 +19,10 @@
             let year = $('.select-year').val();
             let month = $('.select-month').val();
             let column = $('.select-column').val();
+            let contract_id = $('.select-contract').val();
 
             // $(this).unbind('submit').submit();
-            if (!column | !month | !year | !pattern.test(year)) {
+            if (!column | !month | !year |!contract_id | !pattern.test(year)) {
                 alert('Kiểm tra thông tin đã nhập!');
             } else {
                 $(this).unbind('submit').submit();

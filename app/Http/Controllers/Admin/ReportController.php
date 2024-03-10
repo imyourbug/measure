@@ -96,33 +96,34 @@ class ReportController extends Controller
 
     public function duplicate(Request $request)
     {
-        $data = $request->validate([
-            'month_from' => 'required|numeric',
-            'month_to' => 'required|numeric',
-            'year_from' => 'required|numeric',
-            'year_to' => 'required|numeric',
-            'contract_id' => 'required|numeric',
-        ]);
-        if ($data['month_from'] === $data['month_to'] && $data['year_from'] === $data['year_to']) {
-            Toastr::error('Hãy chọn 2 tháng khác nhau', __('title.toastr.fail'));
-
-            return redirect()->back();
-        }
-        $tasks = Task::with([
-            'details.taskChemitries',
-            'details.taskMaps',
-            'details.taskSolutions',
-            'details.taskItems',
-            'details.taskStaffs',
-        ])
-            ->whereHas('details', function ($q) use ($data) {
-                $q->whereRaw('MONTH(plan_date) = ?', $data['month_from'])
-                    ->whereRaw('YEAR(plan_date) = ?', $data['year_from']);
-            })
-            ->where('contract_id', $data['contract_id'])
-            ->get();
-        DB::beginTransaction();
         try {
+            $data = $request->validate([
+                'month_from' => 'required|numeric',
+                'month_to' => 'required|numeric',
+                'year_from' => 'required|numeric',
+                'year_to' => 'required|numeric',
+                'contract_id' => 'required|numeric',
+            ]);
+            if ($data['month_from'] === $data['month_to'] && $data['year_from'] === $data['year_to']) {
+                Toastr::error('Hãy chọn 2 tháng khác nhau', __('title.toastr.fail'));
+
+                return redirect()->back();
+            }
+            $tasks = Task::with([
+                'details.taskChemitries',
+                'details.taskMaps',
+                'details.taskSolutions',
+                'details.taskItems',
+                'details.taskStaffs',
+            ])
+                ->whereHas('details', function ($q) use ($data) {
+                    $q->whereRaw('MONTH(plan_date) = ?', $data['month_from'])
+                        ->whereRaw('YEAR(plan_date) = ?', $data['year_from']);
+                })
+                ->where('contract_id', $data['contract_id'])
+                ->get();
+
+            DB::beginTransaction();
             foreach ($tasks as $task) {
                 foreach ($task->details as $detail) {
                     $month = $detail->plan_date->format('m');

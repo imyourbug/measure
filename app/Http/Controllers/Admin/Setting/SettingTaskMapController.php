@@ -122,4 +122,23 @@ class SettingTaskMapController extends Controller
             ]);
         }
     }
+
+    public function deleteAll(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                'ids' => 'nullable|array',
+            ]);
+            SettingTaskMap::whereIn('id', $data['ids'])->delete();
+
+            return response()->json([
+                'status' => 0,
+            ]);
+        } catch (Throwable $e) {
+            return response()->json([
+                'status' => 1,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
 }

@@ -22,6 +22,11 @@
         var listIdItem = [];
         var listIdChemistry = [];
         var listIdSolution = [];
+        var listAllIdMap = [];
+        var listAllIdStaff = [];
+        var listAllIdItem = [];
+        var listAllIdChemistry = [];
+        var listAllIdSolution = [];
 
         function closeModal(type) {
             $("#modal-" + type).css("display", "none");
@@ -60,7 +65,10 @@
                 },
                 columns: [{
                         data: function(d) {
-                            return `<input class="select-id" data-id="${d.id}" type="checkbox" /> `;
+                            if (!listAllIdMap.includes(d.id)) {
+                                listAllIdMap.push(d.id);
+                            }
+                            return `<input class="select-id-map" data-id="${d.id}" type="checkbox" /> `;
                         },
                     },
                     {
@@ -426,15 +434,27 @@
         });
 
         // map
-        $(document).on("click", ".select-id", function() {
+        $(document).on("click", ".select-id-map-all", function() {
+            if ($(this).prop('checked')) {
+                $('.select-id-map').prop('checked', true);
+                listIdMap = listAllIdMap;
+            } else {
+                $('.select-id-map').prop('checked', false);
+                listIdMap = [];
+            }
+            $('.btn-delete-map-all').css('display', listIdMap.length > 0 ? 'block' : 'none');
+        });
+        $(document).on("click", ".select-id-map", function() {
             let id = $(this).data('id');
-            if (listIdMap.includes(id)) {
+            if (!listIdMap.includes(id)) {
                 listIdMap.push(id);
             } else {
                 listIdMap = listIdMap.filter(function(item) {
-                    return item !== id
+                    return item !== id;
                 })
             };
+            console.log(listIdMap.length > 0, listIdMap.length);
+            $('.btn-delete-map-all').css('display', listIdMap.length > 0 ? 'block' : 'none');
         });
         $(document).on("click", ".btn-edit", function() {
             $.ajax({
@@ -504,6 +524,30 @@
                         if (response.status == 0) {
                             toastr.success("Xóa thành công");
                             dataTableMap.ajax.reload();
+                        } else {
+                            toastr.error(response.message);
+                        }
+                    },
+                });
+            }
+        });
+
+        $(document).on("click", ".btn-delete-map-all", function() {
+            if (confirm("Bạn có muốn xóa")) {
+                console.log(listIdMap);
+                $.ajax({
+                    type: "POST",
+                    url: `/api/settingtaskmaps/deleteAll`,
+                    data: {
+                        ids: listIdMap
+                    },
+                    success: function(response) {
+                        if (response.status == 0) {
+                            toastr.success("Xóa thành công");
+                            dataTableMap.ajax.reload();
+                            listIdMap.length = 0;
+                            $('.btn-delete-map-all').css('display', 'none');
+                            $('.select-id-map-all').prop('checked', false);
                         } else {
                             toastr.error(response.message);
                         }
@@ -885,7 +929,12 @@
                                                 class="table-map table display nowrap dataTable dtr-inline collapsed">
                                                 <thead>
                                                     <tr>
-                                                        <th></th>
+                                                        <th><input type="checkbox" class="select-id-map-all" />
+                                                            <button class="btn btn-danger btn-sm btn-delete-map-all"
+                                                                style="display: none">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                        </th>
                                                         <th>ID</th>
                                                         <th>Mã sơ đồ</th>
                                                         <th>Vị trí</th>
@@ -1195,7 +1244,7 @@
                         </div>
                     </div>
                     <div class="row">
-                         <div class="col-lg-6 col-md-12">
+                        <div class="col-lg-6 col-md-12">
                             <div class="form-group">
                                 <label for="menu">Kết quả dự kiến</label>
                                 <input class="form-control" type="text" id="fake_result" />

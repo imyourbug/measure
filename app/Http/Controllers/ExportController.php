@@ -12,6 +12,7 @@ use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use MPDF;
+use Throwable;
 
 class ExportController extends Controller
 {
@@ -29,6 +30,7 @@ class ExportController extends Controller
             'user_id' => 'required|numeric',
             'display' => 'required|in:0,1',
         ]);
+
         $data['creator'] = User::with(['staff'])->firstWhere('id', $data['user_id'])->toArray();
         $pdf = null;
         $filename = '';
@@ -50,7 +52,7 @@ class ExportController extends Controller
         // $pdf->setPaper('A4', 'portrait');
         $filename .= 'tháng ' . $data['month'] . ' năm ' . $data['year'] . '.pdf';
 
-        // return $pdf->stream($filename);
+        return $pdf->stream($filename);
         return $pdf->download($filename);
     }
 
