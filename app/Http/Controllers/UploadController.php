@@ -18,7 +18,7 @@ class UploadController extends Controller
         if ($request->hasFile('file')) {
             try {
                 $file_name = date('H-i-s') . $request->file('file')->getClientOriginalName();
-                $pathFull = 'uploads/' . date('Y-m-d');
+                $pathFull = 'upload/' . date('Y-m-d');
                 $request->file('file')->storeAs(
                     'public/' . $pathFull,
                     $file_name

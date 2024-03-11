@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/schedule', function () {
-    return Artisan::call('schedule:work');
+    return Artisan::call('schedule:run');
 });
 
 Route::get('/link', function () {
@@ -138,8 +138,8 @@ Route::group([
     #staffs
     Route::group(['prefix' => 'staffs', 'as' => 'staffs.'], function () {
         Route::get('/', 'InfoUserController@index')->name('index');
-        // Route::get('/create', 'InfoUserController@create')->name('create');
-        // Route::post('/create', 'InfoUserController@store')->name('store');
+        Route::get('/create', 'InfoUserController@create')->name('create');
+        Route::post('/create', 'InfoUserController@store')->name('store');
         Route::get('/update/{id}', 'InfoUserController@show')->name('show');
         Route::post('/update', 'InfoUserController@update')->name('update');
     });

@@ -5,37 +5,50 @@ $(document).ready(function () {
             url: "/admin/customers",
             dataSrc: "customers",
         },
-        columns: [{
-            data: "id"
-        },
-        {
-            data: "name"
-        },
-        {
-            data: "address"
-        },
-        {
-            data: "tel"
-        },
-        {
-            data: "email"
-        },
-        {
-            data: function (d) {
-                return `<a class="btn btn-primary btn-sm" href='/admin/customers/update/${d.id}'>
+        columns: [
+            {
+                data: "id",
+            },
+            {
+                data: "name",
+            },
+            {
+                data: "address",
+            },
+            {
+                data: "province",
+            },
+            {
+                data: "tel",
+            },
+            {
+                data: "website",
+            },
+            {
+                data: "representative",
+            },
+            {
+                data: "manager",
+            },
+            {
+                data: "email",
+            },
+            {
+                data: "field",
+            },
+            {
+                data: function (d) {
+                    return `<a class="btn btn-primary btn-sm" href="/admin/customers/detail/${d.id}">
                             <i class="fas fa-edit"></i>
-                        </a>
-                        <a class="btn btn-success btn-sm" style="padding: 4px 15px" href="/admin/customers/detail/${d.id}">
-                            <i class="fa-solid fa-info"></i>
                         </a>
                         <button data-id="${d.user_id}" class="btn btn-danger btn-sm btn-delete">
                             <i class="fas fa-trash"></i>
                         </button>`;
+                },
             },
-        },
         ],
     });
-})
+});
 
 $(document).on("click", ".btn-delete", function () {
     if (confirm("Bạn có muốn xóa")) {

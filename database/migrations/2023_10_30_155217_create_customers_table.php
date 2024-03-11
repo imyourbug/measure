@@ -17,6 +17,11 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->string('tel')->nullable();
             $table->string('email')->nullable();
+            $table->string('province')->nullable();
+            $table->string('website')->nullable();
+            $table->string('manager')->nullable();
+            $table->string('representative')->nullable();
+            $table->string('field')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

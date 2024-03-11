@@ -5,35 +5,73 @@ $(document).ready(function () {
             url: "/admin/accounts",
             dataSrc: "accounts",
         },
-        columns: [{
-            data: "id"
-        },
-        {
-            data: "name"
-        },
-        {
-            data: "email"
-        },
-        {
-            data: function (d) {
-                return `${d.role == 1 ? 'Quản lý' : (d.role == 0 ? 'Nhân viên' : 'Khách hàng')}`;
+        columns: [
+            {
+                data: "id",
             },
-        },
-        {
-            data: function (d) {
-                let btnDelete = `<button data-id="${d.id}" class="btn btn-danger btn-sm btn-delete">
+            {
+                data: "name",
+            },
+            {
+                data: "email",
+            },
+            {
+                data: function (d) {
+                    return `${
+                        d.role == 1
+                            ? ""
+                            : d.role == 0
+                            ? d.staff.tel ?? ""
+                            : d.customer.tel ?? ""
+                    }`;
+                },
+            },
+            {
+                data: function (d) {
+                    return `${
+                        d.role == 1
+                            ? ""
+                            : d.role == 0
+                            ? d.staff.position ?? ""
+                            : ""
+                    }`;
+                },
+            },
+            {
+                data: function (d) {
+                    return `${
+                        d.role == 1
+                            ? "Quản lý"
+                            : d.role == 0
+                            ? "Nhân viên"
+                            : "Khách hàng"
+                    }`;
+                },
+            },
+            {
+                data: "created_at",
+            },
+            {
+                data: function (d) {
+                    let btnDelete = `<button data-id="${d.id}" class="btn btn-danger btn-sm btn-delete">
                                     <i class="fas fa-trash"></i>
                                 </button>`;
-                return `<a class="btn btn-primary btn-sm" href='/admin/accounts/update/${d.id}'>
+                    return `<a class="btn btn-primary btn-sm" href='/admin/accounts/update/${
+                        d.id
+                    }'>
                             <i class="fas fa-edit"></i>
                         </a>
-                        ${($('#logging_user_id').val() == 1 && d.role != $('#logging_user_id').val()) ?
-                        btnDelete : ''}`;
+                        ${
+                            $("#logging_user_id").val() != d.id &&
+                            $("#editing_user_id").val() != d.id
+                                ? btnDelete
+                                : ""
+                        }`;
+                },
             },
-        },
         ],
     });
-})
+});
 
 $(document).on("click", ".btn-delete", function () {
     if (confirm("Bạn có muốn xóa")) {

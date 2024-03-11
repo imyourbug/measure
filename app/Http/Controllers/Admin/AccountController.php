@@ -87,7 +87,7 @@ class AccountController extends Controller
         if ($request->ajax()) {
             return response()->json([
                 'status' => 0,
-                'accounts' => User::all()
+                'accounts' => User::with(['customer', 'staff'])->get()
             ]);
         }
 

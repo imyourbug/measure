@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Constant\GlobalConstant;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Throwable;
 use Toastr;
@@ -21,17 +24,54 @@ class CustomerController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'name' => 'required|string',
-            'address' => 'required|string',
-            'tel' => 'required|string|regex:/^0\d{9,10}$/',
-            'email' => 'required|email:rfc,dns',
-        ]);
         try {
-            Customer::create($data);
-            Toastr::success('Tạo khách hàng thành công', __('title.toastr.success'));
+            $tel_or_email = $request->tel_or_email;
+            $rules = [
+                'tel_or_email' => !is_numeric($tel_or_email) ? 'required|email:dns,rfc'
+                    : 'required|string|regex:/^0\d{9,10}$/',
+                'password' => 'required|string',
+                'name' => 'required|string',
+                'address' => 'required|string',
+                'tel' => 'required|string',
+                'province' => 'nullable|string',
+                'manager' => 'nullable|string',
+                'website' => 'nullable|string',
+                'representative' => 'nullable|string',
+                'field' => 'nullable|string',
+                'email' => 'required|email:rfc,dns',
+            ];
+            $data = $request->validate($rules);
+
+            $tel_or_email = $data['tel_or_email'];
+            $check = User::where(is_numeric($tel_or_email) ? 'name' : 'email', $tel_or_email)
+                ->get();
+            if ($check->count() > 0) {
+                throw new Exception('Tài khoản đã có người đăng ký!');
+            }
+
+            DB::beginTransaction();
+            $user = User::create([
+                is_numeric($tel_or_email) ? 'name' : 'email' =>  $tel_or_email,
+                'password' => Hash::make($data['password']),
+                'role' => GlobalConstant::ROLE_CUSTOMER
+            ]);
+            Customer::create([
+                'name' => $data['name'],
+                'address' => $data['address'],
+                'tel' => $data['tel'],
+                'province' => $data['province'],
+                'website' => $data['website'],
+                'manager' => $data['manager'],
+                'representative' => $data['representative'],
+                'field' => $data['field'],
+                'email' => $data['email'],
+                'user_id' => $user->id
+            ]);
+            Toastr::success('Thành công', __('title.toastr.success'));
+            DB::commit();
         } catch (Throwable $e) {
-            Toastr::error('Tạo khách hàng thất bại', __('title.toastr.fail'));
+            DB::rollBack();
+            Toastr::error($e->getMessage(), __('title.toastr.fail'));
         }
 
         return redirect()->back();

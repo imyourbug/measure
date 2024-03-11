@@ -15,7 +15,10 @@
                 <th>ID</th>
                 <th>Tên</th>
                 <th>Email</th>
+                <th>Số điện thoại</th>
+                <th>Chức vụ</th>
                 <th>Quyền</th>
+                <th>Ngày tạo</th>
                 <th>Thao tác</th>
             </tr>
         </thead>

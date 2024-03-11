@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Constant\GlobalConstant;
 use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\Controller;
 use App\Models\InfoUser;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Throwable;
 use Toastr;
 
 class InfoUserController extends Controller
@@ -23,24 +28,54 @@ class InfoUserController extends Controller
         ]);
     }
 
-    // public function store(Request $request)
-    // {
-    //     $data = $request->validate([
-    //         'name' => 'required|string',
-    //         'address' => 'required|string',
-    //         'tel' => 'required|string|regex:/^0\d{9,10}$/',
-    //         'fax' => 'required|string',
-    //     ]);
-    //     try {
-    //         InfoUser::create($data);
-    //         Toastr::success('Tạo nhân viên thành công', __('title.toastr.success'));
-    //     } catch (Throwable $e) {
-    //         dd($e);
-    //         Toastr::error('Tạo nhân viên thất bại', __('title.toastr.fail'));
-    //     }
+    public function store(Request $request)
+    {
+        try {
+            $tel_or_email = $request->tel_or_email;
+            $rules = [
+                'tel_or_email' => !is_numeric($tel_or_email) ? 'required|email:dns,rfc'
+                    : 'required|string|regex:/^0\d{9,10}$/',
+                'password' => 'required|string',
+                'name' => 'required|string',
+                'avatar' => 'nullable|string',
+                'position' => 'required|string',
+                'identification' => 'required|string|regex:/\d{12}$/',
+                'tel' => 'required|string|regex:/^0\d{9,10}$/',
+                'active' => 'required|in:0,1',
+            ];
+            $data = $request->validate($rules);
 
-    //     return redirect()->back();
-    // }
+            $tel_or_email = $data['tel_or_email'];
+            $check = User::where(is_numeric($tel_or_email) ? 'name' : 'email', $tel_or_email)
+                ->get();
+            if ($check->count() > 0) {
+                throw new Exception('Tài khoản đã có người đăng ký!');
+            }
+
+            DB::beginTransaction();
+            $user = User::create([
+                is_numeric($tel_or_email) ? 'name' : 'email' =>  $tel_or_email,
+                'password' => Hash::make($data['password']),
+                'role' => GlobalConstant::ROLE_CUSTOMER
+            ]);
+            InfoUser::create([
+                'name' => $data['name'],
+                'avatar' => $data['avatar'],
+                'position' => $data['position'],
+                'identification' => $data['identification'],
+                'tel' => $data['tel'],
+                'active' => $data['active'],
+                'user_id' => $user->id
+            ]);
+            Toastr::success('Tạo thành công', __('title.toastr.success'));
+            DB::commit();
+        } catch (Throwable $e) {
+            DB::rollBack();
+            Toastr::error($e->getMessage(), __('title.toastr.fail'));
+        }
+
+        return redirect()->back();
+    }
 
     public function update(Request $request)
     {

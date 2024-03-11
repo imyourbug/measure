@@ -392,6 +392,7 @@
                             class="nav-item {{ in_array(request()->route()->getName(), ['admin.customers.index', 'admin.customers.create'])
                                 ? 'menu-is-opening menu-open'
                                 : '' }}">
+                                
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fa-solid fa-person"></i>
                                 <p>

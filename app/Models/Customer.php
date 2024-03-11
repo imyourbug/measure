@@ -14,6 +14,11 @@ class Customer extends Model
         'address',
         'tel',
         'email',
+        'province',
+        'manager',
+        'website',
+        'representative',
+        'field',
         'user_id',
     ];
 
