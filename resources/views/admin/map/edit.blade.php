@@ -67,7 +67,7 @@
                         <div class="">
                             <img id="image_show" style="width: 100px;height:100px" src="{{ old('image') ?? $map->image }}"
                                 alt="image" />
-                            <input type="file" id="upload">
+                            <input type="file" id="upload" accept=".png,.jpeg"/>
                         </div>
                         <input type="hidden" name="image" id="image" value="{{ old('image') ?? $map->image }}">
                     </div>

@@ -108,6 +108,24 @@ class ContractController extends Controller
                 'data.*.info_tasks.*.value_time_type' => 'nullable|array',
                 'data.*.info_tasks.*.value_time_type.*' => 'nullable',
             ]);
+            $self_contract = Contract::create([
+                'name' =>  $data['name'],
+                'customer_id' =>  $data['customer_id'],
+                'start' =>  $data['start'],
+                'finish' =>  $data['finish'],
+                'content' =>  $data['content'],
+                'attachment' =>  $data['attachment'],
+            ]);
+            if (!empty($data['data'])) {
+                foreach ($data['data'] as $item) {
+                    if (!empty($item['info_tasks'])) {
+                        foreach ($item['info_tasks'] as $info) {
+                            $rangeTime = $this->getRangeTime($info['time_type'], $info['value_time_type'], $data['start'], $data['finish']);
+                            $this->createTask($rangeTime, $info['task_type'], $self_contract->id);
+                        }
+                    }
+                }
+            }
 
             DB::beginTransaction();
             if (!empty($data['data'])) {
@@ -201,6 +219,9 @@ class ContractController extends Controller
         return view('admin.contract.list', [
             'title' => 'Danh sách hợp đồng',
             'contracts' => Contract::with('customer')->get(),
+            'customers' => Customer::all(),
+            'parent_types' => Type::where('parent_id', 0)
+                ->get(),
         ]);
     }
 

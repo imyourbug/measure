@@ -89,7 +89,7 @@
                         <label for="file">Chọn ảnh</label><br>
                         <div class="">
                             <img id="image_show" style="width: 100px;height:100px" src="" alt="image" />
-                            <input type="file" id="upload">
+                            <input type="file" id="upload" accept=".png,.jpeg"/>
                         </div>
                         <input type="hidden" name="image" id="image" value="">
                     </div>

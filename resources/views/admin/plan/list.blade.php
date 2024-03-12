@@ -22,12 +22,12 @@
                     },
                     {
                         data: function(d) {
-                            return `${d.branch.name}`;
+                            return `${d.branch ? d.branch.name : ""}`;
                         },
                     },
                     {
                         data: function(d) {
-                            return `${d.branch.address ?? ''}`;
+                            return `${d.branch ? d.branch.address : ""}`;
                         },
                     },
 

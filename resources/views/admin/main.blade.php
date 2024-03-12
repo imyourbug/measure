@@ -19,6 +19,8 @@
     <link rel="stylesheet" href="/template/admin/dist/css/adminlte.min.css">
     <!-- ajax -->
     <link rel="stylesheet" href="https://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
+    <!-- select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <meta name="csrf-token" id="csrf-token" content="{{ csrf_token() }}">
     <style>
         #table_filter {
@@ -132,6 +134,9 @@
     <div class="Toastify"></div>
     <script src="https://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
     {!! Toastr::message() !!}
+    {{-- select2 --}}
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    {{-- common --}}
     <script src="/js/common/index.js"></script>
     <script>
         function closeModalChangePassword() {

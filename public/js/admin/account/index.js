@@ -1,6 +1,20 @@
 var dataTable = null;
 $(document).ready(function () {
     dataTable = $("#table").DataTable({
+        layout: {
+            topStart: {
+                buttons: [
+                    {
+                        extend: "excel",
+                        text: "Xuất Excel",
+                        exportOptions: {
+                            columns: ":not(:last-child)",
+                        },
+                    },
+                    "colvis",
+                ],
+            },
+        },
         ajax: {
             url: "/admin/accounts",
             dataSrc: "accounts",

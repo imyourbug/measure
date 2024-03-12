@@ -27,7 +27,7 @@
                     },
                     {
                         data: function(d) {
-                            return `${d.branch.name}`;
+                            return `${d.branch ? d.branch.name : ""}`;
                         },
                     },
                     {

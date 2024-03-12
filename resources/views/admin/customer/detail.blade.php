@@ -10,15 +10,15 @@
                 <div class="col-lg-6 col-md-12">
                     <div class="form-group">
                         <label for="menu">Họ tên</label>
-                        <input type="text" class="form-control" name="name"
-                            value="{{ old('name') ?? $customer->name}}" placeholder="Nhập họ tên">
+                        <input type="text" class="form-control" name="name" value="{{ old('name') ?? $customer->name }}"
+                            placeholder="Nhập họ tên">
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-12">
                     <div class="form-group">
                         <label for="menu">Địa chỉ</label>
                         <input type="text" class="form-control" id="name" name="address"
-                            value="{{ old('address') ?? $customer->address}}" placeholder="Nhập địa chỉ">
+                            value="{{ old('address') ?? $customer->address }}" placeholder="Nhập địa chỉ">
                     </div>
                 </div>
             </div>
@@ -26,15 +26,15 @@
                 <div class="col-lg-6 col-md-12">
                     <div class="form-group">
                         <label for="menu">Số điện thoại</label>
-                        <input type="text" class="form-control" name="tel"
-                            value="{{ old('tel') ?? $customer->tel}}" placeholder="Nhập số điện thoại">
+                        <input type="text" class="form-control" name="tel" value="{{ old('tel') ?? $customer->tel }}"
+                            placeholder="Nhập số điện thoại">
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-12">
                     <div class="form-group">
                         <label for="menu">Email</label>
                         <input type="email" class="form-control" id="name" name="email"
-                            value="{{ old('email') ?? $customer->email}}" placeholder="Nhập email">
+                            value="{{ old('email') ?? $customer->email }}" placeholder="Nhập email">
                     </div>
                 </div>
             </div>
@@ -43,14 +43,14 @@
                     <div class="form-group">
                         <label for="menu">Thành phố</label>
                         <input type="text" class="form-control" name="province"
-                            value="{{ old('province') ?? $customer->province}}" placeholder="Nhập thành phố">
+                            value="{{ old('province') ?? $customer->province }}" placeholder="Nhập thành phố">
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-12">
                     <div class="form-group">
                         <label for="menu">Website</label>
                         <input type="text" class="form-control" id="website" name="website"
-                            value="{{ old('website') ?? $customer->website}}" placeholder="Nhập website">
+                            value="{{ old('website') ?? $customer->website }}" placeholder="Nhập website">
                     </div>
                 </div>
             </div>
@@ -59,14 +59,15 @@
                     <div class="form-group">
                         <label for="menu">Người đại diện</label>
                         <input type="text" class="form-control" name="representative"
-                            value="{{ old('representative') ?? $customer->representative}}" placeholder="Nhập người đại diện">
+                            value="{{ old('representative') ?? $customer->representative }}"
+                            placeholder="Nhập người đại diện">
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-12">
                     <div class="form-group">
                         <label for="menu">Lĩnh vực</label>
                         <input type="text" class="form-control" id="name" name="field"
-                            value="{{ old('field') ?? $customer->field}}" placeholder="Nhập lĩnh vực">
+                            value="{{ old('field') ?? $customer->field }}" placeholder="Nhập lĩnh vực">
                     </div>
                 </div>
             </div>
@@ -75,7 +76,7 @@
                     <div class="form-group">
                         <label for="menu">Người quản lý</label>
                         <input type="text" class="form-control" name="manager"
-                            value="{{ old('manager') ?? $customer->manager}}" placeholder="Nhập người quản lý">
+                            value="{{ old('manager') ?? $customer->manager }}" placeholder="Nhập người quản lý">
                     </div>
                 </div>
             </div>

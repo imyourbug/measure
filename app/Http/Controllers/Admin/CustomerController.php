@@ -32,7 +32,7 @@ class CustomerController extends Controller
                 'password' => 'required|string',
                 'name' => 'required|string',
                 'address' => 'required|string',
-                'tel' => 'required|string',
+                'tel' => 'required|string|regex:/^0\d{9,10}$/',
                 'province' => 'nullable|string',
                 'manager' => 'nullable|string',
                 'website' => 'nullable|string',
@@ -84,6 +84,11 @@ class CustomerController extends Controller
             'name' => 'required|string',
             'address' => 'required|string',
             'tel' => 'required|string|regex:/^0\d{9,10}$/',
+            'province' => 'nullable|string',
+            'manager' => 'nullable|string',
+            'website' => 'nullable|string',
+            'representative' => 'nullable|string',
+            'field' => 'nullable|string',
             'email' => 'required|email:rfc,dns',
         ]);
         unset($data['id']);

@@ -61,7 +61,7 @@
                         <div class="">
                             <img id="image_show" style="width: 100px;height:100px" src="{{ $item->image }}"
                                 alt="image" />
-                            <input type="file" id="upload">
+                            <input type="file" id="upload" accept=".png,.jpeg"/>
                         </div>
                         <input type="hidden" name="image" id="image" value="{{ old('supplier') ?? $item->image }}">
                     </div>

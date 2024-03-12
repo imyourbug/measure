@@ -1,4 +1,69 @@
-//list
+var dataTable = null;
+$(document).ready(function () {
+    dataTable = $("#table").DataTable({
+        layout: {
+            topStart: {
+                buttons: [{
+                    extend: "excel",
+                    text: "Xuất Excel",
+                    exportOptions: {
+                        columns: ":not(:last-child)",
+                    },
+                },
+                    "colvis",
+                ],
+            },
+        },
+        ajax: {
+            url: "/api/contracts/getAll",
+            dataSrc: "contracts",
+        },
+        columns: [
+            {
+                data: "id"
+            },
+            {
+                data: function (d) {
+                    return `${d.customer.name ? d.customer.name : ""}`;
+                },
+            },
+            {
+                data: "name"
+            },
+            {
+                data: function (d) {
+                    return `${d.branch ? d.branch ? d.branch.name : "" : ""}`;
+                },
+            },
+            {
+                data: "start"
+            },
+            {
+                data: "finish"
+            },
+            {
+                data: "content"
+            },
+
+            {
+                data: function (d) {
+                    return `${getStatusContract(d.finish)}`;
+                },
+            },
+            {
+                data: function (d) {
+                    return `<a class="btn btn-primary btn-sm" href='/admin/contracts/detail/${d.id}'>
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <button data-id="${d.id}" class="btn btn-danger btn-sm btn-delete">
+                                <i class="fas fa-trash"></i>
+                            </button>`;
+                },
+            },
+        ],
+    });
+})
+
 $(".btn-delete").on("click", function () {
     if (confirm("Bạn có muốn xóa")) {
         let id = $(this).data("id");
@@ -123,9 +188,8 @@ $(".btn-save").on("click", function () {
     // render text info
     let html = "";
     data.info_tasks.forEach((info) => {
-        html += `${$("#type_" + info.task_type).data("name")}: ${
-            info.value_time_type
-        }<br/>`;
+        html += `${$("#type_" + info.task_type).data("name")}: ${info.value_time_type
+            }<br/>`;
     });
     $(".info-branch-" + branch_id).html(html);
 });
@@ -262,6 +326,7 @@ $(".btn-create").on("click", function () {
                     ? toastr.success(response.message)
                     : toastr.error(response.message);
                 reset();
+                dataTable.ajax.reload();
             },
         });
     }

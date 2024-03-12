@@ -68,7 +68,7 @@
                         <label for="file">Chọn ảnh</label><br>
                         <div class="">
                             <img id="image_show" style="width: 100px;height:100px" src="{{ $staff->avatar }}" alt="Avatar" />
-                            <input type="file" id="upload">
+                            <input type="file" id="upload" accept=".png,.jpeg"/>
                         </div>
                         <input type="hidden" name="avatar" id="avatar" value="{{ $staff->avatar }}">
                     </div>

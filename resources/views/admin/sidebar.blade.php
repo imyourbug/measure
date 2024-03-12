@@ -372,13 +372,13 @@
                                 </p>
                             </a>
                             <ul class="nav nav-treeview">
-                                <li
+                                {{-- <li
                                     class="nav-item {{ request()->route()->getName() == 'admin.contracts.create' ? 'option-open' : '' }}">
                                     <a href="{{ route('admin.contracts.create') }}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Thêm hợp đồng</p>
                                     </a>
-                                </li>
+                                </li> --}}
                                 <li
                                     class="nav-item {{ request()->route()->getName() == 'admin.contracts.index' ? 'option-open' : '' }}">
                                     <a href="{{ route('admin.contracts.index') }}" class="nav-link">

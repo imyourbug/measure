@@ -278,7 +278,7 @@
                                 <div class="">
                                     <img id="image_show_solution" style="width: 100px;height:100px" src=""
                                         alt="image" />
-                                    <input type="file" class="upload" data-type="solution">
+                                    <input type="file" class="upload" data-type="solution" accept=".png,.jpeg"/>
                                 </div>
                                 <input type="hidden" id="image_solution" value="">
                             </div>
@@ -352,7 +352,7 @@
                                 <div class="">
                                     <img id="image_show_item" style="width: 100px;height:100px" src=""
                                         alt="image" />
-                                    <input type="file" class="upload" data-type="item">
+                                    <input type="file" class="upload" data-type="item" accept=".png,.jpeg"/>
                                 </div>
                                 <input type="hidden" id="image_item" value="">
                             </div>
@@ -425,7 +425,7 @@
                                 <div class="">
                                     <img id="image_show_map" style="width: 100px;height:100px" src=""
                                         alt="image" />
-                                    <input type="file" class="upload" data-type="map">
+                                    <input type="file" class="upload" data-type="map" accept=".png,.jpeg"/>
                                 </div>
                                 <input type="hidden" id="image_map" value="">
                             </div>
@@ -534,7 +534,7 @@
                                 <div class="">
                                     <img id="image_show_chemistry" style="width: 100px;height:100px" src=""
                                         alt="image" />
-                                    <input type="file" class="upload" data-type="chemistry">
+                                    <input type="file" class="upload" data-type="chemistry" accept=".png,.jpeg"/>
                                 </div>
                                 <input type="hidden" id="image_chemistry" value="">
                             </div>
