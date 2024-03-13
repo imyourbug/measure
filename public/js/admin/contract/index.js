@@ -64,17 +64,16 @@ $(document).ready(function () {
     });
 })
 
-$(".btn-delete").on("click", function () {
+$(document).on("click", ".btn-delete", function () {
     if (confirm("Bạn có muốn xóa")) {
         let id = $(this).data("id");
         $.ajax({
             type: "DELETE",
             url: `/api/contracts/${id}/destroy`,
-
             success: function (response) {
                 if (response.status == 0) {
                     toastr.success("Xóa thành công");
-                    $(".row" + id).remove();
+                    dataTable.ajax.reload();
                 } else {
                     toastr.error(response.message);
                 }

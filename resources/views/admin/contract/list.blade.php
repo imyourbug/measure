@@ -17,7 +17,7 @@
     <script src="https://cdn.datatables.net/datetime/1.5.2/js/dataTables.dateTime.min.js"></script>
     <script src="https://cdn.datatables.net/keytable/2.12.0/js/dataTables.keyTable.js"></script>
     <script src="https://cdn.datatables.net/keytable/2.12.0/js/keyTable.dataTables.js"></script>
-    <script src="/js/admin/contract/index.js"></script>
+    <script src="/js/admin/contract/index.js?v=1"></script>
     <script>
         $("#attachment").change(function() {
             const form = new FormData();

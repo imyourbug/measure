@@ -90,6 +90,7 @@
                 </div>
             </div>
         </div>
+        <!-- Footer -->
         <div class="card-footer">
             <button class="btn btn-primary btn-create" data-url="{{ route('contracts.store') }}">Lưu</button>
             <a href="{{ route('admin.contracts.index') }}" class="btn btn-success">Xem danh sách</a>
