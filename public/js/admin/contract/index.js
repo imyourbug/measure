@@ -113,12 +113,6 @@ function renderOption(type, id_type) {
 }
 
 //btn open modal
-// $(".btn-open-modal").on("click", function () {
-//     let branch_id = $(this).data("id");
-// $(".btn-save").attr("data-id", branch_id);
-// });
-
-//btn open modal
 function openModal(branch_id) {
     $(".id-branch").val(branch_id);
 }
