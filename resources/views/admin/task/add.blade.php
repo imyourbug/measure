@@ -26,7 +26,7 @@
                             <option value="">--Hợp đồng--</option>
                             @foreach ($contracts as $contract)
                                 <option value="{{ $contract->id }}">
-                                    {{ $contract->name . '-' . $contract->branch->name }}
+                                    {{ $contract->name . '-' . ($contract->branch->name ?? '') }}
                                 </option>
                             @endforeach
                         </select>

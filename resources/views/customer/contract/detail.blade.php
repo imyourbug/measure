@@ -42,7 +42,7 @@
                         <div class="form-group">
                             <label for="menu">Chi nhánh</label>
                             <p class="form-control">
-                                {{ $contract->branch->name }}
+                                {{ $contract->branch->name ?? '' }}
                             </p>
                         </div>
                     </div>

@@ -114,7 +114,7 @@
                         <tr class="row{{ $contract->id }}">
                             <th>{{ $contract->id }}</th>
                             <th>{{ $contract->name }}</th>
-                            <th>{{ $contract->branch->name }}</th>
+                            <th>{{ $contract->branch->name ?? '' }}</th>
                             <td>{{ date('d-m-Y', strtotime($contract->start)) }}</td>
                             <td>{{ date('d-m-Y', strtotime($contract->finish)) }}</td>
                             <td>{{ $contract->content }}</td>
