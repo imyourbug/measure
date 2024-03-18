@@ -31,35 +31,32 @@ $(document).ready(function () {
             },
             {
                 data: function (d) {
-                    return `${
-                        d.role == 1
-                            ? ""
-                            : d.role == 0
+                    return `${d.role == 1
+                        ? ""
+                        : d.role == 0
                             ? d.staff.tel ?? ""
                             : d.customer.tel ?? ""
-                    }`;
+                        }`;
                 },
             },
             {
                 data: function (d) {
-                    return `${
-                        d.role == 1
-                            ? ""
-                            : d.role == 0
+                    return `${d.role == 1
+                        ? ""
+                        : d.role == 0
                             ? d.staff.position ?? ""
                             : ""
-                    }`;
+                        }`;
                 },
             },
             {
                 data: function (d) {
-                    return `${
-                        d.role == 1
-                            ? "Quản lý"
-                            : d.role == 0
+                    return `${d.role == 1
+                        ? "Quản lý"
+                        : d.role == 0
                             ? "Nhân viên"
                             : "Khách hàng"
-                    }`;
+                        }`;
                 },
             },
             {
@@ -70,16 +67,20 @@ $(document).ready(function () {
                     let btnDelete = `<button data-id="${d.id}" class="btn btn-danger btn-sm btn-delete">
                                     <i class="fas fa-trash"></i>
                                 </button>`;
-                    return `<a class="btn btn-primary btn-sm" href='/admin/accounts/update/${
-                        d.id
-                    }'>
+                    let urlUpdate = '';
+                    switch (parseInt(d.role)) {
+                        case 0: urlUpdate = `/admin/staffs/update/${d.staff.id}`; break;
+                        case 1: urlUpdate = `/admin/accounts/update/${d.id}`; break;
+                        default: urlUpdate = `/admin/customers/detail/${d.customer.id}`; break;
+                    }
+
+                    return `<a class="btn btn-primary btn-sm" href='${urlUpdate}'>
                             <i class="fas fa-edit"></i>
                         </a>
-                        ${
-                            $("#logging_user_id").val() != d.id &&
+                        ${$("#logging_user_id").val() != d.id &&
                             $("#editing_user_id").val() != d.id
-                                ? btnDelete
-                                : ""
+                            ? btnDelete
+                            : ""
                         }`;
                 },
             },

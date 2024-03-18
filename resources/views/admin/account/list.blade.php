@@ -11,7 +11,7 @@
     <script src="https://cdn.datatables.net/buttons/3.0.1/js/dataTables.buttons.js"></script>
     <script src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.html5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-    <script src="/js/admin/account/index.js"></script>
+    <script src="/js/admin/account/index.js?v=23"></script>
 @endpush
 @section('content')
     <a href="{{ route('admin.accounts.create') }}" class="btn btn-success mb-3">Thêm mới</a>

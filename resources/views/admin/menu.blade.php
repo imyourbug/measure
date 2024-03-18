@@ -76,7 +76,11 @@
                     </a>
                     <p class="dropdown-item" style="font-weight: bold;">QUẢN LÝ</p>
                     <a href="{{ route('admin.accounts.index') }}" style="padding-left: 40px" class="dropdown-item">
-                        -&emsp;Tài khoản
+                        -&emsp;Tài khoản đăng nhập
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="{{ route('admin.customers.index') }}" style="padding-left: 40px" class="dropdown-item">
+                        -&emsp;Khách hàng
                     </a>
                     <div class="dropdown-divider"></div>
                     <a href="{{ route('admin.branches.index') }}" style="padding-left: 40px" class="dropdown-item">
@@ -90,10 +94,10 @@
                     <a href="{{ route('admin.types.index') }}" style="padding-left: 40px" class="dropdown-item">
                         -&emsp;Loại nhiệm vụ
                     </a>
-                    <div class="dropdown-divider"></div>
+                    <!-- <div class="dropdown-divider"></div>
                     <a href="{{ route('admin.maps.index') }}" style="padding-left: 40px" class="dropdown-item">
                         -&emsp;Sơ đồ
-                    </a>
+                    </a> -->
                     <div class="dropdown-divider"></div>
                     <a href="{{ route('admin.chemistries.index') }}" style="padding-left: 40px" class="dropdown-item">
                         -&emsp;Hóa chất
@@ -106,9 +110,13 @@
                     <a href="{{ route('admin.items.index') }}" style="padding-left: 40px" class="dropdown-item">
                         -&emsp;Vật tư
                     </a>
-                    <div class="dropdown-divider"></div>
+                    <!-- <div class="dropdown-divider"></div>
                     <a href="{{ route('admin.tasks.index') }}" style="padding-left: 40px" class="dropdown-item">
                         -&emsp;Nhiệm vụ
+                    </a> -->
+                    <div class="dropdown-divider"></div>
+                    <a href="#" style="padding-left: 40px" class="dropdown-item">
+                        -&emsp;Đề xuất
                     </a>
                 </div>
             </li>

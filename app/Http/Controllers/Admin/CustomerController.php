@@ -36,6 +36,8 @@ class CustomerController extends Controller
                 'province' => 'nullable|string',
                 'manager' => 'nullable|string',
                 'website' => 'nullable|string',
+                'avatar' => 'nullable|string',
+                'tax_code' => 'nullable|string',
                 'representative' => 'nullable|string',
                 'field' => 'nullable|string',
                 'email' => 'required|email:rfc,dns',
@@ -59,11 +61,11 @@ class CustomerController extends Controller
                 'name' => $data['name'],
                 'address' => $data['address'],
                 'tel' => $data['tel'],
-                'province' => $data['province'],
+                'tax_code' => $data['tax_code'],
                 'website' => $data['website'],
                 'manager' => $data['manager'],
                 'representative' => $data['representative'],
-                'field' => $data['field'],
+                'avatar' => $data['avatar'],
                 'email' => $data['email'],
                 'user_id' => $user->id
             ]);
@@ -87,6 +89,8 @@ class CustomerController extends Controller
             'province' => 'nullable|string',
             'manager' => 'nullable|string',
             'website' => 'nullable|string',
+            'avatar' => 'nullable|string',
+            'tax_code' => 'nullable|string',
             'representative' => 'nullable|string',
             'field' => 'nullable|string',
             'email' => 'required|email:rfc,dns',
@@ -105,7 +109,7 @@ class CustomerController extends Controller
         if ($request->ajax()) {
             return response()->json([
                 'status' => 0,
-                'customers' => Customer::all()
+                'customers' => Customer::with(['user'])->get()
             ]);
         }
 

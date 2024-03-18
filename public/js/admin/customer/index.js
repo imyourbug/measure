@@ -27,28 +27,35 @@ $(document).ready(function () {
                 data: "name",
             },
             {
+                data: "representative",
+            },
+            {
+                data: "tax_code",
+            },
+            {
                 data: "address",
-            },
-            {
-                data: "province",
-            },
-            {
-                data: "tel",
             },
             {
                 data: "website",
             },
             {
-                data: "representative",
+                data: "email",
+            },
+            {
+                data: function (d) {
+                    return `<img style="width: 50px;height:50px" src="${d.avatar}" alt="avatar" />`;
+                },
             },
             {
                 data: "manager",
             },
             {
-                data: "email",
+                data: "tel",
             },
             {
-                data: "field",
+                data: function (d) {
+                    return d.user.email ? d.user.email : d.user.name;
+                },
             },
             {
                 data: function (d) {
