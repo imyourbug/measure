@@ -32,7 +32,7 @@
             <div class="row">
                 <div class="col-lg-6 col-md-12">
                     <div class="form-group">
-                        <label for="menu">Tên phương pháp</label>
+                        <label for="menu">Tên phương pháp <span class="required">(*)</span></label>
                         <input type="text" class="form-control" name="name" value="{{ old('name') }}"
                             placeholder="Nhập tên phương pháp">
                     </div>
@@ -66,7 +66,7 @@
                 </div>
                 <div class="col-lg-6 col-md-12">
                     <div class="form-group">
-                        <label>Hiệu lực</label>
+                        <label>Hiệu lực <span class="required">(*)</span></label>
                         <div class="custom-control custom-radio">
                             <input class="custom-control-input" type="radio" id="active" value="1" name="active"
                                 checked>

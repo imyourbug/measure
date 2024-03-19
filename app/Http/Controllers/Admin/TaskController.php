@@ -11,7 +11,6 @@ use App\Models\Map;
 use App\Models\Solution;
 use App\Models\Task;
 use App\Models\TaskDetail;
-use App\Models\TaskMap;
 use App\Models\Type;
 use App\Models\User;
 use Illuminate\Http\Request;

@@ -24,22 +24,26 @@ $(document).ready(function () {
                 data: "id",
             },
             {
-                data: function (d) {
-                    return `<img style="width: 50px;height:50px" src="${d.avatar}" alt="avatar" />`;
-                },
-            },
-            {
                 data: "name",
-            },
-            {
+            }, {
                 data: "position",
-            },
-            {
+            }, {
                 data: "identification",
             },
             {
                 data: "tel",
+            }, {
+                data: function (d) {
+                    return `<img style="width: 50px;height:50px" src="${d.avatar}" alt="avatar" />`;
+                },
             },
+
+            {
+                data: function (d) {
+                    return `${d.user.email ? d.user.email : d.user.name}`;
+                },
+            },
+
             {
                 data: function (d) {
                     return getActive(d.active);
@@ -50,16 +54,14 @@ $(document).ready(function () {
                     let btnDelete = `<button data-id="${d.id}" class="btn btn-danger btn-sm btn-delete">
                                     <i class="fas fa-trash"></i>
                                 </button>`;
-                    return `<a class="btn btn-primary btn-sm" href='/admin/staffs/update/${
-                        d.id
-                    }'>
+                    return `<a class="btn btn-primary btn-sm" href='/admin/staffs/update/${d.id
+                        }'>
                             <i class="fas fa-edit"></i>
                         </a>
-                        ${
-                            $("#logging_user_id").val() != d.id &&
+                        ${$("#logging_user_id").val() != d.id &&
                             $("#editing_user_id").val() != d.id
-                                ? btnDelete
-                                : ""
+                            ? btnDelete
+                            : ""
                         }`;
                 },
             },

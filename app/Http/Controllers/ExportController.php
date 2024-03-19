@@ -5,14 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Contract;
 use App\Models\TaskDetail;
-use App\Models\TaskMap;
 use App\Models\User;
 use DateInterval;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use MPDF;
-use Throwable;
 
 class ExportController extends Controller
 {

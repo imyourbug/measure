@@ -17,7 +17,7 @@ $(document).ready(function () {
             { data: "type.name" },
             {
                 data: function (d) {
-                    return `${d.contract.name} - ${d.contract.branch.name}`;
+                    return `${d.contract.name} - ${d.contract.branch ? d.contract.branch.name : ''}`;
                 },
             },
             { data: "note" },

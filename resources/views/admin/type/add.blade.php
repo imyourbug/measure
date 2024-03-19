@@ -32,14 +32,14 @@
             <div class="row">
                 <div class="col-lg-6 col-md-12">
                     <div class="form-group">
-                        <label for="menu">Tên loại</label>
+                        <label for="menu">Tên loại <span class="required">(*)</span></label>
                         <input type="text" class="form-control" name="name" value="{{ old('name') }}"
                             placeholder="Nhập tên loại">
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-12">
                     <div class="form-group">
-                        <label for="menu">Danh mục cha</label>
+                        <label for="menu">Danh mục cha <span class="required">(*)</span></label>
                         <select class="form-control" name="parent_id">
                             <option value="0">--Danh mục cha--</option>
                             @foreach ($types as $type)

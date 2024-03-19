@@ -52,32 +52,16 @@
                     <form action="{{ route('admin.staffs.store') }}" method="POST">
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-lg-6 col-sm-12">
-                                    <div class="form-group">
-                                        <label for="menu">Tài khoản (Số điện thoại hoặc email)</label>
-                                        <input type="text" class="form-control" name="tel_or_email"
-                                            value="{{ old('tel_or_email') }}" placeholder="Nhập tài khoản">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-sm-12">
-                                    <div class="form-group">
-                                        <label for="menu">Mật khẩu</label>
-                                        <input type="password" class="form-control" id="name" name="password"
-                                            value="{{ old('password') }}" placeholder="Nhập mật khẩu">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
                                 <div class="col-lg-6 col-md-12">
                                     <div class="form-group">
-                                        <label for="menu">Họ tên</label>
+                                        <label for="menu">Họ tên <span class="required">(*)</span></label>
                                         <input type="text" class="form-control" name="name"
                                             value="{{ old('name') }}" placeholder="Nhập họ tên">
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-md-12">
                                     <div class="form-group">
-                                        <label for="menu">Chức vụ</label>
+                                        <label for="menu">Chức vụ <span class="required">(*)</span></label>
                                         <input type="text" class="form-control" name="position"
                                             value="{{ old('position') }}" placeholder="Nhập chức vụ">
                                     </div>
@@ -86,16 +70,33 @@
                             <div class="row">
                                 <div class="col-lg-6 col-md-12">
                                     <div class="form-group">
-                                        <label for="menu">Căn cước công dân</label>
+                                        <label for="menu">Căn cước công dân <span class="required">(*)</span></label>
                                         <input type="text" class="form-control" name="identification"
                                             value="{{ old('identification') }}" placeholder="Nhập căn cước công dân">
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-md-12">
                                     <div class="form-group">
-                                        <label for="menu">Điện thoại</label>
+                                        <label for="menu">Điện thoại <span class="required">(*)</span></label>
                                         <input type="text" class="form-control" name="tel"
                                             value="{{ old('tel') }}" placeholder="Nhập điện thoại">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="menu">Tài khoản (Số điện thoại hoặc email) <span
+                                                class="required">(*)</span></label>
+                                        <input type="text" class="form-control" name="tel_or_email"
+                                            value="{{ old('tel_or_email') }}" placeholder="Nhập tài khoản">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label for="menu">Mật khẩu <span class="required">(*)</span></label>
+                                        <input type="password" class="form-control" id="name" name="password"
+                                            value="{{ old('password') }}" placeholder="Nhập mật khẩu">
                                     </div>
                                 </div>
                             </div>
@@ -113,10 +114,10 @@
                                 </div>
                                 <div class="col-lg-6 col-md-12">
                                     <div class="form-group">
-                                        <label for="menu">Kích hoạt</label>
+                                        <label for="menu">Kích hoạt <span class="required">(*)</span></label>
                                         <div class="custom-control custom-radio">
-                                            <input class="custom-control-input" type="radio" id="active" value="1"
-                                                name="active" checked>
+                                            <input class="custom-control-input" type="radio" id="active"
+                                                value="1" name="active" checked>
                                             <label for="active" class="custom-control-label">Có</label>
                                         </div>
                                         <div class="custom-control custom-radio">
@@ -153,11 +154,12 @@
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Ảnh</th>
                                 <th>Họ tên</th>
                                 <th>Chức vụ</th>
                                 <th>CCCD</th>
                                 <th>Điện thoại</th>
+                                <th>Ảnh</th>
+                                <th>Tài khoản</th>
                                 <th>Hiệu lực</th>
                                 <th>Thao tác</th>
                             </tr>

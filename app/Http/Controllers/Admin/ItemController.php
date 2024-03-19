@@ -4,9 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Item;
-use App\Models\Map;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Throwable;
 use Toastr;
 
@@ -29,7 +27,6 @@ class ItemController extends Controller
             'supplier' => 'nullable|string',
             'active' => 'required|in:0,1',
         ]);
-        // dd($data);
         try {
             Item::create($data);
             Toastr::success('Tạo vật tư thành công', __('title.toastr.success'));

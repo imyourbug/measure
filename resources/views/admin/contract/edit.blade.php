@@ -38,7 +38,7 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Tên hợp đồng</label>
+                                <label for="menu">Tên hợp đồng <span class="required">(*)</span></label>
                                 <input class="form-control" type="text" name="name"
                                     value="{{ old('name') ?? $contract->name }}" placeholder="Nhập tên hợp đồng..." />
                             </div>

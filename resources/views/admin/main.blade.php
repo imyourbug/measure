@@ -23,6 +23,12 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <meta name="csrf-token" id="csrf-token" content="{{ csrf_token() }}">
     <style>
+        span.required{
+            color: red;
+        }
+        span.select2-dropdown {
+            top: -25px;
+        }
         #table_filter {
             text-align: right;
         }

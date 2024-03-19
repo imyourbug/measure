@@ -1,5 +1,6 @@
 var dataTable = null;
 $(document).ready(function () {
+    $(".select2").select2();
     dataTable = $("#table").DataTable({
         layout: {
             topStart: {
@@ -36,15 +37,14 @@ $(document).ready(function () {
                 },
             },
             {
+                data: "content"
+            },
+            {
                 data: "start"
             },
             {
                 data: "finish"
             },
-            {
-                data: "content"
-            },
-
             {
                 data: function (d) {
                     return `${getStatusContract(d.finish)}`;
@@ -82,10 +82,21 @@ $(document).on("click", ".btn-delete", function () {
     }
 });
 
+$(document).on("click", ".btn-delete-task", function () {
+    if (confirm("Bạn có muốn xóa")) {
+        let task_type = $(this).data("type");
+        let dataStorage = JSON.parse(localStorage.getItem("data")) ?? [];
+        dataStorage = dataStorage.filter((e) => e.task_type != task_type);
+        localStorage.setItem("data", JSON.stringify(dataStorage));
+        // render text info
+        renderListTaskOpted();
+    }
+});
+
 function renderDate() {
     let html = '<option value="0">Cuối tháng</option>';
     for (let index = 1; index <= 31; index++) {
-        html += `<option value="${index}">${index}</option> `;
+        html += `<option value="${index}">${index}</option>`;
     }
 
     return html;
@@ -101,6 +112,21 @@ function renderDay() {
             <option value="Sunday">Chủ nhật</option>`;
 }
 
+function renderListTaskOpted() {
+    let dataStorage = JSON.parse(localStorage.getItem("data")) ?? [];
+    let html = "";
+    dataStorage.forEach((info) => {
+        html += `<p> <button data-type="${info.task_type}" class="btn btn-danger btn-sm btn-delete-task">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                    ${info.name_type}: ${info.value_time_type}
+                </p>`;
+    });
+    $(".info-task").html(html);
+
+
+}
+
 function renderOption(type, id_type) {
     let html = `<div class="option-select">
         ${type == "day" ? "Chọn thứ (hàng tuần)" : "Chọn ngày (hàng tháng)"}
@@ -112,15 +138,13 @@ function renderOption(type, id_type) {
     $(".select2").select2();
 }
 
-//btn open modal
-function openModal(branch_id) {
-    $(".id-branch").val(branch_id);
-}
+// $(document).on('click', '.btn-open-modal', function () {
+
+// })
 
 //btn save
-$(".btn-save").on("click", function () {
-    let dataStorage = JSON.parse(localStorage.getItem("data")) ?? [];
-    let branch_id = $(".id-branch").val();
+$(document).on("click", ".btn-save", function () {
+    let dataStorage = JSON.parse(localStorage.getItem("data")) || [];
 
     let types_is_selected = $(".form-type")
         .find("input")
@@ -131,8 +155,6 @@ $(".btn-save").on("click", function () {
         })
         .get();
 
-    console.log(types_is_selected);
-
     // get value type time
     let info_tasks = [];
     types_is_selected.forEach((e) => {
@@ -142,49 +164,23 @@ $(".btn-save").on("click", function () {
         });
         let _info = {
             task_type: e,
-            time_type: $(".select-type-" + e).val(),
+            time_type: $(".select-type-" + e).find("option:selected").val(),
+            name_type: $("#type_" + e).data("name"),
             value_time_type: dataValueSelectType,
         };
-        console.log(_info);
+        console.log($(".select-type-" + e).find("option:selected").val());
+
         if (_info.value_time_type.length > 0) {
             info_tasks.push(_info);
         }
     });
 
-    let data = {
-        branch_id: branch_id,
-        info_tasks: info_tasks,
-    };
-
     //push data to storage
-    if (data.info_tasks.length > 0) {
-        if (dataStorage.length == 0) {
-            dataStorage.push(data);
-        } else {
-            let count = 0;
-            dataStorage = dataStorage.map((e) => {
-                if (e.branch_id == branch_id) {
-                    count++;
-                    return { ...data };
-                }
-                return e;
-            });
-            if (count == 0) {
-                dataStorage.push(data);
-            }
-        }
-    } else {
-        dataStorage = dataStorage.filter((e) => e.branch_id != branch_id);
-    }
+    dataStorage = [...dataStorage, ...info_tasks].reverse().filter((v, i, a) => a.findIndex(v2 => (v2.task_type === v.task_type)) === i);
     localStorage.setItem("data", JSON.stringify(dataStorage));
 
     // render text info
-    let html = "";
-    data.info_tasks.forEach((info) => {
-        html += `${$("#type_" + info.task_type).data("name")}: ${info.value_time_type
-            }<br/>`;
-    });
-    $(".info-branch-" + branch_id).html(html);
+    renderListTaskOpted();
 });
 
 $(document).on("click", ".option-type", function () {
@@ -192,13 +188,13 @@ $(document).on("click", ".option-type", function () {
     let id = $(this).data("type");
     if (this.checked) {
         if (!$("div.option-type").length) {
-            $(".modal-body").append(`<div class="row option option-${id}">
+            $(".modal-option-task").append(`<div class="row option option-${id}">
                                         <div class="col-lg-12">
                                             <div class="form-group option-type-${id}" style="align-items: center">
                                                 <label for="menu">${name} theo</label>
                                                 <select class="custom-select form-control-borders select-type select-type-${id}" data-type="${id}">
                                                     <option value="day">Thứ</option>
-                                                    <option value="date" selected>Ngày</option>
+                                                    <option value="date">Ngày</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -260,55 +256,36 @@ $(".select-customer").on("change", function () {
             type: "GET",
             url: $(this).data("url") + "?id=" + id_customer,
             success: function (response) {
-                $(".branch").remove();
+                $(".select-branch").html('');
                 let html = "";
-                let dataStorage = [];
                 response.data.forEach((e) => {
-                    let data = {
-                        branch_id: e.id,
-                    };
-                    dataStorage.push(data);
-                    html += `<div class="row branch">
-                    <div class="col-lg-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <label for="menu">${e.name}</label>&emsp13;
-                                <button data-id="${e.id}" type="button" class="btn btn-success btn-open-modal"
-                                    data-target="#modal-task" data-toggle="modal" onclick="openModal(${e.id})">
-                                    <i class="fa-solid fa-plus"></i></button>
-                                <div class="card-tools">
-                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                        <i class="fas fa-minus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="card-body info-branch info-branch-${e.id}">
-                            </div>
-                        </div>
-                    </div>
-                </div>`;
+                    html += `<option value="${e.id}">${e.name}</option>`;
                 });
-                localStorage.setItem("data", JSON.stringify(dataStorage));
-                $(".form-contract").append(html);
+                $(".select-branch").append(html);
             },
         });
     } else {
-        $(".branch").remove();
+        $(".select-branch").html('');
     }
 });
 
 //add
-$(".btn-create").on("click", function () {
+$(document).on("click", ".btn-create", function () {
     if (confirm("Xác nhận tạo hợp đồng mới?")) {
-        let data = JSON.parse(localStorage.getItem("data"));
+        let data = JSON.parse(localStorage.getItem("data")) || [];
+        let branch_ids = [];
+        $("#branch_id").select2("data").forEach((e) => {
+            branch_ids.push(e.id);
+        });
         let params = {
             customer_id: $("#customer_id").val(),
             name: $("#name").val(),
             start: $("#start").val(),
             finish: $("#finish").val(),
             content: $("#content").val(),
+            branch_ids: branch_ids,
             attachment: $("#value-attachment").val(),
-            data: data,
+            tasks: data,
         };
         $.ajax({
             type: "POST",
@@ -329,5 +306,6 @@ $(".btn-create").on("click", function () {
 function reset() {
     localStorage.removeItem("data");
     $(".info-branch").html("");
+    $(".info-task").html("");
 }
 reset();

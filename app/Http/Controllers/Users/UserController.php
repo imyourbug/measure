@@ -3,17 +3,14 @@
 namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Users\ChangePasswordRequest;
 use App\Http\Requests\Users\LoginRequest;
 use App\Http\Requests\Users\RecoverRequest;
 use App\Http\Requests\Users\RegisterRequest;
 use App\Mail\RecoverPasswordMail;
 use App\Models\InfoUser;
 use App\Models\User;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;

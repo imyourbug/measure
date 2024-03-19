@@ -110,7 +110,7 @@ class InfoUserController extends Controller
         if ($request->ajax()) {
             return response()->json([
                 'status' => 0,
-                'staff' => InfoUser::all()
+                'staff' => InfoUser::with(['user'])->get()
             ]);
         }
 

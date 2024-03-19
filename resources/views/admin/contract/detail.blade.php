@@ -364,14 +364,14 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Tên hợp đồng</label>
+                                <label for="menu">Tên hợp đồng <span class="required">(*)</span></label>
                                 <input class="form-control" type="text" name="name"
                                     value="{{ old('name') ?? $contract->name }}" placeholder="Nhập tên hợp đồng..." />
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Khách hàng</label>
+                                <label for="menu">Khách hàng <span class="required">(*)</span></label>
                                 <select class="form-control" name="customer_id">
                                     <option value="">--Khách hàng--</option>
                                     @foreach ($customers as $customer)
@@ -396,14 +396,14 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Ngày bắt đầu</label>
+                                <label for="menu">Ngày bắt đầu <span class="required">(*)</span></label>
                                 <input type="date" class="form-control" id="start" name="start"
                                     value="{{ old('start') ?? $contract->start }}">
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Ngày kết thúc</label>
+                                <label for="menu">Ngày kết thúc <span class="required">(*)</span></label>
                                 <input type="date" class="form-control" id="finish" name="finish"
                                     value="{{ old('finish') ?? $contract->finish }}">
                             </div>

@@ -5,16 +5,8 @@ namespace App\Http\Controllers\Customers;
 use App\Http\Controllers\Controller;
 use App\Models\Contract;
 use App\Models\Customer;
-use App\Models\Task;
-use App\Models\TaskDetail;
-use App\Models\Type;
-use DateInterval;
-use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Throwable;
-use Toastr;
 
 class ContractController extends Controller
 {

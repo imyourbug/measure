@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Map;
 use App\Models\Setting;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Throwable;
 use Toastr;
 

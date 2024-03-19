@@ -81,7 +81,7 @@
 @section('content')
     <div class="row ">
         <div class="col-lg-4 col-md-6 col-sm-12">
-            <a href="{{ route('admin.contracts.create') }}" class="btn btn-success">Thêm mới</a>
+            <a href="{{ route('admin.contracts.index') }}" class="btn btn-success">Thêm mới</a>
             <div class="form-group">
                 <label for="">Tháng</label>
                 <select name="" class="form-control" id="select-month">

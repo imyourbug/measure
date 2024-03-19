@@ -100,36 +100,17 @@ class ContractController extends Controller
                 'finish' => 'required|date',
                 'content' => 'required|string',
                 'attachment' => 'nullable|string',
-                'data' => 'nullable|array',
-                'data.*.branch_id' => 'nullable|numeric',
-                'data.*.info_tasks.*' => 'nullable|array',
-                'data.*.info_tasks.*.task_type' => 'nullable|numeric',
-                'data.*.info_tasks.*.time_type' => 'nullable|string|in:date,day',
-                'data.*.info_tasks.*.value_time_type' => 'nullable|array',
-                'data.*.info_tasks.*.value_time_type.*' => 'nullable',
+                'branch_ids' => 'nullable|array',
+                'branch_ids.*' => 'nullable|integer',
+                'tasks' => 'required|array',
+                'tasks.*.task_type' => 'nullable|numeric',
+                'tasks.*.time_type' => 'nullable|string|in:date,day',
+                'tasks.*.value_time_type' => 'nullable|array',
+                'tasks.*.value_time_type.*' => 'nullable',
             ]);
-            $self_contract = Contract::create([
-                'name' =>  $data['name'],
-                'customer_id' =>  $data['customer_id'],
-                'start' =>  $data['start'],
-                'finish' =>  $data['finish'],
-                'content' =>  $data['content'],
-                'attachment' =>  $data['attachment'],
-            ]);
-            if (!empty($data['data'])) {
-                foreach ($data['data'] as $item) {
-                    if (!empty($item['info_tasks'])) {
-                        foreach ($item['info_tasks'] as $info) {
-                            $rangeTime = $this->getRangeTime($info['time_type'], $info['value_time_type'], $data['start'], $data['finish']);
-                            $this->createTask($rangeTime, $info['task_type'], $self_contract->id);
-                        }
-                    }
-                }
-            }
-
             DB::beginTransaction();
-            if (!empty($data['data'])) {
-                foreach ($data['data'] as $item) {
+            if (!empty($data['branch_ids'])) {
+                foreach ($data['branch_ids'] as $branch_id) {
                     $contract = Contract::create([
                         'name' =>  $data['name'],
                         'customer_id' =>  $data['customer_id'],
@@ -137,13 +118,28 @@ class ContractController extends Controller
                         'finish' =>  $data['finish'],
                         'content' =>  $data['content'],
                         'attachment' =>  $data['attachment'],
-                        'branch_id' =>  $item['branch_id'],
+                        'branch_id' =>  $branch_id,
                     ]);
-                    if (!empty($item['info_tasks'])) {
-                        foreach ($item['info_tasks'] as $info) {
+                    if (!empty($data['tasks'])) {
+                        foreach ($data['tasks'] as $info) {
                             $rangeTime = $this->getRangeTime($info['time_type'], $info['value_time_type'], $data['start'], $data['finish']);
                             $this->createTask($rangeTime, $info['task_type'], $contract->id);
                         }
+                    }
+                }
+            } else {
+                $contract = Contract::create([
+                    'name' =>  $data['name'],
+                    'customer_id' =>  $data['customer_id'],
+                    'start' =>  $data['start'],
+                    'finish' =>  $data['finish'],
+                    'content' =>  $data['content'],
+                    'attachment' =>  $data['attachment'],
+                ]);
+                if (!empty($data['tasks'])) {
+                    foreach ($data['tasks'] as $info) {
+                        $rangeTime = $this->getRangeTime($info['time_type'], $info['value_time_type'], $data['start'], $data['finish']);
+                        $this->createTask($rangeTime, $info['task_type'], $contract->id);
                     }
                 }
             }

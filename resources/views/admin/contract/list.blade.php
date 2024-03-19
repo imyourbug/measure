@@ -3,6 +3,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/2.0.2/css/dataTables.dataTables.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.0.1/css/buttons.dataTables.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 @endpush
 @push('scripts')
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
@@ -54,6 +55,84 @@
                     </div>
                 </div>
                 <div class="card-body form-contract" style="display: block;padding: 10px !important;">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Khách hàng <span class="required">(*)</span></label>
+                                <select class="form-control select-customer"
+                                    data-url="{{ route('branches.getBranchById') }}" id="customer_id">
+                                    <option value="">--Khách hàng--</option>
+                                    @foreach ($customers as $customer)
+                                        <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Tên hợp đồng <span class="required">(*)</span></label>
+                                <input class="form-control" type="text" id="name"
+                                    placeholder="Nhập tên hợp đồng..." />
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Chi nhánh</label>
+                                <select multiple="multiple" id="branch_id"
+                                    class="select2 custom-select form-control-border select-branch">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Nội dung</label>
+                                <input placeholder="Nhập nội dung..." class="form-control" id="content"
+                                    value="{{ old('content') }}" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Ngày bắt đầu <span class="required">(*)</span></label>
+                                <input type="date" class="form-control" id="start"
+                                    value="{{ old('start', now()->format('Y-m-d')) }}">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Ngày kết thúc <span class="required">(*)</span></label>
+                                <input type="date" class="form-control" id="finish"
+                                    value="{{ old('finish', now()->format('Y-m-d')) }}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Nhiệm vụ <span class="required">(*)</span></label>
+                                <button data-id="" type="button" class="btn btn-success btn-open-modal"
+                                    data-target="#modal-task" data-toggle="modal">
+                                    <i class="fa-solid fa-plus"></i></button>
+                                <div class="info-task">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group form-attachment">
+                                <label class="notification" for="menu">Tệp đính kèm</label>
+                                <div class="">
+                                    <input type="file" id="attachment">
+                                    <input type="hidden" id="value-attachment">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{-- <div class="card-body form-contract" style="display: block;padding: 10px !important;">
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
@@ -110,7 +189,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
                 <div class="card-footer">
                     <button class="btn btn-primary btn-create" data-url="{{ route('contracts.store') }}">Lưu</button>
                 </div>
@@ -125,7 +204,7 @@
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
-                    <div class="modal-body">
+                    <div class="modal-body modal-option-task">
                         <div class="row">
                             <div class="col-lg-12">
                                 <label for="menu">Loại nhiệm vụ</label>
@@ -178,9 +257,9 @@
                                 <th>Khách hàng</th>
                                 <th>Tên hợp đồng</th>
                                 <th>Chi nhánh</th>
+                                <th>Nội dung</th>
                                 <th>Ngày bắt đầu</th>
                                 <th>Ngày kết thúc</th>
-                                <th>Nội dung</th>
                                 <th>Trạng thái</th>
                                 <th>Thao tác</th>
                             </tr>
