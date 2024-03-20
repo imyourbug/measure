@@ -5,39 +5,40 @@ $(document).ready(function () {
             url: "/admin/solutions",
             dataSrc: "solutions",
         },
-        columns: [{
-            data: "id"
-        },
-        {
-            data: "name"
-        },
-        {
-            data: "target"
-        },
-        {
-            data: function (d) {
-                return `<img style="width: 50px;height:50px" src="${d.image}" alt="image" />`;
+        columns: [
+            // {
+            //     data: "id"
+            // },
+            {
+                data: "name"
             },
-        },
-        {
-            data: "description"
-        },
+            {
+                data: "target"
+            },
+            {
+                data: function (d) {
+                    return `<img style="width: 50px;height:50px" src="${d.image}" alt="image" />`;
+                },
+            },
+            {
+                data: "description"
+            },
 
-        {
-            data: function (d) {
-                return getActive(d.active);
+            {
+                data: function (d) {
+                    return getActive(d.active);
+                },
             },
-        },
-        {
-            data: function (d) {
-                return `<a class="btn btn-primary btn-sm" href='/admin/solutions/update/${d.id}'>
+            {
+                data: function (d) {
+                    return `<a class="btn btn-primary btn-sm" href='/admin/solutions/update/${d.id}'>
                             <i class="fas fa-edit"></i>
                         </a>
                         <button data-id="${d.id}" class="btn btn-danger btn-sm btn-delete">
                             <i class="fas fa-trash"></i>
                         </button>`;
+                },
             },
-        },
         ],
     });
 })

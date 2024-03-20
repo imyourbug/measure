@@ -5,39 +5,40 @@ $(document).ready(function () {
             url: "/admin/branches",
             dataSrc: "branches",
         },
-        columns: [{
-            data: "id"
-        },
-        {
-            data: "name"
-        },
-        {
-            data: "address"
-        },
-        {
-            data: "tel"
-        },
-        {
-            data: "email"
-        },
-        {
-            data: "manager"
-        },
-        {
-            data: function (d) {
-                return d.user.customer.name;
+        columns: [
+            // {
+            //     data: "id"
+            // },
+            {
+                data: "name"
             },
-        },
-        {
-            data: function (d) {
-                return `<a class="btn btn-primary btn-sm" href='/admin/branches/update/${d.id}'>
+            {
+                data: "address"
+            },
+            {
+                data: "tel"
+            },
+            {
+                data: "email"
+            },
+            {
+                data: "manager"
+            },
+            {
+                data: function (d) {
+                    return d.user.customer.name;
+                },
+            },
+            {
+                data: function (d) {
+                    return `<a class="btn btn-primary btn-sm" href='/admin/branches/update/${d.id}'>
                             <i class="fas fa-edit"></i>
                         </a>
                         <button data-id="${d.id}" class="btn btn-danger btn-sm btn-delete">
                             <i class="fas fa-trash"></i>
                         </button>`;
+                },
             },
-        },
         ],
     });
 })

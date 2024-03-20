@@ -20,7 +20,7 @@
     <table id="table" class="table display nowrap dataTable dtr-inline collapsed">
         <thead>
             <tr>
-                <th>ID</th>
+                <!-- <th>ID</th> -->
                 <th>Nhiệm vụ</th>
                 <th>Ngày kế hoạch</th>
                 <th>Ngày thực hiện</th>
@@ -46,7 +46,7 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Ngày kế hoạch</label>
+                                <label for="menu">Ngày kế hoạch <span class="required">(*)</span></label>
                                 <input type="date" id="plan_date" class="form-control" />
                             </div>
                         </div>
@@ -60,13 +60,13 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Giờ vào</label>
+                                <label for="menu">Giờ vào <span class="required">(*)</span></label>
                                 <input type="text" id="time_in" class="form-control" />
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Giờ ra</label>
+                                <label for="menu">Giờ ra <span class="required">(*)</span></label>
                                 <input type="text" id="time_out" class="form-control" />
                             </div>
                         </div>

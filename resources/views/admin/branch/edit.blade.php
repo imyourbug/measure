@@ -81,7 +81,7 @@
             <table id="table" class="table display nowrap dataTable dtr-inline collapsed">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <!-- <th>ID</th> -->
                         <th>Tên hợp đồng</th>
                         <th>Chi nhánh</th>
                         <th>Ngày bắt đầu</th>

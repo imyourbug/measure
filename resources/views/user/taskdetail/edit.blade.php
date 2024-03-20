@@ -109,7 +109,7 @@
                             <table id="tableMap" class="table-map table display nowrap dataTable dtr-inline collapsed">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <!-- <th>ID</th> -->
                                         <th>Mã sơ đồ</th>
                                         <th>Vị trí</th>
                                         <th>Đối tượng</th>
@@ -134,7 +134,7 @@
                             <table id="tableStaff" class="table-staff table display nowrap dataTable dtr-inline collapsed">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <!-- <th>ID</th> -->
                                         <th>Mã nhân viên</th>
                                         <th>Họ tên</th>
                                         <th>Chức vụ</th>
@@ -156,7 +156,7 @@
                             <table id="tableItem" class="table-item table display nowrap dataTable dtr-inline collapsed">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <!-- <th>ID</th> -->
                                         <th>Tên</th>
                                         <th>Đơn vị</th>
                                         <th>KPI</th>
@@ -180,7 +180,7 @@
                                 class="table-chemistry table display nowrap dataTable dtr-inline collapsed">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <!-- <th>ID</th> -->
                                         <th>Tên</th>
                                         <th>Đơn vị</th>
                                         <th>KPI</th>
@@ -204,7 +204,7 @@
                                 class="table-solution table display nowrap dataTable dtr-inline collapsed">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <!-- <th>ID</th> -->
                                         <th>Tên</th>
                                         <th>Đơn vị</th>
                                         <th>KPI</th>

@@ -20,9 +20,9 @@ $(document).ready(function () {
             dataSrc: "staff",
         },
         columns: [
-            {
-                data: "id",
-            },
+            // {
+            //     data: "id",
+            // },
             {
                 data: "name",
             }, {

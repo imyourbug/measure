@@ -14,15 +14,15 @@ class SettingTaskMapController extends Controller
     {
         try {
             $data = $request->validate([
-                'code' => 'nullable|string',
+                'code' => 'required|string',
                 'position' => 'nullable|string',
                 'number' => 'required|numeric|min:1',
-                'area' => 'required|string',
+                'area' => 'nullable|string',
                 'target' => 'nullable|string',
                 'image' => 'nullable|string',
                 'description' => 'nullable|string',
                 'range' => 'nullable|string',
-                'active' => 'required|in:0,1',
+                'active' => 'nullable|in:0,1',
                 'unit' => 'required|string',
                 'kpi' => 'required|numeric',
                 'fake_result' => 'nullable|numeric',
@@ -30,17 +30,17 @@ class SettingTaskMapController extends Controller
             ]);
             $number = (int)$data['number'];
             for ($i = 0; $i < $number; $i++) {
-                $data['code'] = $data['area'] . '-' .
+                $code = $data['code'] . '-' .
                     str_pad(((string)($i + 1)), 3, "0", STR_PAD_LEFT);;
                 $dataInsert = [
-                    'code' => $data['code'],
-                    'area' => $data['area'],
-                    'position' => $data['position'],
-                    'target' => $data['target'],
-                    'image' => $data['image'],
-                    'description' => $data['description'],
-                    'range' => $data['range'],
-                    'active' => $data['active'],
+                    'code' => $code,
+                    'area' => $data['area'] ?? '',
+                    'position' => $data['position'] ?? '',
+                    'target' => $data['target'] ?? '',
+                    'image' => $data['image'] ?? '',
+                    'description' => $data['description'] ?? '',
+                    'range' => $data['range'] ?? '',
+                    'active' => $data['active'] ?? 0,
                 ];
                 $map = Map::create($dataInsert);
                 SettingTaskMap::create([

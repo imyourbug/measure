@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-lg-6 col-md-12">
                     <div class="form-group">
-                        <label for="menu">Loại nhiệm vụ</label>
+                        <label for="menu">Loại nhiệm vụ <span class="required">(*)</span></label>
                         <select class="form-control" name="type_id">
                             <option value="">--Loại nhiệm vụ--</option>
                             @foreach ($types as $type)
@@ -21,7 +21,7 @@
                 </div>
                 <div class="col-lg-6 col-md-12">
                     <div class="form-group">
-                        <label for="menu">Hợp đồng</label>
+                        <label for="menu">Hợp đồng <span class="required">(*)</span></label>
                         <select class="form-control select-contract" id="contract_id" name="contract_id">
                             <option value="">--Hợp đồng--</option>
                             @foreach ($contracts as $contract)

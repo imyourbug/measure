@@ -172,7 +172,7 @@
                     <table id="table" class="table display nowrap dataTable dtr-inline collapsed">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <!-- <th>ID</th> -->
                                 <th>Khách hàng</th>
                                 <th>Đại diện khách hàng</th>
                                 <th>Mã số thuế</th>

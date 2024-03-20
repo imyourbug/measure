@@ -5,44 +5,45 @@ $(document).ready(function () {
             url: "/admin/maps",
             dataSrc: "maps",
         },
-        columns: [{
-            data: "id"
-        },
-        {
-            data: "code"
-        },
-        {
-            data: "area"
-        },
-        {
-            data: "position"
-        },
-        {
-            data: "target"
-        },
-        {
-            data: "description"
-        },
-        {
-            data: function (d) {
-                return `<img style="width: 50px;height:50px" src="${d.image}" alt="image" />`;
+        columns: [
+            // {
+            //     data: "id"
+            // },
+            {
+                data: "code"
             },
-        },
-        {
-            data: function (d) {
-                return getActive(d.active);
+            {
+                data: "area"
             },
-        },
-        {
-            data: function (d) {
-                return `<a class="btn btn-primary btn-sm" href='/admin/maps/update/${d.id}'>
+            {
+                data: "position"
+            },
+            {
+                data: "target"
+            },
+            {
+                data: "description"
+            },
+            {
+                data: function (d) {
+                    return `<img style="width: 50px;height:50px" src="${d.image}" alt="image" />`;
+                },
+            },
+            {
+                data: function (d) {
+                    return getActive(d.active);
+                },
+            },
+            {
+                data: function (d) {
+                    return `<a class="btn btn-primary btn-sm" href='/admin/maps/update/${d.id}'>
                             <i class="fas fa-edit"></i>
                         </a>
                         <button data-id="${d.id}" class="btn btn-danger btn-sm btn-delete">
                             <i class="fas fa-trash"></i>
                         </button>`;
+                },
             },
-        },
         ],
     });
 })

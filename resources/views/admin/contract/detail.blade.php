@@ -536,7 +536,7 @@
         </div>
         <div class="card-body" style="display: block;padding: 10px !important;">
             <div class="mb-3">
-                <a href="{{ route('admin.tasks.create') }}" target="_blank" class="btn btn-success">Thêm mới</a>
+                <a href="{{ route('admin.tasks.index') }}" target="_blank" class="btn btn-success">Thêm mới</a>
                 <input class="" style="" type="date" id="from"
                     value="{{ Request::get('from') ?? now()->format('Y-m-01') }}" />
                 <input class="" style="" type="date" id="to"
@@ -546,7 +546,7 @@
             <table id="table" class="table display nowrap dataTable dtr-inline collapsed">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <!-- <th>ID</th> -->
                         <th>Nhiệm vụ</th>
                         <th>Hợp đồng</th>
                         <th>Ghi chú</th>
@@ -572,7 +572,7 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Loại nhiệm vụ</label>
+                                <label for="menu">Loại nhiệm vụ <span class="required">(*)</span></label>
                                 <select class="form-control" id="type_id">
                                     @foreach ($types as $type)
                                         <option value="{{ $type->id }}">
@@ -598,7 +598,7 @@
                     <div class="row">
                         <div class="col-lg-12 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Ghi chú</label>
+                                <label for="menu">Ghi chú <span class="required">(*)</span></label>
                                 <textarea placeholder="Nhập ghi chú..." class="form-control" id="note" cols="30" rows="5"></textarea>
                             </div>
                         </div>

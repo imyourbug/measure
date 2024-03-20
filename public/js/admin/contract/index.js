@@ -20,9 +20,9 @@ $(document).ready(function () {
             dataSrc: "contracts",
         },
         columns: [
-            {
-                data: "id"
-            },
+            // {
+            //     data: "id"
+            // },
             {
                 data: function (d) {
                     return `${d.customer.name ? d.customer.name : ""}`;

@@ -36,7 +36,7 @@ $(document).ready(function () {
             dataSrc: "tasks",
         },
         columns: [
-            { data: "id" },
+            // { data: "id" },
             { data: "type.name" },
             {
                 data: function (d) {

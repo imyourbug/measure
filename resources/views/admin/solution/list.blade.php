@@ -14,7 +14,7 @@
     <table id="table" class="table display nowrap dataTable dtr-inline collapsed">
         <thead>
             <tr>
-                <th>ID</th>
+                <!-- <th>ID</th> -->
                 <th>Phương pháp</th>
                 <th>Đối tượng áp dụng</th>
                 <th>Ảnh</th>

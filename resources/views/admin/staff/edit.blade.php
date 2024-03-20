@@ -138,7 +138,7 @@
                     <table id="table" class="table display nowrap dataTable dtr-inline collapsed">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <!-- <th>ID</th> -->
                                 <th>Ảnh</th>
                                 <th>Họ tên</th>
                                 <th>Chức vụ</th>

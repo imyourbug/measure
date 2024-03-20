@@ -18,7 +18,7 @@ $(document).ready(function () {
             dataSrc: "taskMaps",
         },
         columns: [
-            { data: "id" },
+            // { data: "id" },
             {
                 data: function (d) {
                     return d.code ? d.code : `${d.map.area}-${d.map.id.toString().padStart(3, "0")}`;
@@ -48,7 +48,7 @@ $(document).ready(function () {
             dataSrc: "taskStaff",
         },
         columns: [
-            { data: "id" },
+            // { data: "id" },
             {
                 data: function (d) {
                     return `NV${
@@ -82,7 +82,7 @@ $(document).ready(function () {
             dataSrc: "taskChemistries",
         },
         columns: [
-            { data: "id" },
+            // { data: "id" },
             { data: "chemistry.name" },
             { data: "unit" },
             { data: "kpi" },
@@ -106,7 +106,7 @@ $(document).ready(function () {
             dataSrc: "taskItems",
         },
         columns: [
-            { data: "id" },
+            // { data: "id" },
             { data: "item.name" },
             { data: "unit" },
             { data: "kpi" },
@@ -130,7 +130,7 @@ $(document).ready(function () {
             dataSrc: "taskSolutions",
         },
         columns: [
-            { data: "id" },
+            // { data: "id" },
             { data: "solution.name" },
             { data: "unit" },
             { data: "kpi" },

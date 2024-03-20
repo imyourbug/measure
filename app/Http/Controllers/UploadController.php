@@ -18,7 +18,7 @@ class UploadController extends Controller
         if ($request->hasFile('file')) {
             try {
                 $request->validate([
-                    'file' =>  'max:500000|mimes:jpeg,png,pdf,docx,ppt,cad,xlsx,csv',
+                    'file' =>  'max:500000|mimes:jpeg,png,pdf,docx,pptx,cad,xlsx,xls,csv',
                 ]);
                 $file_name = date('H-i-s') . $request->file('file')->getClientOriginalName();
                 $pathFull = 'upload/' . date('Y-m-d');

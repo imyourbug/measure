@@ -376,7 +376,7 @@
                             <div class="row">
                                 <div class="col-lg-12 col-md-12">
                                     <div class="form-group">
-                                        <label for="menu">Chọn hợp đồng</label>
+                                        <label for="menu">Chọn hợp đồng <span class="required">(*)</span></label>
                                         <select name="contract_id" class="form-control">
                                             @foreach ($contracts as $contract)
                                                 <option value="{{ $contract->id }}">
@@ -390,7 +390,7 @@
                             <div class="row">
                                 <div class="col-lg-3 col-md-12">
                                     <div class="form-group">
-                                        <label for="menu">Từ tháng</label>
+                                        <label for="menu">Từ tháng <span class="required">(*)</span></label>
                                         <select name="month_from" class="form-control">
                                             @for ($i = 1; $i <= 12; $i++)
                                                 <option value="{{ $i }}"
@@ -402,14 +402,14 @@
                                 </div>
                                 <div class="col-lg-3 col-md-12">
                                     <div class="form-group">
-                                        <label for="menu">Từ năm</label>
+                                        <label for="menu">Từ năm <span class="required">(*)</span></label>
                                         <input name="year_from" class="form-control" type="text"
                                             value="{{ now()->format('Y') }}" placeholder="Nhập năm..." />
                                     </div>
                                 </div>
                                 <div class="col-lg-3 col-md-12">
                                     <div class="form-group">
-                                        <label for="menu">Sang tháng</label>
+                                        <label for="menu">Sang tháng <span class="required">(*)</span></label>
                                         <select name="month_to" class="form-control">
                                             @for ($i = 1; $i <= 12; $i++)
                                                 <option value="{{ $i }}"
@@ -421,7 +421,7 @@
                                 </div>
                                 <div class="col-lg-3 col-md-12">
                                     <div class="form-group">
-                                        <label for="menu">Sang năm</label>
+                                        <label for="menu">Sang năm <span class="required">(*)</span></label>
                                         <input name="year_to" class="form-control" type="text"
                                             value="{{ now()->format('Y') }}" placeholder="Nhập năm..." />
                                     </div>
@@ -450,7 +450,7 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Chọn loại báo cáo</label>
+                                <label for="menu">Chọn loại báo cáo <span class="required">(*)</span></label>
                                 <select class="form-control select-type">
                                     <option value="0">
                                         Kế hoạch dịch vụ
@@ -463,7 +463,7 @@
                         </div>
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Chọn hợp đồng</label>
+                                <label for="menu">Chọn hợp đồng <span class="required">(*)</span></label>
                                 <select class="form-control select-contract">
                                     @foreach ($contracts as $contract)
                                         <option value="{{ $contract->id }}">
@@ -477,7 +477,7 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Chọn tháng</label>
+                                <label for="menu">Chọn tháng <span class="required">(*)</span></label>
                                 <select class="form-control select-month">
                                     @for ($i = 1; $i <= 12; $i++)
                                         <option value="{{ $i }}"
@@ -489,7 +489,7 @@
                         </div>
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Chọn năm</label>
+                                <label for="menu">Chọn năm <span class="required">(*)</span></label>
                                 <input class="form-control select-year" type="text" value="{{ now()->format('Y') }}"
                                     placeholder="Nhập năm..." />
                             </div>
@@ -498,14 +498,14 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Số lượng cột hiển thị</label>
+                                <label for="menu">Số lượng cột hiển thị <span class="required">(*)</span></label>
                                 <input value="1" min="1" type="number" id="select-column"
                                     class="form-control select-column" />
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Chọn người lập báo cáo</label>
+                                <label for="menu">Chọn người lập báo cáo <span class="required">(*)</span></label>
                                 <select class="form-control select-user">
                                     @foreach ($users as $user)
                                         <option value="{{ $user->id }}">
@@ -560,7 +560,7 @@
             <table id="table" class="table display nowrap dataTable dtr-inline collapsed">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <!-- <th>ID</th> -->
                         <th>Nhiệm vụ</th>
                         <th>Hợp đồng</th>
                         <th>Ghi chú</th>
@@ -586,7 +586,7 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Loại nhiệm vụ</label>
+                                <label for="menu">Loại nhiệm vụ <span class="required">(*)</span></label>
                                 <select class="form-control" id="type_id">
                                     @foreach ($types as $type)
                                         <option value="{{ $type->id }}">
@@ -612,7 +612,7 @@
                     <div class="row">
                         <div class="col-lg-12 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Ghi chú</label>
+                                <label for="menu">Ghi chú <span class="required">(*)</span></label>
                                 <textarea placeholder="Nhập ghi chú..." class="form-control" id="note" cols="30" rows="5"></textarea>
                             </div>
                         </div>

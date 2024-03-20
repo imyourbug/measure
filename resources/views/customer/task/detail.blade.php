@@ -11,7 +11,7 @@
     <table id="table" class="table display nowrap dataTable dtr-inline collapsed">
         <thead>
             <tr>
-                <th>ID</th>
+                <!-- <th>ID</th> -->
                 <th>Nhiệm vụ</th>
                 <th>Ngày kế hoạch</th>
                 <th>Ngày thực hiện</th>

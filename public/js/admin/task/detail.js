@@ -44,7 +44,7 @@ $(document).ready(function () {
             dataSrc: "taskDetails",
         },
         columns: [
-            { data: "id" },
+            // { data: "id" },
             { data: "task.type.name" },
             // { data: function (d) {
             //     return `${formatDate(d.plan_date)}`
@@ -115,7 +115,6 @@ $(document).on("click", ".btn-update-detail", function () {
             actual_date: $("#actual_date").val(),
             time_out: $("#time_out").val(),
         };
-        console.log(data);
         $.ajax({
             type: "POST",
             url: $(this).data("url"),
@@ -124,6 +123,31 @@ $(document).on("click", ".btn-update-detail", function () {
                 if (response.status == 0) {
                     closeModalDetail();
                     toastr.success("Cập nhật thành công");
+                    dataTable.ajax.reload();
+                } else {
+                    toastr.error(response.message);
+                }
+            },
+        });
+    }
+});
+
+$(document).on("click", ".btn-add-detail", function () {
+    if (confirm("Bạn có muốn sửa")) {
+        let data = {
+            time_in: $("#time_in").val(),
+            plan_date: $("#plan_date").val(),
+            actual_date: $("#actual_date").val(),
+            time_out: $("#time_out").val(),
+        };
+        $.ajax({
+            type: "POST",
+            url: $(this).data("url"),
+            data: data,
+            success: function (response) {
+                if (response.status == 0) {
+                    closeModalDetail();
+                    toastr.success("Thêm thành công");
                     dataTable.ajax.reload();
                 } else {
                     toastr.error(response.message);

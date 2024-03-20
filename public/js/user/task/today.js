@@ -45,7 +45,7 @@ $(document).ready(function () {
             dataSrc: "taskDetails",
         },
         columns: [
-            { data: "id" },
+            // { data: "id" },
             { data: "task.type.name" },
             { data: "plan_date" },
             { data: "actual_date" },

@@ -188,7 +188,7 @@
             <table id="table" class="table display nowrap dataTable dtr-inline collapsed">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <!-- <th>ID</th> -->
                         <th>Khách hàng</th>
                         <th>Chi nhánh</th>
                         <th>Ngày bắt đầu</th>
@@ -216,7 +216,7 @@
             <table id="tableBranch" class="table display nowrap dataTable dtr-inline collapsed">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <!-- <th>ID</th> -->
                         <th>Tên chi nhánh</th>
                         <th>Email</th>
                         <th>Số điện thoại</th>
@@ -257,7 +257,7 @@
             <table id="tableTaskDetail" class="table display nowrap dataTable dtr-inline collapsed">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <!-- <th>ID</th> -->
                         <th>Nhiệm vụ</th>
                         <th>Ngày kế hoạch</th>
                         <th>Ngày thực hiện</th>

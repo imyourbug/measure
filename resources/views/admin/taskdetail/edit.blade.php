@@ -91,7 +91,7 @@
                             <table id="tableMap" class="table-map table display nowrap dataTable dtr-inline collapsed">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <!-- <th>ID</th> -->
                                         <th>Mã sơ đồ</th>
                                         <th>Vị trí</th>
                                         <th>Đối tượng</th>
@@ -113,7 +113,7 @@
                             <table id="tableStaff" class="table-staff table display nowrap dataTable dtr-inline collapsed">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <!-- <th>ID</th> -->
                                         <th>Mã nhân viên</th>
                                         <th>Họ tên</th>
                                         <th>Chức vụ</th>
@@ -135,7 +135,7 @@
                             <table id="tableItem" class="table-item table display nowrap dataTable dtr-inline collapsed">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <!-- <th>ID</th> -->
                                         <th>Tên</th>
                                         <th>Đơn vị</th>
                                         <th>KPI</th>
@@ -156,7 +156,7 @@
                                 class="table-chemistry table display nowrap dataTable dtr-inline collapsed">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <!-- <th>ID</th> -->
                                         <th>Tên</th>
                                         <th>Đơn vị</th>
                                         <th>KPI</th>
@@ -177,7 +177,7 @@
                                 class="table-solution table display nowrap dataTable dtr-inline collapsed">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <!-- <th>ID</th> -->
                                         <th>Tên</th>
                                         <th>Đơn vị</th>
                                         <th>KPI</th>
@@ -320,7 +320,7 @@
                                 <select class="form-control" name="" id="map_id">
                                     @foreach ($maps as $map)
                                         <option value="{{ $map->id }}">
-                                            {{ $map->area . '-' . ($map->id > 100 ?: str_pad($map->id, 3, '0', STR_PAD_LEFT)) }}
+                                            {{ $map->code }}
                                         </option>
                                     @endforeach
                                 </select>

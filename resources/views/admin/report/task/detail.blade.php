@@ -109,7 +109,7 @@
                             <table id="tableMap" class="table-map table display nowrap dataTable dtr-inline collapsed">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <!-- <th>ID</th> -->
                                         <th>Mã sơ đồ</th>
                                         <th>Vị trí</th>
                                         <th>Đối tượng</th>
@@ -134,7 +134,7 @@
                             <table id="tableStaff" class="table-staff table display nowrap dataTable dtr-inline collapsed">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <!-- <th>ID</th> -->
                                         <th>Mã nhân viên</th>
                                         <th>Họ tên</th>
                                         <th>Chức vụ</th>
@@ -156,7 +156,7 @@
                             <table id="tableItem" class="table-item table display nowrap dataTable dtr-inline collapsed">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <!-- <th>ID</th> -->
                                         <th>Tên</th>
                                         <th>Đơn vị</th>
                                         <th>KPI</th>
@@ -180,7 +180,7 @@
                                 class="table-chemistry table display nowrap dataTable dtr-inline collapsed">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <!-- <th>ID</th> -->
                                         <th>Tên</th>
                                         <th>Đơn vị</th>
                                         <th>KPI</th>
@@ -204,7 +204,7 @@
                                 class="table-solution table display nowrap dataTable dtr-inline collapsed">
                                 <thead>
                                     <tr>
-                                        <th>ID</th>
+                                        <!-- <th>ID</th> -->
                                         <th>Tên</th>
                                         <th>Đơn vị</th>
                                         <th>KPI</th>
@@ -241,7 +241,7 @@
                     <div class="row">
                         <div class="col-lg-12 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Phương pháp</label>
+                                <label for="menu">Phương pháp <span class="required">(*)</span></label>
                                 <select class="form-control" name="" id="solution_id">
                                     @foreach ($solutions as $solution)
                                         <option value="{{ $solution->id }}">
@@ -254,13 +254,13 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Đơn vị</label>
+                                <label for="menu">Đơn vị <span class="required">(*)</span></label>
                                 <input class="form-control" type="text" id="solution_unit" />
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">KPI</label>
+                                <label for="menu">KPI <span class="required">(*)</span></label>
                                 <input class="form-control" type="text" id="solution_kpi" />
                             </div>
                         </div>
@@ -268,13 +268,13 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Kết quả</label>
+                                <label for="menu">Kết quả <span class="required">(*)</span></label>
                                 <input class="form-control" type="text" id="solution_result" />
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="file">Chọn ảnh</label><br>
+                                <label for="file">Chọn ảnh <span class="required">(*)</span></label><br>
                                 <div class="">
                                     <img id="image_show_solution" style="width: 100px;height:100px" src=""
                                         alt="image" />
@@ -317,7 +317,7 @@
                     <div class="row">
                         <div class="col-lg-12 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Vật tư</label>
+                                <label for="menu">Vật tư <span class="required">(*)</span></label>
                                 <select class="form-control" name="" id="item_id">
                                     @foreach ($items as $item)
                                         <option value="{{ $item->id }}">
@@ -330,13 +330,13 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Đơn vị</label>
+                                <label for="menu">Đơn vị <span class="required">(*)</span></label>
                                 <input class="form-control" type="text" id="item_unit" />
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">KPI</label>
+                                <label for="menu">KPI <span class="required">(*)</span></label>
                                 <input class="form-control" type="text" id="item_kpi" />
                             </div>
                         </div>
@@ -344,13 +344,13 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Kết quả</label>
+                                <label for="menu">Kết quả <span class="required">(*)</span></label>
                                 <input class="form-control" type="text" id="item_result" />
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="file">Chọn ảnh</label><br>
+                                <label for="file">Chọn ảnh <span class="required">(*)</span></label><br>
                                 <div class="">
                                     <img id="image_show_item" style="width: 100px;height:100px" src=""
                                         alt="image" />
@@ -393,7 +393,7 @@
                     <div class="row">
                         <div class="col-lg-12 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Sơ đồ</label>
+                                <label for="menu">Sơ đồ <span class="required">(*)</span></label>
                                 <select class="form-control" name="" id="map_id">
                                     @foreach ($maps as $map)
                                         <option value="{{ $map->id }}">{{ $map->id . '-' . $map->code }}</option>
@@ -405,13 +405,13 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Chỉ số</label>
+                                <label for="menu">Chỉ số <span class="required">(*)</span></label>
                                 <input class="form-control" type="text" id="unit" />
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">KPI</label>
+                                <label for="menu">KPI <span class="required">(*)</span></label>
                                 <input class="form-control" type="text" id="kpi" />
                             </div>
                         </div>
@@ -419,13 +419,13 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Kết quả</label>
+                                <label for="menu">Kết quả <span class="required">(*)</span></label>
                                 <input class="form-control" type="text" id="result" />
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="file">Chọn ảnh</label><br>
+                                <label for="file">Chọn ảnh <span class="required">(*)</span></label><br>
                                 <div class="">
                                     <img id="image_show_map" style="width: 100px;height:100px" src=""
                                         alt="image" />
@@ -469,7 +469,7 @@
                     <div class="row">
                         <div class="col-lg-12 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Nhân sự</label>
+                                <label for="menu">Nhân sự <span class="required">(*)</span></label>
                                 <select class="form-control" name="" id="staff_id">
                                     @foreach ($staffs as $staff)
                                         <option value="{{ $staff->id }}">
@@ -505,7 +505,7 @@
                     <div class="row">
                         <div class="col-lg-12 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Hóa chất</label>
+                                <label for="menu">Hóa chất <span class="required">(*)</span></label>
                                 <select class="form-control" name="" id="chemistry_id">
                                     @foreach ($chemistries as $chemistry)
                                         <option value="{{ $chemistry->id }}">
@@ -518,13 +518,13 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Đơn vị</label>
+                                <label for="menu">Đơn vị <span class="required">(*)</span></label>
                                 <input class="form-control" type="text" id="chemistry_unit" />
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">KPI</label>
+                                <label for="menu">KPI <span class="required">(*)</span></label>
                                 <input class="form-control" type="text" id="chemistry_kpi" />
                             </div>
                         </div>
@@ -532,13 +532,13 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Kết quả</label>
+                                <label for="menu">Kết quả <span class="required">(*)</span></label>
                                 <input class="form-control" type="text" id="chemistry_result" />
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="file">Chọn ảnh</label><br>
+                                <label for="file">Chọn ảnh <span class="required">(*)</span></label><br>
                                 <div class="">
                                     <img id="image_show_chemistry" style="width: 100px;height:100px" src=""
                                         alt="image" />

@@ -5,46 +5,47 @@ $(document).ready(function () {
             url: "/admin/chemistries",
             dataSrc: "chemistries",
         },
-        columns: [{
-            data: "id"
-        },
-        {
-            data: function (d) {
-                return `HC-${d.id.toString().padStart(3, "0")}`;
+        columns: [
+            // {
+            //     data: "id"
+            // },
+            {
+                data: function (d) {
+                    return `HC-${d.id.toString().padStart(3, "0")}`;
+                },
             },
-        },
-        {
-            data: "name"
-        },
-        {
-            data: "number_regist"
-        },
-        {
-            data: "description"
-        },
-        {
-            data: function (d) {
-                return `<img style="width: 50px;height:50px" src="${d.image}" alt="image" />`;
+            {
+                data: "name"
             },
-        },
-        {
-            data: "supplier"
-        },
-        {
-            data: function (d) {
-                return getActive(d.active);
+            {
+                data: "number_regist"
             },
-        },
-        {
-            data: function (d) {
-                return `<a class="btn btn-primary btn-sm" href='/admin/chemistries/update/${d.id}'>
+            {
+                data: "description"
+            },
+            {
+                data: function (d) {
+                    return `<img style="width: 50px;height:50px" src="${d.image}" alt="image" />`;
+                },
+            },
+            {
+                data: "supplier"
+            },
+            {
+                data: function (d) {
+                    return getActive(d.active);
+                },
+            },
+            {
+                data: function (d) {
+                    return `<a class="btn btn-primary btn-sm" href='/admin/chemistries/update/${d.id}'>
                             <i class="fas fa-edit"></i>
                         </a>
                         <button data-id="${d.id}" class="btn btn-danger btn-sm btn-delete">
                             <i class="fas fa-trash"></i>
                         </button>`;
+                },
             },
-        },
         ],
     });
 })

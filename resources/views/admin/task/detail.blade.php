@@ -71,17 +71,14 @@
                             return `<input class="select-id-map" data-id="${d.id}" type="checkbox" /> `;
                         },
                     },
+                    // {
+                    //     data: "id"
+                    // },
                     {
-                        data: "id"
+                        data: "map.code"
                     },
                     {
-                        data: function(d) {
-                            return d.code ? d.code :
-                                `${d.map.area}-${d.map.id.toString().padStart(3, "0")}`;
-                        },
-                    },
-                    {
-                        data: "map.area"
+                        data: "map.position"
                     },
                     {
                         data: "map.target"
@@ -91,6 +88,28 @@
                     },
                     {
                         data: "kpi"
+                    },
+                    {
+                        data: "fake_result"
+                    },
+                    {
+                        data: "map.area"
+                    },
+                    {
+                        data: "map.description"
+                    },
+                    {
+                        data: "map.range"
+                    },
+                    {
+                        data: function(d) {
+                            return `<img style="width: 50px;height:50px" src="${d.image}" alt="image" />`;
+                        },
+                    },
+                    {
+                        data: function(d) {
+                            return getActive(d.active);
+                        },
                     },
                     {
                         data: function(d) {
@@ -111,9 +130,10 @@
                     url: "/api/settingtaskstaff?id=" + $("#task_id").val(),
                     dataSrc: "taskStaff",
                 },
-                columns: [{
-                        data: "id"
-                    },
+                columns: [
+                    // {
+                    //     data: "id"
+                    // },
                     {
                         data: function(d) {
                             return `NV${
@@ -154,9 +174,10 @@
                     url: "/api/settingtaskchemistries?id=" + $("#task_id").val(),
                     dataSrc: "taskChemistries",
                 },
-                columns: [{
-                        data: "id"
-                    },
+                columns: [
+                    // {
+                    //     data: "id"
+                    // },
                     {
                         data: "chemistry.name"
                     },
@@ -185,9 +206,10 @@
                     url: "/api/settingtaskitems?id=" + $("#task_id").val(),
                     dataSrc: "taskItems",
                 },
-                columns: [{
-                        data: "id"
-                    },
+                columns: [
+                    // {
+                    //     data: "id"
+                    // },
                     {
                         data: "item.name"
                     },
@@ -216,9 +238,10 @@
                     url: "/api/settingtasksolutions?id=" + $("#task_id").val(),
                     dataSrc: "taskSolutions",
                 },
-                columns: [{
-                        data: "id"
-                    },
+                columns: [
+                    // {
+                    //     data: "id"
+                    // },
                     {
                         data: "solution.name"
                     },
@@ -804,7 +827,7 @@
                     <table id="table" class="table display nowrap dataTable dtr-inline collapsed">
                         <thead>
                             <tr>
-                                <th>ID</th>
+                                <!-- <th>ID</th> -->
                                 <th>Nhiệm vụ</th>
                                 <th>Ngày kế hoạch</th>
                                 <th>Ngày thực hiện</th>
@@ -821,7 +844,6 @@
             </div>
         </div>
     </div>
-
     <div class="modal fade" id="modal" style="display: none;" aria-modal="true" role="dialog">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
@@ -835,7 +857,7 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Ngày kế hoạch</label>
+                                <label for="menu">Ngày kế hoạch <span class="required">(*)</span></label>
                                 <input type="date" id="plan_date" class="form-control" />
                             </div>
                         </div>
@@ -849,13 +871,13 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Giờ vào</label>
+                                <label for="menu">Giờ vào <span class="required">(*)</span></label>
                                 <input type="text" id="time_in" class="form-control" />
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Giờ ra</label>
+                                <label for="menu">Giờ ra <span class="required">(*)</span></label>
                                 <input type="text" id="time_out" class="form-control" />
                             </div>
                         </div>
@@ -935,12 +957,18 @@
                                                                 <i class="fas fa-trash"></i>
                                                             </button>
                                                         </th>
-                                                        <th>ID</th>
+                                                        <!-- <th>ID</th> -->
                                                         <th>Mã sơ đồ</th>
                                                         <th>Vị trí</th>
                                                         <th>Đối tượng</th>
                                                         <th>Đơn vị</th>
                                                         <th>KPI</th>
+                                                        <th>Kết quả dự kiến</th>
+                                                        <th>Khu vực</th>
+                                                        <th>Mô tả</th>
+                                                        <th>Phạm vi</th>
+                                                        <th>Ảnh</th>
+                                                        <th>Hiệu lực</th>
                                                         <th>Thao tác</th>
                                                     </tr>
                                                 </thead>
@@ -958,7 +986,7 @@
                                                 class="table-staff table display nowrap dataTable dtr-inline collapsed">
                                                 <thead>
                                                     <tr>
-                                                        <th>ID</th>
+                                                        <!-- <th>ID</th> -->
                                                         <th>Mã nhân viên</th>
                                                         <th>Họ tên</th>
                                                         <th>Chức vụ</th>
@@ -981,7 +1009,7 @@
                                                 class="table-item table display nowrap dataTable dtr-inline collapsed">
                                                 <thead>
                                                     <tr>
-                                                        <th>ID</th>
+                                                        <!-- <th>ID</th> -->
                                                         <th>Tên</th>
                                                         <th>Đơn vị</th>
                                                         <th>KPI</th>
@@ -1002,7 +1030,7 @@
                                                 class="table-chemistry table display nowrap dataTable dtr-inline collapsed">
                                                 <thead>
                                                     <tr>
-                                                        <th>ID</th>
+                                                        <!-- <th>ID</th> -->
                                                         <th>Tên</th>
                                                         <th>Đơn vị</th>
                                                         <th>KPI</th>
@@ -1023,7 +1051,7 @@
                                                 class="table-solution table display nowrap dataTable dtr-inline collapsed">
                                                 <thead>
                                                     <tr>
-                                                        <th>ID</th>
+                                                        <!-- <th>ID</th> -->
                                                         <th>Tên</th>
                                                         <th>Đơn vị</th>
                                                         <th>KPI</th>
@@ -1062,7 +1090,7 @@
                     <div class="row">
                         <div class="col-lg-12 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Phương pháp</label>
+                                <label for="menu">Phương pháp <span class="required">(*)</span></label>
                                 <select class="form-control" name="" id="solution_id">
                                     @foreach ($solutions as $solution)
                                         <option value="{{ $solution->id }}">
@@ -1075,13 +1103,13 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Đơn vị</label>
+                                <label for="menu">Đơn vị <span class="required">(*)</span></label>
                                 <input class="form-control" type="text" id="solution_unit" />
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">KPI</label>
+                                <label for="menu">KPI <span class="required">(*)</span></label>
                                 <input class="form-control" type="text" id="solution_kpi" />
                             </div>
                         </div>
@@ -1116,7 +1144,7 @@
                     <div class="row">
                         <div class="col-lg-12 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Vật tư</label>
+                                <label for="menu">Vật tư <span class="required">(*)</span></label>
                                 <select class="form-control" name="" id="item_id">
                                     @foreach ($items as $item)
                                         <option value="{{ $item->id }}">
@@ -1129,13 +1157,13 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Đơn vị</label>
+                                <label for="menu">Đơn vị <span class="required">(*)</span></label>
                                 <input class="form-control" type="text" id="item_unit" />
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">KPI</label>
+                                <label for="menu">KPI <span class="required">(*)</span></label>
                                 <input class="form-control" type="text" id="item_kpi" />
                             </div>
                         </div>
@@ -1163,34 +1191,27 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        {{-- <div class="col-lg-6 col-md-12">
-                    <div class="form-group">
-                        <label for="menu">Mã sơ đồ</label>
-                        <input type="text" class="form-control" name="code" value="{{ old('code') }}"
-                            placeholder="Nhập mã sơ đồ">
-                    </div>
-                </div> --}}
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Số lượng sơ đồ</label>
+                                <label for="menu">Số lượng sơ đồ <span class="required">(*)</span></label>
                                 <input type="number" class="form-control" id="number" value="1"
                                     placeholder="Nhập số lượng sơ đồ">
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Vị trí</label>
-                                <input type="text" class="form-control" id="position" value=""
-                                    placeholder="Nhập vị trí">
+                                <label for="menu">Mã sơ đồ <span class="required">(*)</span></label>
+                                <input type="text" class="form-control" id="code" value=""
+                                    placeholder="Nhập mã sơ đồ">
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Khu vực</label>
-                                <input type="text" class="form-control" id="area" value=""
-                                    placeholder="Nhập khu vực">
+                                <label for="menu">Vị trí</label>
+                                <input type="text" class="form-control" id="position" value=""
+                                    placeholder="Nhập vị trí">
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-12">
@@ -1202,43 +1223,15 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <label for="menu">Mô tả</label>
-                                <textarea class="form-control" id="description" id="" cols="30" rows="3"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Phạm vi</label>
-                                <input type="text" class="form-control" id="range" value=""
-                                    placeholder="Nhập phạm vi">
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-12">
-                            <div class="form-group">
-                                <label for="file">Chọn ảnh</label><br>
-                                <div class="">
-                                    <img id="image_show" style="width: 100px;height:100px" src=""
-                                        alt="image" />
-                                    <input type="file" id="upload" accept=".png,.jpeg"/>
-                                </div>
-                                <input type="hidden" id="image" value="">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6 col-md-12">
-                            <div class="form-group">
-                                <label for="menu">Chỉ số</label>
+                                <label for="menu">Đơn vị <span class="required">(*)</span></label>
                                 <input class="form-control" type="text" id="unit" />
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">KPI</label>
+                                <label for="menu">KPI <span class="required">(*)</span></label>
                                 <input class="form-control" type="text" id="kpi" />
                             </div>
                         </div>
@@ -1248,6 +1241,42 @@
                             <div class="form-group">
                                 <label for="menu">Kết quả dự kiến</label>
                                 <input class="form-control" type="text" id="fake_result" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Khu vực</label>
+                                <input type="text" class="form-control" id="area" value=""
+                                    placeholder="Nhập khu vực">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Mô tả</label>
+                                <input class="form-control" id="description" id="" cols="30"
+                                    rows="3" placeholder="Nhập mô tả" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Phạm vi</label>
+                                <input type="text" class="form-control" id="range" value=""
+                                    placeholder="Nhập phạm vi">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="file">Chọn ảnh</label><br>
+                                <div class="">
+                                    <img id="image_show" style="width: 100px;height:100px" src=""
+                                        alt="image" />
+                                    <input type="file" id="upload" accept=".png,.jpeg" />
+                                </div>
+                                <input type="hidden" id="image" value="">
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-12">
@@ -1275,7 +1304,6 @@
                         class="btn btn-primary btn-update-map">Lưu</button>
                 </div>
             </div>
-
         </div>
     </div>
     {{-- add staff --}}
@@ -1292,7 +1320,7 @@
                     <div class="row">
                         <div class="col-lg-12 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Nhân sự</label>
+                                <label for="menu">Nhân sự <span class="required">(*)</span></label>
                                 <select class="form-control" name="" id="staff_id">
                                     @foreach ($staffs as $staff)
                                         <option value="{{ $staff->id }}">
@@ -1333,7 +1361,7 @@
                     <div class="row">
                         <div class="col-lg-12 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Hóa chất</label>
+                                <label for="menu">Hóa chất <span class="required">(*)</span></label>
                                 <select class="form-control" name="" id="chemistry_id">
                                     @foreach ($chemistries as $chemistry)
                                         <option value="{{ $chemistry->id }}">
@@ -1346,13 +1374,13 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Đơn vị</label>
+                                <label for="menu">Đơn vị <span class="required">(*)</span></label>
                                 <input class="form-control" type="text" id="chemistry_unit" />
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">KPI</label>
+                                <label for="menu">KPI <span class="required">(*)</span></label>
                                 <input class="form-control" type="text" id="chemistry_kpi" />
                             </div>
                         </div>

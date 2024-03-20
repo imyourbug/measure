@@ -14,7 +14,7 @@ $(document).ready(function () {
             dataSrc: "taskDetails",
         },
         columns: [
-            { data: "id" },
+            // { data: "id" },
             { data: "task.type.name" },
             // { data: function (d) {
             //     return `${formatDate(d.plan_date)}`
