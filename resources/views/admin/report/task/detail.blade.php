@@ -103,13 +103,25 @@
                         {{-- Map --}}
                         <div class="tab-pane active show fade" id="custom-tabs-four-home" role="tabpanel"
                             aria-labelledby="custom-tabs-four-home-tab">
-                            <a href="{{ route('admin.reports.reload', ['id' => request()->id]) }}"
-                                onclick="return confirm('Bạn có chắc muốn tải lên kết quả mẫu?')"
-                                class="btn btn-success mb-4 btn-open-modal">Tải lên kết quả mẫu</a>
+                            <div class="mb-4">
+                                <a href="{{ route('admin.reports.reload', ['id' => request()->id]) }}"
+                                    onclick="return confirm('Bạn có chắc muốn tải lên kết quả mẫu?')"
+                                    class="btn btn-success btn-open-modal">Tải lên kết quả mẫu
+                                </a>
+                                <a class="btn btn-warning"
+                                    href="{{ route('admin.settings.reload', ['taskdetail_id' => request()->id]) }}"
+                                    onclick="return confirm('Xác nhận tải lại cài đặt cho nhiệm vụ?')">Tải lại cài đặt
+                                </a>
+                            </div>
                             <table id="tableMap" class="table-map table display nowrap dataTable dtr-inline collapsed">
                                 <thead>
                                     <tr>
                                         <!-- <th>ID</th> -->
+                                        <th><input type="checkbox" class="select-id-map-all" />
+                                            <button class="btn btn-danger btn-sm btn-delete-map-all" style="display: none">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </th>
                                         <th>Mã sơ đồ</th>
                                         <th>Vị trí</th>
                                         <th>Đối tượng</th>
@@ -278,7 +290,7 @@
                                 <div class="">
                                     <img id="image_show_solution" style="width: 100px;height:100px" src=""
                                         alt="image" />
-                                    <input type="file" class="upload" data-type="solution" accept=".png,.jpeg"/>
+                                    <input type="file" class="upload" data-type="solution" accept=".png,.jpeg" />
                                 </div>
                                 <input type="hidden" id="image_solution" value="">
                             </div>
@@ -354,7 +366,7 @@
                                 <div class="">
                                     <img id="image_show_item" style="width: 100px;height:100px" src=""
                                         alt="image" />
-                                    <input type="file" class="upload" data-type="item" accept=".png,.jpeg"/>
+                                    <input type="file" class="upload" data-type="item" accept=".png,.jpeg" />
                                 </div>
                                 <input type="hidden" id="image_item" value="">
                             </div>
@@ -391,14 +403,20 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-lg-12 col-md-12">
+                        {{-- <div class="col-lg-12 col-md-12">
                             <div class="form-group">
                                 <label for="menu">Sơ đồ <span class="required">(*)</span></label>
                                 <select class="form-control" name="" id="map_id">
                                     @foreach ($maps as $map)
-                                        <option value="{{ $map->id }}">{{ $map->id . '-' . $map->code }}</option>
+                                        <option value="{{ $map->id }}">{{ $map->code }}</option>
                                     @endforeach
                                 </select>
+                            </div>
+                        </div> --}}
+                        <div class="col-lg-12 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Mã sơ đồ <span class="required">(*)</span></label>
+                                <input class="form-control" type="text" id="code" />
                             </div>
                         </div>
                     </div>
@@ -429,7 +447,7 @@
                                 <div class="">
                                     <img id="image_show_map" style="width: 100px;height:100px" src=""
                                         alt="image" />
-                                    <input type="file" class="upload" data-type="map" accept=".png,.jpeg"/>
+                                    <input type="file" class="upload" data-type="map" accept=".png,.jpeg" />
                                 </div>
                                 <input type="hidden" id="image_map" value="">
                             </div>
@@ -542,7 +560,7 @@
                                 <div class="">
                                     <img id="image_show_chemistry" style="width: 100px;height:100px" src=""
                                         alt="image" />
-                                    <input type="file" class="upload" data-type="chemistry" accept=".png,.jpeg"/>
+                                    <input type="file" class="upload" data-type="chemistry" accept=".png,.jpeg" />
                                 </div>
                                 <input type="hidden" id="image_chemistry" value="">
                             </div>

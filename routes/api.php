@@ -119,6 +119,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin'], function () {
         Route::get('/', 'TaskMapController@index')->name('index');
         Route::get('/{id}/show', 'TaskMapController@show')->name('show');
         Route::delete('/{id}/destroy', 'TaskMapController@destroy')->name('destroy');
+        Route::post('/deleteAll', 'TaskMapController@deleteAll')->name('deleteAll');
     });
 
     #taskstaff

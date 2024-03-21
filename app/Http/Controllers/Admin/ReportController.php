@@ -30,6 +30,7 @@ class ReportController extends Controller
             ]);
         }
 
+        Toastr::success('Tải lên kết quả mẫu thành công', __('title.toastr.success'));
         return redirect()->back();
     }
 

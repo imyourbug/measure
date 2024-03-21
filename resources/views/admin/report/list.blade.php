@@ -22,7 +22,7 @@
             let contract_id = $('.select-contract').val();
 
             // $(this).unbind('submit').submit();
-            if (!column | !month | !year |!contract_id | !pattern.test(year)) {
+            if (!column | !month | !year | !contract_id | !pattern.test(year)) {
                 alert('Kiểm tra thông tin đã nhập!');
             } else {
                 $(this).unbind('submit').submit();
@@ -380,7 +380,7 @@
                                         <select name="contract_id" class="form-control">
                                             @foreach ($contracts as $contract)
                                                 <option value="{{ $contract->id }}">
-                                                    {{ $contract->name . '-' . ($contract->branch->name ?? '') }}
+                                                    {{ $contract->customer->name . ' | ' . $contract->name . ' | ' . ($contract->branch->name ?? '') }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -467,7 +467,7 @@
                                 <select class="form-control select-contract">
                                     @foreach ($contracts as $contract)
                                         <option value="{{ $contract->id }}">
-                                            {{ $contract->name . '-' . ($contract->branch->name ?? '') }}
+                                            {{ $contract->customer->name . ' | ' . $contract->name . ' | ' . ($contract->branch->name ?? '') }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -545,18 +545,25 @@
             </div>
         </div>
         <div class="card-body" style="display: block;padding: 10px !important;">
-            <div class="row mb-3">
-                <div class="col-lg-6 col-md-12">
+            <div class="row">
+                <div class="col-lg-3 col-md-12">
+                    <label for="">Thời gian</label>
+                    <input id="select-time" class="form-control" type="month" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
                     <label for="">Lựa chọn hợp đồng</label>
                     <select multiple="multiple" class="select2 custom-select form-control-border select">
                         @foreach ($contracts as $contract)
                             <option value="{{ $contract->id }}">
-                                {{ $contract->name . '-' . ($contract->branch->name ?? '') }}
+                                {{ $contract->customer->name . ' | ' . $contract->name . ' | ' . ($contract->branch->name ?? '') }}
                             </option>
                         @endforeach
                     </select>
                 </div>
             </div>
+            <br>
             <table id="table" class="table display nowrap dataTable dtr-inline collapsed">
                 <thead>
                     <tr>

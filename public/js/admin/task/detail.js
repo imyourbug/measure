@@ -133,12 +133,13 @@ $(document).on("click", ".btn-update-detail", function () {
 });
 
 $(document).on("click", ".btn-add-detail", function () {
-    if (confirm("Bạn có muốn sửa")) {
+    if (confirm("Bạn có muốn thêm")) {
         let data = {
             time_in: $("#time_in").val(),
             plan_date: $("#plan_date").val(),
             actual_date: $("#actual_date").val(),
             time_out: $("#time_out").val(),
+            task_id: $("#task_id").val(),
         };
         $.ajax({
             type: "POST",

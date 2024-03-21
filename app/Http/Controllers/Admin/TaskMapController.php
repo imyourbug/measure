@@ -37,12 +37,13 @@ class TaskMapController extends Controller
             $data = $request->validate([
                 'id' => 'required|numeric',
                 'unit' => 'required|string',
+                'code' => 'required|string',
                 'kpi' => 'required|numeric',
                 'result' => 'nullable|numeric',
                 'image' => 'nullable|string',
                 'detail' => 'nullable|string',
                 'task_id' => 'required|numeric',
-                'map_id' => 'required|numeric',
+                'map_id' => 'nullable|numeric',
             ]);
             unset($data['id']);
             TaskMap::where('id', $request->input('id'))->update($data);
@@ -78,6 +79,25 @@ class TaskMapController extends Controller
     {
         try {
             TaskMap::firstWhere('id', $id)->delete();
+
+            return response()->json([
+                'status' => 0,
+            ]);
+        } catch (Throwable $e) {
+            return response()->json([
+                'status' => 1,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function deleteAll(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                'ids' => 'nullable|array',
+            ]);
+            TaskMap::whereIn('id', $data['ids'])->delete();
 
             return response()->json([
                 'status' => 0,

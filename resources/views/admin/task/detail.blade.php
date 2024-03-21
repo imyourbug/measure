@@ -37,7 +37,6 @@
         $("#upload").change(function() {
             const form = new FormData();
             form.append("file", $(this)[0].files[0]);
-            console.log(form);
             $.ajax({
                 processData: false,
                 contentType: false,
@@ -63,7 +62,8 @@
                     url: "/api/settingtaskmaps?id=" + $("#task_id").val(),
                     dataSrc: "taskMaps",
                 },
-                columns: [{
+                columns: [
+                    {
                         data: function(d) {
                             if (!listAllIdMap.includes(d.id)) {
                                 listAllIdMap.push(d.id);
@@ -75,13 +75,13 @@
                     //     data: "id"
                     // },
                     {
-                        data: "map.code"
+                        data: "code"
                     },
                     {
-                        data: "map.position"
+                        data: "position"
                     },
                     {
-                        data: "map.target"
+                        data: "target"
                     },
                     {
                         data: "unit"
@@ -93,24 +93,24 @@
                         data: "fake_result"
                     },
                     {
-                        data: "map.area"
+                        data: "area"
                     },
+                    // {
+                    //     data: "description"
+                    // },
                     {
-                        data: "map.description"
-                    },
-                    {
-                        data: "map.range"
+                        data: "round"
                     },
                     {
                         data: function(d) {
                             return `<img style="width: 50px;height:50px" src="${d.image}" alt="image" />`;
                         },
                     },
-                    {
-                        data: function(d) {
-                            return getActive(d.active);
-                        },
-                    },
+                    // {
+                    //     data: function(d) {
+                    //         return getActive(d.active);
+                    //     },
+                    // },
                     {
                         data: function(d) {
                             return `<a class="btn btn-primary btn-sm btn-edit" data-id="${d.id}" data-target="#modal-map" data-toggle="modal">
@@ -476,7 +476,6 @@
                     return item !== id;
                 })
             };
-            console.log(listIdMap.length > 0, listIdMap.length);
             $('.btn-delete-map-all').css('display', listIdMap.length > 0 ? 'block' : 'none');
         });
         $(document).on("click", ".btn-edit", function() {
@@ -490,6 +489,16 @@
                         $("#map_id").val(taskMap.map_id);
                         $("#kpi").val(taskMap.kpi);
                         $("#unit").val(taskMap.unit);
+                        $("#code").val(taskMap.code);
+                        $("#position").val(taskMap.position);
+                        $("#target").val(taskMap.target);
+                        $("#kpi").val(taskMap.kpi);
+                        $("#fake_result").val(taskMap.fake_result);
+                        $("#area").val(taskMap.area);
+                        // $("#description").val(taskMap.description);
+                        $("#range").val(taskMap.round);
+                        $("#image_show").attr("src", taskMap.image);
+                        $("#image").val(taskMap.image);
                         //
                         $(".btn-add-map").css("display", "none");
                         $(".btn-update-map").css("display", "block");
@@ -513,12 +522,19 @@
             if (confirm("Bạn có muốn sửa")) {
                 let data = {
                     id: $("#settingtaskmap_id").val(),
-                    unit: $("#unit").val(),
                     kpi: $("#kpi").val(),
+                    unit: $("#unit").val(),
                     target: $("#target").val(),
+                    code: $("#code").val(),
+                    position: $("#position").val(),
+                    fake_result: $("#fake_result").val(),
+                    area: $("#area").val(),
+                    image: $("#image").val(),
+                    // description: $("#description").val(),
+                    round: $("#range").val(),
                     task_id: $("#task_id").val(),
-                    map_id: $("#map_id").val(),
                 };
+                console.log(data);
                 $.ajax({
                     type: "POST",
                     url: $(this).data("url"),
@@ -557,7 +573,6 @@
 
         $(document).on("click", ".btn-delete-map-all", function() {
             if (confirm("Bạn có muốn xóa")) {
-                console.log(listIdMap);
                 $.ajax({
                     type: "POST",
                     url: `/api/settingtaskmaps/deleteAll`,
@@ -587,7 +602,7 @@
                 area: $("#area").val(),
                 target: $("#target").val(),
                 image: $("#image").val(),
-                description: $("#description").val(),
+                // description: $("#description").val(),
                 range: $("#range").val(),
                 active: $("#active").val(),
                 unit: $("#unit").val(),
@@ -746,7 +761,6 @@
                     url: $(this).data("url"),
                     data: data,
                     success: function(response) {
-                        console.log(response);
                         if (response.status == 0) {
                             closeModal("chemistry");
                             toastr.success("Cập nhật thành công");
@@ -965,10 +979,10 @@
                                                         <th>KPI</th>
                                                         <th>Kết quả dự kiến</th>
                                                         <th>Khu vực</th>
-                                                        <th>Mô tả</th>
+                                                        {{-- <th>Mô tả</th> --}}
                                                         <th>Phạm vi</th>
                                                         <th>Ảnh</th>
-                                                        <th>Hiệu lực</th>
+                                                        {{-- <th>Hiệu lực</th> --}}
                                                         <th>Thao tác</th>
                                                     </tr>
                                                 </thead>
@@ -1247,27 +1261,24 @@
                             <div class="form-group">
                                 <label for="menu">Khu vực</label>
                                 <input type="text" class="form-control" id="area" value=""
-                                    placeholder="Nhập khu vực">
+                                    placeholder="Nhập khu vực" />
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-6 col-md-12">
+                        {{-- <div class="col-lg-6 col-md-12">
                             <div class="form-group">
                                 <label for="menu">Mô tả</label>
-                                <input class="form-control" id="description" id="" cols="30"
-                                    rows="3" placeholder="Nhập mô tả" />
+                                <input class="form-control" id="description" placeholder="Nhập mô tả" />
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
                                 <label for="menu">Phạm vi</label>
                                 <input type="text" class="form-control" id="range" value=""
-                                    placeholder="Nhập phạm vi">
+                                    placeholder="Nhập phạm vi" />
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
                                 <label for="file">Chọn ảnh</label><br>
@@ -1279,6 +1290,8 @@
                                 <input type="hidden" id="image" value="">
                             </div>
                         </div>
+                    </div>
+                    {{-- <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
                                 <label>Hiệu lực</label>
@@ -1294,7 +1307,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>

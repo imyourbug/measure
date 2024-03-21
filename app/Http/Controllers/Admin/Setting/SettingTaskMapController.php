@@ -46,6 +46,7 @@ class SettingTaskMapController extends Controller
                 SettingTaskMap::create([
                     ...$dataInsert,
                     'unit' => $data['unit'],
+                    'round' => $data['range'],
                     'kpi' => $data['kpi'],
                     'task_id' => $data['task_id'],
                     'fake_result' => $data['fake_result'] ?? 0,
@@ -69,13 +70,18 @@ class SettingTaskMapController extends Controller
         try {
             $data = $request->validate([
                 'id' => 'required|numeric',
+                'code' => 'required|string',
+                'position' => 'nullable|string',
+                'area' => 'nullable|string',
+                'target' => 'nullable|string',
                 'unit' => 'required|string',
                 'kpi' => 'required|numeric',
                 'result' => 'nullable|numeric',
                 'image' => 'nullable|string',
                 'detail' => 'nullable|string',
+                'round' => 'nullable|string',
                 'task_id' => 'required|numeric',
-                'map_id' => 'required|numeric',
+                // 'map_id' => 'required|numeric',
             ]);
             unset($data['id']);
             SettingTaskMap::where('id', $request->input('id'))->update($data);

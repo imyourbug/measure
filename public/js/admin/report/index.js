@@ -1,30 +1,40 @@
 var dataTable = null;
 
-$(document).on("change", ".select2", function () {
-    //
-    console.log($(this).val());
-    let contracts = $(this).val();
-    dataTable.ajax
-        .url("/api/tasks/getAll?contracts=" + contracts.join(","))
-        .load();
-    // if (contracts.length > 0) {
-    //     $.ajax({
-    //         type: "GET",
-    //         url: "/api/tasks/" + $(this).data("id") + "/getById",
-    //         success: function (response) {
-    //             if (response.status == 0) {
-    //                 let task = response.task;
-    //                 $("#type_id").val(task.type_id);
-    //                 $("#contract_id").val(task.contract_id);
-    //                 $("#note").text(task.note);
-    //                 $("#task_id").val(task.id);
-    //             } else {
-    //                 toastr.error(response.message);
-    //             }
-    //         },
-    //     });
-    // }
+var searchParams = new Map();
+
+$(document).on("change", "#select-time", function () {
+    if ($(this).val()) {
+        let time = $(this).val().split("-");
+        let year = time[0];
+        let month = time[1];
+        searchParams.set("month", month);
+        searchParams.set("year", year);
+        dataTable.ajax
+            .url("/api/tasks/getAll?" + getQueryUrlWithParams())
+            .load();
+    }
 });
+
+$(document).on("change", ".select2", function () {
+    let contracts = $(this).val();
+    searchParams.set("contracts", contracts);
+    dataTable.ajax
+        .url("/api/tasks/getAll?" + getQueryUrlWithParams())
+        .load();
+});
+
+function getQueryUrlWithParams() {
+    let query = '';
+    Array.from(searchParams).forEach(([key, values], index) => {
+        if (index = 0) {
+            query += `${key}=${typeof values == "array" ? values.join(",") : values}`;
+        } else {
+            query += `&${key}=${typeof values == "array" ? values.join(",") : values}`;
+        }
+    })
+
+    return query;
+}
 
 $(document).ready(function () {
     // select 2

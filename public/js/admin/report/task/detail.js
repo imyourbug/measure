@@ -3,6 +3,54 @@ var dataTableStaff = null;
 var dataTableItem = null;
 var dataTableChemistry = null;
 var dataTableSolution = null;
+var listIdMap = [];
+var listAllIdMap = [];
+
+$(document).on("click", ".select-id-map-all", function () {
+    if ($(this).prop('checked')) {
+        $('.select-id-map').prop('checked', true);
+        listIdMap = listAllIdMap;
+    } else {
+        $('.select-id-map').prop('checked', false);
+        listIdMap = [];
+    }
+    $('.btn-delete-map-all').css('display', listIdMap.length > 0 ? 'block' : 'none');
+});
+
+$(document).on("click", ".select-id-map", function () {
+    let id = $(this).data('id');
+    if (!listIdMap.includes(id)) {
+        listIdMap.push(id);
+    } else {
+        listIdMap = listIdMap.filter(function (item) {
+            return item !== id;
+        })
+    };
+    $('.btn-delete-map-all').css('display', listIdMap.length > 0 ? 'block' : 'none');
+});
+
+$(document).on("click", ".btn-delete-map-all", function () {
+    if (confirm("Bạn có muốn xóa")) {
+        $.ajax({
+            type: "POST",
+            url: `/api/taskmaps/deleteAll`,
+            data: {
+                ids: listIdMap
+            },
+            success: function (response) {
+                if (response.status == 0) {
+                    toastr.success("Xóa thành công");
+                    dataTableMap.ajax.reload();
+                    listIdMap.length = 0;
+                    $('.btn-delete-map-all').css('display', 'none');
+                    $('.select-id-map-all').prop('checked', false);
+                } else {
+                    toastr.error(response.message);
+                }
+            },
+        });
+    }
+});
 
 function closeModal(type) {
     $("#modal-" + type).css("display", "none");
@@ -18,6 +66,14 @@ $(document).ready(function () {
             dataSrc: "taskMaps",
         },
         columns: [
+            {
+                data: function (d) {
+                    if (!listAllIdMap.includes(d.id)) {
+                        listAllIdMap.push(d.id);
+                    }
+                    return `<input class="select-id-map" data-id="${d.id}" type="checkbox" /> `;
+                },
+            },
             // { data: "id" },
             {
                 data: function (d) {
@@ -62,8 +118,8 @@ $(document).ready(function () {
             {
                 data: function (d) {
                     return `NV${d.user.staff.id >= 10
-                            ? d.user.staff.id
-                            : "0" + d.user.staff.id
+                        ? d.user.staff.id
+                        : "0" + d.user.staff.id
                         }`;
                 },
             },
@@ -405,13 +461,13 @@ $(document).on("click", ".btn-edit", function () {
         success: function (response) {
             if (response.status == 0) {
                 let taskMap = response.taskMap;
-                console.log(taskMap);
                 $(".modal-title-map").text("Cập nhật sơ đồ");
                 $("#map_id").val(taskMap.map_id);
                 $("#kpi").val(taskMap.kpi);
                 $("#unit").val(taskMap.unit);
                 $("#result").val(taskMap.result);
                 $("#detail").val(taskMap.detail);
+                $("#code").val(taskMap.code);
                 //
                 $("#image_show_map").attr("src", taskMap.image);
                 $("#image_map").val(taskMap.image);
@@ -440,7 +496,8 @@ $(document).on("click", ".btn-update-map", function () {
             id: $("#taskmap_id").val(),
             unit: $("#unit").val(),
             kpi: $("#kpi").val(),
-            map_id: $("#map_id").val(),
+            code: $("#code").val(),
+            // map_id: $("#map_id").val(),
             image: $("#image_map").val(),
             result: $("#result").val(),
             detail: $("#detail").val(),
