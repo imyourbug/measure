@@ -120,7 +120,8 @@
         <tbody>
             <tr>
                 <td>
-                    <img height="100px" src="{{ public_path($data['tasks'][0]['type']['parent']['image'] ?? '') }}"
+                    <img height="100px" src="{{ !empty($data['tasks'][0]['type']['parent']['image'])
+                         ? public_path($data['tasks'][0]['type']['parent']['image']) : '' }}"
                         alt="" />
                 </td>
                 <td style="text-align: center;line-height:16px">
@@ -213,7 +214,7 @@
                         <tbody>
                             <tr>
                                 <td style="width:50px;">
-                                    <img src="{{ public_path($info['type']['image']) }}" width="50px" height="50px"
+                                    <img src="{{ !empty($info['type']['image']) ? public_path($info['type']['image']) : '' }}" width="50px" height="50px"
                                         alt="">
                                 </td>
                                 <td colspan="2" style="border-right: 0.5px solid black;">
@@ -243,10 +244,12 @@
                                 </td>
                                 <td
                                     style="border: 0.5px solid black;border-bottom: none;border-right: 0.5px solid black;">
-                                    <img src="{{ $data['image_trend_charts'][$info['id']] ?? public_path('/') }}"
+                                    <img src="{{ !empty($data['image_trend_charts'][$info['id']]) 
+                                        ? public_path($data['image_trend_charts'][$info['id']]) : ''}}"
                                         alt="" />
                                     @if ($data['display'])
-                                        <img src="{{ $data['image_annual_charts'][$info['id']] ?? public_path('/') }}"
+                                        <img src="{{ !empty($data['image_annual_charts'][$info['id']])
+                                             ? public_path($data['image_annual_charts'][$info['id']]) : '' }}"
                                             alt="" />
                                     @endif
                                 </td>
@@ -283,7 +286,7 @@
                                                                     <td>{{ $task_map['kpi'] ?? '' }} </td>
                                                                     <td>{{ $task_map['result'] ?? '' }} </td>
                                                                     <td>
-                                                                        <img src="{{ public_path($task_map['image']) }}"
+                                                                        <img src="{{ !empty($task_map['image']) ? public_path($task_map['image']) : '' }}"
                                                                             width="15px" height="15px"
                                                                             alt="abc" />
                                                                     </td>

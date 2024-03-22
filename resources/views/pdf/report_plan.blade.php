@@ -109,7 +109,8 @@
         <tbody>
             <tr>
                 <td>
-                    <img height="100px" src="{{ public_path($data['tasks'][0]['type']['parent']['image'] ?? '') }}"
+                    <img height="100px" src="{{ !empty($data['tasks'][0]['type']['parent']['image']) 
+                        ? public_path($data['tasks'][0]['type']['parent']['image']) : '' }}"
                         alt="" />
                 </td>
                 <td style="text-align: center;line-height:16px">
@@ -209,7 +210,8 @@
                                 <table class="tbl-plan" cellspacing="0">
                                     <tbody>
                                         <tr>
-                                            <td rowspan="6"><img src="{{ public_path($info['type']['image']) }}"
+                                            <td rowspan="6"><img src="{{ !empty($info['type']['image'])
+                                                 ? public_path($info['type']['image']) : ''}}"
                                                     width="50px" height="50px" alt=""></td>
                                         </tr>
                                         <tr>
