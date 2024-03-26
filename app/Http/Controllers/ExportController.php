@@ -11,6 +11,7 @@ use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use MPDF;
+use Throwable;
 
 class ExportController extends Controller
 {
@@ -47,11 +48,10 @@ class ExportController extends Controller
             default:
                 break;
         }
-        // $pdf->setPaper('A4', 'portrait');
         $filename .= 'tháng ' . $data['month'] . ' năm ' . $data['year'] . '.pdf';
 
         return $pdf->stream($filename);
-        return $pdf->download($filename);
+        // return $pdf->download($filename);
     }
 
     public function getReportPlanByMonthAndYear($month, $year, $contract_id)

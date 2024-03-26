@@ -244,7 +244,7 @@
                                 </td>
                                 <td
                                     style="border: 0.5px solid black;border-bottom: none;border-right: 0.5px solid black;">
-                                    <img src="{{ !empty($data['image_trend_charts'][$info['id']]) 
+                                    <img src="{{ !empty($data['image_trend_charts'][$info['id']])
                                         ? public_path($data['image_trend_charts'][$info['id']]) : ''}}"
                                         alt="" />
                                     @if ($data['display'])
@@ -299,7 +299,7 @@
                                             </tbody>
                                         </table>
                                     @endif
-                                    <img src="{{ $data['image_charts'][$info['id']] ?? public_path('/') }}"
+                                    <img src="{{ $data['image_charts'][$info['id']] ?? '' }}"
                                         alt="" />
                                 </td>
                             </tr>

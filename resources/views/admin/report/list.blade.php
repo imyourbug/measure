@@ -13,15 +13,15 @@
         var listMapChart = [];
         var listTrendMapChart = [];
         var listAnnualMapChart = [];
-        $('#form-export').submit(function(event) {
-            event.preventDefault();
+        $('#form-export').submit(function(e) {
+            e.preventDefault();
             let pattern = /^\d{4}$/;
             let year = $('.select-year').val();
             let month = $('.select-month').val();
             let column = $('.select-column').val();
             let contract_id = $('.select-contract').val();
+            let url = $(this).attr('action');
 
-            // $(this).unbind('submit').submit();
             if (!column | !month | !year | !contract_id | !pattern.test(year)) {
                 alert('Kiểm tra thông tin đã nhập!');
             } else {
@@ -347,6 +347,7 @@
             console.log('close');
             $('.blockChart').html('');
         });
+
         // setInterval(() => {
         //     if (!$('body')
         //         .hasClass('modal-open') && !$('#modal-export')
