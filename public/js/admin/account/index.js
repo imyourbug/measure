@@ -34,8 +34,8 @@ $(document).ready(function () {
                     return `${d.role == 1
                         ? ""
                         : d.role == 0
-                            ? d.staff.tel ?? ""
-                            : d.customer.tel ?? ""
+                            ? (d.staff ? d.staff.tel : "")
+                            : (d.customer ? d.customer.tel : "")
                         }`;
                 },
             },
@@ -44,7 +44,7 @@ $(document).ready(function () {
                     return `${d.role == 1
                         ? ""
                         : d.role == 0
-                            ? d.staff.position ?? ""
+                            ? (d.staff ? d.staff.position : "")
                             : ""
                         }`;
                 },

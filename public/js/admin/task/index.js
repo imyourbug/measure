@@ -16,8 +16,8 @@ $(document).ready(function () {
     dataTable = $("#table").DataTable({
         ajax: {
             url: "/api/tasks/getAll?contract_id="
-                + ($('#request_contract_id').val() ?? '') + "&type_id="
-                + ($('#request_type_id').val() ?? ''),
+                + ($('#request_contract_id').val() || '') + "&type_id="
+                + ($('#request_type_id').val() || ''),
             dataSrc: "tasks",
         },
         columns: [
