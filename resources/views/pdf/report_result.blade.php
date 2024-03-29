@@ -120,9 +120,10 @@
         <tbody>
             <tr>
                 <td>
-                    <img height="100px" src="{{ !empty($data['tasks'][0]['type']['parent']['image'])
-                         ? public_path($data['tasks'][0]['type']['parent']['image']) : '' }}"
-                        alt="" />
+                    @if (!empty($data['tasks'][0]['type']['parent']['image']))
+                        <img height="100px" src="{{ public_path($data['tasks'][0]['type']['parent']['image']) }}"
+                            alt="" />
+                    @endif
                 </td>
                 <td style="text-align: center;line-height:16px">
                     <p style="font-size: 14px;font-weight:bold;color:rgb(15, 22, 168)">BÁO CÁO CÔNG VIỆC</p>
@@ -214,8 +215,10 @@
                         <tbody>
                             <tr>
                                 <td style="width:50px;">
-                                    <img src="{{ !empty($info['type']['image']) ? public_path($info['type']['image']) : '' }}" width="50px" height="50px"
-                                        alt="">
+                                    @if (!empty($info['type']['image']))
+                                        <img src="{{ public_path($info['type']['image']) }}" width="50px"
+                                            height="50px" alt="">
+                                    @endif
                                 </td>
                                 <td colspan="2" style="border-right: 0.5px solid black;">
                                     <h3 style="text-decoration: underline; color:orange">{{ $info['type']['name'] }}
@@ -244,12 +247,12 @@
                                 </td>
                                 <td
                                     style="border: 0.5px solid black;border-bottom: none;border-right: 0.5px solid black;">
-                                    <img src="{{ !empty($data['image_trend_charts'][$info['id']])
-                                        ? public_path($data['image_trend_charts'][$info['id']]) : ''}}"
-                                        alt="" />
-                                    @if ($data['display'])
-                                        <img src="{{ !empty($data['image_annual_charts'][$info['id']])
-                                             ? public_path($data['image_annual_charts'][$info['id']]) : '' }}"
+                                    @if (!empty($data['image_trend_charts'][$info['id']]))
+                                        <img src="{{ public_path($data['image_trend_charts'][$info['id']]) }}"
+                                            alt="" />
+                                    @endif
+                                    @if ($data['display'] && !empty($data['image_annual_charts'][$info['id']]))
+                                        <img src="{{ public_path($data['image_annual_charts'][$info['id']]) }}"
                                             alt="" />
                                     @endif
                                 </td>
@@ -264,43 +267,50 @@
                                 </td>
                                 <td style="border: 0.5px solid black;border-bottom: none;">
                                     @if (!empty($info['details']))
-                                        <table class="tbl-map" style="width:100%" cellspacing="0">
-                                            <tbody>
-                                                <tr>
-                                                    <th>Mã sơ đồ</th>
-                                                    <th>Vị trí</th>
-                                                    <th>Chỉ số</th>
-                                                    <th>KPI</th>
-                                                    <th>Kết quả</th>
-                                                    <th>Ảnh KT</th>
-                                                </tr>
-                                                @if (!empty($info['details']))
-                                                    @foreach ($info['details'] as $detail)
-                                                        @if (!empty($detail['task_maps']))
-                                                            @foreach ($detail['task_maps'] as $task_map)
+                                        @if (!empty($info['details']))
+                                            @foreach ($info['details'] as $detail)
+                                                @foreach ($detail['task_maps'] as $key => $taskMaps)
+                                                    <table class="tbl-map" style="width:100%" cellspacing="0">
+                                                        <tbody>
+                                                            <tr>
+                                                                <th>Mã sơ đồ</th>
+                                                                <th>Vị trí</th>
+                                                                <th>Chỉ số</th>
+                                                                <th>KPI</th>
+                                                                <th>Kết quả</th>
+                                                                <th>Ảnh KT</th>
+                                                            </tr>
+                                                            @foreach ($taskMaps as $taskMap)
                                                                 <tr>
-                                                                    <td>{{ !empty($task_map['map']['code']) ? $task_map['map']['code'] : $task_map['map']['area'] . '-' . ((int) $task_map['map']['id'] > 100 ?: str_pad((string) $task_map['map']['id'], 3, '0', STR_PAD_LEFT)) }}
+                                                                    <td style="width: 60px">
+                                                                        {{ $taskMap['map']['code'] ?? '' }}
                                                                     </td>
-                                                                    <td>{{ $task_map['map']['position'] ?? '' }} </td>
-                                                                    <td>{{ $task_map['unit'] ?? '' }} </td>
-                                                                    <td>{{ $task_map['kpi'] ?? '' }} </td>
-                                                                    <td>{{ $task_map['result'] ?? '' }} </td>
+                                                                    <td>{{ $taskMap['map']['position'] ?? '' }} </td>
+                                                                    <td>{{ $taskMap['unit'] ?? '' }} </td>
+                                                                    <td>{{ $taskMap['kpi'] ?? '' }} </td>
+                                                                    <td>{{ $taskMap['result'] ?? '' }} </td>
                                                                     <td>
-                                                                        <img src="{{ !empty($task_map['image']) ? public_path($task_map['image']) : '' }}"
-                                                                            width="15px" height="15px"
-                                                                            alt="abc" />
+                                                                        @if (!empty($taskMap['image']))
+                                                                            <img src="{{ public_path($taskMap['image']) }}"
+                                                                                width="15px" height="15px"
+                                                                                alt="abc" />
+                                                                        @endif
                                                                     </td>
                                                                 </tr>
                                                             @endforeach
-                                                        @endif
-                                                    @endforeach
-                                                @endif
-
-                                            </tbody>
-                                        </table>
+                                                        </tbody>
+                                                    </table>
+                                                    @php
+                                                        $keyImage = ($info['id'] ?? '') . $key;
+                                                    @endphp
+                                                    @if (!empty($data['image_charts'][$keyImage]))
+                                                        <img src="{{ $data['image_charts'][$keyImage] }}"
+                                                            alt="" style="margin-bottom: 20px" />
+                                                    @endif
+                                                @endforeach
+                                            @endforeach
+                                        @endif
                                     @endif
-                                    <img src="{{ $data['image_charts'][$info['id']] ?? '' }}"
-                                        alt="" />
                                 </td>
                             </tr>
                             <tr>
@@ -308,7 +318,7 @@
                                     Nhận xét
                                 </td>
                                 <td style="border-right: 0.5px solid black;">
-                                    abc
+
                                 </td>
                             </tr>
                             <tr style="">
@@ -316,7 +326,7 @@
                                     Đề xuất
                                 </td>
                                 <td style="border-bottom: 0.5px solid black;border-right: 0.5px solid black;">
-                                    abc
+
                                 </td>
                             </tr>
                         </tbody>

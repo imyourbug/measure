@@ -109,9 +109,10 @@
         <tbody>
             <tr>
                 <td>
-                    <img height="100px" src="{{ !empty($data['tasks'][0]['type']['parent']['image']) 
-                        ? public_path($data['tasks'][0]['type']['parent']['image']) : '' }}"
-                        alt="" />
+                    @if (!empty($data['tasks'][0]['type']['parent']['image']))
+                        <img height="100px" src="{{ public_path($data['tasks'][0]['type']['parent']['image']) }}"
+                            alt="" />
+                    @endif
                 </td>
                 <td style="text-align: center;line-height:16px">
                     <p style="font-size: 14px;font-weight:bold;color:rgb(15, 22, 168)">KẾ HOẠCH CÔNG VIỆC</p>
@@ -210,16 +211,18 @@
                                 <table class="tbl-plan" cellspacing="0">
                                     <tbody>
                                         <tr>
-                                            <td rowspan="6"><img src="{{ !empty($info['type']['image'])
-                                                 ? public_path($info['type']['image']) : ''}}"
-                                                    width="50px" height="50px" alt=""></td>
+                                            @if (!empty($info['type']['image']))
+                                                <td rowspan="6"><img src="{{ public_path($info['type']['image']) }}"
+                                                        width="50px" height="50px" alt="">
+                                                </td>
+                                            @endif
                                         </tr>
                                         <tr>
-                                            <td style="border-top: 0.5px solid black;border-left: 0.5px solid black;">
+                                            <td style="border-top: 0.5px solid black;border-left: 0.5px solid black;width:40px">
                                                 <img src="{{ public_path('images/lich.png') }}" width="20px"
                                                     height="20px" alt="">
                                             </td>
-                                            <td style="border-top: 0.5px solid black;">
+                                            <td style="border-top: 0.5px solid black;width:40px">
                                                 Lịch
                                             </td>
                                             <td style="font-weight:bold;border: 0.5px solid black;border-bottom: none;">
@@ -265,9 +268,15 @@
                                             <td style="border: 0.5px solid black;border-bottom: none;">
                                                 @if (!empty($task['task_maps']))
                                                     <p>
-                                                        @foreach ($task['task_maps'] as $map)
-                                                            {{ $map['map']['target'] }}
-                                                        @endforeach
+                                                        @php
+                                                            $targets = [];
+                                                            foreach ($task['task_maps'] as $map) {
+                                                                if (!in_array($map['target'], $targets)) {
+                                                                    array_push($targets, $map['target']);
+                                                                }
+                                                            }
+                                                        @endphp
+                                                        {{ implode(', ', $targets) }}
                                                     </p>
                                                 @endif
                                             </td>

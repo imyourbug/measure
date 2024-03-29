@@ -2,6 +2,7 @@
 @push('styles')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <a href="" target="_blank"></a>
 @endpush
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
@@ -22,11 +23,19 @@
             let contract_id = $('.select-contract').val();
             let url = $(this).attr('action');
 
-            if (!column | !month | !year | !contract_id | !pattern.test(year)) {
-                alert('Kiểm tra thông tin đã nhập!');
-            } else {
-                $(this).unbind('submit').submit();
-            }
+            $.ajax({
+                type: "POST",
+                data: $(this).serialize(),
+                url: $(this).attr('action'),
+                success: function(response) {
+                    console.log(response);
+                    if (response.status == 0) {
+                        window.open(response.url);
+                    } else {
+                        toastr.error(response.message);
+                    }
+                }
+            })
         })
 
         $('.btn-preview').on('click', function() {
@@ -66,74 +75,87 @@
                     url: "/api/exports/getDataMapChart?month=" + month + "&year=" + year + "&contract_id=" +
                         contract_id,
                     success: function(response) {
+                        console.log(response);
                         let html = '';
                         let data = Object.keys(response.data).map((key) => response.data[key]);
                         data.forEach(e => {
-                            html +=
-                                `<canvas id="mapChart${e.task_id}" style="display:block;"></canvas>`;
+                            let dataE = Object.keys(e).map((key) => e[key]);
+                            dataE.forEach(item => {
+                                if (typeof item !== 'number') {
+                                    let dataItem = Object.keys(item).map((key) => item[
+                                        key]);
+                                    html +=
+                                        `<canvas id="mapChart${e.task_id}${dataItem[0]['code'].substring(0, 1)}" style="display:block;"></canvas>`;
+                                }
+                            });
                         });
                         $('.groupChart').html('');
                         $('.groupChart').html(html);
 
                         data.forEach(e => {
-                            let labels = [];
-                            let dataResults = [];
-                            let dataKpi = [];
-                            let backgroundColor = [];
                             let dataChart = [];
                             Object.keys(e).forEach((key) => {
                                 if (key != 'task_id') {
                                     dataChart.push(e[key]);
                                 }
                             });
+                            // let areaKey = [];
                             dataChart.forEach(d => {
-                                if (dataResults.length < column) {
-                                    labels.push(
-                                        `${d.area}-${d.map_id.toString().padStart(3, "0") }`
-                                    );
-                                    dataResults.push(d.all_result);
-                                    dataKpi.push(d.all_kpi);
-                                    // backgroundColor.push(getRandomRGBColor());
-                                    backgroundColor.push('#E50B4E');
-                                }
-                            });
-                            let map = {
-                                task_id: e.task_id,
-                                chart: new Chart($('#mapChart' + e.task_id), {
-                                    type: 'bar',
-                                    data: {
-                                        labels: labels,
-                                        datasets: [{
-                                                label: 'Kết quả thực tế',
-                                                data: dataResults,
-                                                backgroundColor: backgroundColor,
-                                                borderWidth: 1,
-                                                order: 2,
-                                            },
-                                            {
-                                                type: 'line',
-                                                label: 'KPI',
-                                                data: dataKpi,
-                                                fill: false,
-                                                borderColor: 'rgb(54, 162, 235)',
-                                                order: 1,
-                                            }
-                                        ]
-                                    },
-                                    options: {
-                                        scales: {
-                                            y: {
-                                                beginAtZero: true
-                                            }
-                                        }
+                                let labels = [];
+                                let dataResults = [];
+                                let dataKpi = [];
+                                let backgroundColor = [];
+                                let dataD = Object.keys(d).map((key) => d[key]);
+                                dataD.forEach((itemD) => {
+
+                                    if (dataResults.length < column) {
+                                        labels.push(itemD.code);
+                                        dataResults.push(itemD.all_result);
+                                        dataKpi.push(itemD.all_kpi);
+                                        // backgroundColor.push(getRandomRGBColor());
+                                        backgroundColor.push('#E50B4E');
                                     }
                                 })
-                            }
-                            listMapChart.push(map);
-                        });
-                    },
-                })
 
+                                let map = {
+                                    task_id: e.task_id,
+                                    chart: new Chart($(
+                                        `#mapChart${e.task_id}${dataD[0].code.substring(0, 1)}`
+                                    ), {
+                                        type: 'bar',
+                                        data: {
+                                            labels: labels,
+                                            datasets: [{
+                                                    label: 'Kết quả thực tế',
+                                                    data: dataResults,
+                                                    backgroundColor: backgroundColor,
+                                                    borderWidth: 1,
+                                                    order: 2,
+                                                },
+                                                {
+                                                    type: 'line',
+                                                    label: 'KPI',
+                                                    data: dataKpi,
+                                                    fill: false,
+                                                    borderColor: 'rgb(54, 162, 235)',
+                                                    order: 1,
+                                                }
+                                            ]
+                                        },
+                                        options: {
+                                            scales: {
+                                                y: {
+                                                    beginAtZero: true
+                                                }
+                                            }
+                                        }
+                                    })
+                                }
+                                listMapChart.push(map);
+                            })
+                        });
+                    }
+                });
                 $.ajax({
                     type: "GET",
                     url: "/api/exports/getTrendDataMapChart?contract_id=" +
@@ -204,8 +226,7 @@
                             listTrendMapChart.push(map);
                         });
                     },
-                })
-
+                });
                 $.ajax({
                     type: "GET",
                     url: "/api/exports/getDataAnnualMapChart?contract_id=" +
@@ -289,14 +310,14 @@
                             listAnnualMapChart.push(map);
                         });
                     },
-                })
+                });
             }
 
             setTimeout(() => {
                 if (type_report == 1) {
                     listMapChart.forEach(e => {
                         $('.groupImage').append(
-                            `<input type="hidden" name="image_charts[${e.task_id}]" value="${e.chart.toBase64Image('image/png', 1)}" alt="" />`
+                            `<input type="hidden" name="image_charts[${e.chart.canvas.id.replace('mapChart', '')}]" value="${e.chart.toBase64Image('image/png', 1)}" alt="" />`
                         );
                     });
                     listTrendMapChart.forEach(e => {
@@ -314,7 +335,6 @@
                 $('.month').val($('.select-month').val());
                 $('.year').val($('.select-year').val());
                 $('.type_report').val($('.select-type').val());
-                console.log($('.type_report').val());
                 $('.contract_id').val($('.select-contract').val());
                 $('.user_id').val($('.select-user').val());
                 $('.display').val($('#select-display').is(':checked') ? $('#select-display').val() : 0);
@@ -322,7 +342,9 @@
                     $('.btn-export').prop('disabled', false);
                 }, 2000);
             }, 2000);
-        });
+        })
+
+
 
         function getRandomRGBColor() {
             const red = Math.floor(Math.random() * 256);
@@ -348,14 +370,6 @@
             $('.blockChart').html('');
         });
 
-        // setInterval(() => {
-        //     if (!$('body')
-        //         .hasClass('modal-open') && !$('#modal-export')
-        //         .hasClass('show')) {
-        //         console.log("is not open");
-        //         $('.blockChart').html('');
-        //     }
-        // }, 2000);
     </script>
 @endpush
 @section('content')
@@ -650,12 +664,6 @@
                     </div>
                     <div class="groupAnnualImage">
                     </div>
-                    {{-- <div class="groupChart" style="display: block;">
-                    </div>
-                    <div class="groupTrendChart" style="display: block;">
-                    </div>
-                    <div class="groupAnnualChart" style="display: block;">
-                    </div> --}}
                     <input type="hidden" class="month" name="month" />
                     <input type="hidden" class="year" name="year" />
                     <input type="hidden" class="type_report" name="type_report" />

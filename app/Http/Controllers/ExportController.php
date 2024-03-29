@@ -10,48 +10,75 @@ use DateInterval;
 use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use MPDF;
 use Throwable;
 
 class ExportController extends Controller
 {
+
+    public function dowload(Request $request)
+    {
+        $filename = $request->filename ?? '';
+        if ($filename) {
+            return response()->file(
+                $filename
+            );
+        }
+    }
+
     //
     public function plan(Request $request)
     {
-        $data = $request->validate([
-            'month' => 'required|numeric|between:1,12',
-            'year' => 'required|numeric|min:1900',
-            'type_report' => 'required|in:0,1',
-            'contract_id' => 'required|numeric',
-            'image_charts' => 'nullable|array',
-            'image_trend_charts' => 'nullable|array',
-            'image_annual_charts' => 'nullable|array',
-            'user_id' => 'required|numeric',
-            'display' => 'required|in:0,1',
-        ]);
+        try {
+            $data = $request->validate([
+                'month' => 'required|numeric|between:1,12',
+                'year' => 'required|numeric|min:1900',
+                'type_report' => 'required|in:0,1',
+                'contract_id' => 'required|numeric',
+                'image_charts' => 'nullable|array',
+                'image_trend_charts' => 'nullable|array',
+                'image_annual_charts' => 'nullable|array',
+                'user_id' => 'required|numeric',
+                'display' => 'required|in:0,1',
+            ]);
 
-        $data['creator'] = User::with(['staff'])->firstWhere('id', $data['user_id'])->toArray();
-        $pdf = null;
-        $filename = '';
-        switch ((int)$data['type_report']) {
-            case 0:
-                $pdf = MPDF::loadView('pdf.report_plan', ['data' => $data
-                    + $this->getReportPlanByMonthAndYear($data['month'], $data['year'], $data['contract_id'])]);
-                $filename = 'Báo cáo kế hoạch ';
-                break;
-            case 1:
-                $pdf = MPDF::loadView('pdf.report_result', ['data' =>
-                $data
-                    + $this->getReportWorkByMonthAndYear($data['month'], $data['year'], $data['contract_id'])]);
-                $filename = 'Báo cáo kết quả ';
-                break;
-            default:
-                break;
+            $data['creator'] = User::with(['staff'])->firstWhere('id', $data['user_id'])->toArray();
+            $pdf = null;
+            $filename = '';
+            switch ((int)$data['type_report']) {
+                case 0:
+                    $pdf = MPDF::loadView('pdf.report_plan', ['data' => array_merge($data, $this->getReportPlanByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]);
+                    $filename = 'Báo cáo kế hoạch ';
+                    break;
+                case 1:
+                    $pdf = MPDF::loadView('pdf.report_result', ['data' =>
+                    $data
+                        + $this->getReportWorkByMonthAndYear($data['month'], $data['year'], $data['contract_id'])]);
+                    $filename = 'Báo cáo kết quả ';
+                    break;
+                default:
+                    break;
+            }
+            $filename .= 'tháng ' . $data['month'] . ' năm ' . $data['year'] . '.pdf';
+            // return $pdf->stream($filename);
+
+            $path = storage_path() . '/app/public/pdf/';
+            if (!File::isDirectory($path)) {
+                File::makeDirectory($path, 0777, true, true);
+            }
+            $pdf->save($path . $filename, 'F');
+
+            return response()->json([
+                'status' => 0,
+                'url' => '/storage/pdf/' . $filename
+            ]);
+        } catch (Throwable $e) {
+            return response()->json([
+                'status' => 1,
+                'url' => $e->getMessage()
+            ]);
         }
-        $filename .= 'tháng ' . $data['month'] . ' năm ' . $data['year'] . '.pdf';
-
-        return $pdf->stream($filename);
-        // return $pdf->download($filename);
     }
 
     public function getReportPlanByMonthAndYear($month, $year, $contract_id)
@@ -125,6 +152,18 @@ class ExportController extends Controller
             ];
         }
 
+        // dd($result);
+        foreach ($result['tasks'] as $key => &$task) {
+            foreach ($task['details'] as $keyDetail => &$detail) {
+                $tmp = [];
+                foreach ($detail['task_maps'] as $keyTaskMap => $taskMap) {
+                    $tmp[substr($taskMap['code'], 0, 1)][] = $taskMap;
+                }
+                $detail['task_maps'] = $tmp;
+            }
+        }
+        // dd($result);
+
         return $result;
     }
 
@@ -141,12 +180,11 @@ class ExportController extends Controller
                 $q->where('contract_id', $contract_id);
             })
             ->get();
-        // dd(array_unique($task_details->pluck('task_id')?->toArray() ?? []));
         $result = [];
         foreach ($task_details as $key => $task_detail) {
             DB::enableQueryLog();
             $data_map = DB::table('task_maps')
-                ->selectRaw('map_id, maps.area as area,
+                ->selectRaw('map_id, maps.code as code,
             SUM(CASE
                 WHEN kpi is NULL THEN 0
                 WHEN kpi = "" THEN 0
@@ -159,7 +197,7 @@ class ExportController extends Controller
             END) as all_result')
                 ->join('maps', 'maps.id', '=', 'task_maps.map_id')
                 ->whereRaw('task_id = ?', $task_detail->id)
-                ->groupByRaw('map_id, area')
+                ->groupByRaw('map_id, code')
                 ->orderBy('map_id')
                 ->get()
                 ?->toArray() ?? [];
@@ -173,6 +211,18 @@ class ExportController extends Controller
                 }
             }
             $result[$task_detail->task->id]['task_id'] = $task_detail->task->id;
+        }
+
+        foreach ($result as $key => &$rs) {
+            $tmp = [];
+            foreach ($rs as $keyRs => $valueRs) {
+                if (is_numeric($keyRs)) {
+                    $tmp[substr($valueRs['code'], 0, 1)][$valueRs['map_id']] = $valueRs;
+                }
+            }
+            $tmpTaskId = $rs['task_id'];
+            $rs = $tmp;
+            $rs['task_id'] = $tmpTaskId;
         }
 
         return [

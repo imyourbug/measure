@@ -21,7 +21,17 @@ Route::get('/link', function () {
     return Artisan::call('storage:link');
 });
 
+Route::get('/optimize', function () {
+    return Artisan::call('optimize:clear');
+});
+
 Route::get('/', function () {
+    return view('user.login.index', [
+        'title' => 'Đăng nhập'
+    ]);
+});
+
+Route::get('/download/{filename}', function () {
     return view('user.login.index', [
         'title' => 'Đăng nhập'
     ]);

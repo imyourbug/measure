@@ -129,7 +129,30 @@ class ReportController extends Controller
                 foreach ($task->details as $detail) {
                     $month = $detail->plan_date->format('m');
                     $year = $detail->plan_date->format('Y');
+                    if ($month == $data['month_to'] && $year == $data['year_to']) {
+                        // taskChemitry
+                        foreach ($detail->taskChemitries as $taskChemitry) {
+                            $taskChemitry->delete();
+                        }
+                        // taskMap
+                        foreach ($detail->taskMaps as $taskMap) {
+                            $taskMap->delete();
+                        }
+                        // taskSolution
+                        foreach ($detail->taskSolutions as $taskSolution) {
+                            $taskSolution->delete();
+                        }
+                        // taskItem
+                        foreach ($detail->taskItems as $taskItem) {
+                            $taskItem->delete();
+                        }
+                        // taskStaff
+                        foreach ($detail->taskStaffs as $taskStaff) {
+                            $taskStaff->delete();
+                        }
+                    }
                     if ($month == $data['month_from'] && $year == $data['year_from']) {
+
                         $new_plan_date = $detail->plan_date->format($data['year_to'] . '-' . $data['month_to'] . '-d');
                         $date = explode('-', $new_plan_date);
                         if (checkdate((int) $date[1], (int) $date[2], (int) $date[0])) {
