@@ -37,107 +37,115 @@
     </script>
 @endpush
 @section('content')
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card direct-chat direct-chat-primary">
-                <div class="card-header ui-sortable-handle header-color" style="cursor: move;">
-                    <h3 class="card-title text-bold">Thêm nhân viên</h3>
-                    <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                            <i class="fas fa-minus"></i>
-                        </button>
+    <form action="{{ route('admin.staffs.store') }}" method="POST">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card direct-chat direct-chat-primary">
+                    <div class="card-header ui-sortable-handle header-color" style="cursor: move;">
+                        <h3 class="card-title text-bold">Thông tin nhân viên</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
                     </div>
-                </div>
-                <div class="card-body" style="display: block;padding: 10px !important;">
-                    <form action="{{ route('admin.staffs.store') }}" method="POST">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-lg-6 col-md-12">
-                                    <div class="form-group">
-                                        <label for="menu">Họ tên <span class="required">(*)</span></label>
-                                        <input type="text" class="form-control" name="name"
-                                            value="{{ old('name') }}" placeholder="Nhập họ tên">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-md-12">
-                                    <div class="form-group">
-                                        <label for="menu">Chức vụ <span class="required">(*)</span></label>
-                                        <input type="text" class="form-control" name="position"
-                                            value="{{ old('position') }}" placeholder="Nhập chức vụ">
-                                    </div>
+                    <div class="card-body" style="display: block;padding: 10px !important;">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-12">
+                                <div class="form-group">
+                                    <label for="menu">Họ tên <span class="required">(*)</span></label>
+                                    <input type="text" class="form-control" name="name" value="{{ old('name') }}"
+                                        placeholder="Nhập họ tên">
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-lg-6 col-md-12">
-                                    <div class="form-group">
-                                        <label for="menu">Căn cước công dân <span class="required">(*)</span></label>
-                                        <input type="text" class="form-control" name="identification"
-                                            value="{{ old('identification') }}" placeholder="Nhập căn cước công dân">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-md-12">
-                                    <div class="form-group">
-                                        <label for="menu">Điện thoại <span class="required">(*)</span></label>
-                                        <input type="text" class="form-control" name="tel"
-                                            value="{{ old('tel') }}" placeholder="Nhập điện thoại">
-                                    </div>
+                            <div class="col-lg-6 col-md-12">
+                                <div class="form-group">
+                                    <label for="menu">Chức vụ <span class="required">(*)</span></label>
+                                    <input type="text" class="form-control" name="position" value="{{ old('position') }}"
+                                        placeholder="Nhập chức vụ">
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-lg-6 col-sm-12">
-                                    <div class="form-group">
-                                        <label for="menu">Tài khoản (Số điện thoại hoặc email) <span
-                                                class="required">(*)</span></label>
-                                        <input type="text" class="form-control" name="tel_or_email"
-                                            value="{{ old('tel_or_email') }}" placeholder="Nhập tài khoản">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-sm-12">
-                                    <div class="form-group">
-                                        <label for="menu">Mật khẩu <span class="required">(*)</span></label>
-                                        <input type="password" class="form-control" id="name" name="password"
-                                            value="{{ old('password') }}" placeholder="Nhập mật khẩu">
-                                    </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-12">
+                                <div class="form-group">
+                                    <label for="menu">Căn cước công dân <span class="required">(*)</span></label>
+                                    <input type="text" class="form-control" name="identification"
+                                        value="{{ old('identification') }}" placeholder="Nhập căn cước công dân">
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-lg-6 col-md-12">
-                                    <div class="form-group">
-                                        <label for="file">Chọn ảnh</label><br>
-                                        <div class="">
-                                            <img id="image_show" style="width: 100px;height:100px" src=""
-                                                alt="Avatar" />
-                                            <input type="file" id="upload" accept=".png,.jpeg">
-                                        </div>
-                                        <input type="hidden" name="avatar" id="avatar" value="">
-                                    </div>
+                            <div class="col-lg-6 col-md-12">
+                                <div class="form-group">
+                                    <label for="menu">Điện thoại <span class="required">(*)</span></label>
+                                    <input type="text" class="form-control" name="tel" value="{{ old('tel') }}"
+                                        placeholder="Nhập điện thoại">
                                 </div>
-                                <div class="col-lg-6 col-md-12">
-                                    <div class="form-group">
-                                        <label for="menu">Kích hoạt <span class="required">(*)</span></label>
-                                        <div class="custom-control custom-radio">
-                                            <input class="custom-control-input" type="radio" id="active"
-                                                value="1" name="active" checked>
-                                            <label for="active" class="custom-control-label">Có</label>
-                                        </div>
-                                        <div class="custom-control custom-radio">
-                                            <input class="custom-control-input" type="radio" id="unactive"
-                                                value="0" name="active">
-                                            <label for="unactive" class="custom-control-label">Không</label>
-                                        </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-12">
+                                <div class="form-group">
+                                    <label for="file">Chọn ảnh</label><br>
+                                    <div class="">
+                                        <img id="image_show" style="width: 100px;height:100px" src=""
+                                            alt="Avatar" />
+                                        <input type="file" id="upload" accept=".png,.jpeg">
+                                    </div>
+                                    <input type="hidden" name="avatar" id="avatar" value="">
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-12">
+                                <div class="form-group">
+                                    <label for="menu">Kích hoạt <span class="required">(*)</span></label>
+                                    <div class="custom-control custom-radio">
+                                        <input class="custom-control-input" type="radio" id="active" value="1"
+                                            name="active" checked>
+                                        <label for="active" class="custom-control-label">Có</label>
+                                    </div>
+                                    <div class="custom-control custom-radio">
+                                        <input class="custom-control-input" type="radio" id="unactive" value="0"
+                                            name="active">
+                                        <label for="unactive" class="custom-control-label">Không</label>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-primary">Lưu</button>
+                    </div>
+                    <div class="card-header ui-sortable-handle header-color" style="cursor: move;">
+                        <h3 class="card-title text-bold">Thông tin đăng nhập</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
                         </div>
-                        @csrf
-                    </form>
+                    </div>
+                    <div class="card-body" style="display: block;padding: 10px !important;">
+                        <div class="row">
+                            <div class="col-lg-6 col-sm-12">
+                                <div class="form-group">
+                                    <label for="menu">Tài khoản (Số điện thoại hoặc email) <span
+                                            class="required">(*)</span></label>
+                                    <input type="text" class="form-control" name="tel_or_email"
+                                        value="{{ old('tel_or_email') }}" placeholder="Nhập tài khoản">
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-sm-12">
+                                <div class="form-group">
+                                    <label for="menu">Mật khẩu <span class="required">(*)</span></label>
+                                    <input type="password" class="form-control" id="name" name="password"
+                                        value="{{ old('password') }}" placeholder="Nhập mật khẩu">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary">Lưu</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+        @csrf
+    </form>
     <div class="row">
         <div class="col-lg-12">
             <div class="card direct-chat direct-chat-primary">

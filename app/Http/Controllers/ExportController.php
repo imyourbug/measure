@@ -11,6 +11,7 @@ use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use MPDF;
 use Throwable;
 
@@ -60,7 +61,8 @@ class ExportController extends Controller
                 default:
                     break;
             }
-            $filename .= 'tháng ' . $data['month'] . ' năm ' . $data['year'] . '.pdf';
+            $filename .= 'tháng ' . $data['month'] . ' năm ' . $data['year'];
+            $filename = Str::slug($filename) . '.pdf';
             // return $pdf->stream($filename);
 
             $path = storage_path() . '/app/public/pdf/';

@@ -30,7 +30,8 @@
                 success: function(response) {
                     console.log(response);
                     if (response.status == 0) {
-                        window.open(response.url);
+                        console.log(response);
+                        // window.open(response.url);
                     } else {
                         toastr.error(response.message);
                     }
@@ -343,8 +344,6 @@
                 }, 2000);
             }, 2000);
         })
-
-
 
         function getRandomRGBColor() {
             const red = Math.floor(Math.random() * 256);

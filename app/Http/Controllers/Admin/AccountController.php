@@ -60,7 +60,6 @@ class AccountController extends Controller
             DB::commit();
         } catch (Throwable $e) {
             DB::rollBack();
-            dd($e);
             Toastr::error('Tạo tài khoản thất bại', __('title.toastr.fail'));
         }
 
