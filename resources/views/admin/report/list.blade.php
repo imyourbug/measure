@@ -31,7 +31,7 @@
                     console.log(response);
                     if (response.status == 0) {
                         console.log(response);
-                        // window.open(response.url);
+                        window.open(response.url);
                     } else {
                         toastr.error(response.message);
                     }
