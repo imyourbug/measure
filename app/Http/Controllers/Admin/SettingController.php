@@ -155,4 +155,28 @@ class SettingController extends Controller
 
         return redirect()->back();
     }
+
+    public function update(Request $request)
+    {
+        try {
+            foreach ($request->except('_token') as $key => $value) {
+                Setting::where('key', $key)->update([
+                    'value' => $value
+                ]);
+            }
+        } catch (Throwable $e) {
+            Toastr::error(__('message.fail.update'), __('title.toastr.fail'));
+        }
+        Toastr::success(__('message.success.update'), __('title.toastr.success'));
+
+        return redirect()->back();
+    }
+
+    public function index()
+    {
+        return view('admin.setting', [
+            'title' => 'Cài đặt',
+            'settings' => Setting::all()
+        ]);
+    }
 }

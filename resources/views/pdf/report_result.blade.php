@@ -126,7 +126,7 @@
                     @endif
                 </td>
                 <td style="text-align: center;line-height:16px">
-                    <p style="font-size: 14px;font-weight:bold;color:rgb(15, 22, 168)">BÁO CÁO CÔNG VIỆC</p>
+                    <p style="font-size: 14px;font-weight:bold;">BÁO CÁO CÔNG VIỆC</p>
                     <p style="font-weight:bold;color:orange">Work Report</p>
                 </td>
             </tr>

@@ -9,6 +9,7 @@ use App\Models\User;
 use DateInterval;
 use DateTime;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -28,8 +29,52 @@ class ExportController extends Controller
         }
     }
 
-    //
     public function plan(Request $request)
+    {
+        $data = $request->validate([
+            'month' => 'required|numeric|between:1,12',
+            'year' => 'required|numeric|min:1900',
+            'type_report' => 'required|in:0,1,2,3,4,5',
+            'contract_id' => 'required|numeric',
+            'image_charts' => 'nullable|array',
+            'image_trend_charts' => 'nullable|array',
+            'image_annual_charts' => 'nullable|array',
+            'user_id' => 'required|numeric',
+            'display' => 'required|in:0,1',
+        ]);
+
+        $data['creator'] = User::with(['staff'])->firstWhere('id', $data['user_id'])->toArray();
+        $pdf = null;
+        $filename = '';
+        switch ((int)$data['type_report']) {
+            case 0:
+                $data['file_name'] = $filename = 'KẾ HOẠCH THỰC HIỆN DỊCH VỤ ';
+                $pdf = MPDF::loadView('pdf.report_plan_1', ['data' => array_merge($data, $this->getReportPlanByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]);
+                break;
+            case 1:
+                $data['file_name'] = $filename = 'KẾ HOẠCH CHI TIẾT ';
+                $pdf = MPDF::loadView('pdf.report_plan_2', ['data' => array_merge($data, $this->getReportPlanByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]);
+                break;
+            case 5:
+                $data['file_name'] = $filename = 'BẢNG KÊ CÔNG VIỆC/DỊCH VỤ ';
+                $pdf = MPDF::loadView('pdf.report_plan_6', ['data' => array_merge($data, $this->getReportPlanByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]);
+                break;
+                // case 1:
+                //     $data['file_name'] = $filename = 'Báo cáo kết quả ';
+                //     $pdf = MPDF::loadView('pdf.report_plan_2', ['data' =>
+                //     $data
+                //         + $this->getReportWorkByMonthAndYear($data['month'], $data['year'], $data['contract_id'])]);
+                //     break;
+            default:
+                break;
+        }
+        $filename .= 'tháng ' . $data['month'] . ' năm ' . $data['year'];
+        $filename = Str::slug($filename) . '.pdf';
+        return $pdf->stream($filename);
+    }
+
+    //
+    public function plan2(Request $request)
     {
         try {
             $data = $request->validate([
@@ -49,8 +94,8 @@ class ExportController extends Controller
             $filename = '';
             switch ((int)$data['type_report']) {
                 case 0:
-                    $pdf = MPDF::loadView('pdf.report_plan', ['data' => array_merge($data, $this->getReportPlanByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]);
-                    $filename = 'Báo cáo kế hoạch ';
+                    $pdf = MPDF::loadView('pdf.report_plan_1', ['data' => array_merge($data, $this->getReportPlanByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]);
+                    $filename = 'KẾ HOẠCH THỰC HIỆN DỊCH VỤ ';
                     break;
                 case 1:
                     $pdf = MPDF::loadView('pdf.report_result', ['data' =>
@@ -63,7 +108,7 @@ class ExportController extends Controller
             }
             $filename .= 'tháng ' . $data['month'] . ' năm ' . $data['year'];
             $filename = Str::slug($filename) . '.pdf';
-            // return $pdf->stream($filename);
+            return $pdf->stream($filename);
 
             $path = storage_path() . '/app/public/pdf/';
             if (!File::isDirectory($path)) {
@@ -94,12 +139,14 @@ class ExportController extends Controller
             'tasks.details.taskSolutions.solution',
             'tasks.details.taskChemitries.chemistry',
             'tasks.details.taskStaffs.user.staff',
+            'tasks.settingTaskMaps',
         ])
             ->where('id', $contract_id)
             ->first()
             ->toArray();
         $tasks = $contract['tasks'];
         $result = [];
+        $result['contract'] = $contract;
         $result['customer'] = $contract['customer'];
         $result['branch'] = $contract['branch'];
         foreach ($tasks as $task) {
@@ -137,6 +184,7 @@ class ExportController extends Controller
             ->toArray();
         $tasks = $contract['tasks'];
         $result = [];
+        $result['contract'] = $contract;
         $result['customer'] = $contract['customer'];
         $result['branch'] = $contract['branch'];
         foreach ($tasks as $task) {
@@ -154,7 +202,6 @@ class ExportController extends Controller
             ];
         }
 
-        // dd($result);
         foreach ($result['tasks'] as $key => &$task) {
             foreach ($task['details'] as $keyDetail => &$detail) {
                 $tmp = [];
@@ -164,7 +211,6 @@ class ExportController extends Controller
                 $detail['task_maps'] = $tmp;
             }
         }
-        // dd($result);
 
         return $result;
     }
