@@ -14,30 +14,45 @@
         var listMapChart = [];
         var listTrendMapChart = [];
         var listAnnualMapChart = [];
-        $('#form-export').submit(function(e) {
-            e.preventDefault();
-            let pattern = /^\d{4}$/;
-            let year = $('.select-year').val();
-            let month = $('.select-month').val();
-            let column = $('.select-column').val();
-            let contract_id = $('.select-contract').val();
-            let url = $(this).attr('action');
+        // $('#form-export').submit(function(e) {
+        //     e.preventDefault();
+        //     let pattern = /^\d{4}$/;
+        //     let year = $('.select-year').val();
+        //     let month = $('.select-month').val();
+        //     let column = $('.select-column').val();
+        //     let contract_id = $('.select-contract').val();
+        //     let url = $(this).attr('action');
 
-            $.ajax({
-                type: "POST",
-                data: $(this).serialize(),
-                url: $(this).attr('action'),
-                success: function(response) {
-                    console.log(response);
-                    if (response.status == 0) {
-                        console.log(response);
-                        window.open(response.url);
-                    } else {
-                        toastr.error(response.message);
-                    }
-                }
-            })
-        })
+        //     $.ajax({
+        //         type: "POST",
+        //         data: $(this).serialize(),
+        //         url: $(this).attr('action'),
+        //         success: function(response) {
+        //             console.log(response);
+        //             if (response.status == 0) {
+        //                 console.log(response);
+        //                 window.open(response.url);
+        //             } else {
+        //                 toastr.error(response.message);
+        //             }
+        //         }
+        //     })
+        // })
+        //     $.ajax({
+        //         type: "POST",
+        //         data: $(this).serialize(),
+        //         url: $(this).attr('action'),
+        //         success: function(response) {
+        //             console.log(response);
+        //             if (response.status == 0) {
+        //                 console.log(response);
+        //                 window.open(response.url);
+        //             } else {
+        //                 toastr.error(response.message);
+        //             }
+        //         }
+        //     })
+        // })
 
         $('.btn-preview').on('click', function() {
             // reset
@@ -467,10 +482,25 @@
                                 <label for="menu">Chọn loại báo cáo <span class="required">(*)</span></label>
                                 <select class="form-control select-type">
                                     <option value="0">
-                                        Kế hoạch dịch vụ
+                                        KẾ HOẠCH THỰC HIỆN DỊCH VỤ
                                     </option>
                                     <option value="1">
-                                        Kết quả tháng
+                                        KẾ HOẠCH CHI TIẾT
+                                    </option>
+                                    <option value="2">
+                                        BÁO CÁO ĐÁNH GIÁ KẾT QUẢ THỰC HIỆN DỊCH VỤ
+                                    </option>
+                                    <option value="3">
+                                        BIÊN BẢN NGHIỆM THU CÔNG VIỆC HOÀN THÀNH
+                                    </option>
+                                    <option value="4">
+                                        BIÊN BẢN XÁC NHẬN KHỐI LƯỢNG HOÀN THÀNH-BÁO CÁO CHI TIẾT
+                                    </option>
+                                    <option value="5">
+                                        BẢNG KÊ CÔNG VIỆC/DỊCH VỤ
+                                    </option>
+                                    <option value="6">
+                                        BIÊN BẢN XÁC NHẬN CÔNG VIỆC/DỊCH VỤ
                                     </option>
                                 </select>
                             </div>
@@ -672,6 +702,7 @@
                     <div class="modal-footer justify-content-between">
                         <button class="btn btn-default" data-dismiss="modal">Đóng</button>
                         <button type="submit" class="btn btn-primary btn-export" disabled>Xác nhận</button>
+                        <button type="submit" class="btn btn-primary">Xác nhận 2</button>
                     </div>
                 </form>
             </div>

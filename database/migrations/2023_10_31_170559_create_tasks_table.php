@@ -16,6 +16,8 @@ return new class extends Migration
             // $table->string('name')->nullable();
             $table->unsignedBigInteger('type_id');
             $table->unsignedBigInteger('contract_id');
+            $table->string('frequence')->nullable();
+            $table->string('confirm')->nullable();
             $table->string('note')->nullable();
             $table->foreign('contract_id')->references('id')->on('contracts')->onDelete('cascade');
             $table->foreign('type_id')->references('id')->on('types')->onDelete('cascade');

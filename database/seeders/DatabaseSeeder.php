@@ -157,9 +157,17 @@ class DatabaseSeeder extends Seeder
             // ]
         ]);
 
-        Setting::create([
-            'key' => 'map',
-            'value' => '',
+        Setting::insert([
+            [
+                'key' => 'craw-count',
+                'name' => 'Số luồng crawl count',
+                'value' => '5',
+            ],
+            [
+                'key' => 'delay-time',
+                'name' => 'Delay time mỗi luồng crawl count (ms)',
+                'value' => '2000',
+            ]
         ]);
 
         //

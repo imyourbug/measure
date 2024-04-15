@@ -23,6 +23,8 @@ class TypeController extends Controller
         $data = $request->validate([
             'name' => 'required|string',
             'image' => 'nullable|string',
+            'suggestion' => 'nullable|string',
+            'note' => 'nullable|string',
             'parent_id' => 'required|numeric',
         ]);
         try {
@@ -40,6 +42,8 @@ class TypeController extends Controller
         $data = $request->validate([
             'id' => 'required|int',
             'name' => 'required|string',
+            'suggestion' => 'nullable|string',
+            'note' => 'nullable|string',
             'image' => 'nullable|string',
             'parent_id' => 'required|numeric',
         ]);
