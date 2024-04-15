@@ -38,6 +38,21 @@
         //         }
         //     })
         // })
+        //     $.ajax({
+        //         type: "POST",
+        //         data: $(this).serialize(),
+        //         url: $(this).attr('action'),
+        //         success: function(response) {
+        //             console.log(response);
+        //             if (response.status == 0) {
+        //                 console.log(response);
+        //                 window.open(response.url);
+        //             } else {
+        //                 toastr.error(response.message);
+        //             }
+        //         }
+        //     })
+        // })
 
         $('.btn-preview').on('click', function() {
             // reset
@@ -467,13 +482,13 @@
                                 <label for="menu">Chọn loại báo cáo <span class="required">(*)</span></label>
                                 <select class="form-control select-type">
                                     <option value="0">
-                                        KẾ HOẠCH THỰC HIỆN DỊCH VỤ 
+                                        KẾ HOẠCH THỰC HIỆN DỊCH VỤ
                                     </option>
                                     <option value="1">
-                                        KẾ HOẠCH CHI TIẾT 
+                                        KẾ HOẠCH CHI TIẾT
                                     </option>
                                     <option value="2">
-                                        BÁO CÁO ĐÁNH GIÁ KẾT QUẢ THỰC HIỆN DỊCH VỤ 
+                                        BÁO CÁO ĐÁNH GIÁ KẾT QUẢ THỰC HIỆN DỊCH VỤ
                                     </option>
                                     <option value="3">
                                         BIÊN BẢN NGHIỆM THU CÔNG VIỆC HOÀN THÀNH
