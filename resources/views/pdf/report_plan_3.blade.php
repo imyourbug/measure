@@ -105,7 +105,7 @@
     <h3>BÊN B: CÔNG TY TNHH DỊCH VỤ PESTKIL VIỆT NAM</h3>
     <p style="margin-left: 50px">Đại diện: Ông ( bà ) :{{ $data['creator']['staff']['name'] ?? '' }} Chức vụ
         :{{ $data['creator']['staff']['position'] ?? '' }}</p>
-    <p style="font-weight:bold;">I. Nội dung: Báo cáo kết quả công việc thực hiện dịch vụ</p>
+    <p style="font-weight:bold;">I. Nội dung: Nghiệm thu công việc hoàn thành</p>
     @if (!empty($data['tasks']))
         <p style="font-weight:bold;">{{ $data['contract']['name'] ?? '' }}
             Tháng
@@ -116,29 +116,46 @@
                     $count = 0;
                 @endphp
                 <tr>
-                    <th>STT</th>
-                    <th>Tên nhiệm vụ</th>
+                    <th rowspan="2">STT</th>
+                    <th rowspan="2">Tên nhiệm vụ</th>
+                    <th colspan="3">Nội dung công việc</th>
+                    <th rowspan="2">Tần suất/lịch</th>
+                    <th rowspan="2">Ngày cụ thể</th>
+                    <th rowspan="2" style="width: 100px">Xác nhận hoàn thành</th>
+                    <th rowspan="2">Ghi chú</th>
+                </tr>
+                <tr>
                     <th>Đối tượng</th>
                     <th>Khu vực</th>
                     <th>Phạm vi</th>
-                    <th>Hiện trạng</th>
-                    <th>Nguyên nhân</th>
-                    <th>Biện pháp khắc phục</th>
                 </tr>
                 @foreach ($data['tasks'] as $key => $info)
                     <tr>
                         @php
-                            // dd($info);
                             $count++;
+                            $plan_dates = '';
+                            $actual_dates = '';
+                            foreach ($info['details'] as $task) {
+                                # code...
+                                $date = explode('-', $task['plan_date']);
+                                if ($date[0] == $data['year'] && $date[1] == $data['month']) {
+                                    # code...
+                                    $plan_dates .=
+                                        \Illuminate\Support\Carbon::parse($task['plan_date'])->format('d/m') . ';';
+                                    $actual_dates .=
+                                        \Illuminate\Support\Carbon::parse($task['actual_date'])->format('d/m') . ';';
+                                }
+                            }
                         @endphp
                         <td>{{ $count < 10 ? '0' . $count : $count }}</td>
                         <td>{{ $info['type']['name'] ?? '' }}</td>
                         <td>{{ $info['setting_task_maps'][0]['target'] ?? '' }}</td>
                         <td>{{ $info['setting_task_maps'][0]['area'] ?? '' }}</td>
                         <td>{{ $info['setting_task_maps'][0]['round'] ?? '' }}</td>
-                        <td>{{ $info['status'] ?? '' }}</td>
-                        <td>{{ $info['reason'] ?? '' }}</td>
-                        <td>{{ $info['solution'] ?? '' }}</td>
+                        <td>{{ $info['frequence'] ?? '' }}</td>
+                        <td>{{ $plan_dates }}</td>
+                        <td>{{ $info['confirm'] ?? '' }}</td>
+                        <td>{{ $info['note'] ?? '' }}</td>
                     </tr>
                 @endforeach
             </tbody>

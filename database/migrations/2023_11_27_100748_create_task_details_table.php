@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('time_in')->default('07:00:00 AM');
             $table->string('time_out')->default('11:00:00 AM');
             $table->string('range')->nullable();
+            $table->string('status')->nullable();
             $table->string('reason')->nullable();
             $table->string('solution')->nullable();
             $table->string('note')->nullable();

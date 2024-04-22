@@ -77,7 +77,7 @@
 </head>
 
 <body>
-    <header>
+    {{-- <header>
         <div class="col10">
             <div class="col7" style="text-align: right">
                 <p style="font-size: 12px;font-weight:bold;text-align:center;postion:absolute;margin-left:0">CÔNG TY
@@ -92,77 +92,176 @@
         <p style="text-align:right">98 Nguyễn Khiêm Ích – Trâu Quỳ - Gia Lâm – TP Hà Nội, ngày {{ date('d') }} tháng
             {{ date('m') }} năm
             {{ date('Y') }}</p>
-    </header>
+    </header> --}}
     <div class="" style="text-align: center">
         <p style="font-size: 14px;font-weight:bold;">{{ $data['file_name'] }}</p>
         <p style="font-style:italic">V/v: {{ $data['contract']['name'] ?? '' }} năm {{ date('Y') }}</p>
         <p style="font-style:italic">Hợp đồng số {{ $data['contract']['id'] ?? '' }} ký ngày
             {{ \Illuminate\Support\Carbon::parse($data['contract']['created_at'])->format('d-m-Y') }}</p>
     </div>
-    <h3 style="font-weight:bold;">Kính gửi: {{ $data['customer']['name'] ?? '' }} -
-        {{ $data['branch']['name'] ?? ('' ?? '') }} </h3>
-    <p style="margin-left: 50px">Đại diện: Ông ( bà ) : {{ $data['branch']['manager'] ?? '' }} Chức vụ :</p>
+    <div class="" style="text-align: left">
+        <p style="font-style:italic">Ngày: ___/_____/_______________</p>
+    </div>
     @if (!empty($data['tasks']))
-        <p style="font-weight:bold;">Nội dung: Kế hoạch công việc thực hiện dịch vụ {{ $info['type']['name'] ?? '' }}
-            Tháng
-            {{ $data['month'] }} năm {{ $data['year'] }}, cụ thể như sau:</p>
-
-        <table class="tbl-plan" cellspacing="0">
-            <tbody>
-                @php
-                    // dd($data['tasks']);
-                    $count = 0;
-                @endphp
-                <tr>
-                    <th rowspan="2">STT</th>
-                    <th rowspan="2">Tên nhiệm vụ</th>
-                    <th colspan="3">Nội dung nhiệm vụ</th>
-                    <th rowspan="2">Tần suất</th>
-                    <th rowspan="2">Ngày kế hoạch</th>
-                    <th rowspan="2">Ngày thực hiện</th>
-                    <th rowspan="2">Ghi chú</th>
-                </tr>
-                <tr>
-                    <th>Đối tượng</th>
-                    <th>Khu vực</th>
-                    <th>Phạm vi</th>
-                </tr>
-                @foreach ($data['tasks'] as $key => $info)
+        @foreach ($data['tasks'] as $info)
+            <p style="font-weight:bold;">{{ $info['type']['parent']['name'] ?? '' }} - {{ $info['type']['name'] ?? '' }}
+            </p>
+            <table class="tbl-plan tbl-staff" cellspacing="0">
+                <tbody>
                     <tr>
-                        @php
-                            $count++;
-                            $plan_dates = '';
-                            $actual_dates = '';
-                            foreach ($info['details'] as $task) {
-                                # code...
-                                $date = explode('-', $task['plan_date']);
-                                if ($date[0] == $data['year'] && $date[1] == $data['month']) {
-                                    # code...
-                                    $plan_dates .=
-                                        \Illuminate\Support\Carbon::parse($task['plan_date'])->format('d/m') . ';';
-                                    $actual_dates .=
-                                        \Illuminate\Support\Carbon::parse($task['actual_date'])->format('d/m') . ';';
-                                }
-                            }
-                        @endphp
-                        <td>{{ $count < 10 ? '0' . $count : $count }}</td>
-                        <td>{{ $info['type']['name'] ?? '' }}</td>
-                        <td>{{ $info['setting_task_maps'][0]['target'] ?? '' }}</td>
-                        <td>{{ $info['setting_task_maps'][0]['area'] ?? '' }}</td>
-                        <td>{{ $info['setting_task_maps'][0]['round'] ?? '' }}</td>
-                        <td>{{ $info['type']['name'] ?? '' }}</td>
-                        <td>
-                            {{ $plan_dates }}
-                        </td>
-                        <td>
-                            {{ $actual_dates }}
-                        </td>
-                        <td>{{ $info['type']['name'] ?? '' }}</td>
+                        <td colspan="4">Nhân sự</td>
+                        <td colspan="2">Thời gian thực hiện</td>
+                        <td rowspan="2">Xác nhận (Yes/No)</td>
                     </tr>
+                    <tr>
+                        <td>Mã NS</td>
+                        <td>Tên NS</td>
+                        <td>CCCD</td>
+                        <td>Số điện thoại</td>
+                        <td>Giờ vào</td>
+                        <td>Giờ ra</td>
+                    </tr>
+                    @foreach ($info['setting_task_staffs'] as $staff)
+                        <tr>
+                            <td>{{ $staff['user']['staff']['id'] ?? '' }}</td>
+                            <td>{{ $staff['user']['staff']['name'] ?? '' }}</td>
+                            <td>{{ $staff['user']['staff']['tel'] ?? '' }}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            <br />
+            <table class="tbl-plan tbl-chemistry" cellspacing="0">
+                <tbody>
+                    <tr>
+                        <td colspan="4">Hóa chất/Vật tư</td>
+                        <td colspan="4">Số lượng sử dụng</td>
+                        <td rowspan="2">Xác nhận (Yes/No)</td>
+                    </tr>
+                    <tr>
+                        <td>Mã HC</td>
+                        <td>Tên HC</td>
+                        <td>Số đăng ký</td>
+                        <td>Mục đích</td>
+                        <td>Mang vào</td>
+                        <td>Mang ra</td>
+                        <td>ĐVT</td>
+                        <td>Số lượng</td>
+                    </tr>
+                    @foreach ($info['setting_task_chemistries'] as $chemistry)
+                        <tr>
+                            <td>{{ $chemistry['chemistry']['id'] ?? '' }}</td>
+                            <td>{{ $chemistry['chemistry']['name'] ?? '' }}</td>
+                            <td>{{ $chemistry['chemistry']['number_register'] ?? '' }}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            <br />
+            <table class="tbl-plan tbl-item" cellspacing="0">
+                <tbody>
+                    <tr>
+                        <td colspan="4">Vật tư/Thiết bị</td>
+                        <td colspan="4">Vật tư và thiết bị sử dụng</td>
+                        <td rowspan="2">Xác nhận (Yes/No)</td>
+                    </tr>
+                    <tr>
+                        <td>Mã VT</td>
+                        <td>Tên VT</td>
+                        <td>Số đăng ký</td>
+                        <td>Mục đích</td>
+                        <td>Mang vào</td>
+                        <td>Mang ra</td>
+                        <td>ĐVT</td>
+                        <td>Số lượng</td>
+                    </tr>
+                    @foreach ($info['setting_task_items'] as $item)
+                        <tr>
+                            <td>{{ $item['item']['id'] ?? '' }}</td>
+                            <td>{{ $item['item']['name'] ?? '' }}</td>
+                            <td>{{ $item['item']['number_register'] ?? '' }}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            <br />
+            <table class="tbl-plan tbl-solution" cellspacing="0">
+                <tbody>
+                    <tr>
+                        <td colspan="4">Phương pháp thực hiện</td>
+                        <td rowspan="2">Xác nhận (Yes/No)</td>
+                    </tr>
+                    <tr>
+                        <td>Mã PP</td>
+                        <td>Tên PP</td>
+                        <td>Mô tả</td>
+                        <td>Mục đích</td>
+                    </tr>
+                    @foreach ($info['setting_task_solutions'] as $solution)
+                        <tr>
+                            <td>{{ $solution['solution']['id'] ?? '' }}</td>
+                            <td>{{ $solution['solution']['name'] ?? '' }}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+            <br />
+            <div class="" style="">
+                Khuyến nghị khách hàng:_____________________________________
+                <br>Lưu ý:________________________________________________________
+            </div>
+            @foreach ($info['details'] as $detail)
+                @foreach ($detail['task_maps'] as $key => $task_maps)
+                    <p>Chi tiết: {{ $task_maps[0]['area'] ?? '' }} – {{ $task_maps[0]['round'] ?? '' }} -
+                        {{ $task_maps[0]['round'] ?? '' }} - SL {{ count($task_maps) }}</p>
+                    <table class="tbl-plan tbl-solution" cellspacing="0">
+                        <tbody>
+                            <tr>
+                                <td>Chỉ tiêu</td>
+                                <td colspan="{{count($task_maps)}}">Mã sơ đồ</td>
+                            </tr>
+                            <tr>
+                                <td>ĐVT</td>
+                                @foreach ($task_maps as $task_map)
+                                    <td>{{ $task_map['code'] ?? '' }}</td>
+                                @endforeach
+                            </tr>
+                            <tr>
+                                <td>Số liệu</td>
+                                @foreach ($task_maps as $task_map)
+                                    <td>{{ $task_map['result'] ?? '' }}</td>
+                                @endforeach
+                            </tr>
+                        </tbody>
+                    </table>
+                    <br />
                 @endforeach
-            </tbody>
-        </table>
-        <br />
+            @endforeach
+            <div class="" style="">
+                Kết quả:______________________________________________________
+                <br>Ghi chú:______________________________________________________
+            </div>
+            <br /> <br />
+        @endforeach
     @endif
     <br />
     <div class="col10">

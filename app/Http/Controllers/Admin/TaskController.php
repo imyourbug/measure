@@ -39,6 +39,11 @@ class TaskController extends Controller
             // 'name' => 'required|string',
             'type_id' => 'required|numeric',
             'contract_id' => 'required|numeric',
+            'confirm' => 'nullable|string',
+            'frequence' => 'nullable|string',
+            'status' => 'nullable|string',
+            'reason' => 'nullable|string',
+            'solution' => 'nullable|string',
             'note' => 'nullable|string',
         ]);
         try {
@@ -57,6 +62,11 @@ class TaskController extends Controller
             $data = $request->validate([
                 'id' => 'required|numeric',
                 'note' => 'required|string',
+                'confirm' => 'nullable|string',
+                'frequence' => 'nullable|string',
+                'status' => 'nullable|string',
+                'reason' => 'nullable|string',
+                'solution' => 'nullable|string',
                 'type_id' => 'required|numeric',
                 'contract_id' => 'required|numeric',
             ]);

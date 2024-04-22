@@ -23,6 +23,12 @@ $(document).ready(function () {
                 },
             },
             {
+                data: "suggestion"
+            },
+            {
+                data: "note"
+            },
+            {
                 data: function (d) {
                     return `<a class="btn btn-primary btn-sm" href='/admin/types/update/${d.id}'>
                             <i class="fas fa-edit"></i>

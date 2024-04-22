@@ -23,6 +23,9 @@ class TaskDetail extends Model
         'time_out',
         'range',
         'note',
+        'status',
+        'reason',
+        'solution',
         'task_id',
     ];
 

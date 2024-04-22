@@ -34,6 +34,20 @@
                 </div>
             </div>
             <div class="row">
+                <div class="col-lg-6 col-md-12">
+                    <div class="form-group">
+                        <label for="menu">Tần suất</label>
+                        <input class="form-control" type="text" name="frequence" value="" />
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <div class="form-group">
+                        <label for="menu">Xác nhận</label>
+                        <input class="form-control" type="text" value="" name="confirm" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-lg-12 col-md-12">
                     <div class="form-group">
                         <label for="menu">Ghi chú</label>

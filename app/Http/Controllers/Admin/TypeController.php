@@ -112,6 +112,6 @@ class TypeController extends Controller
             'status' => 0,
             'data' => Type::where('parent_id', $request->id)
                 ->get()
-        ]);;
+        ]);
     }
 }

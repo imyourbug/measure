@@ -51,12 +51,28 @@
                 </div>
             </div>
             <div class="row">
+                <div class="col-lg-6 col-md-12">
+                    <div class="form-group">
+                        <label for="menu">Khuyến nghị</label>
+                        <input type="text" class="form-control" name="suggestion" value="{{ old('suggestion') }}"
+                            placeholder="Nhập khuyến nghị">
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <div class="form-group">
+                        <label for="menu">Ghi chú</label>
+                        <input type="text" class="form-control" name="note" value="{{ old('note') }}"
+                            placeholder="Nhập ghi chú">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-lg-12 col-md-12">
                     <div class="form-group">
                         <label for="file">Chọn ảnh</label><br>
                         <div class="">
                             <img id="image_show" style="width: 100px;height:100px" src="" alt="image" />
-                            <input type="file" id="upload" accept=".png,.jpeg"/>
+                            <input type="file" id="upload" accept=".png,.jpeg" />
                         </div>
                         <input type="hidden" name="image" id="image" value="">
                     </div>

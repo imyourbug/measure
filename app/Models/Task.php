@@ -16,7 +16,12 @@ class Task extends Model
     protected $fillable = [
         // 'name',
         'note',
+        'frequence',
+        'confirm',
         'type_id',
+        'status',
+        'reason',
+        'solution',
         'contract_id',
     ];
 
@@ -35,7 +40,7 @@ class Task extends Model
         return $this->belongsTo(Contract::class, 'contract_id', 'id');
     }
 
-    public function settingTaskChemitries()
+    public function settingTaskChemistries()
     {
         return $this->hasMany(SettingTaskChemistry::class, 'task_id', 'id');
     }

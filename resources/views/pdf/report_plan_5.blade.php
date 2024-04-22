@@ -99,46 +99,65 @@
         <p style="font-style:italic">Hợp đồng số {{ $data['contract']['id'] ?? '' }} ký ngày
             {{ \Illuminate\Support\Carbon::parse($data['contract']['created_at'])->format('d-m-Y') }}</p>
     </div>
-    <h3>BÊN A: {{ $data['customer']['representative'] ?? $data['customer']['name'] }} –
-        {{ $data['branch']['name'] ?? '' }}</h3>
+    <h3 style="font-weight:bold;">Kính gửi: {{ $data['customer']['name'] ?? '' }} -
+        {{ $data['branch']['name'] ?? ('' ?? '') }} </h3>
     <p style="margin-left: 50px">Đại diện: Ông ( bà ) : {{ $data['branch']['manager'] ?? '' }} Chức vụ :</p>
-    <h3>BÊN B: CÔNG TY TNHH DỊCH VỤ PESTKIL VIỆT NAM</h3>
-    <p style="margin-left: 50px">Đại diện: Ông ( bà ) :{{ $data['creator']['staff']['name'] ?? '' }} Chức vụ
-        :{{ $data['creator']['staff']['position'] ?? '' }}</p>
-    <p style="font-weight:bold;">I. Nội dung: Báo cáo kết quả công việc thực hiện dịch vụ</p>
     @if (!empty($data['tasks']))
-        <p style="font-weight:bold;">{{ $data['contract']['name'] ?? '' }}
+        <p style="font-weight:bold;">Nội dung: Kế hoạch công việc thực hiện dịch vụ {{ $info['type']['name'] ?? '' }}
             Tháng
             {{ $data['month'] }} năm {{ $data['year'] }}, cụ thể như sau:</p>
+
         <table class="tbl-plan" cellspacing="0">
             <tbody>
                 @php
+                    // dd($data['tasks']);
                     $count = 0;
                 @endphp
                 <tr>
-                    <th>STT</th>
-                    <th>Tên nhiệm vụ</th>
+                    <th rowspan="2">STT</th>
+                    <th rowspan="2">Tên nhiệm vụ</th>
+                    <th colspan="3">Nội dung nhiệm vụ</th>
+                    <th rowspan="2">Tần suất</th>
+                    <th rowspan="2">Ngày kế hoạch</th>
+                    <th rowspan="2">Ngày thực hiện</th>
+                    <th rowspan="2">Ghi chú</th>
+                </tr>
+                <tr>
                     <th>Đối tượng</th>
                     <th>Khu vực</th>
                     <th>Phạm vi</th>
-                    <th>Hiện trạng</th>
-                    <th>Nguyên nhân</th>
-                    <th>Biện pháp khắc phục</th>
                 </tr>
                 @foreach ($data['tasks'] as $key => $info)
                     <tr>
                         @php
-                            // dd($info);
                             $count++;
+                            $plan_dates = '';
+                            $actual_dates = '';
+                            foreach ($info['details'] as $task) {
+                                # code...
+                                $date = explode('-', $task['plan_date']);
+                                if ($date[0] == $data['year'] && $date[1] == $data['month']) {
+                                    # code...
+                                    $plan_dates .=
+                                        \Illuminate\Support\Carbon::parse($task['plan_date'])->format('d/m') . ';';
+                                    $actual_dates .=
+                                        \Illuminate\Support\Carbon::parse($task['actual_date'])->format('d/m') . ';';
+                                }
+                            }
                         @endphp
                         <td>{{ $count < 10 ? '0' . $count : $count }}</td>
                         <td>{{ $info['type']['name'] ?? '' }}</td>
                         <td>{{ $info['setting_task_maps'][0]['target'] ?? '' }}</td>
                         <td>{{ $info['setting_task_maps'][0]['area'] ?? '' }}</td>
                         <td>{{ $info['setting_task_maps'][0]['round'] ?? '' }}</td>
-                        <td>{{ $info['status'] ?? '' }}</td>
-                        <td>{{ $info['reason'] ?? '' }}</td>
-                        <td>{{ $info['solution'] ?? '' }}</td>
+                        <td>{{ $info['frequence'] ?? '' }}</td>
+                        <td>
+                            {{ $plan_dates }}
+                        </td>
+                        <td>
+                            {{ $actual_dates }}
+                        </td>
+                        <td>{{ $info['note'] ?? '' }}</td>
                     </tr>
                 @endforeach
             </tbody>
@@ -146,23 +165,13 @@
         <br />
     @endif
     <br />
-    <p style="font-weight:bold;">II. Ý kiến của khách hàng</p>
     <div class="col10">
-        <div class="col3" style="text-align: center">
-            <p style="font-weight:bold;"> ĐẠI DIỆN BÊN A
-                <br>{{ $data['customer']['representative'] ?? $data['customer']['name'] }} –
-                {{ $data['branch']['name'] ?? '' }}
-            </p>
-            <p style="font-style: italic">(Ký và ghi rõ họ tên)</p>
-        </div>
-        <div class="col4">
+        <div class="col7">
             &emsp;
         </div>
-        <div class="col3" style="text-align: center">
-            <p style="font-weight:bold;"> ĐẠI DIỆN BÊN B
-                <br>CÔNG TY TNHH DỊCH VỤ PESTKIL VIỆT NAM – PVSC
-            </p>
-            <p style="font-style: italic">(Ký và ghi rõ họ tên)</p>
+        <div class="col3" style="text-align: right">
+            <p> <span style="font-weight:bold;">CÔNG TY TNHH DỊCH VỤ PESTKIL VIỆT NAM</p>
+            <p> <span style="font-weight:bold;">PVSC</p>
             <div style="">{{ $data['creator']['staff']['name'] ?? '' }}</div>
         </div>
     </div>

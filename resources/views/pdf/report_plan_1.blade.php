@@ -77,7 +77,7 @@
 </head>
 
 <body>
-    <header>
+    {{-- <header>
         <div class="col10">
             <div class="col7" style="text-align: right">
                 <p style="font-size: 12px;font-weight:bold;text-align:center;postion:absolute;margin-left:0">CÔNG TY
@@ -92,75 +92,151 @@
         <p style="text-align:right">98 Nguyễn Khiêm Ích – Trâu Quỳ - Gia Lâm – TP Hà Nội, ngày {{ date('d') }} tháng
             {{ date('m') }} năm
             {{ date('Y') }}</p>
-    </header>
+    </header> --}}
     <div class="" style="text-align: center">
         <p style="font-size: 14px;font-weight:bold;">{{ $data['file_name'] }}</p>
-        <p style="font-style:italic">V/v: {{ $data['contract']['name'] ?? '' }} năm {{ date('Y') }}</p>
+        <p style="font-style:italic">V/v: {{ $data['contract']['name'] ?? '' }} tháng {{ $data['month'] ?? '' }} năm
+            {{ $data['year'] ?? '' }}</p>
         <p style="font-style:italic">Hợp đồng số {{ $data['contract']['id'] ?? '' }} ký ngày
             {{ \Illuminate\Support\Carbon::parse($data['contract']['created_at'])->format('d-m-Y') }}</p>
     </div>
-    <h3 style="font-weight:bold;">Kính gửi: {{ $data['customer']['name'] ?? '' }} -
-        {{ $data['branch']['name'] ?? ('' ?? '') }} </h3>
-    <p style="margin-left: 50px">Đại diện: Ông ( bà ) : {{ $data['branch']['manager'] ?? '' }} Chức vụ :</p>
     @if (!empty($data['tasks']))
-        <p style="font-weight:bold;">Nội dung: Kế hoạch công việc thực hiện dịch vụ {{ $info['type']['name'] ?? '' }}
-            Tháng
-            {{ $data['month'] }} năm {{ $data['year'] }}, cụ thể như sau:</p>
-
-        <table class="tbl-plan" cellspacing="0">
-            <tbody>
-                @php
-                    // dd($data['tasks']);
-                    $count = 0;
-                @endphp
-                <tr>
-                    <th rowspan="2">STT</th>
-                    <th rowspan="2">Tên nhiệm vụ</th>
-                    <th colspan="3">Nội dung nhiệm vụ</th>
-                    <th rowspan="2">Tần suất</th>
-                    <th rowspan="2">Ngày</th>
-                    <th rowspan="2">Ghi chú</th>
-                </tr>
-                <tr>
-                    <th>Đối tượng</th>
-                    <th>Khu vực</th>
-                    <th>Phạm vi</th>
-                </tr>
-                @foreach ($data['tasks'] as $key => $info)
-                    <tr>
-                        @php
-                            $count++;
-                            $plan_dates = '';
-                            foreach ($info['details'] as $task) {
-                                # code...
-                                $date = explode('-', $task['plan_date']);
-                                if ($date[0] == $data['year'] && $date[1] == $data['month']) {
-                                    # code...
-                                    $plan_dates .=
-                                        \Illuminate\Support\Carbon::parse($task['plan_date'])->format('d/m') . ';';
-                                }
+        @foreach ($data['tasks'] as $info)
+            <p style="font-weight:bold;">{{ $info['type']['parent']['name'] ?? '' }} - {{ $info['type']['name'] ?? '' }}
+            </p>
+            <table class="tbl-plan" cellspacing="0">
+                <tbody>
+                    @php
+                        $taskMaps = [];
+                        $taskStaff = [];
+                        $taskChemistries = [];
+                        $taskItems = [];
+                        $taskSolutions = [];
+                        foreach ($info['details'] as $task) {
+                            $date = explode('-', $task['plan_date']);
+                            if ($date[0] == $data['year'] && $date[1] == $data['month']) {
+                                count($task['task_maps']) === 0 ?: array_push($taskMaps, ...$task['task_maps']);
+                                count($task['task_staffs']) === 0 ?: array_push($taskStaff, ...$task['task_staffs']);
+                                count($task['task_chemitries']) === 0 ?:
+                                array_push($taskChemistries, ...$task['task_chemitries']);
+                                count($task['task_items']) === 0 ?: array_push($taskItems, ...$task['task_items']);
+                                count($task['task_solutions']) === 0 ?:
+                                array_push($taskSolutions, ...$task['task_solutions']);
                             }
-                        @endphp
-                        <td>{{ $count < 10 ? '0' . $count : $count }}</td>
-                        <td>{{ $info['type']['name'] ?? '' }}</td>
-                        <td>{{ $info['setting_task_maps'][0]['target'] ?? '' }}</td>
-                        <td>{{ $info['setting_task_maps'][0]['area'] ?? '' }}</td>
-                        <td>{{ $info['setting_task_maps'][0]['round'] ?? '' }}</td>
-                        <td>{{ $info['type']['name'] ?? '' }}</td>
-                        <td>
-                            {{ $plan_dates }}
-                        </td>
-                        <td>{{ $info['type']['name'] ?? '' }}</td>
+                        }
+                    @endphp
+                    <tr>
+                        <th style="width:50px">STT</th>
+                        <th style="width:150px">Hạng mục</th>
+                        <th>Thông tin</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
-        <br />
+                    <tr>
+                        <td>01</td>
+                        <td>Sơ đồ</td>
+                        <td>
+                            @foreach ($taskMaps as $taskMap)
+                                {{ $taskMap['target'] ?? '' }} - {{ $taskMap['area'] ?? '' }} -
+                                {{ $taskMap['round'] ?? '' }}
+                                <br>
+                            @endforeach
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>02</td>
+                        <td>Nhân sự</td>
+                        <td>
+                            @foreach ($taskStaff as $staff)
+                                {{ 'NV' . $staff['user']['staff']['id'] ?? '' }} -
+                                {{ $staff['user']['staff']['name'] ?? '' }} -
+                                {{ $staff['user']['staff']['identification'] ?? '' }} -
+                                {{ $staff['user']['staff']['tel'] ?? '' }}
+                                <br>
+                            @endforeach
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>03</td>
+                        <td>Thuốc/Hóa chất</td>
+                        <td>
+                            @foreach ($taskChemistries as $taskChemistry)
+                                {{ $taskChemistry['chemistry']['id'] ?? '' }} -
+                                {{ $taskChemistry['chemistry']['name'] ?? '' }} -
+                                {{ $taskChemistry['chemistry']['number_regist'] ?? '' }}
+                                <br>
+                            @endforeach
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>04</td>
+                        <td>Vật tư/Thiết bị</td>
+                        <td>
+                            @foreach ($taskItems as $taskItem)
+                                {{ $taskItem['item']['id'] ?? '' }} -
+                                {{ $taskItem['item']['name'] ?? '' }} -
+                                {{ $taskItem['item']['target'] ?? '' }} -
+                                {{ $taskItem['item']['supplier'] ?? '' }}
+                                <br>
+                            @endforeach
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>05</td>
+                        <td>Phương pháp thực hiện</td>
+                        <td>
+                            @foreach ($taskSolutions as $taskSolution)
+                                {{ $taskSolution['solution']['id'] ?? '' }} -
+                                {{ $taskSolution['solution']['name'] ?? '' }} -
+                                {{ $taskSolution['solution']['target'] ?? '' }}
+                                <br>
+                            @endforeach
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <br />
+            <div class="" style="margin-left: 20px">
+                <p>1 - Khuyến nghị</p>
+                <p>2 - Lưu ý</p>
+            </div>
+        @endforeach
     @endif
     <br />
     <div class="col10">
         <div class="col7">
-            &emsp;
+            <p style="font-weight:bold;text-decoration: underline">THÔNG TIN LIÊN HỆ</p>
+            <p style="font-weight:bold;">Trung tâm CSKH PESTKIL VIỆT NAM</p>
+            <table>
+                <tbody>
+                    <tr>
+                        <td><img src="{{ public_path('images/building.png') }}" width="20px" height="20px"
+                                alt="" /></td>
+                        <td>T118 Lô đất L2 khu 31 Ha, Trâu Quỳ - Gia Lâm - HN</td>
+                    </tr>
+                    <tr>
+                        <td><img src="{{ public_path('images/tel.png') }}" width="20px" height="20px"
+                                alt="" />
+                        </td>
+                        <td>0961063486 – 0838 094 888</td>
+                    </tr>
+                    <tr>
+                        <td><img src="{{ public_path('images/email.png') }}" width="20px" height="20px"
+                                alt="" /></td>
+                        <td>Cskh@pestkil.com.vn </td>
+                    </tr>
+                    <tr>
+                        <td><img src="{{ public_path('images/fb.png') }}" width="20px" height="20px"
+                                alt="" />
+                        </td>
+                        <td>Facebook: </td>
+                    </tr>
+                    <tr>
+                        <td><img src="{{ public_path('images/down.png') }}" width="20px" height="20px"
+                                alt="" />
+                        </td>
+                        <td>Tải ứng dụng CSKH trên IOS và Android</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         <div class="col3" style="text-align: right">
             <p> <span style="font-weight:bold;">CÔNG TY TNHH DỊCH VỤ PESTKIL VIỆT NAM</p>

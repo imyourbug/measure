@@ -34,7 +34,7 @@ class ExportController extends Controller
         $data = $request->validate([
             'month' => 'required|numeric|between:1,12',
             'year' => 'required|numeric|min:1900',
-            'type_report' => 'required|in:0,1,2,3,4,5',
+            'type_report' => 'required|in:0,1,2,3,4,5,6',
             'contract_id' => 'required|numeric',
             'image_charts' => 'nullable|array',
             'image_trend_charts' => 'nullable|array',
@@ -49,22 +49,32 @@ class ExportController extends Controller
         switch ((int)$data['type_report']) {
             case 0:
                 $data['file_name'] = $filename = 'KẾ HOẠCH THỰC HIỆN DỊCH VỤ ';
-                $pdf = MPDF::loadView('pdf.report_plan_1', ['data' => array_merge($data, $this->getReportPlanByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]);
+                $pdf = MPDF::loadView('pdf.report_plan_0', ['data' => array_merge($data, $this->getReportPlanByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]);
                 break;
             case 1:
                 $data['file_name'] = $filename = 'KẾ HOẠCH CHI TIẾT ';
-                $pdf = MPDF::loadView('pdf.report_plan_2', ['data' => array_merge($data, $this->getReportPlanByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]);
+                $pdf = MPDF::loadView('pdf.report_plan_1', ['data' => array_merge($data, $this->getReportPlanByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]);
+                break;
+            case 2:
+                $data['file_name'] = $filename = 'BÁO CÁO ĐÁNH GIÁ KẾT QUẢ THỰC HIỆN DỊCH VỤ ';
+                $pdf = MPDF::loadView('pdf.report_plan_2', ['data' => array_merge($data, $this->getReportWorkByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]);
+                break;
+            case 3:
+                $data['file_name'] = $filename = 'BIÊN BẢN NGHIỆM THU CÔNG VIỆC HOÀN THÀNH ';
+                $pdf = MPDF::loadView('pdf.report_plan_3', ['data' => array_merge($data, $this->getReportWorkByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]);
+                break;
+            case 4:
+                $data['file_name'] = $filename = 'BIÊN BẢN XÁC NHẬN KHỐI LƯỢNG HOÀN THÀNH-BÁO CÁO CHI TIẾT ';
+                $pdf = MPDF::loadView('pdf.report_plan_4', ['data' => array_merge($data, $this->getReportWorkByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]);
                 break;
             case 5:
                 $data['file_name'] = $filename = 'BẢNG KÊ CÔNG VIỆC/DỊCH VỤ ';
-                $pdf = MPDF::loadView('pdf.report_plan_6', ['data' => array_merge($data, $this->getReportPlanByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]);
+                $pdf = MPDF::loadView('pdf.report_plan_5', ['data' => array_merge($data, $this->getReportPlanByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]);
                 break;
-                // case 1:
-                //     $data['file_name'] = $filename = 'Báo cáo kết quả ';
-                //     $pdf = MPDF::loadView('pdf.report_plan_2', ['data' =>
-                //     $data
-                //         + $this->getReportWorkByMonthAndYear($data['month'], $data['year'], $data['contract_id'])]);
-                //     break;
+            case 6:
+                $data['file_name'] = $filename = 'BIÊN BẢN XÁC NHẬN CÔNG VIỆC/DỊCH VỤ ';
+                $pdf = MPDF::loadView('pdf.report_plan_6', ['data' => array_merge($data, $this->getReportWorkByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]);
+                break;
             default:
                 break;
         }
@@ -139,7 +149,11 @@ class ExportController extends Controller
             'tasks.details.taskSolutions.solution',
             'tasks.details.taskChemitries.chemistry',
             'tasks.details.taskStaffs.user.staff',
-            'tasks.settingTaskMaps',
+            'tasks.settingTaskMaps.map',
+            'tasks.settingTaskChemistries.chemistry',
+            'tasks.settingTaskSolutions.solution',
+            'tasks.settingTaskItems.item',
+            'tasks.settingTaskStaffs.user.staff',
         ])
             ->where('id', $contract_id)
             ->first()
@@ -178,6 +192,11 @@ class ExportController extends Controller
             'tasks.details.taskSolutions.solution',
             'tasks.details.taskChemitries.chemistry',
             'tasks.details.taskStaffs.user.staff',
+            'tasks.settingTaskMaps.map',
+            'tasks.settingTaskChemistries.chemistry',
+            'tasks.settingTaskSolutions.solution',
+            'tasks.settingTaskItems.item',
+            'tasks.settingTaskStaffs.user.staff',
         ])
             ->where('id', $contract_id)
             ->first()

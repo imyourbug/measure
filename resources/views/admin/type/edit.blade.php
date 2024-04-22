@@ -54,6 +54,22 @@
                 </div>
             </div>
             <div class="row">
+                <div class="col-lg-6 col-md-12">
+                    <div class="form-group">
+                        <label for="menu">Khuyến nghị</label>
+                        <input type="text" class="form-control" name="suggestion" value="{{ old('suggestion') ?? $type->suggestion }}"
+                            placeholder="Nhập khuyến nghị">
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <div class="form-group">
+                        <label for="menu">Ghi chú</label>
+                        <input type="text" class="form-control" name="note" value="{{ old('note')  ?? $type->note}}"
+                            placeholder="Nhập ghi chú">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
                 <div class="col-lg-12 col-md-12">
                     <div class="form-group">
                         <label for="file">Chọn ảnh</label><br>

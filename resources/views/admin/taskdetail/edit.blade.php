@@ -1,11 +1,23 @@
 @extends('admin.main')
 @push('styles')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.2/css/dataTables.dataTables.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.0.1/css/buttons.dataTables.css">
 @endpush
 @push('scripts')
     <script src="/js/admin/taskdetail/edit.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/2.0.2/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.1/js/dataTables.buttons.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.dataTables.js"></script>
+    <script src="https://cdn.datatables.net/select/2.0.0/js/dataTables.select.js"></script>
+    <script src="https://cdn.datatables.net/select/2.0.0/js/select.dataTables.js"></script>
+    <script src="https://cdn.datatables.net/datetime/1.5.2/js/dataTables.dateTime.min.js"></script>
+    <script src="https://cdn.datatables.net/keytable/2.12.0/js/dataTables.keyTable.js"></script>
+    <script src="https://cdn.datatables.net/keytable/2.12.0/js/keyTable.dataTables.js"></script>
     <script></script>
 @endpush
 @section('content')
@@ -85,7 +97,7 @@
                         {{-- Map --}}
                         <div class="tab-pane active show fade" id="custom-tabs-four-home" role="tabpanel"
                             aria-labelledby="custom-tabs-four-home-tab">
-                            <button class="btn btn-success mb-4 btn-open-modal" data-target="#modal-map"
+                            <button class="btn btn-success mb-2 btn-open-modal" data-target="#modal-map"
                                 data-toggle="modal">Thêm
                                 mới</button>
                             <table id="tableMap" class="table-map table display nowrap dataTable dtr-inline collapsed">
@@ -107,10 +119,11 @@
                         {{-- Staff --}}
                         <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel"
                             aria-labelledby="custom-tabs-four-profile-tab">
-                            <button class="btn btn-success mb-4 btn-open-modal-staff" data-target="#modal-staff"
+                            <button class="btn btn-success mb-2 btn-open-modal-staff" data-target="#modal-staff"
                                 data-toggle="modal">Thêm
                                 mới</button>
-                            <table id="tableStaff" class="table-staff table display nowrap dataTable dtr-inline collapsed">
+                            <table id="tableStaff"
+                                class="table-staff table display nowrap dataTable dtr-inline collapsed">
                                 <thead>
                                     <tr>
                                         <!-- <th>ID</th> -->
@@ -129,7 +142,7 @@
                         {{-- Item --}}
                         <div class="tab-pane fade" id="custom-tabs-four-items" role="tabpanel"
                             aria-labelledby="custom-tabs-four-items-tab">
-                            <button class="btn btn-success mb-4 btn-open-modal-item" data-target="#modal-item"
+                            <button class="btn btn-success mb-2 btn-open-modal-item" data-target="#modal-item"
                                 data-toggle="modal">Thêm
                                 mới</button>
                             <table id="tableItem" class="table-item table display nowrap dataTable dtr-inline collapsed">
@@ -149,7 +162,7 @@
                         {{-- Chemistry --}}
                         <div class="tab-pane fade" id="custom-tabs-four-chemistries" role="tabpanel"
                             aria-labelledby="custom-tabs-four-chemistries-tab">
-                            <button class="btn btn-success mb-4 btn-open-modal-chemistry" data-target="#modal-chemistry"
+                            <button class="btn btn-success mb-2 btn-open-modal-chemistry" data-target="#modal-chemistry"
                                 data-toggle="modal">Thêm
                                 mới</button>
                             <table id="tableChemistry"
@@ -170,7 +183,7 @@
                         {{-- Solution --}}
                         <div class="tab-pane fade" id="custom-tabs-four-solutions" role="tabpanel"
                             aria-labelledby="custom-tabs-four-solutions-tab">
-                            <button class="btn btn-success mb-4 btn-open-modal-solution" data-target="#modal-solution"
+                            <button class="btn btn-success mb-2 btn-open-modal-solution" data-target="#modal-solution"
                                 data-toggle="modal">Thêm
                                 mới</button>
                             <table id="tableSolution"

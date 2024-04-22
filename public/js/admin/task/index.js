@@ -28,6 +28,11 @@ $(document).ready(function () {
                     return `${d.contract.name} - ${d.contract.branch ? d.contract.branch.name : ""}`;
                 },
             },
+            { data: "frequence" },
+            { data: "confirm" },
+            { data: "status" },
+            { data: "reason" },
+            { data: "solution" },
             { data: "note" },
             { data: "created_at" },
             {
@@ -57,7 +62,12 @@ $(document).on("click", ".btn-edit", function () {
                 let task = response.task;
                 $("#type_id").val(task.type_id);
                 $("#contract_id").val(task.contract_id);
-                $("#note").text(task.note);
+                $("#note").val(task.note);
+                $("#frequence").val(task.frequence);
+                $("#confirm").val(task.confirm);
+                $("#reason").val(task.reason);
+                $("#status").val(task.status);
+                $("#solution").val(task.solution);
                 $("#task_id").val(task.id);
             } else {
                 toastr.error(response.message);
@@ -72,6 +82,11 @@ $(document).on("click", ".btn-update", function () {
             id: $("#task_id").val(),
             note: $("#note").val(),
             contract_id: $("#contract_id").val(),
+            frequence: $("#frequence").val(),
+            confirm: $("#confirm").val(),
+            status: $("#status").val(),
+            solution: $("#solution").val(),
+            reason: $("#reason").val(),
             type_id: $("#type_id").val(),
         };
         console.log(data);
