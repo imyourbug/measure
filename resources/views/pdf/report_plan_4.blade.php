@@ -200,41 +200,96 @@
                 @endphp
                 <p>Khu vực {{ $key }}</p>
 
+                @if ($data['display'])
+                    <table class="tbl-plan">
+                        <tr>
+                            <td>Tháng {{ $data['month'] }} năm {{ $data['year'] }}</td>
+                            <td>So sánh {{ $data['month'] . '-' . $data['year'] }} với
+                                {{ $data['month'] . '-' . ($data['year'] - 1) }}</td>
+                            <td>Diễn biến từng tháng</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                @if (!empty($data['image_charts'][$keyImage]))
+                                    <img src="{{ $data['image_charts'][$keyImage] }}" alt=""
+                                        style="margin-bottom: 20px" />
+                                @endif
+                            </td>
+                            <td style="border: 0.5px solid black;border-right: 0.5px solid black;">
+                                @if (!empty($data['image_trend_charts'][$info['id']]))
+                                    <img src="{{ public_path($data['image_trend_charts'][$info['id']]) }}"
+                                        alt="" />
+                                @endif
+
+                            </td>
+                            <td style="border: 0.5px solid black;border-right: 0.5px solid black;">
+                                @if (!empty($data['image_annual_charts'][$info['id']]))
+                                    <img src="{{ public_path($data['image_annual_charts'][$info['id']]) }}"
+                                        alt="" />
+                                @endif
+                            </td>
+                        </tr>
+                    </table>
+                @endif
+                <p style="margin-left:20px">- Nhận xét</p>
+                <p style="margin-left:20px">- Chi tiết</p>
+                <p style="margin-left:10px">Kết quả theo dõi: Từ: Tháng {{ $data['month'] }} năm {{ $data['year'] }}
+                    đến
+                    Tháng {{ $data['month'] }} năm {{ $data['year'] }}</p>
                 <table class="tbl-plan">
                     <tr>
-                        <td>Tháng {{ $data['month'] }} năm {{ $data['year'] }}</td>
-                        <td>So sánh {{ $data['month'] . '-' . $data['year'] }} với
-                            {{ $data['month'] . '-' . ($data['year'] - 1) }}</td>
-                        <td>Diễn biến từng tháng</td>
+                        <td>Mã sơ đồ</td>
+                        @foreach ($taskMaps as $task_map)
+                            @if (substr($task_map['code'], 0, 1) === $key)
+                                <td>{{ $task_map['code'] ?? '' }}</td>
+                            @endif
+                        @endforeach
                     </tr>
                     <tr>
                         <td>
-                            @if (!empty($data['image_charts'][$keyImage]))
-                                <img src="{{ $data['image_charts'][$keyImage] }}" alt=""
-                                    style="margin-bottom: 20px" />
-                            @endif
+                            Kết quả
                         </td>
-                        <td style="border: 0.5px solid black;border-bottom: none;border-right: 0.5px solid black;">
-                            @if (!empty($data['image_trend_charts'][$info['id']]))
-                                <img src="{{ public_path($data['image_trend_charts'][$info['id']]) }}"
-                                    alt="" />
+                        @foreach ($taskMaps as $task_map)
+                            @if (substr($task_map['code'], 0, 1) === $key)
+                                <td>{{ ($task_map['result'] ?? 0 / $task_map['kpi']) * 100 }}%</td>
                             @endif
-
+                        @endforeach
+                    </tr>
+                </table>
+                <p style="margin-left:10px">Kết quả theo dõi: Năm {{ $data['year'] }} so với
+                    {{ $data['year_compare'] }}
+                </p>
+                <table class="tbl-plan">
+                    <tr>
+                        <td>Năm</td>
+                        @for ($i = 1; $i <= 12; $i++)
+                            <td>
+                                Tháng {{ $i < 10 ? '0' . $i : $i }}
+                            </td>
+                        @endfor
+                    </tr>
+                    <tr>
+                        <td>
+                            {{ $data['year'] }}
                         </td>
-                        <td style="border: 0.5px solid black;border-bottom: none;border-right: 0.5px solid black;">
-                            @if ($data['display'] && !empty($data['image_annual_charts'][$info['id']]))
-                                <img src="{{ public_path($data['image_annual_charts'][$info['id']]) }}"
-                                    alt="" />
-                            @endif
-                        </td>
+                        @for ($i = 1; $i <= 12; $i++)
+                            <td>
+                                @if (!empty($data['compare'][$info['id']]['this_year'][$i - 1]))
+                                    @php
+                                        foreach ($data['compare'][$info['id']]['this_year'][$i - 1] as $value) {
+                                            foreach ($value['task_maps'][$key] as $item) {
+                                                dd($item);
+                                            }
+                                        }
+                                    @endphp
+                                @else
+                                    0%
+                                @endif
+                            </td>
+                        @endfor
                     </tr>
                 </table>
             @endforeach
-            <p style="margin-left:20px">- Nhận xét</p>
-            <p style="margin-left:20px">- Chi tiết</p>
-            <p style="margin-left:10px">Kết quả theo dõi: : Từ: Tháng {{ $data['month'] }} năm {{ $data['year'] }} đến
-                Tháng {{ $data['month'] }} năm {{ $data['year'] }}</p>
-            <p style="margin-left:10px">Năm {{ $data['year'] }} so với {{ $data['year'] - 1 }}</p>
         @endforeach
     @endif
 

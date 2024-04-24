@@ -92,7 +92,6 @@
             listAnnualMapChart = [];
             // declare
             let type_report = $('.select-type').val();
-            // $('.blockChart').html('');
             let year = $('.select-year').val();
             let month = $('.select-month').val();
             let contract_id = $('.select-contract').val();
@@ -365,6 +364,7 @@
                 $('.type_report').val($('.select-type').val());
                 $('.contract_id').val($('.select-contract').val());
                 $('.user_id').val($('.select-user').val());
+                $('.year_compare').val($('.year_compare').val());
                 $('.display').val($('#select-display').is(':checked') ? $('#select-display').val() : 0);
                 setTimeout(() => {
                     $('.btn-export').prop('disabled', false);
@@ -471,7 +471,6 @@
                         </div>
                     </form>
                 </div>
-
             </div>
         </div>
     </div>
@@ -553,11 +552,19 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
+                                <label for="menu">Năm so sánh <span class="required">(*)</span></label>
+                                <input value="{{ date('Y') - 1 }}" type="text" class="form-control year_compare">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
                                 <label for="menu">Số lượng cột hiển thị <span class="required">(*)</span></label>
                                 <input value="1" min="1" type="number" id="select-column"
                                     class="form-control select-column" />
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
                                 <label for="menu">Chọn người lập báo cáo <span class="required">(*)</span></label>
@@ -570,19 +577,16 @@
                                 </select>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Hiển thị biểu đồ năm</label>
+                                <label for="menu">Lựa chọn</label>
                                 <div class="custom-control custom-checkbox">
                                     <input value="1" type="checkbox" id="select-display"
                                         class="option-type custom-control-input">
-                                    <label class="custom-control-label" for="select-display">Có</label>
+                                    <label class="custom-control-label" for="select-display">Hiển thị ảnh</label>
                                 </div>
                             </div>
                         </div>
-
                     </div>
                     <button class="btn btn-danger btn-preview" data-target="#modal-export" data-toggle="modal">Xuất
                         PDF</button>
@@ -710,6 +714,7 @@
                     <input type="hidden" class="contract_id" name="contract_id" />
                     <input type="hidden" class="user_id" name="user_id" />
                     <input type="hidden" class="display" name="display" />
+                    <input type="hidden" class="year_compare" name="year_compare" />
                     <div class="modal-footer justify-content-between">
                         <button class="btn btn-default" data-dismiss="modal">Đóng</button>
                         <button type="submit" class="btn btn-primary btn-export" disabled>Xác nhận</button>

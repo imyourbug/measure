@@ -34,6 +34,7 @@ class ExportController extends Controller
         $data = $request->validate([
             'month' => 'required|numeric|between:1,12',
             'year' => 'required|numeric|min:1900',
+            'year_compare' => 'required|numeric|min:1900',
             'type_report' => 'required|in:0,1,2,3,4,5,6',
             'contract_id' => 'required|numeric',
             'image_charts' => 'nullable|array',
@@ -65,7 +66,12 @@ class ExportController extends Controller
                 break;
             case 4:
                 $data['file_name'] = $filename = 'BIÊN BẢN XÁC NHẬN KHỐI LƯỢNG HOÀN THÀNH-BÁO CÁO CHI TIẾT ';
-                $pdf = MPDF::loadView('pdf.report_plan_4', ['data' => array_merge($data, $this->getReportWorkByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]);
+                $pdf = MPDF::loadView('pdf.report_plan_4', [
+                    'data' =>
+                    $data +
+                        ['compare' => $this->getDataCompareTwoYears($data['year'], $data['year_compare'], $data['contract_id'])] +
+                        $this->getReportWorkByMonthAndYear($data['month'], $data['year'], $data['contract_id'])
+                ]);
                 break;
             case 5:
                 $data['file_name'] = $filename = 'BẢNG KÊ CÔNG VIỆC/DỊCH VỤ ';
@@ -356,6 +362,34 @@ class ExportController extends Controller
         ];
     }
 
+    public function getDataCompareTwoYears($firstYear, $secondYear, $contractId)
+    {
+        $contract = Contract::with(['tasks.details'])->firstWhere('id', $contractId);
+        $result = [];
+        foreach ($contract->tasks as $task) {
+            $tmp_this_year = [];
+            $tmp_last_year = [];
+            for ($month = 1; $month <= 12; $month++) {
+                $tmp_this_year[$month] = $this->getDataCompareByMonthYearTaskId($month, $firstYear, $task->id);
+                $tmp_last_year[$month] = $firstYear == $secondYear ? $tmp_this_year[$month] :
+                    $this->getDataCompareByMonthYearTaskId($month, $secondYear, $task->id);
+            }
+            $result[$task->id] = [
+                'task_id' => $task->id,
+                'last_year' => [
+                    ...$tmp_last_year,
+                    'year' => $secondYear
+                ],
+                'this_year' => [
+                    ...$tmp_this_year,
+                    'year' => $firstYear
+                ],
+            ];
+        }
+
+        return $result;
+    }
+
     public function getDataAnnualMapChart(Request $request)
     {
         $this_year = now()->format('Y');
@@ -386,6 +420,33 @@ class ExportController extends Controller
             'status' => 0,
             'data' => $result,
         ];
+    }
+
+    public function getDataCompareByMonthYearTaskId($month, $year, $task_id)
+    {
+        $details = TaskDetail::with([
+            'task',
+            'taskMaps.map',
+            'taskItems.item',
+            'taskSolutions.solution',
+            'taskChemitries.chemistry',
+            'taskStaffs.user.staff',
+        ])
+            ->whereRaw('MONTH(plan_date) = ?', $month)
+            ->whereRaw('YEAR(plan_date) = ?', $year)
+            ->where('task_id', $task_id)
+            ->get()
+            ->toArray();
+
+        foreach ($details as $keyDetail => &$detail) {
+            $tmp = [];
+            foreach ($detail['task_maps'] as $keyTaskMap => $taskMap) {
+                $tmp[substr($taskMap['code'], 0, 1)][] = $taskMap;
+            }
+            $detail['task_maps'] = $tmp;
+        }
+
+        return $details;
     }
 
     public function getDataByMonthAndYear($month, $year, $task_id)
