@@ -189,7 +189,6 @@
             <p style="">Báo cáo phân tích</p>
             @foreach ($task['task_maps'] as $key => $taskMaps)
                 @php
-                    // dd($data);
                     $keyImage = ($info['id'] ?? '') . $key;
                 @endphp
                 <p>Khu vực {{ $key }}</p>

@@ -98,7 +98,6 @@ class ExportController extends Controller
                 'url' => '/storage/pdf/' . $filename
             ]);
         } catch (Throwable $e) {
-            dd($e);
             return response()->json([
                 'status' => 1,
                 'url' => $e->getMessage()

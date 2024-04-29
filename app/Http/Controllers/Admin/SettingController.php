@@ -68,7 +68,6 @@ class SettingController extends Controller
             . ' --host=' . env('DB_HOST') . ' --port=' . env('DB_PORT') . ' ' . env('DB_DATABASE') . ' > ' . $filePath;
         $returnVar = NULL;
         $output = NULL;
-        // dd($command);
         exec($command, $output, $returnVar);
         Log::info('Command backup: ' . $command);
 

@@ -27,7 +27,6 @@ class SolutionController extends Controller
             'description' => 'nullable|string',
             'active' => 'required|in:0,1',
         ]);
-        // dd($data);
         try {
             Solution::create($data);
             Toastr::success('Tạo phương pháp thành công', __('title.toastr.success'));
