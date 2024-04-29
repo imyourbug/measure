@@ -403,46 +403,51 @@
                         });
                     },
                 });
+                setTimeout(() => {
+                    listMapChart.forEach(e => {
+                        $('.groupImage').append(
+                            `<input type="hidden" name="image_charts[${e.chart.canvas.id.replace('mapChart', '')}]" value="${e.chart.toBase64Image('image/png', 1)}" alt="" />`
+                        );
+                    });
+                    listTrendMapChart.forEach(e => {
+                        $('.groupTrendImage').append(
+                            `<input type="hidden" name="image_trend_charts[${e.chart.canvas.id.replace('trendMapChart', '')}]" value="${e.chart.toBase64Image('image/png', 1)}" alt="" />`
+                        );
+                    });
+                    listAnnualMapChart.forEach(e => {
+                        $('.groupAnnualImage').append(
+                            `<input type="hidden" name="image_annual_charts[${e.chart.canvas.id.replace('annualMapChart', '')}]" value="${e.chart.toBase64Image('image/png', 1)}" alt="" />`
+                        );
+                    });
+                    setTimeout(() => {
+                        $('.month').val($('.select-month').val());
+                        $('.year').val($('.select-year').val());
+                        $('.type_report').val($('.select-type').val());
+                        $('.contract_id').val($('.select-contract').val());
+                        $('.user_id').val($('.select-user').val());
+                        $('.year_compare').val($('.year_compare').val());
+                        $('.display').val($('#select-display').is(':checked') ? $(
+                                '#select-display')
+                            .val() : 0);
+                        $('.btn-export').prop('disabled', false);
+                    }, 2000);
+                }, 2000);
                 // listMapChart.forEach(e => {
                 //     $('.groupImage').append(
-                //         `<input type="hidden" name="image_charts[${e.chart.canvas.id.replace('mapChart', '')}]" value="${e.chart.toBase64Image('image/png', 1)}" alt="" />`
+                //         `<input type="hidden" name="image_charts[${e.chart.canvas.id.replace('mapChart', '')}]" value="" alt="" />`
                 //     );
                 // });
                 // listTrendMapChart.forEach(e => {
                 //     $('.groupTrendImage').append(
-                //         `<input type="hidden" name="image_trend_charts[${e.chart.canvas.id.replace('trendMapChart', '')}]" value="${e.chart.toBase64Image('image/png', 1)}" alt="" />`
+                //         `<input type="hidden" name="image_trend_charts[${e.chart.canvas.id.replace('trendMapChart', '')}]" value="" alt="" />`
                 //     );
                 // });
                 // listAnnualMapChart.forEach(e => {
                 //     $('.groupAnnualImage').append(
-                //         `<input type="hidden" name="image_annual_charts[${e.chart.canvas.id.replace('annualMapChart', '')}]" value="${e.chart.toBase64Image('image/png', 1)}" alt="" />`
+                //         `<input type="hidden" name="image_annual_charts[${e.chart.canvas.id.replace('annualMapChart', '')}]" value="" alt="" />`
                 //     );
                 // });
-                listMapChart.forEach(e => {
-                    $('.groupImage').append(
-                        `<input type="hidden" name="image_charts[${e.chart.canvas.id.replace('mapChart', '')}]" value="" alt="" />`
-                    );
-                });
-                listTrendMapChart.forEach(e => {
-                    $('.groupTrendImage').append(
-                        `<input type="hidden" name="image_trend_charts[${e.chart.canvas.id.replace('trendMapChart', '')}]" value="" alt="" />`
-                    );
-                });
-                listAnnualMapChart.forEach(e => {
-                    $('.groupAnnualImage').append(
-                        `<input type="hidden" name="image_annual_charts[${e.chart.canvas.id.replace('annualMapChart', '')}]" value="" alt="" />`
-                    );
-                });
             }
-            $('.month').val($('.select-month').val());
-            $('.year').val($('.select-year').val());
-            $('.type_report').val($('.select-type').val());
-            $('.contract_id').val($('.select-contract').val());
-            $('.user_id').val($('.select-user').val());
-            $('.year_compare').val($('.year_compare').val());
-            $('.display').val($('#select-display').is(':checked') ? $('#select-display')
-                .val() : 0);
-            $('.btn-export').prop('disabled', false);
         });
 
         function getRandomRGBColor() {
@@ -790,14 +795,14 @@
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
-                    <div style="" class="allChart">
+                    {{-- <div style="" class="allChart">
                         <div class="groupChart blockChart" style="">
                         </div>
                         <div class="groupTrendChart blockChart" style="">
                         </div>
                         <div class="groupAnnualChart blockChart" style="">
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="groupImage">
                     </div>
                     <div class="groupTrendImage">
@@ -821,12 +826,12 @@
         </div>
     </div>
     <input type="hidden" id="task_id">
-    {{-- <div style="" class="allChart">
+    <div style="" class="allChart">
         <div class="groupChart blockChart" style="">
         </div>
         <div class="groupTrendChart blockChart" style="">
         </div>
         <div class="groupAnnualChart blockChart" style="">
         </div>
-    </div> --}}
+    </div>
 @endsection

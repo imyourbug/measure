@@ -274,13 +274,13 @@ class ExportController extends Controller
         $contract = Contract::with(['tasks.details'])->firstWhere('id', $contract_id);
 
         $result = [];
+        $code = [];
         foreach ($contract->tasks as $task) {
             $details = TaskDetail::with(['task', 'taskMaps.map'])
                 ->whereRaw('YEAR(plan_date) = ?', $year)
                 ->where('task_id', $task->id)
                 ->get();
             // get code
-            $code = [];
             foreach ($details as $detail) {
                 foreach ($detail['taskMaps'] as $taskMap) {
                     $code[substr($taskMap->code, 0, 1)] = substr($taskMap->code, 0, 1);
