@@ -128,7 +128,6 @@
                 @foreach ($data['tasks'] as $key => $info)
                     <tr>
                         @php
-                            // dd($info);
                             $count++;
                         @endphp
                         <td>{{ $count < 10 ? '0' . $count : $count }}</td>

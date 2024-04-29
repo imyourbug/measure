@@ -139,38 +139,32 @@
                         <th>KPI</th>
                         <th>Đánh giá</th>
                     </tr>
-
-                    <tr>
+                    @php
+                        $plan_dates = '';
+                        $actual_dates = '';
+                        foreach ($info['details'] as $task) {
+                            $date = explode('-', $task['plan_date']);
+                            if ($date[0] == $data['year'] && $date[1] == $data['month']) {
+                                $plan_dates .=
+                                    \Illuminate\Support\Carbon::parse($task['plan_date'])->format('d/m') . ';';
+                                $actual_dates .=
+                                    \Illuminate\Support\Carbon::parse($task['actual_date'])->format('d/m') . ';';
+                            }
+                        }
+                    @endphp
+                    @foreach ($task['task_maps'] as $key => $taskMap)
                         @php
-                            // dd($info);
-                            $plan_dates = '';
-                            $actual_dates = '';
-                            foreach ($info['details'] as $task) {
-                                # code...
-                                $date = explode('-', $task['plan_date']);
-                                if ($date[0] == $data['year'] && $date[1] == $data['month']) {
-                                    # code...
-                                    $plan_dates .=
-                                        \Illuminate\Support\Carbon::parse($task['plan_date'])->format('d/m') . ';';
-                                    $actual_dates .=
-                                        \Illuminate\Support\Carbon::parse($task['actual_date'])->format('d/m') . ';';
-                                }
+                            $count++;
+                            $sumResult = 0;
+                            $sumKPI = 0;
+                            foreach ($taskMap as $taskMapInfo) {
+                                $sumResult += $taskMapInfo['result'] ?? 0;
+                                $sumKPI += $taskMapInfo['kpi'] ?? 0;
                             }
                         @endphp
-                        @foreach ($task['task_maps'] as $key => $taskMap)
-                            @php
-                                // dd($taskMap);
-                                $count++;
-                                $sumResult = 0;
-                                $sumKPI = 0;
-                                foreach ($taskMap as $taskMapInfo) {
-                                    $sumResult += $taskMapInfo['result'] ?? 0;
-                                    $sumKPI += $taskMapInfo['kpi'] ?? 0;
-                                }
-                            @endphp
+                        <tr>
                             <td>{{ $count < 10 ? '0' . $count : $count }}</td>
                             <td>{{ $info['type']['name'] ?? '' }}</td>
-                            {{-- <td>{{ $taskMap[0]['area'] ?? '' }} </td> --}}
                             <td>{{ $key }} </td>
                             <td>{{ $taskMap[0]['round'] ?? '' }}</td>
                             <td>{{ $taskMap[0]['target'] ?? '' }}</td>
@@ -186,8 +180,8 @@
                             <td>{{ $sumKPI / count($taskMap) }}</td>
                             <td>{{ $sumResult < $sumKPI ? 'Không đạt' : 'Đạt' }}</td>
                             <td>{{ $taskMap['note'] ?? '' }}</td>
-                        @endforeach
-                    </tr>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
             <br />
@@ -195,8 +189,8 @@
             <p style="">Báo cáo phân tích</p>
             @foreach ($task['task_maps'] as $key => $taskMaps)
                 @php
-                    $keyImage = ($info['id'] ?? '') . $key;
                     // dd($data);
+                    $keyImage = ($info['id'] ?? '') . $key;
                 @endphp
                 <p>Khu vực {{ $key }}</p>
 
@@ -209,22 +203,22 @@
                             <td>Diễn biến từng tháng</td>
                         </tr>
                         <tr>
-                            <td>
+                            <td>ph
                                 @if (!empty($data['image_charts'][$keyImage]))
                                     <img src="{{ $data['image_charts'][$keyImage] }}" alt=""
                                         style="margin-bottom: 20px" />
                                 @endif
                             </td>
                             <td style="border: 0.5px solid black;border-right: 0.5px solid black;">
-                                @if (!empty($data['image_trend_charts'][$info['id']]))
-                                    <img src="{{ public_path($data['image_trend_charts'][$info['id']]) }}"
+                                @if (!empty($data['image_trend_charts'][$keyImage]))
+                                    <img src="{{ public_path($data['image_trend_charts'][$keyImage]) }}"
                                         alt="" />
                                 @endif
 
                             </td>
                             <td style="border: 0.5px solid black;border-right: 0.5px solid black;">
-                                @if (!empty($data['image_annual_charts'][$info['id']]))
-                                    <img src="{{ public_path($data['image_annual_charts'][$info['id']]) }}"
+                                @if (!empty($data['image_annual_charts'][$keyImage]))
+                                    <img src="{{ public_path($data['image_annual_charts'][$keyImage]) }}"
                                         alt="" />
                                 @endif
                             </td>
@@ -251,7 +245,9 @@
                         </td>
                         @foreach ($taskMaps as $task_map)
                             @if (substr($task_map['code'], 0, 1) === $key)
-                                <td>{{ ($task_map['result'] ?? 0 / $task_map['kpi']) * 100 }}%</td>
+                                <td>
+                                    {{ $task_map['kpi'] !== 0 ? ($task_map['result'] / $task_map['kpi']) * 100 : 0 }}%
+                                </td>
                             @endif
                         @endforeach
                     </tr>
@@ -276,12 +272,44 @@
                             <td>
                                 @if (!empty($data['compare'][$info['id']]['this_year'][$i - 1]))
                                     @php
+                                        $result_this_year = 0;
+                                        $kpi_this_year = 0;
                                         foreach ($data['compare'][$info['id']]['this_year'][$i - 1] as $value) {
-                                            foreach ($value['task_maps'][$key] as $item) {
-                                                dd($item);
+                                            if (!empty($value['task_maps'][$key])) {
+                                                foreach ($value['task_maps'][$key] as $item) {
+                                                    $result_this_year += $item['result'] ?? 0;
+                                                    $kpi_this_year += $item['kpi'] ?? 0;
+                                                }
                                             }
                                         }
                                     @endphp
+                                    {{ $kpi_this_year !== 0 ? ($result_this_year / $kpi_this_year) * 100 : 0 }}%
+                                @else
+                                    0%
+                                @endif
+                            </td>
+                        @endfor
+                    </tr>
+                    <tr>
+                        <td>
+                            {{ $data['year_compare'] }}
+                        </td>
+                        @for ($i = 1; $i <= 12; $i++)
+                            <td>
+                                @if (!empty($data['compare'][$info['id']]['last_year'][$i - 1]))
+                                    @php
+                                        $result_last_year = 0;
+                                        $count_last_year = 0;
+                                        foreach ($data['compare'][$info['id']]['last_year'][$i - 1] as $value) {
+                                            if (!empty($value['task_maps'][$key])) {
+                                                foreach ($value['task_maps'][$key] as $item) {
+                                                    $result_last_year += $item['result'] ?? 0;
+                                                    $count_last_year++;
+                                                }
+                                            }
+                                        }
+                                    @endphp
+                                    {{ $count_last_year !== 0 ? ($result_last_year / $count_last_year) * 100 : 0 }}%
                                 @else
                                     0%
                                 @endif

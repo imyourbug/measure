@@ -101,23 +101,24 @@ class SettingController extends Controller
                 $e['task_id'] = (int)$taskdetail_id;
                 return $e;
             }, $settingTaskMaps);
-            TaskMap::upsert(
-                $settingTaskMaps,
-                ['map_id', 'task_id'],
-                [
-                    'code',
-                    'area',
-                    'position',
-                    'target',
-                    'unit',
-                    'kpi',
-                    'result',
-                    'image',
-                    'detail',
-                    'round',
-                    'fake_result',
-                ]
-            );
+            foreach ($settingTaskMaps as $key => $value) {
+                TaskMap::updateOrCreate(
+                    ['map_id' => $value['map_id'], 'task_id' => $value['task_id']],
+                    [
+                        'code' => $value['code'],
+                        'area' => $value['area'],
+                        'position' => $value['position'],
+                        'target' => $value['target'],
+                        'unit' => $value['unit'],
+                        'kpi' => $value['kpi'],
+                        'result' => $value['result'],
+                        'image' => $value['image'],
+                        'detail' => $value['detail'],
+                        'round' => $value['round'],
+                        'fake_result' => $value['fake_result'],
+                    ]
+                );
+            }
             // taskItem
             $settingTaskItems = $task_detail->task?->settingTaskItems?->toArray() ?? [];
             $settingTaskItems = array_map(function ($e) use ($taskdetail_id) {
@@ -125,19 +126,20 @@ class SettingController extends Controller
                 $e['task_id'] = (int)$taskdetail_id;
                 return $e;
             }, $settingTaskItems);
-            TaskItem::upsert(
-                $settingTaskItems,
-                ['item_id', 'task_id'],
-                [
-                    'code',
-                    'name',
-                    'unit',
-                    'kpi',
-                    'result',
-                    'image',
-                    'detail',
-                ]
-            );
+            foreach ($settingTaskItems as $key => $value) {
+                TaskItem::updateOrCreate(
+                    ['item_id' => $value['item_id'], 'task_id' => $value['task_id']],
+                    [
+                        'code' => $value['code'],
+                        'name' => $value['name'],
+                        'unit' => $value['unit'],
+                        'kpi' => $value['kpi'],
+                        'result' => $value['result'],
+                        'image' => $value['image'],
+                        'detail' => $value['detail'],
+                    ]
+                );
+            }
             // taskSolution
             $settingTaskSolutions = $task_detail->task?->settingTaskSolutions?->toArray() ?? [];
             $settingTaskSolutions = array_map(function ($e) use ($taskdetail_id) {
@@ -145,19 +147,20 @@ class SettingController extends Controller
                 $e['task_id'] = (int)$taskdetail_id;
                 return $e;
             }, $settingTaskSolutions);
-            TaskSolution::upsert(
-                $settingTaskSolutions,
-                ['solution_id', 'task_id'],
-                [
-                    'code',
-                    'name',
-                    'unit',
-                    'kpi',
-                    'result',
-                    'image',
-                    'detail',
-                ]
-            );
+            foreach ($settingTaskSolutions as $key => $value) {
+                TaskSolution::updateOrCreate(
+                    ['solution_id' => $value['solution_id'], 'task_id' => $value['task_id']],
+                    [
+                        'code' => $value['code'],
+                        'name' => $value['name'],
+                        'unit' => $value['unit'],
+                        'kpi' => $value['kpi'],
+                        'result' => $value['result'],
+                        'image' => $value['image'],
+                        'detail' => $value['detail'],
+                    ]
+                );
+            }
             // taskStaff
             $settingTaskStaffs = $task_detail->task?->settingTaskStaffs?->toArray() ?? [];
             $settingTaskStaffs = array_map(function ($e) use ($taskdetail_id) {
@@ -165,17 +168,18 @@ class SettingController extends Controller
                 $e['task_id'] = (int)$taskdetail_id;
                 return $e;
             }, $settingTaskStaffs);
-            TaskStaff::upsert(
-                $settingTaskStaffs,
-                ['user_id', 'task_id'],
-                [
-                    'code',
-                    'name',
-                    'position',
-                    'tel',
-                    'identification',
-                ]
-            );
+            foreach ($settingTaskStaffs as $key => $value) {
+                TaskStaff::updateOrCreate(
+                    ['user_id' => $value['user_id'], 'task_id' => $value['task_id']],
+                    [
+                        'code' => $value['code'],
+                        'name' => $value['name'],
+                        'position' => $value['position'],
+                        'tel' => $value['tel'],
+                        'identification' => $value['identification'],
+                    ]
+                );
+            }
             // taskChemistry
             $settingTaskChemistries = $task_detail->task?->settingTaskChemistries?->toArray() ?? [];
             $settingTaskChemistries = array_map(function ($e) use ($taskdetail_id) {
@@ -183,19 +187,20 @@ class SettingController extends Controller
                 $e['task_id'] = (int)$taskdetail_id;
                 return $e;
             }, $settingTaskChemistries);
-            TaskChemistry::upsert(
-                $settingTaskChemistries,
-                ['chemistry_id', 'task_id'],
-                [
-                    'code',
-                    'name',
-                    'unit',
-                    'kpi',
-                    'result',
-                    'image',
-                    'detail',
-                ]
-            );
+            foreach ($settingTaskChemistries as $key => $value) {
+                TaskChemistry::updateOrCreate(
+                    ['chemistry_id' => $value['chemistry_id'], 'task_id' => $value['task_id']],
+                    [
+                        'code' => $value['code'],
+                        'name' => $value['name'],
+                        'unit' => $value['unit'],
+                        'kpi' => $value['kpi'],
+                        'result' => $value['result'],
+                        'image' => $value['image'],
+                        'detail' => $value['detail'],
+                    ]
+                );
+            }
             DB::commit();
             Toastr::success('Tải lên cài đặt thành công', __('title.toastr.success'));
         } catch (\Throwable $e) {

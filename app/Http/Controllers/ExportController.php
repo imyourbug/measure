@@ -31,72 +31,12 @@ class ExportController extends Controller
 
     public function plan(Request $request)
     {
-        $data = $request->validate([
-            'month' => 'required|numeric|between:1,12',
-            'year' => 'required|numeric|min:1900',
-            'year_compare' => 'required|numeric|min:1900',
-            'type_report' => 'required|in:0,1,2,3,4,5,6',
-            'contract_id' => 'required|numeric',
-            'image_charts' => 'nullable|array',
-            'image_trend_charts' => 'nullable|array',
-            'image_annual_charts' => 'nullable|array',
-            'user_id' => 'required|numeric',
-            'display' => 'required|in:0,1',
-        ]);
-
-        $data['creator'] = User::with(['staff'])->firstWhere('id', $data['user_id'])->toArray();
-        $pdf = null;
-        $filename = '';
-        switch ((int)$data['type_report']) {
-            case 0:
-                $data['file_name'] = $filename = 'KẾ HOẠCH THỰC HIỆN DỊCH VỤ ';
-                $pdf = MPDF::loadView('pdf.report_plan_0', ['data' => array_merge($data, $this->getReportPlanByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]);
-                break;
-            case 1:
-                $data['file_name'] = $filename = 'KẾ HOẠCH CHI TIẾT ';
-                $pdf = MPDF::loadView('pdf.report_plan_1', ['data' => array_merge($data, $this->getReportPlanByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]);
-                break;
-            case 2:
-                $data['file_name'] = $filename = 'BÁO CÁO ĐÁNH GIÁ KẾT QUẢ THỰC HIỆN DỊCH VỤ ';
-                $pdf = MPDF::loadView('pdf.report_plan_2', ['data' => array_merge($data, $this->getReportWorkByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]);
-                break;
-            case 3:
-                $data['file_name'] = $filename = 'BIÊN BẢN NGHIỆM THU CÔNG VIỆC HOÀN THÀNH ';
-                $pdf = MPDF::loadView('pdf.report_plan_3', ['data' => array_merge($data, $this->getReportWorkByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]);
-                break;
-            case 4:
-                $data['file_name'] = $filename = 'BIÊN BẢN XÁC NHẬN KHỐI LƯỢNG HOÀN THÀNH-BÁO CÁO CHI TIẾT ';
-                $pdf = MPDF::loadView('pdf.report_plan_4', [
-                    'data' =>
-                    $data +
-                        ['compare' => $this->getDataCompareTwoYears($data['year'], $data['year_compare'], $data['contract_id'])] +
-                        $this->getReportWorkByMonthAndYear($data['month'], $data['year'], $data['contract_id'])
-                ]);
-                break;
-            case 5:
-                $data['file_name'] = $filename = 'BẢNG KÊ CÔNG VIỆC/DỊCH VỤ ';
-                $pdf = MPDF::loadView('pdf.report_plan_5', ['data' => array_merge($data, $this->getReportPlanByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]);
-                break;
-            case 6:
-                $data['file_name'] = $filename = 'BIÊN BẢN XÁC NHẬN CÔNG VIỆC/DỊCH VỤ ';
-                $pdf = MPDF::loadView('pdf.report_plan_6', ['data' => array_merge($data, $this->getReportWorkByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]);
-                break;
-            default:
-                break;
-        }
-        $filename .= 'tháng ' . $data['month'] . ' năm ' . $data['year'];
-        $filename = Str::slug($filename) . '.pdf';
-        return $pdf->stream($filename);
-    }
-
-    //
-    public function plan2(Request $request)
-    {
         try {
             $data = $request->validate([
                 'month' => 'required|numeric|between:1,12',
                 'year' => 'required|numeric|min:1900',
-                'type_report' => 'required|in:0,1',
+                'year_compare' => 'required|numeric|min:1900',
+                'type_report' => 'required|in:0,1,2,3,4,5,6',
                 'contract_id' => 'required|numeric',
                 'image_charts' => 'nullable|array',
                 'image_trend_charts' => 'nullable|array',
@@ -110,22 +50,43 @@ class ExportController extends Controller
             $filename = '';
             switch ((int)$data['type_report']) {
                 case 0:
-                    $pdf = MPDF::loadView('pdf.report_plan_1', ['data' => array_merge($data, $this->getReportPlanByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]);
-                    $filename = 'KẾ HOẠCH THỰC HIỆN DỊCH VỤ ';
+                    $data['file_name'] = $filename = 'KẾ HOẠCH THỰC HIỆN DỊCH VỤ ';
+                    $pdf = MPDF::loadView('pdf.report_plan_0', ['data' => array_merge($data, $this->getReportPlanByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]);
                     break;
                 case 1:
-                    $pdf = MPDF::loadView('pdf.report_result', ['data' =>
-                    $data
-                        + $this->getReportWorkByMonthAndYear($data['month'], $data['year'], $data['contract_id'])]);
-                    $filename = 'Báo cáo kết quả ';
+                    $data['file_name'] = $filename = 'KẾ HOẠCH CHI TIẾT ';
+                    $pdf = MPDF::loadView('pdf.report_plan_1', ['data' => array_merge($data, $this->getReportPlanByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]);
+                    break;
+                case 2:
+                    $data['file_name'] = $filename = 'BÁO CÁO ĐÁNH GIÁ KẾT QUẢ THỰC HIỆN DỊCH VỤ ';
+                    $pdf = MPDF::loadView('pdf.report_plan_2', ['data' => array_merge($data, $this->getReportWorkByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]);
+                    break;
+                case 3:
+                    $data['file_name'] = $filename = 'BIÊN BẢN NGHIỆM THU CÔNG VIỆC HOÀN THÀNH ';
+                    $pdf = MPDF::loadView('pdf.report_plan_3', ['data' => array_merge($data, $this->getReportWorkByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]);
+                    break;
+                case 4:
+                    $data['file_name'] = $filename = 'BIÊN BẢN XÁC NHẬN KHỐI LƯỢNG HOÀN THÀNH-BÁO CÁO CHI TIẾT ';
+                    $pdf = MPDF::loadView('pdf.report_plan_4', [
+                        'data' =>
+                        $data +
+                            ['compare' => $this->getDataCompareTwoYears($data['year'], $data['year_compare'], $data['contract_id'])] +
+                            $this->getReportWorkByMonthAndYear($data['month'], $data['year'], $data['contract_id'])
+                    ]);
+                    break;
+                case 5:
+                    $data['file_name'] = $filename = 'BẢNG KÊ CÔNG VIỆC/DỊCH VỤ ';
+                    $pdf = MPDF::loadView('pdf.report_plan_5', ['data' => array_merge($data, $this->getReportPlanByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]);
+                    break;
+                case 6:
+                    $data['file_name'] = $filename = 'BIÊN BẢN XÁC NHẬN CÔNG VIỆC/DỊCH VỤ ';
+                    $pdf = MPDF::loadView('pdf.report_plan_6', ['data' => array_merge($data, $this->getReportWorkByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]);
                     break;
                 default:
                     break;
             }
             $filename .= 'tháng ' . $data['month'] . ' năm ' . $data['year'];
             $filename = Str::slug($filename) . '.pdf';
-            return $pdf->stream($filename);
-
             $path = storage_path() . '/app/public/pdf/';
             if (!File::isDirectory($path)) {
                 File::makeDirectory($path, 0777, true, true);
@@ -137,6 +98,7 @@ class ExportController extends Controller
                 'url' => '/storage/pdf/' . $filename
             ]);
         } catch (Throwable $e) {
+            dd($e);
             return response()->json([
                 'status' => 1,
                 'url' => $e->getMessage()
@@ -304,33 +266,42 @@ class ExportController extends Controller
         ];
     }
 
-    public function getTrendDataMapChart(Request $request)
+    public function getDataAnnualMapChart(Request $request)
     {
         $contract_id = $request->contract_id;
+        $year = $request->year;
 
         $contract = Contract::with(['tasks.details'])->firstWhere('id', $contract_id);
-        $start = new DateTime($contract->start);
-        $finish = new DateTime($contract->finish);
-        $keys = [];
-        for ($date = $start; $date <= $finish; $date->add(new DateInterval('P3W'))) {
-            if (!key_exists($date->format('Y-m'), $keys)) {
-                $keys[$date->format('Y-m')] = [
-                    'month' => $date->format('m'),
-                    'year' => $date->format('Y'),
-                ];
-            }
-        }
+
         $result = [];
         foreach ($contract->tasks as $task) {
+            $details = TaskDetail::with(['task', 'taskMaps.map'])
+                ->whereRaw('YEAR(plan_date) = ?', $year)
+                ->where('task_id', $task->id)
+                ->get();
+            // get code
+            $code = [];
+            foreach ($details as $detail) {
+                foreach ($detail['taskMaps'] as $taskMap) {
+                    $code[substr($taskMap->code, 0, 1)] = substr($taskMap->code, 0, 1);
+                }
+            }
+        }
+
+        foreach ($contract->tasks as $task) {
             $tmp = [];
-            foreach ($keys as $key => $date) {
-                $key_task_details = TaskDetail::with(['task', 'taskMaps.map'])
-                    ->whereRaw('MONTH(plan_date) = ?', $date['month'])
-                    ->whereRaw('YEAR(plan_date) = ?', $date['year'])
+            for ($month = 1; $month <= 12; $month++) {
+                $details = TaskDetail::with(['task', 'taskMaps.map'])
+                    ->whereRaw('MONTH(plan_date) = ?', $month)
+                    ->whereRaw('YEAR(plan_date) = ?', $year)
                     ->where('task_id', $task->id)
-                    ->get()->pluck('id');
-                $value = DB::table('task_maps')
-                    ->selectRaw('SUM(CASE
+                    ->get();
+                // get key
+                $key_task_details = $details->pluck('id');
+                // get value
+                foreach ($code as $c) {
+                    $value = DB::table('task_maps')
+                        ->selectRaw('SUM(CASE
                                     WHEN kpi is NULL THEN 0
                                     WHEN kpi = "" THEN 0
                                     ELSE kpi
@@ -340,18 +311,19 @@ class ExportController extends Controller
                                     WHEN result = "" THEN 0
                                     ELSE result
                                 END) as all_result')
-                    ->join('maps', 'maps.id', '=', 'task_maps.map_id')
-                    ->whereIn('task_id', $key_task_details)
-                    ->first();
-
-                $tmp[$key] = [
-                    ...$date,
-                    'kpi' => $value->all_kpi ?? 0,
-                    'result' => $value->all_result ?? 0,
-                ];
+                        ->whereIn('task_id', $key_task_details)
+                        ->whereRaw('SUBSTR(code, 1, 1) = ?', $c)
+                        ->first();
+                    $tmp[$month][$c] = [
+                        'kpi' => $value->all_kpi ?? 0,
+                        'result' => $value->all_result ?? 0,
+                        'code' => $c,
+                        'month' => $month,
+                    ];
+                }
             }
             $result[$task->id] = [
-                ...$tmp,
+                'value' => $tmp,
                 'task_id' => $task->id
             ];
         }
@@ -360,6 +332,78 @@ class ExportController extends Controller
             'status' => 0,
             'data' => $result,
         ];
+    }
+
+    public function getTrendDataMapChart(Request $request)
+    {
+        $year = $request->year;
+        $year_compare = $request->year_compare;
+        $month = $request->month;
+        $month_compare = $request->month_compare;
+        $contract = Contract::with(['tasks.details'])->firstWhere('id', $request->contract_id);
+        $result = [];
+        foreach ($contract->tasks as $task) {
+            $tmp_this_year = [];
+            $tmp_last_year = [];
+            $tmp_this_year = $this->getDataTrend($month, $year, $task->id);
+            $tmp_last_year = $this->getDataTrend($month_compare, $year_compare, $task->id);
+            $result[$task->id] = [
+                'task_id' => $task->id,
+                'last_year' => $tmp_last_year,
+                'this_year' => $tmp_this_year,
+            ];
+        }
+
+        return [
+            'status' => 0,
+            'data' => $result,
+        ];
+    }
+
+    public function getDataTrend($month, $year, $task_id)
+    {
+        $details = TaskDetail::with(['task', 'taskMaps.map'])
+            ->whereRaw('MONTH(plan_date) = ?', $month)
+            ->whereRaw('YEAR(plan_date) = ?', $year)
+            ->where('task_id',  $task_id)
+            ->get()
+            ?->toArray() ?? [];
+
+        $result = [];
+        foreach ($details as $keyDetail => $detail) {
+            if (!empty($detail['task_maps'])) {
+                foreach ($detail['task_maps'] as $keyTaskMap => $taskMap) {
+                    $result[substr($taskMap['code'], 0, 1)]['result'] = ($result[substr($taskMap['code'], 0, 1)]['result'] ?? 0) +  ($taskMap['result'] ?? 0);
+                    $result[substr($taskMap['code'], 0, 1)]['kpi'] = ($result[substr($taskMap['code'], 0, 1)]['kpi'] ?? 0) +  ($taskMap['kpi'] ?? 0);
+                    $result[substr($taskMap['code'], 0, 1)]['code'] = substr($taskMap['code'], 0, 1);
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    public function getDataByMonthAndYear($month, $year, $task_id)
+    {
+        $details = TaskDetail::with(['task', 'taskMaps.map'])
+            ->whereRaw('MONTH(plan_date) = ?', $month)
+            ->whereRaw('YEAR(plan_date) = ?', $year)
+            ->where('task_id',  $task_id)
+            ->get()
+            ?->toArray() ?? [];
+
+        $result = [];
+        foreach ($details as $keyDetail => $detail) {
+            if (!empty($detail['task_maps'])) {
+                foreach ($detail['task_maps'] as $keyTaskMap => $taskMap) {
+                    $result[substr($taskMap['code'], 0, 1)]['result'] = ($result[substr($taskMap['code'], 0, 1)]['result'] ?? 0) +  ($taskMap['result'] ?? 0);
+                    $result[substr($taskMap['code'], 0, 1)]['kpi'] = ($result[substr($taskMap['code'], 0, 1)]['kpi'] ?? 0) +  ($taskMap['kpi'] ?? 0);
+                    $result[substr($taskMap['code'], 0, 1)]['code'] = substr($taskMap['code'], 0, 1);
+                }
+            }
+        }
+
+        return $result;
     }
 
     public function getDataCompareTwoYears($firstYear, $secondYear, $contractId)
@@ -390,39 +434,7 @@ class ExportController extends Controller
         return $result;
     }
 
-    public function getDataAnnualMapChart(Request $request)
-    {
-        $this_year = now()->format('Y');
-        $last_year = now()->subYear(1)->format('Y');
-        $contract = Contract::with(['tasks.details'])->firstWhere('id', $request->contract_id);
-        $result = [];
-        foreach ($contract->tasks as $task) {
-            $tmp_this_year = [];
-            $tmp_last_year = [];
-            for ($month = 1; $month <= 12; $month++) {
-                $tmp_this_year[$month] = $this->getDataByMonthAndYear($month, $this_year, $task->id);
-                $tmp_last_year[$month] = $this->getDataByMonthAndYear($month, $last_year, $task->id);
-            }
-            $result[$task->id] = [
-                'task_id' => $task->id,
-                'last_year' => [
-                    ...$tmp_last_year,
-                    'year' => $last_year
-                ],
-                'this_year' => [
-                    ...$tmp_this_year,
-                    'year' => $this_year
-                ],
-            ];
-        }
-
-        return [
-            'status' => 0,
-            'data' => $result,
-        ];
-    }
-
-    public function getDataCompareByMonthYearTaskId($month, $year, $task_id)
+    public function getDataCompareByMonthYearTaskId($month = 0, $year = 0, $task_id)
     {
         $details = TaskDetail::with([
             'task',
@@ -447,37 +459,5 @@ class ExportController extends Controller
         }
 
         return $details;
-    }
-
-    public function getDataByMonthAndYear($month, $year, $task_id)
-    {
-        $result = [];
-        $key_task_details = TaskDetail::with(['task', 'taskMaps.map'])
-            ->whereRaw('MONTH(plan_date) = ?', $month)
-            ->whereRaw('YEAR(plan_date) = ?', $year)
-            ->where('task_id',  $task_id)
-            ->get()->pluck('id');
-        $value = DB::table('task_maps')
-            ->selectRaw('SUM(CASE
-                            WHEN kpi is NULL THEN 0
-                            WHEN kpi = "" THEN 0
-                            ELSE kpi
-                            END) as all_kpi,
-                        SUM(CASE
-                            WHEN result is NULL THEN 0
-                            WHEN result = "" THEN 0
-                            ELSE result
-                            END) as all_result')
-            ->join('maps', 'maps.id', '=', 'task_maps.map_id')
-            ->whereIn('task_id', $key_task_details)
-            ->first();
-        $result = [
-            'kpi' => $value->all_kpi ?? 0,
-            'result' => $value->all_result ?? 0,
-            'month' => $month,
-            'year' => $year,
-        ];
-
-        return $result;
     }
 }

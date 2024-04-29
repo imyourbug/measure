@@ -110,7 +110,6 @@
         <table class="tbl-plan" cellspacing="0">
             <tbody>
                 @php
-                    // dd($data['tasks']);
                     $count = 0;
                 @endphp
                 <tr>
