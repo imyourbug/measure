@@ -100,7 +100,7 @@ class ExportController extends Controller
         } catch (Throwable $e) {
             return response()->json([
                 'status' => 1,
-                'url' => $e->getMessage()
+                'message' => $e->getMessage()
             ]);
         }
     }
