@@ -36,6 +36,7 @@ class ExportController extends Controller
                 'month' => 'required|numeric|between:1,12',
                 'year' => 'required|numeric|min:1900',
                 'year_compare' => 'required|numeric|min:1900',
+                'month_compare' => 'required|numeric|between:1,12',
                 'type_report' => 'required|in:0,1,2,3,4,5,6',
                 'contract_id' => 'required|numeric',
                 'image_charts' => 'nullable|array',
@@ -340,18 +341,45 @@ class ExportController extends Controller
         $month = $request->month;
         $month_compare = $request->month_compare;
         $contract = Contract::with(['tasks.details'])->firstWhere('id', $request->contract_id);
-        $result = [];
+        $tmpResult = [];
         foreach ($contract->tasks as $task) {
             $tmp_this_year = [];
             $tmp_last_year = [];
             $tmp_this_year = $this->getDataTrend($month, $year, $task->id);
             $tmp_last_year = $this->getDataTrend($month_compare, $year_compare, $task->id);
-            $result[$task->id] = [
+            $tmpResult[$task->id] = [
                 'task_id' => $task->id,
                 'last_year' => $tmp_last_year,
                 'this_year' => $tmp_this_year,
             ];
         }
+        // get all code
+        $result = [];
+        foreach ($tmpResult as $key => $valueTmp) {
+            foreach ($valueTmp['last_year'] as $keyLastYear => $valueLastYear) {
+                if (!in_array($key . $keyLastYear, $result)) {
+                    $result[$key . $keyLastYear]['last_year'] = $valueLastYear['kpi'] != 0 ?
+                        ($valueLastYear['result'] / $valueLastYear['kpi']) * 100 : 0;
+                    $result[$key . $keyLastYear]['task_id'] = $key;
+                }
+            }
+            foreach ($valueTmp['this_year'] as $keyThisYear => $valueThisYear) {
+                if (!in_array($key . $keyThisYear, $result)) {
+                    $result[$key . $keyThisYear]['this_year'] = $valueThisYear['kpi'] != 0 ?
+                        ($valueThisYear['result'] / $valueThisYear['kpi']) * 100 : 0;
+                    $result[$key . $keyThisYear]['task_id'] = $key;
+                }
+            }
+        }
+
+        $result = array_map(function ($key, $item) {
+            return [
+                'last_year' => $item['last_year'] ?? 0,
+                'this_year' => $item['this_year'] ?? 0,
+                'code' => $key,
+                'task_id' =>  $item['task_id'] ?? '',
+            ];
+        }, array_keys($result), array_values($result));
 
         return [
             'status' => 0,

@@ -6,7 +6,6 @@ function closeModal() {
     $(".modal-backdrop").remove();
 }
 
-
 $(document).on("click", ".btn-filter", function () {
     let requestUrl = "/api/tasks/getAll?from=" + $('#from').val() + "&to=" + $('#to').val()
     dataTable.ajax.url(requestUrl).load();
@@ -21,7 +20,6 @@ $(document).ready(function () {
             dataSrc: "tasks",
         },
         columns: [
-            // { data: "id" },
             { data: "type.name" },
             {
                 data: function (d) {

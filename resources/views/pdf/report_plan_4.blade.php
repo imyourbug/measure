@@ -152,170 +152,176 @@
                             }
                         }
                     @endphp
-                    @foreach ($task['task_maps'] as $key => $taskMap)
-                        @php
-                            $count++;
-                            $sumResult = 0;
-                            $sumKPI = 0;
-                            foreach ($taskMap as $taskMapInfo) {
-                                $sumResult += $taskMapInfo['result'] ?? 0;
-                                $sumKPI += $taskMapInfo['kpi'] ?? 0;
-                            }
-                        @endphp
-                        <tr>
-                            <td>{{ $count < 10 ? '0' . $count : $count }}</td>
-                            <td>{{ $info['type']['name'] ?? '' }}</td>
-                            <td>{{ $key }} </td>
-                            <td>{{ $taskMap[0]['round'] ?? '' }}</td>
-                            <td>{{ $taskMap[0]['target'] ?? '' }}</td>
-                            <td>{{ count($taskMap) }}</td>
-                            <td>
-                                @if (!empty($taskMap[0]['image']))
-                                    <img src="{{ public_path($taskMap[0]['image']) }}" width="20px" height="20px"
-                                        alt="">
-                                @endif
-                            </td>
-                            <td>{{ $taskMap[0]['unit'] ?? '' }}</td>
-                            <td>{{ $sumResult / count($taskMap) }}</td>
-                            <td>{{ $sumKPI / count($taskMap) }}</td>
-                            <td>{{ $sumResult < $sumKPI ? 'Không đạt' : 'Đạt' }}</td>
-                            <td>{{ $taskMap['note'] ?? '' }}</td>
-                        </tr>
+                    @foreach ($info['details'] as $task)
+                        @foreach ($task['task_maps'] as $key => $taskMap)
+                            @php
+                                $count++;
+                                $sumResult = 0;
+                                $sumKPI = 0;
+                                foreach ($taskMap as $taskMapInfo) {
+                                    $sumResult += $taskMapInfo['result'] ?? 0;
+                                    $sumKPI += $taskMapInfo['kpi'] ?? 0;
+                                }
+                            @endphp
+                            <tr>
+                                <td>{{ $count < 10 ? '0' . $count : $count }}</td>
+                                <td>{{ $info['type']['name'] ?? '' }}</td>
+                                <td>{{ $key }} </td>
+                                <td>{{ $taskMap[0]['round'] ?? '' }}</td>
+                                <td>{{ $taskMap[0]['target'] ?? '' }}</td>
+                                <td>{{ count($taskMap) }}</td>
+                                <td>
+                                    @if (!empty($taskMap[0]['image']))
+                                        <img src="{{ public_path($taskMap[0]['image']) }}" width="20px"
+                                            height="20px" alt="">
+                                    @endif
+                                </td>
+                                <td>{{ $taskMap[0]['unit'] ?? '' }}</td>
+                                <td>{{ round($sumResult / count($taskMap), 2) }}</td>
+                                <td>{{ round($sumKPI / count($taskMap), 2) }}</td>
+                                <td>{{ $sumResult < $sumKPI ? 'Không đạt' : 'Đạt' }}</td>
+                                <td>{{ $taskMap['note'] ?? '' }}</td>
+                            </tr>
+                        @endforeach
                     @endforeach
+
                 </tbody>
             </table>
             <br />
             <br />
             <p style="">Báo cáo phân tích</p>
-            @foreach ($task['task_maps'] as $key => $taskMaps)
-                @php
-                    $keyImage = ($info['id'] ?? '') . $key;
-                @endphp
-                <p>Khu vực {{ $key }}</p>
+            @foreach ($info['details'] as $task)
+                @foreach ($task['task_maps'] as $key => $taskMaps)
+                    @php
+                        $keyImage = ($info['id'] ?? '') . $key;
+                    @endphp
+                    <p>Khu vực {{ $key }}</p>
 
-                @if ($data['display'])
+                    @if ($data['display'])
+                        <table class="tbl-plan">
+                            <tr>
+                                <td>Tháng {{ $data['month'] }} năm {{ $data['year'] }}</td>
+                                <td>So sánh {{ $data['month_compare'] . '-' . $data['year_compare'] }} với
+                                    {{ $data['month'] . '-' . $data['year'] }}</td>
+                                <td>Diễn biến từng tháng</td>
+                            </tr>
+                            <tr>
+                                <td>ph
+                                    @if (!empty($data['image_charts'][$keyImage]))
+                                        <img src="{{ $data['image_charts'][$keyImage] }}" alt=""
+                                            style="margin-bottom: 20px" />
+                                    @endif
+                                </td>
+                                <td style="border: 0.5px solid black;border-right: 0.5px solid black;">
+                                    @if (!empty($data['image_trend_charts'][$keyImage]))
+                                        <img src="{{ public_path($data['image_trend_charts'][$keyImage]) }}"
+                                            alt="" />
+                                    @endif
+
+                                </td>
+                                <td style="border: 0.5px solid black;border-right: 0.5px solid black;">
+                                    @if (!empty($data['image_annual_charts'][$keyImage]))
+                                        <img src="{{ public_path($data['image_annual_charts'][$keyImage]) }}"
+                                            alt="" />
+                                    @endif
+                                </td>
+                            </tr>
+                        </table>
+                    @endif
+                    <p style="margin-left:20px">- Nhận xét</p>
+                    <p style="margin-left:20px">- Chi tiết</p>
+                    <p style="margin-left:10px">Kết quả theo dõi: Từ: Tháng {{ $data['month'] }} năm
+                        {{ $data['year'] }}
+                        đến
+                        Tháng {{ $data['month'] }} năm {{ $data['year'] }}</p>
                     <table class="tbl-plan">
                         <tr>
-                            <td>Tháng {{ $data['month'] }} năm {{ $data['year'] }}</td>
-                            <td>So sánh {{ $data['month'] . '-' . $data['year'] }} với
-                                {{ $data['month'] . '-' . ($data['year'] - 1) }}</td>
-                            <td>Diễn biến từng tháng</td>
+                            <td>Mã sơ đồ</td>
+                            @foreach ($taskMaps as $task_map)
+                                @if (substr($task_map['code'], 0, 1) === $key)
+                                    <td>{{ $task_map['code'] ?? '' }}</td>
+                                @endif
+                            @endforeach
                         </tr>
                         <tr>
-                            <td>ph
-                                @if (!empty($data['image_charts'][$keyImage]))
-                                    <img src="{{ $data['image_charts'][$keyImage] }}" alt=""
-                                        style="margin-bottom: 20px" />
-                                @endif
+                            <td>
+                                Kết quả
                             </td>
-                            <td style="border: 0.5px solid black;border-right: 0.5px solid black;">
-                                @if (!empty($data['image_trend_charts'][$keyImage]))
-                                    <img src="{{ public_path($data['image_trend_charts'][$keyImage]) }}"
-                                        alt="" />
+                            @foreach ($taskMaps as $task_map)
+                                @if (substr($task_map['code'], 0, 1) === $key)
+                                    <td>
+                                        {{ $task_map['kpi'] !== 0 ? round(($task_map['result'] / $task_map['kpi']) * 100, 2) : 0 }}%
+                                    </td>
                                 @endif
-
-                            </td>
-                            <td style="border: 0.5px solid black;border-right: 0.5px solid black;">
-                                @if (!empty($data['image_annual_charts'][$keyImage]))
-                                    <img src="{{ public_path($data['image_annual_charts'][$keyImage]) }}"
-                                        alt="" />
-                                @endif
-                            </td>
+                            @endforeach
                         </tr>
                     </table>
-                @endif
-                <p style="margin-left:20px">- Nhận xét</p>
-                <p style="margin-left:20px">- Chi tiết</p>
-                <p style="margin-left:10px">Kết quả theo dõi: Từ: Tháng {{ $data['month'] }} năm {{ $data['year'] }}
-                    đến
-                    Tháng {{ $data['month'] }} năm {{ $data['year'] }}</p>
-                <table class="tbl-plan">
-                    <tr>
-                        <td>Mã sơ đồ</td>
-                        @foreach ($taskMaps as $task_map)
-                            @if (substr($task_map['code'], 0, 1) === $key)
-                                <td>{{ $task_map['code'] ?? '' }}</td>
-                            @endif
-                        @endforeach
-                    </tr>
-                    <tr>
-                        <td>
-                            Kết quả
-                        </td>
-                        @foreach ($taskMaps as $task_map)
-                            @if (substr($task_map['code'], 0, 1) === $key)
+                    <p style="margin-left:10px">Kết quả theo dõi: Năm {{ $data['year'] }} so với
+                        {{ $data['year_compare'] }}
+                    </p>
+                    <table class="tbl-plan">
+                        <tr>
+                            <td>Năm</td>
+                            @for ($i = 1; $i <= 12; $i++)
                                 <td>
-                                    {{ $task_map['kpi'] !== 0 ? ($task_map['result'] / $task_map['kpi']) * 100 : 0 }}%
+                                    Tháng {{ $i < 10 ? '0' . $i : $i }}
                                 </td>
-                            @endif
-                        @endforeach
-                    </tr>
-                </table>
-                <p style="margin-left:10px">Kết quả theo dõi: Năm {{ $data['year'] }} so với
-                    {{ $data['year_compare'] }}
-                </p>
-                <table class="tbl-plan">
-                    <tr>
-                        <td>Năm</td>
-                        @for ($i = 1; $i <= 12; $i++)
+                            @endfor
+                        </tr>
+                        <tr>
                             <td>
-                                Tháng {{ $i < 10 ? '0' . $i : $i }}
+                                {{ $data['year'] }}
                             </td>
-                        @endfor
-                    </tr>
-                    <tr>
-                        <td>
-                            {{ $data['year'] }}
-                        </td>
-                        @for ($i = 1; $i <= 12; $i++)
-                            <td>
-                                @if (!empty($data['compare'][$info['id']]['this_year'][$i - 1]))
-                                    @php
-                                        $result_this_year = 0;
-                                        $kpi_this_year = 0;
-                                        foreach ($data['compare'][$info['id']]['this_year'][$i - 1] as $value) {
-                                            if (!empty($value['task_maps'][$key])) {
-                                                foreach ($value['task_maps'][$key] as $item) {
-                                                    $result_this_year += $item['result'] ?? 0;
-                                                    $kpi_this_year += $item['kpi'] ?? 0;
+                            @for ($i = 1; $i <= 12; $i++)
+                                <td>
+                                    @if (!empty($data['compare'][$info['id']]['this_year'][$i - 1]))
+                                        @php
+                                            $result_this_year = 0;
+                                            $kpi_this_year = 0;
+                                            foreach ($data['compare'][$info['id']]['this_year'][$i - 1] as $value) {
+                                                if (!empty($value['task_maps'][$key])) {
+                                                    foreach ($value['task_maps'][$key] as $item) {
+                                                        $result_this_year += $item['result'] ?? 0;
+                                                        $kpi_this_year += $item['kpi'] ?? 0;
+                                                    }
                                                 }
                                             }
-                                        }
-                                    @endphp
-                                    {{ $kpi_this_year !== 0 ? ($result_this_year / $kpi_this_year) * 100 : 0 }}%
-                                @else
-                                    0%
-                                @endif
-                            </td>
-                        @endfor
-                    </tr>
-                    <tr>
-                        <td>
-                            {{ $data['year_compare'] }}
-                        </td>
-                        @for ($i = 1; $i <= 12; $i++)
+                                        @endphp
+                                        {{ $kpi_this_year !== 0 ? round(($result_this_year / $kpi_this_year) * 100, 2) : 0 }}%
+                                    @else
+                                        0%
+                                    @endif
+                                </td>
+                            @endfor
+                        </tr>
+                        <tr>
                             <td>
-                                @if (!empty($data['compare'][$info['id']]['last_year'][$i - 1]))
-                                    @php
-                                        $result_last_year = 0;
-                                        $count_last_year = 0;
-                                        foreach ($data['compare'][$info['id']]['last_year'][$i - 1] as $value) {
-                                            if (!empty($value['task_maps'][$key])) {
-                                                foreach ($value['task_maps'][$key] as $item) {
-                                                    $result_last_year += $item['result'] ?? 0;
-                                                    $count_last_year++;
+                                {{ $data['year_compare'] }}
+                            </td>
+                            @for ($i = 1; $i <= 12; $i++)
+                                <td>
+                                    @if (!empty($data['compare'][$info['id']]['last_year'][$i - 1]))
+                                        @php
+                                            $result_last_year = 0;
+                                            $count_last_year = 0;
+                                            foreach ($data['compare'][$info['id']]['last_year'][$i - 1] as $value) {
+                                                if (!empty($value['task_maps'][$key])) {
+                                                    foreach ($value['task_maps'][$key] as $item) {
+                                                        $result_last_year += $item['result'] ?? 0;
+                                                        $count_last_year++;
+                                                    }
                                                 }
                                             }
-                                        }
-                                    @endphp
-                                    {{ $count_last_year !== 0 ? ($result_last_year / $count_last_year) * 100 : 0 }}%
-                                @else
-                                    0%
-                                @endif
-                            </td>
-                        @endfor
-                    </tr>
-                </table>
+                                        @endphp
+                                        {{ $count_last_year !== 0 ? round(($result_last_year / $count_last_year) * 100, 2) : 0 }}%
+                                    @else
+                                        0%
+                                    @endif
+                                </td>
+                            @endfor
+                        </tr>
+                    </table>
+                @endforeach
             @endforeach
         @endforeach
     @endif

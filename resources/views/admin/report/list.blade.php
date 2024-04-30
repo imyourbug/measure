@@ -40,9 +40,7 @@
                 data: $(this).serialize(),
                 url: $(this).attr('action'),
                 success: function(response) {
-                    console.log(response);
                     if (response.status == 0) {
-                        console.log(response);
                         window.open(response.url);
                     } else {
                         toastr.error(response.message);
@@ -171,118 +169,69 @@
                         });
                     }
                 });
+
                 await $.ajax({
                     type: "GET",
                     url: `/api/exports/getTrendDataMapChart?month_compare=${month_compare}&year_compare=${year_compare}&month=${month}&year=${year}&contract_id=${contract_id}`,
                     success: function(response) {
                         let html = '';
                         let data = Object.keys(response.data).map((key) => response.data[key]);
-                        let allCodeMap = [];
 
                         data.forEach(e => {
-                            let last_year = Object.keys(e.last_year).map((key) => e
-                                .last_year[key]);
-                            let this_year = Object.keys(e.this_year).map((key) => e
-                                .this_year[key]);
-                            let tmpCode = [];
-                            last_year.forEach(item => {
-                                if (!allCodeMap.includes(item.code)) {
-                                    allCodeMap.push(item.code);
-                                }
-                            });
-                            this_year.forEach(item => {
-                                if (!allCodeMap.includes(item.code)) {
-                                    allCodeMap.push(item.code);
-                                }
-                            });
-                        });
-                        data.forEach(e => {
-                            allCodeMap.forEach(code => {
-                                html +=
-                                    `<canvas id="trendMapChart${e.task_id}${code}" style="display:block;"></canvas>`;
-                            })
+                            html +=
+                                `<canvas id="trendMapChart${e.code}" style="display:block;"></canvas>`;
                         });
                         $('.groupTrendChart').html('');
                         $('.groupTrendChart').html(html);
 
                         data.forEach(e => {
-                            let result = [];
-                            let last_year = Object.keys(e.last_year).map((key) => e
-                                .last_year[key]);
-                            let this_year = Object.keys(e.this_year).map((key) => e
-                                .this_year[key]);
-                            allCodeMap.forEach(code => {
-                                let rs = {
-                                    code: code,
-                                    last_year: 0,
-                                    this_year: 0,
-                                };
-                                last_year.forEach(item => {
-                                    rs.last_year = code == item.code ? (item
-                                        .result / item
-                                        .kpi) * 100 : 0;
-
-                                });
-                                this_year.forEach(item => {
-                                    rs.this_year = code == item.code ? (item
-                                        .result / item
-                                        .kpi) * 100 : 0;
-                                });
-                                result.push(rs);
-                            })
-
-                            result.forEach(d => {
-                                let backgroundColor = ['#38A3EB', '#38A3EB'];
-                                let map = {
-                                    task_id: e.task_id,
-                                    chart: new Chart($(
-                                        `#trendMapChart${e.task_id}${d.code}`
-                                    ), {
-                                        type: 'bar',
-                                        data: {
-                                            labels: [
-                                                `Năm ${year_compare < year ? year_compare : year}`,
-                                                `Năm ${year_compare > year ? year_compare : year}`
+                            let backgroundColor = ['#38A3EB', '#38A3EB'];
+                            let map = {
+                                chart: new Chart($(
+                                    `#trendMapChart${e.code}`
+                                ), {
+                                    type: 'bar',
+                                    data: {
+                                        labels: [
+                                            `Năm ${year_compare < year ? year_compare : year}`,
+                                            `Năm ${year_compare > year ? year_compare : year}`
+                                        ],
+                                        datasets: [{
+                                            label: 'Tỷ lệ',
+                                            data: [year_compare <
+                                                year ? e
+                                                .last_year :
+                                                e.this_year,
+                                                year_compare >
+                                                year ?
+                                                e.last_year :
+                                                e.this_year
                                             ],
-                                            datasets: [{
-                                                label: 'Tỷ lệ',
-                                                data: [year_compare <
-                                                    year ? d
-                                                    .last_year :
-                                                    d
-                                                    .this_year,
-                                                    year_compare >
-                                                    year ?
-                                                    d
-                                                    .last_year :
-                                                    d
-                                                    .this_year
-                                                ],
-                                                order: 1,
-                                                backgroundColor
-                                            }]
-                                        },
-                                        options: {
-                                            scales: {
-                                                y: {
-                                                    beginAtZero: true,
-                                                    ticks: {
-                                                        // Include a dollar sign in the ticks
-                                                        callback: function(
-                                                            value,
-                                                            index,
-                                                            ticks) {
-                                                            return `${value}%`;
-                                                        }
+                                            order: 1,
+                                            backgroundColor
+                                        }]
+                                    },
+                                    options: {
+                                        scales: {
+                                            y: {
+                                                beginAtZero: true,
+                                                ticks: {
+                                                    // Include a dollar sign in the ticks
+                                                    callback: function(
+                                                        value,
+                                                        index,
+                                                        ticks) {
+                                                        return `${value}%`;
                                                     }
                                                 }
                                             }
                                         }
-                                    })
-                                }
-                                listTrendMapChart.push(map);
-                            });
+                                    }
+                                })
+                            }
+                            listTrendMapChart.push(map);
                         });
+
                     },
                 });
 
@@ -419,35 +368,21 @@
                             `<input type="hidden" name="image_annual_charts[${e.chart.canvas.id.replace('annualMapChart', '')}]" value="${e.chart.toBase64Image('image/png', 1)}" alt="" />`
                         );
                     });
-                    setTimeout(() => {
-                        $('.month').val($('.select-month').val());
-                        $('.year').val($('.select-year').val());
-                        $('.type_report').val($('.select-type').val());
-                        $('.contract_id').val($('.select-contract').val());
-                        $('.user_id').val($('.select-user').val());
-                        $('.year_compare').val($('.year_compare').val());
-                        $('.display').val($('#select-display').is(':checked') ? $(
-                                '#select-display')
-                            .val() : 0);
-                        $('.btn-export').prop('disabled', false);
-                    }, 2000);
                 }, 2000);
-                // listMapChart.forEach(e => {
-                //     $('.groupImage').append(
-                //         `<input type="hidden" name="image_charts[${e.chart.canvas.id.replace('mapChart', '')}]" value="" alt="" />`
-                //     );
-                // });
-                // listTrendMapChart.forEach(e => {
-                //     $('.groupTrendImage').append(
-                //         `<input type="hidden" name="image_trend_charts[${e.chart.canvas.id.replace('trendMapChart', '')}]" value="" alt="" />`
-                //     );
-                // });
-                // listAnnualMapChart.forEach(e => {
-                //     $('.groupAnnualImage').append(
-                //         `<input type="hidden" name="image_annual_charts[${e.chart.canvas.id.replace('annualMapChart', '')}]" value="" alt="" />`
-                //     );
-                // });
             }
+            setTimeout(() => {
+                $('.month').val($('.select-month').val());
+                $('.year').val($('.select-year').val());
+                $('.type_report').val($('.select-type').val());
+                $('.contract_id').val($('.select-contract').val());
+                $('.user_id').val($('.select-user').val());
+                $('.month_compare').val($('.select-month-compare').val());
+                $('.year_compare').val($('.select-year-compare').val());
+                $('.display').val($('#select-display').is(':checked') ? $(
+                        '#select-display')
+                    .val() : 0);
+                $('.btn-export').prop('disabled', false);
+            }, 4000);
         });
 
         function getRandomRGBColor() {
@@ -719,10 +654,14 @@
             <table id="table" class="table display nowrap dataTable dtr-inline collapsed">
                 <thead>
                     <tr>
-                        <!-- <th>ID</th> -->
                         <th>Nhiệm vụ</th>
                         <th>Hợp đồng</th>
                         <th>Ghi chú</th>
+                        <th>Tần suất</th>
+                        <th>Xác nhận</th>
+                        <th>Hiện trạng</th>
+                        <th>Nguyên nhân</th>
+                        <th>Biện pháp</th>
                         <th>Ngày lập</th>
                         <th>Thao tác</th>
                     </tr>
@@ -769,10 +708,48 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-12 col-md-12">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Tần suất</label>
+                                <input class="form-control" type="text" id="frequence" placeholder="Nhập tần suất" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Xác nhận</label>
+                                <input class="form-control" type="text" id="confirm" placeholder="Nhập xác nhận" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Hiện trạng</label>
+                                <input class="form-control" type="text" id="status"
+                                    placeholder="Nhập hiện trạng" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Nguyên nhân</label>
+                                <input class="form-control" type="text" id="reason"
+                                    placeholder="Nhập nguyên nhân" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Biện pháp</label>
+                                <input class="form-control" type="text" placeholder="Nhập biện pháp"
+                                    id="solution" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
                             <div class="form-group">
                                 <label for="menu">Ghi chú <span class="required">(*)</span></label>
-                                <textarea placeholder="Nhập ghi chú..." class="form-control" id="note" cols="30" rows="5"></textarea>
+                                <input class="form-control" type="text" placeholder="Nhập ghi chú..."
+                                    id="note" />
                             </div>
                         </div>
                     </div>
@@ -816,6 +793,7 @@
                     <input type="hidden" class="user_id" name="user_id" />
                     <input type="hidden" class="display" name="display" />
                     <input type="hidden" class="year_compare" name="year_compare" />
+                    <input type="hidden" class="month_compare" name="month_compare" />
                     <div class="modal-footer justify-content-between">
                         <button class="btn btn-default" data-dismiss="modal">Đóng</button>
                         {{-- <button type="submit" class="btn btn-primary btn-export" disabled>Xác nhận</button> --}}

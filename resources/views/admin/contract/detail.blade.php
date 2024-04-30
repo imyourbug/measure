@@ -1,8 +1,8 @@
 @extends('admin.main')
 @push('styles')
-<link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/2.0.2/css/dataTables.dataTables.css">
-<link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.0.1/css/buttons.dataTables.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.2/css/dataTables.dataTables.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.0.1/css/buttons.dataTables.css">
 @endpush
 @push('scripts')
     <script src="/js/admin/task/index.js"></script>
@@ -30,7 +30,7 @@
             let year = $('.select-year').val();
             let month = $('.select-month').val();
             let column = $('.select-column').val();
-            let contract_id = $('.contract_id').val();
+            let contract_id = $('.select-contract').val();
             let url = $(this).attr('action');
 
             $.ajax({
@@ -40,15 +40,16 @@
                 success: function(response) {
                     console.log(response);
                     if (response.status == 0) {
+                        console.log(response);
                         window.open(response.url);
                     } else {
                         toastr.error(response.message);
                     }
                 }
             })
-        })
+        });
 
-        $('.btn-preview').on('click', function() {
+        $('.btn-preview').on('click', async function() {
             // reset
             $('.btn-export').prop('disabled', true);
             $('.groupAnnualImage').html('');
@@ -74,26 +75,26 @@
             listAnnualMapChart = [];
             // declare
             let type_report = $('.select-type').val();
-            // $('.blockChart').html('');
             let year = $('.select-year').val();
             let month = $('.select-month').val();
-            let contract_id = $('.contract_id').val();
+            let year_compare = $('.select-year-compare').val();
+            let month_compare = $('.select-month-compare').val();
+            let contract_id = $('.select-contract').val();
             let column = $('.select-column').val();
-            if (type_report == 1) {
-                $.ajax({
+            if (type_report == 4) {
+                await $.ajax({
                     type: "GET",
-                    url: "/api/exports/getDataMapChart?month=" + month + "&year=" + year + "&contract_id=" +
-                        contract_id,
+                    url: `/api/exports/getDataMapChart?month=${month}&year=${year}&contract_id=${contract_id}`,
                     success: function(response) {
-                        console.log(response);
                         let html = '';
                         let data = Object.keys(response.data).map((key) => response.data[key]);
                         data.forEach(e => {
                             let dataE = Object.keys(e).map((key) => e[key]);
                             dataE.forEach(item => {
                                 if (typeof item !== 'number') {
-                                    let dataItem = Object.keys(item).map((key) => item[
-                                        key]);
+                                    let dataItem = Object.keys(item).map((key) =>
+                                        item[
+                                            key]);
                                     html +=
                                         `<canvas id="mapChart${e.task_id}${dataItem[0]['code'].substring(0, 1)}" style="display:block;"></canvas>`;
                                 }
@@ -120,10 +121,10 @@
 
                                     if (dataResults.length < column) {
                                         labels.push(itemD.code);
-                                        dataResults.push(itemD.all_result);
-                                        dataKpi.push(itemD.all_kpi);
+                                        dataResults.push((itemD.all_result /
+                                            itemD.all_kpi) * 100);
                                         // backgroundColor.push(getRandomRGBColor());
-                                        backgroundColor.push('#E50B4E');
+                                        backgroundColor.push('#38A3EB');
                                     }
                                 })
 
@@ -136,26 +137,28 @@
                                         data: {
                                             labels: labels,
                                             datasets: [{
-                                                    label: 'Kết quả thực tế',
-                                                    data: dataResults,
-                                                    backgroundColor: backgroundColor,
-                                                    borderWidth: 1,
-                                                    order: 2,
-                                                },
-                                                {
-                                                    type: 'line',
-                                                    label: 'KPI',
-                                                    data: dataKpi,
-                                                    fill: false,
-                                                    borderColor: 'rgb(54, 162, 235)',
-                                                    order: 1,
-                                                }
-                                            ]
+                                                label: 'Tỷ lệ',
+                                                data: dataResults,
+                                                backgroundColor: backgroundColor,
+                                                borderWidth: 1,
+                                                order: 2,
+                                            }, ]
                                         },
                                         options: {
                                             scales: {
                                                 y: {
-                                                    beginAtZero: true
+                                                    beginAtZero: true,
+                                                    ticks: {
+                                                        // Include a dollar sign in the ticks
+                                                        callback: function(
+                                                            value,
+                                                            index,
+                                                            ticks
+                                                        ) {
+                                                            return value +
+                                                                '%';
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
@@ -166,68 +169,60 @@
                         });
                     }
                 });
-                $.ajax({
+                await $.ajax({
                     type: "GET",
-                    url: "/api/exports/getTrendDataMapChart?contract_id=" +
-                        contract_id,
+                    url: `/api/exports/getTrendDataMapChart?month_compare=${month_compare}&year_compare=${year_compare}&month=${month}&year=${year}&contract_id=${contract_id}`,
                     success: function(response) {
                         let html = '';
                         let data = Object.keys(response.data).map((key) => response.data[key]);
+
                         data.forEach(e => {
                             html +=
-                                `<canvas id="trendMapChart${e.task_id}" style="display:block;"></canvas>`;
+                                `<canvas id="trendMapChart${e.code}" style="display:block;"></canvas>`;
                         });
                         $('.groupTrendChart').html('');
                         $('.groupTrendChart').html(html);
 
                         data.forEach(e => {
-                            let labels = [];
-                            let dataResultsTrend = [];
-                            let dataKpiTrend = [];
-                            let backgroundColor = [];
-                            let dataTrendChart = [];
-                            Object.keys(e).forEach((key) => {
-                                if (key != 'task_id') {
-                                    dataTrendChart.push(e[key]);
-                                }
-                            });
-                            dataTrendChart.forEach(d => {
-                                labels.push(
-                                    `${d.month}-${d.year}`
-                                );
-                                dataResultsTrend.push(d.result);
-                                dataKpiTrend.push(d.kpi);
-                                // backgroundColor.push(getRandomRGBColor());
-                                backgroundColor.push('#E50B4E');
-                            });
+                            let backgroundColor = ['#38A3EB', '#38A3EB'];
                             let map = {
-                                task_id: e.task_id,
-                                chart: new Chart($('#trendMapChart' + e.task_id), {
-                                    type: 'line',
+                                chart: new Chart($(
+                                    `#trendMapChart${e.code}`
+                                ), {
+                                    type: 'bar',
                                     data: {
-                                        labels: labels,
+                                        labels: [
+                                            `Năm ${year_compare < year ? year_compare : year}`,
+                                            `Năm ${year_compare > year ? year_compare : year}`
+                                        ],
                                         datasets: [{
-                                                type: 'line',
-                                                label: 'Kết quả thực tế',
-                                                data: dataResultsTrend,
-                                                fill: false,
-                                                borderColor: 'rgb(00, 162, 000)',
-                                                order: 1,
-                                            },
-                                            {
-                                                type: 'line',
-                                                label: 'KPI',
-                                                data: dataKpiTrend,
-                                                fill: false,
-                                                borderColor: 'rgb(54, 162, 235)',
-                                                order: 1,
-                                            }
-                                        ]
+                                            label: 'Tỷ lệ',
+                                            data: [year_compare <
+                                                year ? e
+                                                .last_year :
+                                                e.this_year,
+                                                year_compare >
+                                                year ?
+                                                e.last_year :
+                                                e.this_year
+                                            ],
+                                            order: 1,
+                                            backgroundColor
+                                        }]
                                     },
                                     options: {
                                         scales: {
                                             y: {
-                                                beginAtZero: true
+                                                beginAtZero: true,
+                                                ticks: {
+                                                    // Include a dollar sign in the ticks
+                                                    callback: function(
+                                                        value,
+                                                        index,
+                                                        ticks) {
+                                                        return `${value}%`;
+                                                    }
+                                                }
                                             }
                                         }
                                     }
@@ -235,96 +230,128 @@
                             }
                             listTrendMapChart.push(map);
                         });
+
                     },
                 });
-                $.ajax({
+
+                await $.ajax({
                     type: "GET",
-                    url: "/api/exports/getDataAnnualMapChart?contract_id=" +
-                        contract_id,
+                    url: `/api/exports/getDataAnnualMapChart?year=${year}&contract_id=${contract_id}`,
                     success: function(response) {
                         let html = '';
                         let data = Object.keys(response.data).map((key) => response.data[key]);
-                        let this_year = '';
-                        let last_year = '';
+                        let allCodeMap = [];
+
+                        // get all code map
                         data.forEach(e => {
-                            html +=
-                                `<canvas id="annualMapChart${e.task_id}" style="display:block;"></canvas>`;
+                            let value = Object.keys(e.value).map((key) => e
+                                .value[key]);
+                            value.forEach(item => {
+                                let item_value = Object.keys(item).map((key) =>
+                                    item[
+                                        key]);
+                                item_value.forEach((v) => {
+                                    if (!allCodeMap.includes(v.code)) {
+                                        allCodeMap.push(v.code);
+                                    }
+                                })
+                            });
+                        });
+                        data.forEach(e => {
+                            allCodeMap.forEach(code => {
+                                html +=
+                                    `<canvas id="annualMapChart${e.task_id}${code}" style="display:block;"></canvas>`;
+                            })
                         });
                         $('.groupAnnualChart').html('');
                         $('.groupAnnualChart').html(html);
 
                         data.forEach(e => {
-                            let labels = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-                            let dataResultsThisYear = [];
-                            let dataResultsLastYear = [];
-                            let backgroundColor = [];
-                            let dataLastYearChart = [];
-                            let dataThisYearChart = [];
-                            last_year = e.last_year['year'] ?? '';
-                            this_year = e.this_year['year'] ?? '';
+                            let result = [];
+                            let value = Object.keys(e.value).map((key) => e
+                                .value[key]);
+                            allCodeMap.forEach(code => {
+                                let rs = {
+                                    code: code,
+                                    month: [],
+                                    value_month: [],
+                                    backgroundColor: [],
+                                };
+                                value.forEach(item => {
+                                    let itemValue = Object.keys(item).map((
+                                        key) => item[key]);
+                                    itemValue.forEach(v => {
+                                        if (code == v.code) {
+                                            rs.value_month.push(v
+                                                .kpi != 0 ? (v
+                                                    .result / v
+                                                    .kpi) *
+                                                100 : 0);
+                                        }
+                                    });
 
-                            Object.keys(e.last_year).forEach((key) => {
-                                if (key != 'task_id' && key != 'year') {
-                                    dataLastYearChart.push(e.last_year[key]);
-                                }
-                            });
-                            dataLastYearChart.forEach(d => {
-                                dataResultsLastYear.push(d.result);
-                                // backgroundColor.push('#E50B4E');
-                            });
-                            //
-                            Object.keys(e.this_year).forEach((key) => {
-                                if (key != 'task_id' && key != 'year') {
-                                    dataThisYearChart.push(e.this_year[key]);
-                                }
-                            });
-                            dataThisYearChart.forEach(d => {
-                                dataResultsThisYear.push(d.result);
-                                // backgroundColor.push('#E50B4E');
-                            });
-                            //
+                                    rs.month.push(item.month);
+                                    rs.backgroundColor.push('#38A3EB');
 
-                            let map = {
-                                task_id: e.task_id,
-                                chart: new Chart($('#annualMapChart' + e.task_id), {
-                                    type: 'line',
-                                    data: {
-                                        labels: labels,
-                                        datasets: [{
-                                                type: 'line',
-                                                label: this_year,
-                                                data: dataResultsThisYear,
-                                                fill: false,
-                                                borderColor: 'rgb(00, 162, 000)',
+                                });
+                                result.push(rs);
+                            });
+
+                            result.forEach(d => {
+                                let map = {
+                                    task_id: e.task_id,
+                                    chart: new Chart($(
+                                        `#annualMapChart${e.task_id}${d.code}`
+                                    ), {
+                                        type: 'bar',
+                                        data: {
+                                            labels: ['Tháng 01',
+                                                'Tháng 02',
+                                                'Tháng 03',
+                                                'Tháng 04',
+                                                'Tháng 05',
+                                                'Tháng 06',
+                                                'Tháng 07',
+                                                'Tháng 08',
+                                                'Tháng 09',
+                                                'Tháng 10',
+                                                'Tháng 11',
+                                                'Tháng 12'
+                                            ],
+                                            datasets: [{
+                                                label: 'Tỷ lệ',
+                                                data: d
+                                                    .value_month,
                                                 order: 1,
-                                            },
-                                            {
-                                                type: 'line',
-                                                label: last_year,
-                                                data: dataResultsLastYear,
-                                                fill: false,
-                                                borderColor: 'rgb(54, 162, 235)',
-                                                order: 1,
-                                            }
-                                        ]
-                                    },
-                                    options: {
-                                        scales: {
-                                            y: {
-                                                beginAtZero: true
+                                                backgroundColor: d
+                                                    .backgroundColor
+                                            }]
+                                        },
+                                        options: {
+                                            scales: {
+                                                y: {
+                                                    beginAtZero: true,
+                                                    ticks: {
+                                                        // Include a dollar sign in the ticks
+                                                        callback: function(
+                                                            value,
+                                                            index,
+                                                            ticks) {
+                                                            return `${value}%`;
+                                                        }
+                                                    }
+                                                }
                                             }
                                         }
-                                    }
-                                })
-                            }
-                            listAnnualMapChart.push(map);
+                                    })
+                                }
+                                listAnnualMapChart.push(map);
+                            });
+
                         });
                     },
                 });
-            }
-
-            setTimeout(() => {
-                if (type_report == 1) {
+                setTimeout(() => {
                     listMapChart.forEach(e => {
                         $('.groupImage').append(
                             `<input type="hidden" name="image_charts[${e.chart.canvas.id.replace('mapChart', '')}]" value="${e.chart.toBase64Image('image/png', 1)}" alt="" />`
@@ -332,27 +359,31 @@
                     });
                     listTrendMapChart.forEach(e => {
                         $('.groupTrendImage').append(
-                            `<input type="hidden" name="image_trend_charts[${e.task_id}]" value="${e.chart.toBase64Image('image/png', 1)}" alt="" />`
+                            `<input type="hidden" name="image_trend_charts[${e.chart.canvas.id.replace('trendMapChart', '')}]" value="${e.chart.toBase64Image('image/png', 1)}" alt="" />`
                         );
                     });
                     listAnnualMapChart.forEach(e => {
                         $('.groupAnnualImage').append(
-                            `<input type="hidden" name="image_annual_charts[${e.task_id}]" value="${e.chart.toBase64Image('image/png', 1)}" alt="" />`
+                            `<input type="hidden" name="image_annual_charts[${e.chart.canvas.id.replace('annualMapChart', '')}]" value="${e.chart.toBase64Image('image/png', 1)}" alt="" />`
                         );
                     });
-                }
 
+                }, 2000);
+            }
+            setTimeout(() => {
                 $('.month').val($('.select-month').val());
                 $('.year').val($('.select-year').val());
                 $('.type_report').val($('.select-type').val());
-                $('.contract_id').val($('.contract_id').val());
+                $('.contract_id').val($('.select-contract').val());
                 $('.user_id').val($('.select-user').val());
-                $('.display').val($('#select-display').is(':checked') ? $('#select-display').val() : 0);
-                setTimeout(() => {
-                    $('.btn-export').prop('disabled', false);
-                }, 2000);
-            }, 2000);
-        })
+                $('.month_compare').val($('.select-month-compare').val());
+                $('.year_compare').val($('.select-year-compare').val());
+                $('.display').val($('#select-display').is(':checked') ? $(
+                        '#select-display')
+                    .val() : 0);
+                $('.btn-export').prop('disabled', false);
+            }, 4000);
+        });
 
         function getRandomRGBColor() {
             const red = Math.floor(Math.random() * 256);
@@ -381,7 +412,8 @@
 @section('content')
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12">
-            <form action="{{ route('admin.contracts.update', ['id' => $contract->id]) }}" method="POST" class="form-contract">
+            <form action="{{ route('admin.contracts.update', ['id' => $contract->id]) }}" method="POST"
+                class="form-contract">
                 @csrf
                 <div class="card-body">
                     <div class="row">
@@ -478,34 +510,47 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Chọn loại báo cáo</label>
+                                <label for="menu">Chọn loại báo cáo <span class="required">(*)</span></label>
                                 <select class="form-control select-type">
                                     <option value="0">
-                                        Kế hoạch dịch vụ
+                                        KẾ HOẠCH THỰC HIỆN DỊCH VỤ
                                     </option>
                                     <option value="1">
-                                        Kết quả tháng
+                                        KẾ HOẠCH CHI TIẾT
+                                    </option>
+                                    <option value="2">
+                                        BÁO CÁO ĐÁNH GIÁ KẾT QUẢ THỰC HIỆN DỊCH VỤ
+                                    </option>
+                                    <option value="3">
+                                        BIÊN BẢN NGHIỆM THU CÔNG VIỆC HOÀN THÀNH
+                                    </option>
+                                    <option value="4" selected>
+                                        BIÊN BẢN XÁC NHẬN KHỐI LƯỢNG HOÀN THÀNH-BÁO CÁO CHI TIẾT
+                                    </option>
+                                    <option value="5">
+                                        BẢNG KÊ CÔNG VIỆC/DỊCH VỤ
+                                    </option>
+                                    <option value="6">
+                                        BIÊN BẢN XÁC NHẬN CÔNG VIỆC/DỊCH VỤ
                                     </option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Chọn người lập báo cáo</label>
-                                <select class="form-control select-user">
-                                    @foreach ($users as $user)
-                                        <option value="{{ $user->id }}">
-                                            {{ $user->staff->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                <label for="menu">Lựa chọn</label>
+                                <div class="custom-control custom-checkbox">
+                                    <input checked value="1" type="checkbox" id="select-display"
+                                        class="option-type custom-control-input">
+                                    <label class="custom-control-label" for="select-display">Hiển thị ảnh</label>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Chọn tháng</label>
+                                <label for="menu">Chọn tháng <span class="required">(*)</span></label>
                                 <select class="form-control select-month">
                                     @for ($i = 1; $i <= 12; $i++)
                                         <option value="{{ $i }}"
@@ -517,7 +562,7 @@
                         </div>
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Chọn năm</label>
+                                <label for="menu">Chọn năm <span class="required">(*)</span></label>
                                 <input class="form-control select-year" type="text" value="{{ now()->format('Y') }}"
                                     placeholder="Nhập năm..." />
                             </div>
@@ -526,22 +571,46 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Số lượng cột hiển thị</label>
-                                <input value="1" min="1" type="number" id="select-column"
-                                    class="form-control select-column" />
+                                <label for="menu">Chọn tháng so sánh<span class="required">(*)</span></label>
+                                <select class="form-control select-month-compare">
+                                    @for ($i = 1; $i <= 12; $i++)
+                                        <option value="{{ $i }}"
+                                            {{ $i == now()->format('m') ? 'selected' : '' }}>{{ $i }}
+                                        </option>
+                                    @endfor
+                                </select>
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Hiển thị biểu đồ năm</label>
-                                <div class="custom-control custom-checkbox">
-                                    <input value="1" type="checkbox" id="select-display"
-                                        class="option-type custom-control-input">
-                                    <label class="custom-control-label" for="select-display">Có</label>
-                                </div>
+                                <label for="menu">Năm so sánh <span class="required">(*)</span></label>
+                                <input value="{{ date('Y') - 1 }}" type="text"
+                                    class="form-control year_compare select-year-compare">
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Chọn người lập báo cáo <span class="required">(*)</span></label>
+                                <select class="form-control select-user">
+                                    @foreach ($users as $user)
+                                        <option value="{{ $user->id }}">
+                                            {{ $user->staff->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Số lượng cột hiển thị <span class="required">(*)</span></label>
+                                <input value="10" min="1" type="number" id="select-column"
+                                    class="form-control select-column" />
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" class="select-contract" value="{{ request()->id }}" />
                     <button class="btn btn-danger btn-preview" data-target="#modal-export" data-toggle="modal">Xuất
                         PDF</button>
                 </div>
@@ -623,10 +692,48 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-12 col-md-12">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Tần suất</label>
+                                <input class="form-control" type="text" id="frequence" placeholder="Nhập tần suất" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Xác nhận</label>
+                                <input class="form-control" type="text" id="confirm" placeholder="Nhập xác nhận" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Hiện trạng</label>
+                                <input class="form-control" type="text" id="status"
+                                    placeholder="Nhập hiện trạng" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Nguyên nhân</label>
+                                <input class="form-control" type="text" id="reason"
+                                    placeholder="Nhập nguyên nhân" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Biện pháp</label>
+                                <input class="form-control" type="text" placeholder="Nhập biện pháp"
+                                    id="solution" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
                             <div class="form-group">
                                 <label for="menu">Ghi chú <span class="required">(*)</span></label>
-                                <textarea placeholder="Nhập ghi chú..." class="form-control" id="note" cols="30" rows="5"></textarea>
+                                <input class="form-control" type="text" placeholder="Nhập ghi chú..."
+                                    id="note" />
                             </div>
                         </div>
                     </div>
@@ -667,6 +774,8 @@
                     <input type="hidden" class="contract_id" value="{{ request()->id }}" name="contract_id" />
                     <input type="hidden" class="user_id" name="user_id" />
                     <input type="hidden" class="display" name="display" />
+                    <input type="hidden" class="year_compare" name="year_compare" />
+                    <input type="hidden" class="month_compare" name="month_compare" />
                     <div class="modal-footer justify-content-between">
                         <button class="btn btn-default" data-dismiss="modal">Đóng</button>
                         <button type="submit" class="btn btn-primary btn-export" disabled>Xác nhận</button>

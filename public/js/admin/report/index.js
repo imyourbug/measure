@@ -46,13 +46,17 @@ $(document).ready(function () {
             dataSrc: "tasks",
         },
         columns: [
-            // { data: "id" },
             { data: "type.name" },
             {
                 data: function (d) {
-                    return `${d.contract.name} - ${d.contract.branch ? d.contract.branch.name : ''}`;
+                    return `${d.contract.name} - ${d.contract.branch ? d.contract.branch.name : ""}`;
                 },
             },
+            { data: "frequence" },
+            { data: "confirm" },
+            { data: "status" },
+            { data: "reason" },
+            { data: "solution" },
             { data: "note" },
             { data: "created_at" },
             {
@@ -88,7 +92,12 @@ $(document).on("click", ".btn-edit", function () {
                 let task = response.task;
                 $("#type_id").val(task.type_id);
                 $("#contract_id").val(task.contract_id);
-                $("#note").text(task.note);
+                $("#note").val(task.note);
+                $("#frequence").val(task.frequence);
+                $("#confirm").val(task.confirm);
+                $("#reason").val(task.reason);
+                $("#status").val(task.status);
+                $("#solution").val(task.solution);
                 $("#task_id").val(task.id);
             } else {
                 toastr.error(response.message);
@@ -104,6 +113,11 @@ $(document).on("click", ".btn-update", function () {
             note: $("#note").val(),
             contract_id: $("#contract_id").val(),
             type_id: $("#type_id").val(),
+            frequence: $("#frequence").val(),
+            confirm: $("#confirm").val(),
+            status: $("#status").val(),
+            solution: $("#solution").val(),
+            reason: $("#reason").val(),
         };
         console.log(data);
         $.ajax({
@@ -112,7 +126,7 @@ $(document).on("click", ".btn-update", function () {
             data: data,
             success: function (response) {
                 if (response.status == 0) {
-                    closeModal("solution");
+                    closeModal("modal");
                     toastr.success("Cập nhật thành công");
                     dataTable.ajax.reload();
                 } else {
@@ -141,3 +155,9 @@ $(document).on("click", ".btn-delete", function () {
         });
     }
 });
+
+function closeModal() {
+    $("#modal").css("display", "none");
+    $("body").removeClass("modal-open");
+    $(".modal-backdrop").remove();
+}
