@@ -15,7 +15,7 @@ class CreateAccountRequest extends BaseRequest
     {
         $tel_or_email = $this->tel_or_email;
         $validate = [
-            'tel_or_email' => !is_numeric($tel_or_email) ? 'required|email:dns,rfc'
+            'tel_or_email' => !is_numeric($tel_or_email) ? 'required|regex:/^(.*?)@(.*?)$/'
                 : 'required|string|regex:/^0\d{9,10}$/',
             'password' => 'required|string',
         ];

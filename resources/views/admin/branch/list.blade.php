@@ -14,11 +14,11 @@
             <tr>
                 <!-- <th>ID</th> -->
                 <th>Tên chi nhánh</th>
-                <th>Email</th>
-                <th>Số điện thoại</th>
-                <th>Địa chỉ</th>
-                <th>Quản lý</th>
                 <th>Khách hàng</th>
+                <th>Địa chỉ</th>
+                <th>Số điện thoại</th>
+                <th>Email</th>
+                <th>Quản lý</th>
                 <th>Thao tác</th>
             </tr>
         </thead>

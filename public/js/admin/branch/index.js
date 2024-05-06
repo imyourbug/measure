@@ -10,6 +10,11 @@ $(document).ready(function () {
             //     data: "id"
             // },
             {
+                data: function (d) {
+                    return d.user.customer.name;
+                },
+            },
+            {
                 data: "name"
             },
             {
@@ -24,11 +29,7 @@ $(document).ready(function () {
             {
                 data: "manager"
             },
-            {
-                data: function (d) {
-                    return d.user.customer.name;
-                },
-            },
+            
             {
                 data: function (d) {
                     return `<a class="btn btn-primary btn-sm" href='/admin/branches/update/${d.id}'>

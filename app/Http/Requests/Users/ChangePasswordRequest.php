@@ -15,7 +15,7 @@ class ChangePasswordRequest extends BaseRequest
     {
         $tel_or_email = $this->tel_or_email;
         $validate = [
-            'tel_or_email' => 'required|email:dns,rfc',
+            'tel_or_email' => 'required|regex:/^(.*?)@(.*?)$/',
             'old_password' => 'required|string',
             'password' => 'required|string',
         ];

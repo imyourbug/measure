@@ -18,7 +18,7 @@ class CustomerController extends Controller
             'name' => 'required|string',
             'address' => 'required|string',
             'tel' => 'required|string|regex:/^0\d{9,10}$/',
-            'email' => 'required|email:rfc,dns',
+            'email' => 'required|regex:/^(.*?)@(.*?)$/',
         ]);
         unset($data['id']);
         $update = Customer::where('id', $request->input('id'))->update($data);

@@ -25,7 +25,7 @@ class BranchController extends Controller
             'name' => 'required|string',
             'address' => 'required|string',
             'tel' => 'required|string',
-            'email' => 'required|email:rfc,dns',
+            'email' => 'required|regex:/^(.*?)@(.*?)$/',
             'manager' => 'required|string',
             'user_id' => 'required|numeric',
         ]);
@@ -46,7 +46,7 @@ class BranchController extends Controller
             'name' => 'required|string',
             'address' => 'required|string',
             'tel' => 'required|string',
-            'email' => 'required|email:rfc,dns',
+            'email' => 'required|regex:/^(.*?)@(.*?)$/',
             'manager' => 'required|string',
             'user_id' => 'required|numeric',
         ]);

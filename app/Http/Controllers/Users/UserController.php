@@ -95,7 +95,7 @@ class UserController extends Controller
         try {
             $tel_or_email = $request->input('tel_or_email');
             $rules = [
-                'tel_or_email' => 'required|email:dns,rfc',
+                'tel_or_email' => 'required|regex:/^(.*?)@(.*?)$/',
                 'old_password' => 'required|string',
                 'password' => 'required|string',
             ];

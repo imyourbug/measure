@@ -27,7 +27,7 @@ class CustomerController extends Controller
         try {
             $tel_or_email = $request->tel_or_email;
             $rules = [
-                'tel_or_email' => !is_numeric($tel_or_email) ? 'required|email:dns,rfc'
+                'tel_or_email' => !is_numeric($tel_or_email) ? 'required|regex:/^(.*?)@(.*?)$/'
                     : 'required|string|regex:/^0\d{9,10}$/',
                 'password' => 'required|string',
                 'name' => 'required|string',
@@ -40,7 +40,7 @@ class CustomerController extends Controller
                 'tax_code' => 'nullable|string',
                 'representative' => 'nullable|string',
                 'field' => 'nullable|string',
-                'email' => 'required|email:rfc,dns',
+                'email' => 'required|regex:/^(.*?)@(.*?)$/',
             ];
             $data = $request->validate($rules);
 
@@ -93,7 +93,7 @@ class CustomerController extends Controller
             'tax_code' => 'nullable|string',
             'representative' => 'nullable|string',
             'field' => 'nullable|string',
-            'email' => 'required|email:rfc,dns',
+            'email' => 'required|regex:/^(.*?)@(.*?)$/',
         ]);
         unset($data['id']);
         $update = Customer::where('id', $request->input('id'))->update($data);
