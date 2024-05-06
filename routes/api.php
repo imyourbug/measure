@@ -179,7 +179,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin'], function () {
         Route::post('/create', 'ContractController@store')->name('store');
         Route::delete('/{id}/destroy', 'ContractController@destroy')->name('destroy');
         Route::get('/getTypeByContractId', 'ContractController@getTypeByContractId')->name('getTypeByContractId');
-        Route::get('/getAll', 'ContractController@index')->name('getAll');
+        Route::get('/getAll', 'ContractController@getAll')->name('getAll');
     });
 
     #branches

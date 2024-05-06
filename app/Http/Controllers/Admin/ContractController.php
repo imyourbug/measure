@@ -19,6 +19,28 @@ use Toastr;
 
 class ContractController extends Controller
 {
+    public function getAll(Request $request)
+    {
+        $customer_id = $request->customer_id;
+        $month = $request->month;
+        $contracts = Contract::with(['customer', 'branch', 'tasks.details'])
+            ->when($customer_id, function ($q) use ($customer_id) {
+                return $q->whereHas('customer', function ($q) use ($customer_id) {
+                    $q->where('id', $customer_id);
+                });
+            })
+            ->when($month, function ($q) use ($month) {
+                return $q->whereHas('tasks.details', function ($q) use ($month) {
+                    $q->whereRaw('MONTH(plan_date) = ?', $month);
+                });
+            })
+            ->get();
+        return response()->json([
+            'status' => 0,
+            'contracts' => $contracts
+        ]);
+    }
+
     public function create()
     {
         return view('admin.contract.add', [
@@ -191,27 +213,6 @@ class ContractController extends Controller
 
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            $customer_id = $request->customer_id;
-            $month = $request->month;
-            $contracts = Contract::with(['customer', 'branch', 'tasks.details'])
-                ->when($customer_id, function ($q) use ($customer_id) {
-                    return $q->whereHas('customer', function ($q) use ($customer_id) {
-                        $q->where('id', $customer_id);
-                    });
-                })
-                ->when($month, function ($q) use ($month) {
-                    return $q->whereHas('tasks.details', function ($q) use ($month) {
-                        $q->whereRaw('MONTH(plan_date) = ?', $month);
-                    });
-                })
-                ->get();
-            return response()->json([
-                'status' => 0,
-                'contracts' => $contracts
-            ]);
-        }
-
         return view('admin.contract.list', [
             'title' => 'Danh sách hợp đồng',
             'contracts' => Contract::with('customer')->get(),
