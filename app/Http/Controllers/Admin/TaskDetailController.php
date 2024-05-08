@@ -69,25 +69,45 @@ class TaskDetailController extends Controller
     {
         $user_id = $request->user_id;
         $task_id = $request->id;
-        $month = $request->month;
-        $task_details = TaskDetail::with(['task.type', 'taskStaffs'])
-            ->when($user_id, function ($q) use ($user_id) {
-                return $q->whereHas('taskStaffs', function ($q) use ($user_id) {
-                    $q->where('user_id', $user_id);
-                });
-            })
-            ->when($task_id, function ($q) use ($task_id) {
-                return $q->where('task_id', $task_id);
-            })
-            ->when($month, function ($q) use ($month) {
-                return $q->whereRaw('MONTH(plan_date) = ?', $month);
-            })
-            ->get();
+        $from = $request->from;
+        $to = $request->to;
+        try {
+            $task_details = TaskDetail::with(['task.type', 'taskStaffs'])
+                // user_id
+                ->when($user_id, function ($q) use ($user_id) {
+                    return $q->whereHas('taskStaffs', function ($q) use ($user_id) {
+                        $q->where('user_id', $user_id);
+                    });
+                })
+                // task_id
+                ->when($task_id, function ($q) use ($task_id) {
+                    return $q->where('task_id', $task_id);
+                })
+                // date
+                ->when($from, function ($q) use ($from, $to) {
+                    return $q->when($to, function ($q) use ($from, $to) {
+                        return $q->whereRaw('plan_date <= ?', $to . ' 23:59:59')
+                            ->whereRaw('plan_date >= ?', $from);
+                    }, function ($q) use ($from) {
+                        return $q->whereRaw('plan_date >= ?', $from);
+                    });
+                }, function ($q) use ($to) {
+                    return $q->when($to, function ($q) use ($to) {
+                        return $q->whereRaw('plan_date <= ?', $to . ' 23:59:59');
+                    });
+                })
+                ->get();
 
-        return response()->json([
-            'status' => 0,
-            'taskDetails' => $task_details,
-        ]);
+            return response()->json([
+                'status' => 0,
+                'taskDetails' => $task_details,
+            ]);
+        } catch (Throwable $e) {
+            return response()->json([
+                'status' => 1,
+                'message' => $e->getMessage(),
+            ]);
+        }
     }
 
     public function getById(Request $request)

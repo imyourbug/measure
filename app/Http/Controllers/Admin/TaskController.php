@@ -177,6 +177,7 @@ class TaskController extends Controller
             })->when($to, function ($q) use ($to) {
                 return $q->where('created_at', '<=', $to . ' 23:59:59');
             })->get();
+
         return view('admin.task.detail', [
             'title' => 'Danh sách chi tiết nhiệm vụ',
             'tasks' => $tasks,

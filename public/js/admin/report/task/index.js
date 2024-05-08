@@ -1,28 +1,64 @@
 var dataTable = null;
 
+$(document).ready(function () {
+    // solution
+    dataTable = $("#table").DataTable({
+        ajax: {
+            url: `/api/taskdetails?id=${$("#task_id").val()}`,
+            dataSrc: "taskDetails",
+        },
+        columns: [
+            // { data: "id" },
+            { data: "task.type.name" },
+            // { data: function (d) {
+            //     return `${formatDate(d.plan_date)}`
+            // } },
+            { data: "plan_date" },
+            { data: "actual_date" },
+            { data: "time_in" },
+            { data: "time_out" },
+            { data: "created_at" },
+            {
+                data: function (d) {
+                    return `<a class="btn btn-primary btn-sm btn-edit" data-id="${d.id}" data-target="#modal" data-toggle="modal">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a class="btn btn-success btn-sm" style="padding: 4px 15px" href="/admin/reports/task/detail/${d.id}">
+                                                    <i class="fa-solid fa-info"></i>
+                                                </a>
+                                                <button data-id="${d.id}"
+                                                    class="btn btn-danger btn-sm btn-delete">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>`;
+                },
+            },
+        ],
+    });
+});
+
 function closeModal() {
     $("#modal").css("display", "none");
     $("body").removeClass("modal-open");
     $(".modal-backdrop").remove();
 }
 
-// $(document).on("click", ".btn-filter", function () {
-//     $.ajax({
-//         type: "GET",
-//         url: "/api/taskdetails/" + $(this).data("id") + "/show",
-//         success: function (response) {
-//             if (response.status == 0) {
-//                 let task = response.task;
-//                 $("#type_id").val(task.type_id);
-//                 $("#contract_id").val(task.contract_id);
-//                 $("#note").text(task.note);
-//                 $("#task_id").val(task.id);
-//             } else {
-//                 toastr.error(response.message);
-//             }
-//         },
-//     });
-// });
+$(document).on("click", ".btn-filter", function () {
+    $.ajax({
+        type: "GET",
+        url: "/api/taskdetails/" + $(this).data("id") + "/show",
+        success: function (response) {
+            if (response.status == 0) {
+                let task = response.task;
+                $("#type_id").val(task.type_id);
+                $("#contract_id").val(task.contract_id);
+                $("#note").text(task.note);
+                $("#task_id").val(task.id);
+            } else {
+                toastr.error(response.message);
+            }
+        },
+    });
+});
 
 $(document).on("click", ".btn-add", function () {
     let data = {
@@ -53,42 +89,6 @@ $(".btn-open-modal").on("click", function () {
     $(".modal-title").text("Thêm chi tiết nhiệm vụ");
     $(".btn-add").css("display", "block");
     $(".btn-update").css("display", "none");
-});
-
-$(document).ready(function () {
-    // solution
-    dataTable = $("#table").DataTable({
-        ajax: {
-            url: "/api/taskdetails?id=" + $("#task_id").val(),
-            dataSrc: "taskDetails",
-        },
-        columns: [
-            // { data: "id" },
-            { data: "task.type.name" },
-            // { data: function (d) {
-            //     return `${formatDate(d.plan_date)}`
-            // } },
-            { data: "plan_date" },
-            { data: "actual_date" },
-            { data: "time_in" },
-            { data: "time_out" },
-            { data: "created_at" },
-            {
-                data: function (d) {
-                    return `<a class="btn btn-primary btn-sm btn-edit" data-id="${d.id}" data-target="#modal" data-toggle="modal">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-                                                <a class="btn btn-success btn-sm" style="padding: 4px 15px" href="/admin/reports/task/detail/${d.id}">
-                                                    <i class="fa-solid fa-info"></i>
-                                                </a>
-                                                <button data-id="${d.id}"
-                                                    class="btn btn-danger btn-sm btn-delete">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>`;
-                },
-            },
-        ],
-    });
 });
 
 $(document).on("click", ".btn-edit", function () {
@@ -169,4 +169,28 @@ $(document).on("click", ".btn-delete", function () {
             },
         });
     }
+});
+
+var searchParams = new Map([
+    ["from", ""],
+    ["to", ""],
+]);
+
+function getQueryUrlWithParams() {
+    let query = `id=${$("#task_id").val()}`;
+    Array.from(searchParams).forEach(([key, values], index) => {
+        query += `&${key}=${typeof values == "array" ? values.join(",") : values}`;
+    })
+
+    return query;
+}
+
+$(document).on("click", ".btn-filter", async function () {
+    Array.from(searchParams).forEach(([key, values], index) => {
+        searchParams.set(key, String($('#' + key).val()).length ? $('#' + key).val() : '');
+    });
+
+    dataTable.ajax
+        .url(`/api/taskdetails?${getQueryUrlWithParams()}`)
+        .load();
 });

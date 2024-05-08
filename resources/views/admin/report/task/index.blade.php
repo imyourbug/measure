@@ -20,31 +20,94 @@
     <script src="https://cdn.datatables.net/keytable/2.12.0/js/keyTable.dataTables.js"></script>
 @endpush
 @section('content')
-    {{-- <div class="mb-3">
-        <input class="" style="" type="date" name="from"
-            value="{{ Request::get('from') ?? now()->format('Y-m-01') }}" />
-        <input class="" style="" type="date" name="to"
-            value="{{ Request::get('to') ?? now()->format('Y-m-t') }}" />
-        <button class="btn btn-warning btn-filter" type="submit">Lọc</button>
-        <button class="btn btn-success btn-open-modal" data-target="#modal" data-toggle="modal">Thêm
-            mới</button>
-    </div> --}}
-    <table id="table" class="table display nowrap dataTable dtr-inline collapsed">
-        <thead>
-            <tr>
-                <!-- <th>ID</th> -->
-                <th>Nhiệm vụ</th>
-                <th>Ngày kế hoạch</th>
-                <th>Ngày thực hiện</th>
-                <th>Giờ vào</th>
-                <th>Giờ ra</th>
-                <th>Ngày lập</th>
-                <th>Thao tác</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card direct-chat direct-chat-primary">
+                <div class="card-header ui-sortable-handle header-color" style="cursor: move;">
+                    <h3 class="card-title text-bold">Lựa chọn</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body" style="display: block;padding: 10px !important;">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-12">
+                            <div class="form-group">
+                                <label for="menu">Tháng thực hiện</label>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-12">
+                                        <input type="date" class="form-control" data-name="Ngày tạo" id="from"
+                                            value="{{ date('Y-m-d') }}" placeholder="Từ">
+                                    </div>
+                                    <div class="col-lg-6 col-md-12">
+                                        <input type="date" class="form-control" data-name="Ngày tạo" id="to"
+                                            value="{{date('Y-m-t')}}" placeholder="Đến">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{-- <div class="col-lg-3 col-md-6 col-sm-12">
+                            <div class="form-group">
+                                <label for="menu">Chọn năm</label>
+                                <input class="form-control select-year" type="text" value="{{ now()->format('Y') }}"
+                                    placeholder="Nhập năm..." />
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-12">
+                            <div class="form-group">
+                                <label for="menu">Chọn năm</label>
+                                <input class="form-control select-year" type="text" value="{{ now()->format('Y') }}"
+                                    placeholder="Nhập năm..." />
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6 col-sm-12">
+                            <div class="form-group">
+                                <label for="menu">Chọn năm</label>
+                                <input class="form-control select-year" type="text" value="{{ now()->format('Y') }}"
+                                    placeholder="Nhập năm..." />
+                            </div>
+                        </div> --}}
+                    </div>
+                    <button class="btn btn-warning btn-filter">Lọc</button>
+                    <button class="btn btn-success btn-refresh">Tất cả</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card direct-chat direct-chat-primary">
+                <div class="card-header ui-sortable-handle header-color" style="cursor: move;">
+                    <h3 class="card-title text-bold">{{ $title }}</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body" style="display: block;padding: 10px !important;">
+                    <table id="table" class="table display nowrap dataTable dtr-inline collapsed">
+                        <thead>
+                            <tr>
+                                <!-- <th>ID</th> -->
+                                <th>Nhiệm vụ</th>
+                                <th>Ngày kế hoạch</th>
+                                <th>Ngày thực hiện</th>
+                                <th>Giờ vào</th>
+                                <th>Giờ ra</th>
+                                <th>Ngày lập</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal fade" id="modal" style="display: none;" aria-modal="true" role="dialog">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">

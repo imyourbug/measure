@@ -56,7 +56,7 @@ class InfoUserController extends Controller
             $user = User::create([
                 is_numeric($tel_or_email) ? 'name' : 'email' =>  $tel_or_email,
                 'password' => Hash::make($data['password']),
-                'role' => GlobalConstant::ROLE_CUSTOMER
+                'role' => GlobalConstant::ROLE_STAFF
             ]);
             InfoUser::create([
                 'name' => $data['name'],
