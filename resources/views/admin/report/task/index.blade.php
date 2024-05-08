@@ -20,15 +20,15 @@
     <script src="https://cdn.datatables.net/keytable/2.12.0/js/keyTable.dataTables.js"></script>
 @endpush
 @section('content')
-    <div class="mb-3">
-        {{-- <input class="" style="" type="date" name="from"
+    {{-- <div class="mb-3">
+        <input class="" style="" type="date" name="from"
             value="{{ Request::get('from') ?? now()->format('Y-m-01') }}" />
         <input class="" style="" type="date" name="to"
             value="{{ Request::get('to') ?? now()->format('Y-m-t') }}" />
-        <button class="btn btn-warning btn-filter" type="submit">Lọc</button> --}}
-        {{-- <button class="btn btn-success btn-open-modal" data-target="#modal" data-toggle="modal">Thêm
-            mới</button> --}}
-    </div>
+        <button class="btn btn-warning btn-filter" type="submit">Lọc</button>
+        <button class="btn btn-success btn-open-modal" data-target="#modal" data-toggle="modal">Thêm
+            mới</button>
+    </div> --}}
     <table id="table" class="table display nowrap dataTable dtr-inline collapsed">
         <thead>
             <tr>

@@ -42,11 +42,11 @@ class ExportController extends Controller
                 'image_charts' => 'nullable|array',
                 'image_trend_charts' => 'nullable|array',
                 'image_annual_charts' => 'nullable|array',
-                'user_id' => 'required|numeric',
+                'user_id' => 'nullable|numeric',
                 'display' => 'required|in:0,1',
             ]);
 
-            $data['creator'] = User::with(['staff'])->firstWhere('id', $data['user_id'])->toArray();
+            $data['creator'] = User::with(['staff'])->firstWhere('id', $data['user_id'])?->toArray();
             $pdf = null;
             $filename = '';
             switch ((int)$data['type_report']) {

@@ -28,8 +28,8 @@
                 <th>Mã hóa chất</th>
                 <th>Tên thương mại</th>
                 <th>Số ĐK</th>
-                <th>Ảnh</th>
                 <th>Mô tả</th>
+                <th>Ảnh</th>
                 <th>Nhà cung cấp</th>
                 <th>Hiệu lực</th>
                 <th>Thao tác</th>

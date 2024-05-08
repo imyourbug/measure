@@ -32,20 +32,19 @@ $(document).ready(function () {
             {
                 data: function (d) {
                     return `${d.role == 1
-                        ? ""
+                        ? ''
                         : d.role == 0
-                            ? (d.staff ? d.staff.tel : "")
-                            : (d.customer ? d.customer.tel : "")
-                        }`;
+                            ? (d.staff ? (d.staff.tel || '') : '')
+                            : (d.customer ? (d.customer.tel || '') : '')}`;
                 },
             },
             {
                 data: function (d) {
                     return `${d.role == 1
-                        ? ""
+                        ? ''
                         : d.role == 0
-                            ? (d.staff ? d.staff.position : "")
-                            : ""
+                            ? (d.staff ? (d.staff.position || '') : '')
+                            : ''
                         }`;
                 },
             },
@@ -80,7 +79,7 @@ $(document).ready(function () {
                         ${$("#logging_user_id").val() != d.id &&
                             $("#editing_user_id").val() != d.id
                             ? btnDelete
-                            : ""
+                            : ''
                         }`;
                 },
             },

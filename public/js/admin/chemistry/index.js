@@ -10,9 +10,10 @@ $(document).ready(function () {
             //     data: "id"
             // },
             {
-                data: function (d) {
-                    return `HC-${d.id.toString().padStart(3, "0")}`;
-                },
+                data: "code"
+                // data: function (d) {
+                //     return `HC-${d.id.toString().padStart(3, "0")}`;
+                // },
             },
             {
                 data: "name"
