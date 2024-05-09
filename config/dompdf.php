@@ -11,7 +11,7 @@ return array(
     | in dompdf_config.inc.php. You can also override the entire config file.
     |
     */
-    'show_warnings' => false,   // Throw an Exception on warnings from dompdf
+    // 'show_warnings' => true,   // Throw an Exception on warnings from dompdf
 
     'public_path' => null,  // Override the public path if needed
 
@@ -105,7 +105,7 @@ return array(
         /**
          * Whether to enable font subsetting or not.
          */
-        "enable_font_subsetting" => false,
+        "enable_font_subsetting" => true,
 
         /**
          * The PDF rendering backend to use
@@ -236,7 +236,7 @@ return array(
          *
          * @var bool
          */
-        "enable_php" => false,
+        "enable_php" => true,
 
         /**
          * Enable inline Javascript
@@ -279,6 +279,7 @@ return array(
          * @var bool
          */
         "enable_html5_parser" => true,
+        'default_charset' => 'UTF-8',
     ),
 
 

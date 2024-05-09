@@ -23,8 +23,8 @@ class Branch extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function contract()
+    public function contracts()
     {
-        return $this->hasOne(Contract::class, 'contract_id', 'id');
+        return $this->hasMany(Contract::class, 'branch_id', 'id');
     }
 }

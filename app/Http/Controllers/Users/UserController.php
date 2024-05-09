@@ -3,20 +3,14 @@
 namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Users\ChangePasswordRequest;
 use App\Http\Requests\Users\LoginRequest;
 use App\Http\Requests\Users\RecoverRequest;
 use App\Http\Requests\Users\RegisterRequest;
 use App\Mail\RecoverPasswordMail;
-use App\Models\AirTask;
-use App\Models\ElecTask;
 use App\Models\InfoUser;
 use App\Models\User;
-use App\Models\WaterTask;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -27,13 +21,8 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $id = Auth::id();
-
         return view('user.task.list', [
             'title' => 'Trang người dùng',
-            'electasks' => ElecTask::where('user_id', $id)->orderByDesc('created_at')->get(),
-            'airtasks' => AirTask::where('user_id', $id)->orderByDesc('created_at')->get(),
-            'watertasks' => WaterTask::where('user_id', $id)->orderByDesc('created_at')->get(),
         ]);
     }
 
@@ -46,13 +35,15 @@ class UserController extends Controller
 
     public function forgot()
     {
-        return view('user.forgot.index');
+        return view('user.forgot.index', [
+            'title' => 'Quên mật khẩu'
+        ]);
     }
 
     public function recover(RecoverRequest $request)
     {
         if (!$user = User::firstWhere('email', $request->input('email'))) {
-            Toastr::error('Email không tồn tại!', 'Thông báo');
+            Toastr::error('Email không tồn tại!', __('title.toastr.fail'));
 
             return redirect()->back();
         }
@@ -69,7 +60,7 @@ class UserController extends Controller
         if ($reset_password) {
             Mail::to($request->input('email'))->send(new RecoverPasswordMail($new_password));
         }
-        Toastr::success('Lấy mật khẩu thành công! Hãy kiểm tra email của bạn', 'Thông báo');
+        Toastr::success('Lấy mật khẩu thành công! Hãy kiểm tra email của bạn', __('title.toastr.success'));
 
         return redirect()->back();
     }
@@ -88,35 +79,56 @@ class UserController extends Controller
             is_numeric($tel_or_email) ? 'name' : 'email' => $tel_or_email,
             'password' => $request->input('password')
         ])) {
-            Toastr::success('Đăng nhập thành công', 'Thông báo');
+            Toastr::success('Đăng nhập thành công', __('title.toastr.success'));
             $user = Auth::user();
 
-            return redirect()->route($user->role == 1 ? 'admin.index' : 'users.home');
+            return redirect()->route($user->role == 1 ? 'admin.index'
+                : ($user->role == 2 ? 'customers.me' : 'users.home'));
         }
-        Toastr::error('Tài khoản hoặc mật khẩu không chính xác', 'Thông báo');
+        Toastr::error('Tài khoản hoặc mật khẩu không chính xác', __('title.toastr.fail'));
 
         return redirect()->back();
     }
 
-    public function changePassword(ChangePasswordRequest $request)
+    public function changePassword(Request $request)
     {
-        $rs = User::firstWhere('email', $request->input('email'))->update([
-            'password' => Hash::make($request->input('password'))
-        ]);
-        if ($rs) {
-            Toastr::success('Đổi mật khẩu thành công', 'Thông báo');
+        try {
+            $tel_or_email = $request->input('tel_or_email');
+            $rules = [
+                'tel_or_email' => 'required|regex:/^(.*?)@(.*?)$/',
+                'old_password' => 'required|string',
+                'password' => 'required|string',
+            ];
+            if (is_numeric($tel_or_email)) {
+                $rules['tel_or_email'] = 'required|string|regex:/^0\d{9,10}$/';
+            }
+            $request->validate($rules);
+            $type = is_numeric($tel_or_email) ? 'name' : 'email';
+            $user = Auth::attempt([
+                $type => $tel_or_email,
+                'password' => $request->input('old_password')
+            ]);
+            if (!$user) {
+                return response()->json([
+                    'status' => 1,
+                    'message' => 'Mật khẩu cũ không chính xác'
+                ]);
+            }
+
+            User::firstWhere($type, $tel_or_email)->update([
+                'password' => Hash::make($request->input('password'))
+            ]);
 
             return response()->json([
                 'status' => 0,
                 'message' => 'Đổi mật khẩu thành công'
             ]);
+        } catch (Throwable $e) {
+            return response()->json([
+                'status' => 1,
+                'message' => $e->getMessage()
+            ]);
         }
-        Toastr::error('Đổi mật khẩu thất bại', 'Thông báo');
-
-        return response()->json([
-            'status' => 1,
-            'message' => 'Đổi mật khẩu thất bại'
-        ]);
     }
 
     public function register()
@@ -143,20 +155,45 @@ class UserController extends Controller
                 'password' => Hash::make($request->input('password')),
                 'role' => 1,
             ]);
-            // InfoUser::create([
-            //     'name' =>  $tel_or_email,
-            //     'user_id' => $user->id
-            // ]);
-            Toastr::success('Đăng ký thành công', 'Thông báo');
+            Toastr::success('Đăng ký thành công', __('title.toastr.success'));
             DB::commit();
         } catch (Throwable $e) {
             DB::rollBack();
-            dd($e);
-            Toastr::error(__('message.fail.register'), 'Thông báo');
+            Toastr::error(__('message.fail.register'), __('title.toastr.fail'));
 
             return redirect()->back();
         }
 
         return redirect()->route('users.login');
+    }
+
+    public function update(Request $request)
+    {
+        $data = $request->validate([
+            'id' => 'required|int',
+            'avatar' => 'required|string',
+            'name' => 'required|string',
+            'position' => 'required|string',
+            'identification' => 'required|string|regex:/\d{12}$/',
+            'tel' => 'required|string|regex:/^0\d{9,10}$/',
+            'active' => 'required|in:0,1',
+        ]);
+        unset($data['id']);
+        $update = InfoUser::where('id', $request->input('id'))->update($data);
+        if ($update) {
+            Toastr::success(__('message.success.update'), __('title.toastr.success'));
+        } else Toastr::error(__('message.fail.update'), __('title.toastr.fail'));
+
+        return redirect()->back();
+    }
+
+    public function me(Request $request)
+    {
+        return view('user.me', [
+            'title' => 'Thông tin cá nhân',
+            'staff' => User::with(['staff'])
+                ->firstWhere('id', Auth::id())
+                ->staff
+        ]);
     }
 }

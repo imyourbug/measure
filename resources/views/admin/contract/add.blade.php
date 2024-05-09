@@ -1,18 +1,8 @@
 @extends('admin.main')
 @push('styles')
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    <style>
-        .select2-search__field {
-            border: none !important;
-        }
-
-        .select2-selection__choice__display {
-            color: black;
-        }
-    </style>
 @endpush
 @push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="/js/admin/contract/index.js"></script>
     <script>
         $(document).ready(function() {
@@ -100,12 +90,13 @@
                 </div>
             </div>
         </div>
+        <!-- Footer -->
         <div class="card-footer">
             <button class="btn btn-primary btn-create" data-url="{{ route('contracts.store') }}">Lưu</button>
             <a href="{{ route('admin.contracts.index') }}" class="btn btn-success">Xem danh sách</a>
         </div>
     </div>
-    <div class="modal fade show" id="modal-task" style="display: none;" data-id="123" aria-modal="true" role="dialog">
+    <div class="modal fade" id="modal-task" style="display: none;" aria-modal="true" role="dialog">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
@@ -117,23 +108,22 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-lg-12">
+                            <label for="menu">Loại nhiệm vụ</label>
                             <div class="form-group">
-                                <label for="menu">Loại nhiệm vụ</label>
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" value="0" id="type_elec"
-                                        class="custom-control-input type_elec">
-                                    <label class="custom-control-label" for="type_elec">Đo điện</label>
-                                </div>
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" value="1" id="type_water"
-                                        class="custom-control-input type_water">
-                                    <label class="custom-control-label" for="type_water">Đo nước</label>
-                                </div>
-                                <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" value="2" id="type_air"
-                                        class="custom-control-input type_air">
-                                    <label class="custom-control-label" for="type_air">Đo không khí</label>
-                                </div>
+                                <select class="form-control select-parent-type"
+                                    data-url="{{ route('types.getTypeByParentId') }}" id="parent_type_id">
+                                    <option value="">--Loại nhiệm vụ--</option>
+                                    @foreach ($parent_types as $t)
+                                        <option value="{{ $t->id }}">{{ $t->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label for="menu">Nhiệm vụ</label>
+                            <div class="form-group form-type">
                             </div>
                         </div>
                     </div>

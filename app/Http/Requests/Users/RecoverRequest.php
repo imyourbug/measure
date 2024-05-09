@@ -14,7 +14,7 @@ class RecoverRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email:dns,rfc',
+            'email' => 'required|regex:/^(.*?)@(.*?)$/',
         ];
     }
 }
