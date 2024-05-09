@@ -17,6 +17,36 @@ var listAllIdItem = [];
 var listAllIdChemistry = [];
 var listAllIdSolution = [];
 
+var searchParams = new Map([
+    ["from", ""],
+    ["to", ""],
+]);
+
+function getQueryUrlWithParams() {
+    let query = `id=${$("#task_id").val()}`;
+    Array.from(searchParams).forEach(([key, values], index) => {
+        query += `&${key}=${typeof values == "array" ? values.join(",") : values}`;
+    })
+
+    return query;
+}
+
+$(document).on("click", ".btn-filter", async function () {
+    Array.from(searchParams).forEach(([key, values], index) => {
+        searchParams.set(key, String($('#' + key).val()).length ? $('#' + key).val() : '');
+    });
+
+    dataTable.ajax
+        .url(`/api/taskdetails?${getQueryUrlWithParams()}`)
+        .load();
+});
+
+$(document).on("click", ".btn-refresh", async function () {
+    dataTable.ajax
+        .url(`/api/taskdetails?id=${$("#task_id").val()}`)
+        .load();
+});
+
 function closeModal(type) {
     $("#modal-" + type).css("display", "none");
     $("body").removeClass("modal-open");
@@ -125,8 +155,8 @@ $(document).ready(function () {
             {
                 data: function (d) {
                     return `NV${d.user.staff.id >= 10
-                            ? d.user.staff.id
-                            : "0" + d.user.staff.id
+                        ? d.user.staff.id
+                        : "0" + d.user.staff.id
                         }`;
                 },
             },
@@ -842,7 +872,7 @@ $(".btn-open-modal").on("click", function () {
 $(document).ready(function () {
     dataTable = $("#table").DataTable({
         ajax: {
-            url: "/api/taskdetails?id=" + $("#task_id").val(),
+            url: `/api/taskdetails?id=${$("#task_id").val()}`,
             dataSrc: "taskDetails",
         },
         columns: [

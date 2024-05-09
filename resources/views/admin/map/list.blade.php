@@ -1,8 +1,6 @@
 @extends('admin.main')
 @push('styles')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap.min.css">
-
-
 @endpush
 @push('scripts')
     <script src="/js/admin/map/index.js"></script>

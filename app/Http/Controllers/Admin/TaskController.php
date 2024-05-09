@@ -118,18 +118,12 @@ class TaskController extends Controller
         $contracts = !empty($request->contracts) ? explode(",", $request->contracts) : [];
         $user_id = $request->user_id;
         $contract_id = $request->contract_id;
-        $month = $request->month;
-        $year = $request->year;
         $tasks = Task::with([
             'contract.branch',
             'type',
             'details.taskStaffs',
         ])
-            ->when($month, function ($q) use ($month) {
-                return $q->whereRaw('MONTH(created_at) = ?', $month);
-            })->when($year, function ($q) use ($year) {
-                return $q->whereRaw('YEAR(created_at) = ?', $year);
-            })->when(!empty($type_id), function ($q) use ($type_id) {
+            ->when(!empty($type_id), function ($q) use ($type_id) {
                 return $q->where('type_id', $type_id);
             })
             ->when($from, function ($q) use ($from) {

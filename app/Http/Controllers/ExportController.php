@@ -32,6 +32,9 @@ class ExportController extends Controller
     public function plan(Request $request)
     {
         try {
+            ini_set('max_execution_time', '300');
+            ini_set("pcre.backtrack_limit", "5000000");
+
             $data = $request->validate([
                 'month' => 'required|numeric|between:1,12',
                 'year' => 'required|numeric|min:1900',

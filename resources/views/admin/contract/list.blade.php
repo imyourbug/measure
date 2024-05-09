@@ -132,64 +132,6 @@
                         </div>
                     </div>
                 </div>
-                {{-- <div class="card-body form-contract" style="display: block;padding: 10px !important;">
-                    <div class="row">
-                        <div class="col-lg-6 col-md-12">
-                            <div class="form-group">
-                                <label for="menu">Tên hợp đồng</label>
-                                <input class="form-control" type="text" id="name"
-                                    placeholder="Nhập tên hợp đồng..." />
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-12">
-                            <div class="form-group">
-                                <label for="menu">Khách hàng</label>
-                                <select class="form-control select-customer"
-                                    data-url="{{ route('branches.getBranchById') }}" id="customer_id">
-                                    <option value="">--Khách hàng--</option>
-                                    @foreach ($customers as $customer)
-                                        <option value="{{ $customer->id }}">{{ $customer->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6 col-md-12">
-                            <div class="form-group">
-                                <label for="menu">Ngày bắt đầu</label>
-                                <input type="date" class="form-control" id="start"
-                                    value="{{ old('start') ?? now()->format('Y-m-d') }}">
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-12">
-                            <div class="form-group">
-                                <label for="menu">Ngày kết thúc</label>
-                                <input type="date" class="form-control" id="finish"
-                                    value="{{ old('finish') ?? now()->format('Y-m-d') }}">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6 col-md-12">
-                            <div class="form-group">
-                                <label for="menu">Nội dung</label>
-                                <textarea placeholder="Nhập nội dung..." class="form-control" id="content" cols="30" rows="5">{{ old('content') }}</textarea>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-12">
-                            <div class="form-group form-attachment">
-                                <label class="notification" for="attachment">Tệp đính
-                                    kèm</label>
-                                <div class="">
-                                    <input type="file" id="attachment"
-                                        accept=".png,.jpeg,.pdf,.docx,.ppt,.cad,.xlsx,.csv" />
-                                    <input type="hidden" id="value-attachment">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> --}}
                 <div class="card-footer">
                     <button class="btn btn-primary btn-create" data-url="{{ route('contracts.store') }}">Lưu</button>
                 </div>

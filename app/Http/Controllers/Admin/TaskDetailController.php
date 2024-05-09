@@ -18,6 +18,47 @@ use Throwable;
 
 class TaskDetailController extends Controller
 {
+
+    public function getAll(Request $request)
+    {
+        $user_id = $request->user_id;
+        $task_id = $request->task_id;
+        $from = $request->from;
+        $to = $request->to;
+        try {
+            $task_details = TaskDetail::with(['task.type', 'taskStaffs'])
+                // user_id
+                ->when($user_id, function ($q) use ($user_id) {
+                    return $q->whereHas('taskStaffs', function ($q) use ($user_id) {
+                        $q->where('user_id', $user_id);
+                    });
+                })
+                // task_id
+                ->when($task_id, function ($q) use ($task_id) {
+                    return $q->where('task_id', $task_id);
+                })
+                // from
+                ->when($from, function ($q) use ($from) {
+                    return $q->where('plan_date', '>=', $from . ' 00:00:00');
+                })
+                // to
+                ->when($to, function ($q) use ($to) {
+                    return $q->where('plan_date', '<=', $to . ' 23:59:59');
+                })
+                ->get();
+
+            return response()->json([
+                'status' => 0,
+                'taskDetails' => $task_details,
+            ]);
+        } catch (Throwable $e) {
+            return response()->json([
+                'status' => 1,
+                'message' => $e->getMessage(),
+            ]);
+        }
+    }
+
     public function store(Request $request)
     {
         try {

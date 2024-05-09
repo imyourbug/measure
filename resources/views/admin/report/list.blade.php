@@ -7,13 +7,11 @@
     <a href="" target="_blank"></a>
 @endpush
 @push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/2.0.2/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/buttons/3.0.1/js/dataTables.buttons.js"></script>
     <script src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.html5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.dataTables.js"></script>
     <script src="https://cdn.datatables.net/select/2.0.0/js/dataTables.select.js"></script>
     <script src="https://cdn.datatables.net/select/2.0.0/js/select.dataTables.js"></script>
@@ -21,6 +19,8 @@
     <script src="https://cdn.datatables.net/keytable/2.12.0/js/dataTables.keyTable.js"></script>
     <script src="https://cdn.datatables.net/keytable/2.12.0/js/keyTable.dataTables.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="/js/admin/report/index.js"></script>
 @endpush
 @section('content')
@@ -246,23 +246,37 @@
         </div>
         <div class="card-body" style="display: block;padding: 10px !important;">
             <div class="row">
-                <div class="col-lg-3 col-md-12">
-                    <label for="">Thời gian</label>
-                    <input id="select-time" class="form-control" type="month" />
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label for="menu">Tháng thực hiện</label>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-12">
+                                <input type="date" class="form-control" data-name="Ngày tạo" id="from"
+                                    value="{{ date('Y-m-01') }}" placeholder="Từ">
+                            </div>
+                            <div class="col-lg-6 col-md-12">
+                                <input type="date" class="form-control" data-name="Ngày tạo" id="to"
+                                    value="{{ date('Y-m-t') }}" placeholder="Đến">
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12 col-md-12">
-                    <label for="">Lựa chọn hợp đồng</label>
-                    <select multiple="multiple" class="select2 custom-select form-control-border select">
-                        @foreach ($contracts as $contract)
-                            <option value="{{ $contract->id }}">
-                                {{ $contract->customer->name . ' | ' . $contract->name . ' | ' . ($contract->branch->name ?? '') }}
-                            </option>
-                        @endforeach
-                    </select>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label for="">Lựa chọn hợp đồng</label>
+                        <select multiple="multiple" id="contracts" class="select2 custom-select form-control-border">
+                            @foreach ($contracts as $contract)
+                                <option value="{{ $contract->id }}">
+                                    {{ $contract->customer->name . ' | ' . $contract->name . ' | ' . ($contract->branch->name ?? '') }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
+
             </div>
+            <button class="btn btn-warning btn-filter">Lọc</button>
+            <button class="btn btn-success btn-refresh">Tất cả</button>
             <br>
             <table id="table" class="table display nowrap dataTable dtr-inline collapsed">
                 <thead>

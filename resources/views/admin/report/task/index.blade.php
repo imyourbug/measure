@@ -35,15 +35,15 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-12">
                             <div class="form-group">
-                                <label for="menu">Tháng thực hiện</label>
+                                <label for="menu">Tháng kế hoạch</label>
                                 <div class="row">
                                     <div class="col-lg-6 col-md-12">
                                         <input type="date" class="form-control" data-name="Ngày tạo" id="from"
-                                            value="{{ date('Y-m-d') }}" placeholder="Từ">
+                                            value="{{ date('Y-m-01') }}" placeholder="Từ">
                                     </div>
                                     <div class="col-lg-6 col-md-12">
                                         <input type="date" class="form-control" data-name="Ngày tạo" id="to"
-                                            value="{{date('Y-m-t')}}" placeholder="Đến">
+                                            value="{{ date('Y-m-t') }}" placeholder="Đến">
                                     </div>
                                 </div>
                             </div>

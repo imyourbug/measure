@@ -42,24 +42,6 @@ function closeModal() {
     $(".modal-backdrop").remove();
 }
 
-$(document).on("click", ".btn-filter", function () {
-    $.ajax({
-        type: "GET",
-        url: "/api/taskdetails/" + $(this).data("id") + "/show",
-        success: function (response) {
-            if (response.status == 0) {
-                let task = response.task;
-                $("#type_id").val(task.type_id);
-                $("#contract_id").val(task.contract_id);
-                $("#note").text(task.note);
-                $("#task_id").val(task.id);
-            } else {
-                toastr.error(response.message);
-            }
-        },
-    });
-});
-
 $(document).on("click", ".btn-add", function () {
     let data = {
         plan_date: $("#plan_date").val(),
@@ -192,5 +174,11 @@ $(document).on("click", ".btn-filter", async function () {
 
     dataTable.ajax
         .url(`/api/taskdetails?${getQueryUrlWithParams()}`)
+        .load();
+});
+
+$(document).on("click", ".btn-refresh", async function () {
+    dataTable.ajax
+        .url(`/api/taskdetails?id=${$("#task_id").val()}`)
         .load();
 });

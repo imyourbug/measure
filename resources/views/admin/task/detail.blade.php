@@ -16,13 +16,14 @@
     <script src="https://cdn.datatables.net/2.0.2/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/buttons/3.0.1/js/dataTables.buttons.js"></script>
     <script src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.html5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/3.0.1/js/buttons.dataTables.js"></script>
     <script src="https://cdn.datatables.net/select/2.0.0/js/dataTables.select.js"></script>
     <script src="https://cdn.datatables.net/select/2.0.0/js/select.dataTables.js"></script>
     <script src="https://cdn.datatables.net/datetime/1.5.2/js/dataTables.dateTime.min.js"></script>
     <script src="https://cdn.datatables.net/keytable/2.12.0/js/dataTables.keyTable.js"></script>
     <script src="https://cdn.datatables.net/keytable/2.12.0/js/keyTable.dataTables.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 @endpush
 @section('content')
     <div class="row">
@@ -37,15 +38,28 @@
                     </div>
                 </div>
                 <div class="card-body" style="display: block;padding: 10px !important;">
-                    {{-- <a href="{{ route('admin.tasks.create') }}" class="btn btn-success">Thêm mới</a> --}}
-                    {{-- <input class="" style="" type="date" name="from"
-            value="{{ Request::get('from') ?? now()->format('Y-m-01') }}" />
-        <input class="" style="" type="date" name="to"
-            value="{{ Request::get('to') ?? now()->format('Y-m-t') }}" />
-        <button class="btn btn-warning btn-filter" type="submit">Lọc</button> --}}
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-12">
+                            <div class="form-group">
+                                <label for="menu">Tháng thực hiện</label>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-12">
+                                        <input type="date" class="form-control" data-name="Ngày tạo" id="from"
+                                            value="{{ date('Y-m-01') }}" placeholder="Từ">
+                                    </div>
+                                    <div class="col-lg-6 col-md-12">
+                                        <input type="date" class="form-control" data-name="Ngày tạo" id="to"
+                                            value="{{ date('Y-m-t') }}" placeholder="Đến">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="mb-2">
                         <button class="btn btn-success btn-open-modal" data-target="#modal" data-toggle="modal">Thêm
                             mới</button>
+                        <button class="btn btn-primary btn-refresh">Tất cả</button>
+                        <button class="btn btn-warning btn-filter">Lọc</button>
                     </div>
                     <table id="table" class="table display nowrap dataTable dtr-inline collapsed">
                         <thead>

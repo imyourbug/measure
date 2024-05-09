@@ -30,21 +30,21 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
         });
         $this->renderable(function (Throwable $e, $request) {
-            return response()->json([
-                'status' => 1,
-                'message' => $e->getMessage(),
-            ]);
-            // Log::info('Exception');
-            // Log::error($e);
-            // if ($e instanceof ValidationException) {
-            //     foreach ($e->errors() as $err) {
-            //         Toastr::error($err[0], __('title.toastr.fail'));
-            //     }
-            // } else if ($e instanceof Exception) {
-            //     Toastr::error($e->getMessage(), __('title.toastr.fail'));
-            // }
+            // return response()->json([
+            //     'status' => 1,
+            //     'message' => $e->getMessage(),
+            // ]);
+            Log::info('Exception');
+            Log::error($e);
+            if ($e instanceof ValidationException) {
+                foreach ($e->errors() as $err) {
+                    Toastr::error($err[0], __('title.toastr.fail'));
+                }
+            } else if ($e instanceof Exception) {
+                Toastr::error($e->getMessage(), __('title.toastr.fail'));
+            }
 
-            // return redirect()->back();
+            return redirect()->back();
         });
     }
 }

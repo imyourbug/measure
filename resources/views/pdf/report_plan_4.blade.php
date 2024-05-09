@@ -177,8 +177,8 @@
                                     @endif
                                 </td>
                                 <td>{{ $taskMap[0]['unit'] ?? '' }}</td>
-                                <td>{{ round($sumResult / count($taskMap), 2) }}</td>
-                                <td>{{ round($sumKPI / count($taskMap), 2) }}</td>
+                                <td>{{ count($taskMap) ? round($sumResult / count($taskMap), 2) : $sumResult }}</td>
+                                <td>{{ count($taskMap) ? round($sumKPI / count($taskMap), 2) : $sumKPI }}</td>
                                 <td>{{ $sumResult < $sumKPI ? 'Không đạt' : 'Đạt' }}</td>
                                 <td>{{ $taskMap['note'] ?? '' }}</td>
                             </tr>
@@ -250,7 +250,7 @@
                             @foreach ($taskMaps as $task_map)
                                 @if (substr($task_map['code'], 0, 1) === $key)
                                     <td>
-                                        {{ $task_map['kpi'] !== 0 ? round(($task_map['result'] / $task_map['kpi']) * 100, 2) : 0 }}%
+                                        {{ $task_map['kpi'] != 0 ? round(($task_map['result'] / $task_map['kpi']) * 100, 2) : 0 }}%
                                     </td>
                                 @endif
                             @endforeach
@@ -287,7 +287,7 @@
                                                 }
                                             }
                                         @endphp
-                                        {{ $kpi_this_year !== 0 ? round(($result_this_year / $kpi_this_year) * 100, 2) : 0 }}%
+                                        {{ $kpi_this_year != 0 ? round(($result_this_year / $kpi_this_year) * 100, 2) : 0 }}%
                                     @else
                                         0%
                                     @endif
@@ -313,7 +313,7 @@
                                                 }
                                             }
                                         @endphp
-                                        {{ $count_last_year !== 0 ? round(($result_last_year / $count_last_year) * 100, 2) : 0 }}%
+                                        {{ $count_last_year != 0 ? round(($result_last_year / $count_last_year) * 100, 2) : 0 }}%
                                     @else
                                         0%
                                     @endif

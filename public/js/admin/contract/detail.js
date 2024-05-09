@@ -1,163 +1,3 @@
-var dataTable = null;
-
-var searchParams = new Map([
-    ["from", ""],
-    ["to", ""],
-    ["contracts", ""],
-]);
-
-function getQueryUrlWithParams() {
-    let query = ``;
-    Array.from(searchParams).forEach(([key, values], index) => {
-        query += `&${key}=${typeof values == "array" ? values.join(",") : values}`;
-    })
-
-    return query;
-}
-
-$(document).on("click", ".btn-filter", async function () {
-    Array.from(searchParams).forEach(([key, values], index) => {
-        searchParams.set(key, String($('#' + key).val()).length ? $('#' + key).val() : '');
-    });
-
-    dataTable.ajax
-        .url(`/api/tasks/getAll?${getQueryUrlWithParams()}`)
-        .load();
-});
-
-$(document).on("click", ".btn-refresh", async function () {
-    dataTable.ajax
-        .url(`/api/tasks/getAll`)
-        .load();
-});
-
-$(document).ready(function () {
-    // select 2
-    $(".select2").select2();
-    // solution
-    dataTable = $("#table").DataTable({
-        ajax: {
-            url: `/api/tasks/getAll`,
-            dataSrc: "tasks",
-        },
-        columns: [
-            { data: "type.name" },
-            {
-                data: function (d) {
-                    return `${d.contract.name} - ${d.contract.branch ? d.contract.branch.name : ""}`;
-                },
-            },
-            { data: "note" },
-            { data: "frequence" },
-            { data: "confirm" },
-            { data: "status" },
-            { data: "reason" },
-            { data: "solution" },
-            { data: "created_at" },
-            {
-                data: function (d) {
-                    return `<a class="btn btn-primary btn-sm btn-edit" data-id="${d.id}" data-target="#modal" data-toggle="modal">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-                                                <a class="btn btn-success btn-sm" style="padding: 4px 15px" href="/admin/reports/task/${d.id}">
-                                                    <i class="fa-solid fa-info"></i>
-                                                </a>`;
-                    // return `<a class="btn btn-primary btn-sm btn-edit" data-id="${d.id}" data-target="#modal" data-toggle="modal">
-                    //                             <i class="fas fa-edit"></i>
-                    //                         </a>
-                    //                         <a class="btn btn-success btn-sm" style="padding: 4px 15px" href="/admin/reports/task/${d.id}">
-                    //                             <i class="fa-solid fa-info"></i>
-                    //                         </a>
-                    //                         <button data-id="${d.id}"
-                    //                             class="btn btn-danger btn-sm btn-delete">
-                    //                             <i class="fas fa-trash"></i>
-                    //                         </button>`;
-                },
-            },
-        ],
-    });
-});
-
-$(document).on("click", ".btn-edit", function () {
-    $.ajax({
-        type: "GET",
-        url: "/api/tasks/" + $(this).data("id") + "/getById",
-        success: function (response) {
-            if (response.status == 0) {
-                let task = response.task;
-                $("#type_id").val(task.type_id);
-                $("#contract_id").val(task.contract_id);
-                $("#note").val(task.note);
-                $("#frequence").val(task.frequence);
-                $("#confirm").val(task.confirm);
-                $("#reason").val(task.reason);
-                $("#status").val(task.status);
-                $("#solution").val(task.solution);
-                $("#task_id").val(task.id);
-            } else {
-                toastr.error(response.message);
-            }
-        },
-    });
-});
-
-$(document).on("click", ".btn-update", function () {
-    if (confirm("Bạn có muốn sửa")) {
-        let data = {
-            id: $("#task_id").val(),
-            note: $("#note").val(),
-            contract_id: $("#contract_id").val(),
-            type_id: $("#type_id").val(),
-            frequence: $("#frequence").val(),
-            confirm: $("#confirm").val(),
-            status: $("#status").val(),
-            solution: $("#solution").val(),
-            reason: $("#reason").val(),
-        };
-        console.log(data);
-        $.ajax({
-            type: "POST",
-            url: $(this).data("url"),
-            data: data,
-            success: function (response) {
-                if (response.status == 0) {
-                    closeModal("modal");
-                    toastr.success("Cập nhật thành công");
-                    dataTable.ajax.reload();
-                } else {
-                    toastr.error(response.message);
-                }
-            },
-        });
-    }
-});
-
-$(document).on("click", ".btn-delete", function () {
-    if (confirm("Bạn có muốn xóa")) {
-        let id = $(this).data("id");
-        $.ajax({
-            type: "DELETE",
-            url: `/api/tasks/${id}/destroy`,
-
-            success: function (response) {
-                if (response.status == 0) {
-                    toastr.success("Xóa thành công");
-                    dataTable.ajax.reload();
-                } else {
-                    toastr.error(response.message);
-                }
-            },
-        });
-    }
-});
-
-function closeModal() {
-    $("#modal").css("display", "none");
-    $("body").removeClass("modal-open");
-    $(".modal-backdrop").remove();
-}
-
-// report
 var listMapChart = [];
 var listTrendMapChart = [];
 var listAnnualMapChart = [];
@@ -175,7 +15,9 @@ $('#form-export').submit(function (e) {
         data: $(this).serialize(),
         url: $(this).attr('action'),
         success: function (response) {
+            console.log(response);
             if (response.status == 0) {
+                console.log(response);
                 window.open(response.url);
             } else {
                 toastr.error(response.message);
@@ -304,7 +146,6 @@ $('.btn-preview').on('click', async function () {
                 });
             }
         });
-
         await $.ajax({
             type: "GET",
             url: `/api/exports/getTrendDataMapChart?month_compare=${month_compare}&year_compare=${year_compare}&month=${month}&year=${year}&contract_id=${contract_id}`,
@@ -503,6 +344,7 @@ $('.btn-preview').on('click', async function () {
                     `<input type="hidden" name="image_annual_charts[${e.chart.canvas.id.replace('annualMapChart', '')}]" value="${e.chart.toBase64Image('image/png', 1)}" alt="" />`
                 );
             });
+
         }, 2000);
     }
     setTimeout(() => {
@@ -533,13 +375,168 @@ $(document).on('click', function (e) {
     const clickedElementId = clickedElement.attr('id'); // or use any other identifier
     const targetElement = $('.modal-content-export'); // Replace with your element's ID
 
-    if (!clickedElement.is(targetElement) && !clickedElement.parents().is(targetElement) &&
-        $('body')
-            .hasClass('modal-open')) {
+    if (!clickedElement.is(targetElement) && !clickedElement.parents().is(targetElement) && $('body')
+        .hasClass('modal-open')) {
         // Clicked outside the element
         $('.blockChart').html('');
     }
 });
 $(document).on('click', '.close', function (e) {
     $('.blockChart').html('');
+});
+
+// task
+
+var dataTable = null;
+
+var searchParams = new Map([
+    ["from", ""],
+    ["to", ""],
+]);
+
+function getQueryUrlWithParams() {
+    let query = `contract_id=${$('#request_contract_id').val() || ''}`;
+    Array.from(searchParams).forEach(([key, values], index) => {
+        query += `&${key}=${typeof values == "array" ? values.join(",") : values}`;
+    })
+
+    return query;
+}
+
+$(document).on("click", ".btn-filter", async function () {
+    Array.from(searchParams).forEach(([key, values], index) => {
+        searchParams.set(key, String($('#' + key).val()).length ? $('#' + key).val() : '');
+    });
+
+    dataTable.ajax
+        .url(`/api/tasks/getAll?${getQueryUrlWithParams()}`)
+        .load();
+});
+
+$(document).on("click", ".btn-refresh", async function () {
+    dataTable.ajax
+        .url(`/api/tasks/getAll?contract_id=${$('#request_contract_id').val() || ''}`)
+        .load();
+});
+// $(document).on("click", ".btn-filter", function () {
+//     let requestUrl = "/api/tasks/getAll?from=" + $('#from').val() + "&to=" + $('#to').val()
+//     dataTable.ajax.url(requestUrl).load();
+// });
+
+function closeModal() {
+    $("#modal").css("display", "none");
+    $("body").removeClass("modal-open");
+    $(".modal-backdrop").remove();
+}
+
+
+$(document).ready(function () {
+    dataTable = $("#table").DataTable({
+        ajax: {
+            url: `/api/tasks/getAll?contract_id=${$('#request_contract_id').val() || ''}`,
+            dataSrc: "tasks",
+        },
+        columns: [
+            { data: "type.name" },
+            {
+                data: function (d) {
+                    return `${d.contract.name} - ${d.contract.branch ? d.contract.branch.name : ""}`;
+                },
+            },
+            { data: "frequence" },
+            { data: "confirm" },
+            { data: "status" },
+            { data: "reason" },
+            { data: "solution" },
+            { data: "note" },
+            { data: "created_at" },
+            {
+                data: function (d) {
+                    return `<a class="btn btn-primary btn-sm btn-edit" data-id="${d.id}" data-target="#modal" data-toggle="modal">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+                                                <a class="btn btn-success btn-sm" style="padding: 4px 15px" href="/admin/tasks/detail/${d.id}">
+                                                    <i class="fa-solid fa-info"></i>
+                                                </a>
+                                                <button data-id="${d.id}"
+                                                    class="btn btn-danger btn-sm btn-delete">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>`;
+                },
+            },
+        ],
+    });
+});
+
+$(document).on("click", ".btn-edit", function () {
+    $.ajax({
+        type: "GET",
+        url: "/api/tasks/" + $(this).data("id") + "/getById",
+        success: function (response) {
+            if (response.status == 0) {
+                let task = response.task;
+                $("#type_id").val(task.type_id);
+                $("#contract_id").val(task.contract_id);
+                $("#note").val(task.note);
+                $("#frequence").val(task.frequence);
+                $("#confirm").val(task.confirm);
+                $("#reason").val(task.reason);
+                $("#status").val(task.status);
+                $("#solution").val(task.solution);
+                $("#task_id").val(task.id);
+            } else {
+                toastr.error(response.message);
+            }
+        },
+    });
+});
+
+$(document).on("click", ".btn-update", function () {
+    if (confirm("Bạn có muốn sửa")) {
+        let data = {
+            id: $("#task_id").val(),
+            note: $("#note").val(),
+            contract_id: $("#contract_id").val(),
+            frequence: $("#frequence").val(),
+            confirm: $("#confirm").val(),
+            status: $("#status").val(),
+            solution: $("#solution").val(),
+            reason: $("#reason").val(),
+            type_id: $("#type_id").val(),
+        };
+        console.log(data);
+        $.ajax({
+            type: "POST",
+            url: $(this).data("url"),
+            data: data,
+            success: function (response) {
+                if (response.status == 0) {
+                    closeModal("solution");
+                    toastr.success("Cập nhật thành công");
+                    dataTable.ajax.reload();
+                } else {
+                    toastr.error(response.message);
+                }
+            },
+        });
+    }
+});
+
+$(document).on("click", ".btn-delete", function () {
+    if (confirm("Bạn có muốn xóa")) {
+        let id = $(this).data("id");
+        $.ajax({
+            type: "DELETE",
+            url: `/api/tasks/${id}/destroy`,
+
+            success: function (response) {
+                if (response.status == 0) {
+                    toastr.success("Xóa thành công");
+                    dataTable.ajax.reload();
+                } else {
+                    toastr.error(response.message);
+                }
+            },
+        });
+    }
 });

@@ -17,105 +17,57 @@
     <script src="https://cdn.datatables.net/datetime/1.5.2/js/dataTables.dateTime.min.js"></script>
     <script src="https://cdn.datatables.net/keytable/2.12.0/js/dataTables.keyTable.js"></script>
     <script src="https://cdn.datatables.net/keytable/2.12.0/js/keyTable.dataTables.js"></script>
-    <script>
-        var dataTable = null;
-        $(document).ready(function() {
-            dataTable = $("#table").DataTable({
-                ajax: {
-                    url: "/api/contracts/getAll",
-                    dataSrc: "contracts",
-                },
-                columns: [{
-                        data: function(d) {
-                            return `${$('#select-month').val() == 0 ? 'Tất cả' : $('#select-month').val()}`;
-                        },
-                    }, {
-                        data: function(d) {
-                            return `${d.customer.name}`;
-                        },
-                    },
-                    {
-                        data: function(d) {
-                            return `${d.branch ? d.branch.name : ""}`;
-                        },
-                    },
-                    {
-                        data: function(d) {
-                            return `${d.branch ? (d.branch.address || "") : ""}`;
-                        },
-                    },
-
-                    {
-                        data: function(d) {
-                            // return `<a class="btn btn-primary btn-sm" href='/admin/contracts/update/${d.id}'>
-                        //             <i class="fas fa-edit"></i>
-                        //         </a>
-                        //         <a class="btn btn-success btn-sm" style="padding: 4px 15px"
-                        //             href='/admin/contracts/detail/${d.id}'>
-                        //             <i class="fa-solid fa-info"></i>
-                        //         </a>
-                        //         <button data-id="${d.id }" class="btn btn-danger btn-sm btn-delete">
-                        //             <i class="fas fa-trash"></i>
-                        //         </button>`;
-                            return `<a class="btn btn-success btn-sm" style="padding: 4px 15px"
-                                        href='/admin/contracts/detail/${d.id}'>
-                                        <i class="fa-solid fa-info"></i>
-                                    </a>`;
-                        },
-                    },
-                ],
-            });
-        })
-
-        $(document).on("click", ".btn-delete", function() {
-            if (confirm("Bạn có muốn xóa")) {
-                let id = $(this).data("id");
-                $.ajax({
-                    type: "DELETE",
-                    url: `/api/contracts/${id}/destroy`,
-                    success: function(response) {
-                        if (response.status == 0) {
-                            toastr.success("Xóa thành công");
-                            dataTable.ajax.reload();
-                        } else {
-                            toastr.error(response.message);
-                        }
-                    },
-                });
-            }
-        });
-        $(document).on("change", "#select-month", function() {
-            let requestUrl = "/api/contracts/getAll?month=" + $(this).val();
-            dataTable.ajax.url(requestUrl).load();
-        });
-    </script>
+    <script src="/js/admin/plan/index.js"></script>
 @endpush
 @section('content')
-    <div class="row ">
-        <div class="col-lg-4 col-md-6 col-sm-12">
-            <a href="{{ route('admin.contracts.index') }}" class="btn btn-success">Thêm mới</a>
-            <div class="form-group">
-                <label for="">Tháng</label>
-                <select name="" class="form-control" id="select-month">
-                    <option value="">--Tất cả--</option>
-                    @for ($i = 1; $i <= 12; $i++)
-                        <option value="{{ $i }}">Tháng {{ $i }}</option>
-                    @endfor
-                </select>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card direct-chat direct-chat-primary">
+                <div class="card-header ui-sortable-handle header-color" style="cursor: move;">
+                    <h3 class="card-title text-bold">{{ $title }}</h3>
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body form-contract" style="display: block;padding: 10px !important;">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-12">
+                            <div class="form-group">
+                                <label for="menu">Tháng thực hiện</label>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-12">
+                                        <select name="" class="form-control" id="select-month">
+                                            <option value="">--Tất cả--</option>
+                                            @for ($i = 1; $i <= 12; $i++)
+                                                <option value="{{ $i }}">Tháng {{ $i }}</option>
+                                            @endfor
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- <button class="btn btn-warning btn-filter">Lọc</button>
+                    <button class="btn btn-success btn-refresh">Tất cả</button> --}}
+                    <a href="{{ route('admin.contracts.index') }}" class="btn btn-success">Thêm mới</a>
+                    <table id="table" class="table display nowrap dataTable dtr-inline collapsed">
+                        <thead>
+                            <tr>
+                                <th>Tháng</th>
+                                <th>Tên công ty</th>
+                                <th>Tên chi nhánh</th>
+                                <th>Địa chỉ</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
+        <input type="hidden" class="id-branch">
     </div>
-    <table id="table" class="table display nowrap dataTable dtr-inline collapsed">
-        <thead>
-            <tr>
-                <th>Tháng</th>
-                <th>Tên công ty</th>
-                <th>Tên chi nhánh</th>
-                <th>Địa chỉ</th>
-                <th>Thao tác</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
 @endsection

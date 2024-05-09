@@ -104,6 +104,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin'], function () {
 
     #taskdetails
     Route::group(['prefix' => 'taskdetails', 'as' => 'taskdetails.'], function () {
+        // Route::get('/getAll', 'TaskController@getAll')->name('getAll');
         Route::post('create', 'TaskDetailController@store')->name('store');
         Route::post('update', 'TaskDetailController@update')->name('update');
         Route::get('/', 'TaskDetailController@index')->name('index');
