@@ -6,10 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Contract;
 use App\Models\TaskDetail;
 use App\Models\User;
-use DateInterval;
-use DateTime;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
@@ -91,6 +88,9 @@ class ExportController extends Controller
             }
             $filename .= 'tháng ' . $data['month'] . ' năm ' . $data['year'];
             $filename = Str::slug($filename) . '.pdf';
+
+            return $pdf->stream($filename);
+
             $path = storage_path() . '/app/public/pdf/';
             if (!File::isDirectory($path)) {
                 File::makeDirectory($path, 0777, true, true);
@@ -102,6 +102,7 @@ class ExportController extends Controller
                 'url' => '/storage/pdf/' . $filename
             ]);
         } catch (Throwable $e) {
+            dd($e);
             return response()->json([
                 'status' => 1,
                 'message' => $e->getMessage()
@@ -193,14 +194,16 @@ class ExportController extends Controller
         }
 
         foreach ($result['tasks'] as $key => &$task) {
+            $tmp = [];
             foreach ($task['details'] as $keyDetail => &$detail) {
-                $tmp = [];
                 foreach ($detail['task_maps'] as $keyTaskMap => $taskMap) {
-                    $tmp[substr($taskMap['code'], 0, 1)][] = $taskMap;
+                    $tmp[$task['id']][substr($taskMap['code'], 0, 1)][] = $taskMap;
                 }
-                $detail['task_maps'] = $tmp;
             }
+            $detail['task_maps'] = $tmp;
+            $task['group_details'] = $tmp;
         }
+        // dd($result);
 
         return $result;
     }

@@ -162,7 +162,7 @@ var listMapChart = [];
 var listTrendMapChart = [];
 var listAnnualMapChart = [];
 $('#form-export').submit(function (e) {
-    e.preventDefault();
+    // e.preventDefault();
     let pattern = /^\d{4}$/;
     let year = $('.select-year').val();
     let month = $('.select-month').val();
@@ -170,18 +170,18 @@ $('#form-export').submit(function (e) {
     let contract_id = $('.select-contract').val();
     let url = $(this).attr('action');
 
-    $.ajax({
-        type: "POST",
-        data: $(this).serialize(),
-        url: $(this).attr('action'),
-        success: function (response) {
-            if (response.status == 0) {
-                window.open(response.url);
-            } else {
-                toastr.error(response.message);
-            }
-        }
-    })
+    // $.ajax({
+    //     type: "POST",
+    //     data: $(this).serialize(),
+    //     url: $(this).attr('action'),
+    //     success: function (response) {
+    //         if (response.status == 0) {
+    //             window.open(response.url);
+    //         } else {
+    //             toastr.error(response.message);
+    //         }
+    //     }
+    // })
 });
 
 $('.btn-preview').on('click', async function () {
