@@ -56,7 +56,7 @@ class ExportController extends Controller
                     break;
                 case 1:
                     $data['file_name'] = $filename = 'KẾ HOẠCH CHI TIẾT ';
-                    $pdf = MPDF::loadView('pdf.report_plan_1', ['data' => array_merge($data, $this->getReportPlanByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]);
+                    $pdf = MPDF::loadView('pdf.report_plan_1', ['data' => array_merge($data, $this->getReportWorkByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]);
                     break;
                 case 2:
                     $data['file_name'] = $filename = 'BÁO CÁO ĐÁNH GIÁ KẾT QUẢ THỰC HIỆN DỊCH VỤ ';
@@ -89,8 +89,6 @@ class ExportController extends Controller
             $filename .= 'tháng ' . $data['month'] . ' năm ' . $data['year'];
             $filename = Str::slug($filename) . '.pdf';
 
-            return $pdf->stream($filename);
-
             $path = storage_path() . '/app/public/pdf/';
             if (!File::isDirectory($path)) {
                 File::makeDirectory($path, 0777, true, true);
@@ -102,7 +100,6 @@ class ExportController extends Controller
                 'url' => '/storage/pdf/' . $filename
             ]);
         } catch (Throwable $e) {
-            dd($e);
             return response()->json([
                 'status' => 1,
                 'message' => $e->getMessage()
@@ -196,8 +193,13 @@ class ExportController extends Controller
         foreach ($result['tasks'] as $key => &$task) {
             $tmp = [];
             foreach ($task['details'] as $keyDetail => &$detail) {
-                foreach ($detail['task_maps'] as $keyTaskMap => $taskMap) {
-                    $tmp[$task['id']][substr($taskMap['code'], 0, 1)][] = $taskMap;
+                foreach ($detail['task_maps'] as $keyTaskMap => &$taskMap) {
+                    // dd($taskMap);
+                    if (!empty($tmp[$task['id']][substr($taskMap['code'], 0, 1)][$taskMap['code']])) {
+                        $taskMap['result'] = ($tmp[$task['id']][substr($taskMap['code'], 0, 1)][$taskMap['code']]['result'] ?? 0) + ($taskMap['result'] ?? 0);
+                        $taskMap['kpi'] = ($tmp[$task['id']][substr($taskMap['code'], 0, 1)][$taskMap['code']]['kpi'] ?? 0) + ($taskMap['kpi'] ?? 0);
+                    }
+                    $tmp[$task['id']][substr($taskMap['code'], 0, 1)][$taskMap['code']] = $taskMap;
                 }
             }
             $detail['task_maps'] = $tmp;

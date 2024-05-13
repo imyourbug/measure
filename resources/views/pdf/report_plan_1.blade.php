@@ -77,7 +77,7 @@
 </head>
 
 <body>
-    {{-- <header>
+    <header>
         <div class="col10">
             <div class="col7" style="text-align: right">
                 <p style="font-size: 12px;font-weight:bold;text-align:center;postion:absolute;margin-left:0">CÔNG TY
@@ -92,22 +92,79 @@
         <p style="text-align:right">98 Nguyễn Khiêm Ích – Trâu Quỳ - Gia Lâm – TP Hà Nội, ngày {{ date('d') }} tháng
             {{ date('m') }} năm
             {{ date('Y') }}</p>
-    </header> --}}
+    </header>
     <div class="" style="text-align: center">
         <p style="font-size: 14px;font-weight:bold;">{{ $data['file_name'] }}</p>
-        <p style="font-style:italic">V/v: {{ $data['contract']['name'] ?? '' }} tháng {{ $data['month'] ?? '' }} năm
-            {{ $data['year'] ?? '' }}</p>
+        <p style="font-style:italic">V/v: {{ $data['contract']['name'] ?? '' }} năm {{ date('Y') }}</p>
         <p style="font-style:italic">Hợp đồng số {{ $data['contract']['id'] ?? '' }} ký ngày
             {{ \Illuminate\Support\Carbon::parse($data['contract']['created_at'])->format('d-m-Y') }}</p>
     </div>
+    <h3 style="font-weight:bold;">Kính gửi: {{ $data['customer']['name'] ?? '' }} -
+        {{ $data['branch']['name'] ?? ('' ?? '') }} </h3>
+    <p style="margin-left: 50px">Đại diện: Ông ( bà ) : {{ $data['branch']['manager'] ?? '' }} Chức vụ :</p>
     @if (!empty($data['tasks']))
-        @foreach ($data['tasks'] as $info)
-            <p style="font-weight:bold;">{{ $info['type']['parent']['name'] ?? '' }} - {{ $info['type']['name'] ?? '' }}
+        <p style="font-weight:bold;">Nội dung: Kế hoạch công việc thực hiện dịch vụ {{ $info['type']['name'] ?? '' }}
+            Tháng
+            {{ $data['month'] }} năm {{ $data['year'] }}, cụ thể như sau:</p>
+
+        <table class="tbl-plan" cellspacing="0">
+            <tbody>
+                @php
+                    $count = 0;
+                @endphp
+                <tr>
+                    <th rowspan="2">STT</th>
+                    <th rowspan="2">Tên nhiệm vụ</th>
+                    <th colspan="3">Nội dung nhiệm vụ</th>
+                    <th rowspan="2">Tần suất</th>
+                    <th rowspan="2">Ngày</th>
+                    <th rowspan="2">Ghi chú</th>
+                </tr>
+                <tr>
+                    <th>Đối tượng</th>
+                    <th>Khu vực</th>
+                    <th>Phạm vi</th>
+                </tr>
+                @foreach ($data['tasks'] as $key => $info)
+                    <tr>
+                        @php
+                            $count++;
+                            $plan_dates = '';
+                            foreach ($info['details'] as $task) {
+                                # code...
+                                $date = explode('-', $task['plan_date']);
+                                if ($date[0] == $data['year'] && $date[1] == $data['month']) {
+                                    # code...
+                                    $plan_dates .=
+                                        \Illuminate\Support\Carbon::parse($task['plan_date'])->format('d/m') . ';';
+                                }
+                            }
+                        @endphp
+                        <td>{{ $count < 10 ? '0' . $count : $count }}</td>
+                        <td>{{ $info['type']['name'] ?? '' }}</td>
+                        <td>{{ $info['setting_task_maps'][0]['target'] ?? '' }}</td>
+                        <td>{{ $info['setting_task_maps'][0]['area'] ?? '' }}</td>
+                        <td>{{ $info['setting_task_maps'][0]['round'] ?? '' }}</td>
+                        <td>{{ $info['frequence'] ?? '' }}</td>
+                        <td>
+                            {{ $plan_dates }}
+                        </td>
+                        <td>{{ $info['note'] ?? '' }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+        <br />
+    @endif
+    <br />
+    @if (!empty($data['tasks']))
+        @foreach ($data['tasks'] as $keyInfo => $info)
+            <p style="font-weight:bold;">{{ $info['type']['parent']['name'] ?? '' }} -
+                {{ $info['type']['name'] ?? '' }}
             </p>
             <table class="tbl-plan" cellspacing="0">
                 <tbody>
                     @php
-                        $taskMaps = [];
                         $taskStaff = [];
                         $taskChemistries = [];
                         $taskItems = [];
@@ -115,13 +172,18 @@
                         foreach ($info['details'] as $task) {
                             $date = explode('-', $task['plan_date']);
                             if ($date[0] == $data['year'] && $date[1] == $data['month']) {
-                                count($task['task_maps']) === 0 ?: array_push($taskMaps, ...$task['task_maps']);
-                                count($task['task_staffs']) === 0 ?: array_push($taskStaff, ...$task['task_staffs']);
-                                count($task['task_chemitries']) === 0 ?:
-                                array_push($taskChemistries, ...$task['task_chemitries']);
-                                count($task['task_items']) === 0 ?: array_push($taskItems, ...$task['task_items']);
-                                count($task['task_solutions']) === 0 ?:
-                                array_push($taskSolutions, ...$task['task_solutions']);
+                                foreach ($task['task_staffs'] as $task_staff) {
+                                    $taskStaff[$task_staff['user']['staff']['id']] = $task_staff;
+                                }
+                                foreach ($task['task_chemitries'] as $task_chemitry) {
+                                    $taskChemistries[$task_chemitry['chemistry']['id']] = $task_chemitry;
+                                }
+                                foreach ($task['task_items'] as $task_item) {
+                                    $taskItems[$task_item['item']['id']] = $task_item;
+                                }
+                                foreach ($task['task_solutions'] as $task_solution) {
+                                    $taskSolutions[$task_solution['solution']['id']] = $task_solution;
+                                }
                             }
                         }
                     @endphp
@@ -134,10 +196,11 @@
                         <td>01</td>
                         <td>Sơ đồ</td>
                         <td>
-                            @foreach ($taskMaps as $taskMap)
-                                {{ $taskMap['target'] ?? '' }} - {{ $taskMap['area'] ?? '' }} -
-                                {{ $taskMap['round'] ?? '' }}
-                                <br>
+                            @foreach ($info['group_details'] as $areas)
+                                @foreach ($areas as $key => $tasks)
+                                    Khu vực: {{ $key }} - Tổng số: {{ count($tasks) }}
+                                    <br>
+                                @endforeach
                             @endforeach
                         </td>
                     </tr>

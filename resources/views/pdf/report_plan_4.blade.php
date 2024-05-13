@@ -154,8 +154,8 @@
                                 <td>{{ $count < 10 ? '0' . $count : $count }}</td>
                                 <td>{{ $info['type']['name'] ?? '' }}</td>
                                 <td>{{ $key }} </td>
-                                <td>{{ $tasks[0]['round'] ?? '' }}</td>
-                                <td>{{ $tasks[0]['target'] ?? '' }}</td>
+                                <td>{{ $tasks[array_key_first($tasks)]['round'] ?? '' }}</td>
+                                <td>{{ $tasks[array_key_first($tasks)]['target'] ?? '' }}</td>
                                 <td>{{ count($tasks) }}</td>
                                 <td>
                                     @if (!empty($tasks[0]['image']))
@@ -163,12 +163,12 @@
                                             alt="">
                                     @endif
                                 </td>
-                                <td>{{ $tasks[0]['unit'] ?? '' }}</td>
+                                <td>{{ $tasks[array_key_first($tasks)]['unit'] ?? '' }}</td>
                                 <td>{{ count($tasks) ? round($sumResult / count($tasks), 2) : $sumResult }}
                                 </td>
                                 <td>{{ count($tasks) ? round($sumKPI / count($tasks), 2) : $sumKPI }}</td>
                                 <td>{{ $sumResult < $sumKPI ? 'Không đạt' : 'Đạt' }}</td>
-                                <td>{{ $tasks['note'] ?? '' }}</td>
+                                <td>{{ $info['note'] ?? '' }}</td>
                             </tr>
                         @endforeach
                     @endforeach
@@ -247,71 +247,71 @@
                             @endforeach
                         </tr>
                     </table>
-                    {{-- <p style="margin-left:10px">Kết quả theo dõi: Năm {{ $data['year'] }} so với
-                            {{ $data['year_compare'] }}
-                        </p>
-                        <table class="tbl-plan">
-                            <tr>
-                                <td>Năm</td>
-                                @for ($i = 1; $i <= 12; $i++)
-                                    <td>
-                                        Tháng {{ $i < 10 ? '0' . $i : $i }}
-                                    </td>
-                                @endfor
-                            </tr>
-                            <tr>
+                    <p style="margin-left:10px">Kết quả theo dõi: Năm {{ $data['year'] }} so với
+                        {{ $data['year_compare'] }}
+                    </p>
+                    <table class="tbl-plan">
+                        <tr>
+                            <td>Năm</td>
+                            @for ($i = 1; $i <= 12; $i++)
                                 <td>
-                                    {{ $data['year'] }}
+                                    Tháng {{ $i < 10 ? '0' . $i : $i }}
                                 </td>
-                                @for ($i = 1; $i <= 12; $i++)
-                                    <td>
-                                        @if (!empty($data['compare'][$info['id']]['this_year'][$i - 1]))
-                                            @php
-                                                $result_this_year = 0;
-                                                $kpi_this_year = 0;
-                                                foreach ($data['compare'][$info['id']]['this_year'][$i - 1] as $value) {
-                                                    if (!empty($value['task_maps'][$key])) {
-                                                        foreach ($value['task_maps'][$key] as $item) {
-                                                            $result_this_year += $item['result'] ?? 0;
-                                                            $kpi_this_year += $item['kpi'] ?? 0;
-                                                        }
+                            @endfor
+                        </tr>
+                        <tr>
+                            <td>
+                                {{ $data['year'] }}
+                            </td>
+                            @for ($i = 1; $i <= 12; $i++)
+                                <td>
+                                    @if (!empty($data['compare'][$info['id']]['this_year'][$i - 1]))
+                                        @php
+                                            $result_this_year = 0;
+                                            $kpi_this_year = 0;
+                                            foreach ($data['compare'][$info['id']]['this_year'][$i - 1] as $value) {
+                                                if (!empty($value['task_maps'][$key])) {
+                                                    foreach ($value['task_maps'][$key] as $item) {
+                                                        $result_this_year += $item['result'] ?? 0;
+                                                        $kpi_this_year += $item['kpi'] ?? 0;
                                                     }
                                                 }
-                                            @endphp
-                                            {{ $kpi_this_year != 0 ? round(($result_this_year / $kpi_this_year) * 100, 2) : 0 }}%
-                                        @else
-                                            0%
-                                        @endif
-                                    </td>
-                                @endfor
-                            </tr>
-                            <tr>
-                                <td>
-                                    {{ $data['year_compare'] }}
+                                            }
+                                        @endphp
+                                        {{ $kpi_this_year != 0 ? round(($result_this_year / $kpi_this_year) * 100, 2) : 0 }}%
+                                    @else
+                                        0%
+                                    @endif
                                 </td>
-                                @for ($i = 1; $i <= 12; $i++)
-                                    <td>
-                                        @if (!empty($data['compare'][$info['id']]['last_year'][$i - 1]))
-                                            @php
-                                                $result_last_year = 0;
-                                                $count_last_year = 0;
-                                                foreach ($data['compare'][$info['id']]['last_year'][$i - 1] as $value) {
-                                                    if (!empty($value['task_maps'][$key])) {
-                                                        foreach ($value['task_maps'][$key] as $item) {
-                                                            $result_last_year += $item['result'] ?? 0;
-                                                            $count_last_year++;
-                                                        }
+                            @endfor
+                        </tr>
+                        <tr>
+                            <td>
+                                {{ $data['year_compare'] }}
+                            </td>
+                            @for ($i = 1; $i <= 12; $i++)
+                                <td>
+                                    @if (!empty($data['compare'][$info['id']]['last_year'][$i - 1]))
+                                        @php
+                                            $result_last_year = 0;
+                                            $count_last_year = 0;
+                                            foreach ($data['compare'][$info['id']]['last_year'][$i - 1] as $value) {
+                                                if (!empty($value['task_maps'][$key])) {
+                                                    foreach ($value['task_maps'][$key] as $item) {
+                                                        $result_last_year += $item['result'] ?? 0;
+                                                        $count_last_year++;
                                                     }
                                                 }
-                                            @endphp
-                                            {{ $count_last_year != 0 ? round(($result_last_year / $count_last_year) * 100, 2) : 0 }}%
-                                        @else
-                                            0%
-                                        @endif
-                                    </td>
-                                @endfor
-                            </tr>
-                        </table> --}}
+                                            }
+                                        @endphp
+                                        {{ $count_last_year != 0 ? round(($result_last_year / $count_last_year) * 100, 2) : 0 }}%
+                                    @else
+                                        0%
+                                    @endif
+                                </td>
+                            @endfor
+                        </tr>
+                    </table>
                 @endforeach
             @endforeach
         @endforeach
