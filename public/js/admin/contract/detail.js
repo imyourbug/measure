@@ -255,21 +255,23 @@ $('.btn-preview').on('click', async function () {
                             backgroundColor: [],
                         };
                         value.forEach(item => {
-                            let itemValue = Object.keys(item).map((
-                                key) => item[key]);
-                            itemValue.forEach(v => {
-                                if (code == v.code) {
-                                    rs.value_month.push(v
-                                        .kpi != 0 ? (v
-                                            .result / v
-                                                .kpi) *
-                                    100 : 0);
-                                }
-                            });
+                            if (rs.month.length < month) {
+                                let itemValue = Object.keys(item).map((
+                                    key) => item[key]);
+                                itemValue.forEach(v => {
+                                    if (code == v.code) {
+                                        // rs.value_month.push(v
+                                        //     .kpi != 0 ? (v
+                                        //         .result / v
+                                        //             .kpi) *
+                                        // 100 : 0);
+                                        rs.value_month.push(v.result);
+                                    }
+                                });
 
-                            rs.month.push(item.month);
-                            rs.backgroundColor.push('#38A3EB');
-
+                                rs.month.push(item.month);
+                                rs.backgroundColor.push('#38A3EB');
+                            }
                         });
                         result.push(rs);
                     });
@@ -282,7 +284,8 @@ $('.btn-preview').on('click', async function () {
                             ), {
                                 type: 'bar',
                                 data: {
-                                    labels: ['Tháng 01',
+                                    labels: [
+                                        'Tháng 01',
                                         'Tháng 02',
                                         'Tháng 03',
                                         'Tháng 04',
@@ -294,7 +297,7 @@ $('.btn-preview').on('click', async function () {
                                         'Tháng 10',
                                         'Tháng 11',
                                         'Tháng 12'
-                                    ],
+                                    ].slice(0, month),
                                     datasets: [{
                                         label: 'Tỷ lệ',
                                         data: d

@@ -80,16 +80,15 @@
     <header>
         <div class="col10">
             <div class="col7" style="text-align: right">
-                <p style="font-size: 12px;font-weight:bold;text-align:center;postion:absolute;margin-left:0">CÔNG TY
-                    TNHH DỊCH VỤ PESTKIL VIỆT NAM - CHI NHÁNH:
-                    HÀ
-                    NỘI <br>- - - o0o - - -</p>
+                <p style="font-size: 12px;font-weight:bold;text-align:center;postion:absolute;margin-left:0">
+                    {{ $data['setting']['company-name'] ?? '' }} - CHI NHÁNH:
+                    {{ $data['setting']['branch-name'] ?? '' }} <br>- - - o0o - - -</p>
             </div>
             <div class="col3">
                 &emsp;
             </div>
         </div>
-        <p style="text-align:right">98 Nguyễn Khiêm Ích – Trâu Quỳ - Gia Lâm – TP Hà Nội, ngày {{ date('d') }} tháng
+        <p style="text-align:right">{{ $data['setting']['company-address'] ?? '' }}, ngày {{ date('d') }} tháng
             {{ date('m') }} năm
             {{ date('Y') }}</p>
     </header>
@@ -129,25 +128,52 @@
                     <tr>
                         @php
                             $count++;
-                            $plan_dates = '';
+                            $plan_dates = [];
+                            $ranges = [];
+                            $targets = [];
+                            $rounds = [];
+                            foreach ($info['setting_task_maps'] as $setting_task_map) {
+                                // get all of range
+                                if (
+                                    !empty($setting_task_map['position']) &&
+                                    !in_array($setting_task_map['position'], $ranges)
+                                ) {
+                                    $ranges[] = $setting_task_map['position'];
+                                }
+                                // get all of target
+                                if (
+                                    !empty($setting_task_map['target']) &&
+                                    !in_array($setting_task_map['target'], $targets)
+                                ) {
+                                    $targets[] = $setting_task_map['target'];
+                                }
+                                // get all of round
+                                if (
+                                    !empty($setting_task_map['round']) &&
+                                    !in_array($setting_task_map['round'], $rounds)
+                                ) {
+                                    $rounds[] = $setting_task_map['round'];
+                                }
+                            }
                             foreach ($info['details'] as $task) {
-                                # code...
+                                // get all of date
                                 $date = explode('-', $task['plan_date']);
                                 if ($date[0] == $data['year'] && $date[1] == $data['month']) {
                                     # code...
-                                    $plan_dates .=
-                                        \Illuminate\Support\Carbon::parse($task['plan_date'])->format('d/m') . ';';
+                                    $plan_dates[] = \Illuminate\Support\Carbon::parse($task['plan_date'])->format(
+                                        'd/m',
+                                    );
                                 }
                             }
                         @endphp
                         <td>{{ $count < 10 ? '0' . $count : $count }}</td>
                         <td>{{ $info['type']['name'] ?? '' }}</td>
-                        <td>{{ $info['setting_task_maps'][0]['target'] ?? '' }}</td>
-                        <td>{{ $info['setting_task_maps'][0]['area'] ?? '' }}</td>
-                        <td>{{ $info['setting_task_maps'][0]['round'] ?? '' }}</td>
+                        <td>{{ implode(';', $targets) }}</td>
+                        <td>{{ implode(';', $ranges) }}</td>
+                        <td>{{ implode(';', $rounds) }}</td>
                         <td>{{ $info['frequence'] ?? '' }}</td>
                         <td>
-                            {{ $plan_dates }}
+                            {{ implode(';', $plan_dates) }}
                         </td>
                         <td>{{ $info['note'] ?? '' }}</td>
                     </tr>
@@ -198,7 +224,11 @@
                         <td>
                             @foreach ($info['group_details'] as $areas)
                                 @foreach ($areas as $key => $tasks)
-                                    Khu vực: {{ $key }} - Tổng số: {{ count($tasks) }}
+                                    @php
+                                        $firstItem = $tasks[array_key_first($tasks)] ?? '';
+                                    @endphp
+                                    Khu vực: {{ $key . ' - ' . (!empty($firstItem) ? $firstItem['position'] : '') }}
+                                    - Tổng số: {{ count($tasks) }}
                                     <br>
                                 @endforeach
                             @endforeach
@@ -302,7 +332,7 @@
             </table>
         </div>
         <div class="col3" style="text-align: right">
-            <p> <span style="font-weight:bold;">CÔNG TY TNHH DỊCH VỤ PESTKIL VIỆT NAM</p>
+            <p> <span style="font-weight:bold;">{{ $data['setting']['company-name'] ?? '' }}</p>
             <p> <span style="font-weight:bold;">PVSC</p>
             <div style="">{{ $data['creator']['staff']['name'] ?? '' }}</div>
         </div>

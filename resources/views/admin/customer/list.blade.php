@@ -115,6 +115,13 @@
                             </div>
                         </div>
                         <div class="row">
+                            <div class="col-lg-6 col-md-12">
+                                <div class="form-group">
+                                    <label for="menu">Chức vụ</label>
+                                    <input type="text" class="form-control" name="position" value="{{ old('position') }}"
+                                        placeholder="Nhập chức vụ">
+                                </div>
+                            </div>
                             <div class="col-lg-6 col-md-12 my-5 ml-4">
                                 <div class="form-group">
                                     <label for="file">Ảnh đại diện</label><br>
@@ -189,6 +196,7 @@
                                 <th>Ảnh đại diện</th>
                                 <th>Người liên hệ</th>
                                 <th>Số điện thoại</th>
+                                <th>Chức vụ</th>
                                 <th>Tài khoản</th>
                                 <th>Thao tác</th>
                             </tr>

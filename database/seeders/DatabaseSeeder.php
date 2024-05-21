@@ -192,22 +192,22 @@ class DatabaseSeeder extends Seeder
             ]
         ]);
 
-        Map::insert([
-            [
-                'area' => 'A',
-                'position' => 'Cửa ra vào',
-                'target' => 'Ruồi',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-            [
-                'area' => 'A',
-                'position' => 'Cửa ra vào',
-                'target' => 'Muỗi',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
-        ]);
+        // Map::insert([
+        //     [
+        //         'area' => 'A',
+        //         'position' => 'Cửa ra vào',
+        //         'target' => 'Ruồi',
+        //         'created_at' => now(),
+        //         'updated_at' => now(),
+        //     ],
+        //     [
+        //         'area' => 'A',
+        //         'position' => 'Cửa ra vào',
+        //         'target' => 'Muỗi',
+        //         'created_at' => now(),
+        //         'updated_at' => now(),
+        //     ],
+        // ]);
 
         Chemistry::insert([
             [

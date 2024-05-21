@@ -53,6 +53,9 @@ $(document).ready(function () {
                 data: "tel",
             },
             {
+                data: "position",
+            },
+            {
                 data: function (d) {
                     return d.user.email ? d.user.email : d.user.name;
                 },

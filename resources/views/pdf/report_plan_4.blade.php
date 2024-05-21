@@ -80,16 +80,15 @@
     <header>
         <div class="col10">
             <div class="col7" style="text-align: right">
-                <p style="font-size: 12px;font-weight:bold;text-align:center;postion:absolute;margin-left:0">CÔNG TY
-                    TNHH DỊCH VỤ PESTKIL VIỆT NAM - CHI NHÁNH:
-                    HÀ
-                    NỘI <br>- - - o0o - - -</p>
+                <p style="font-size: 12px;font-weight:bold;text-align:center;postion:absolute;margin-left:0">
+                    {{ $data['setting']['company-name'] ?? '' }} - CHI NHÁNH:
+                    {{ $data['setting']['branch-name'] ?? '' }} <br>- - - o0o - - -</p>
             </div>
             <div class="col3">
                 &emsp;
             </div>
         </div>
-        <p style="text-align:right">98 Nguyễn Khiêm Ích – Trâu Quỳ - Gia Lâm – TP Hà Nội, ngày {{ date('d') }} tháng
+        <p style="text-align:right">{{ $data['setting']['company-address'] ?? '' }}, ngày {{ date('d') }} tháng
             {{ date('m') }} năm
             {{ date('Y') }}</p>
     </header>
@@ -100,11 +99,12 @@
             {{ \Illuminate\Support\Carbon::parse($data['contract']['created_at'])->format('d-m-Y') }}</p>
     </div>
     <h3>A. Thành phần tham gia nghiệm thu</h3>
-    <h3>BÊN A: {{ $data['customer']['representative'] ?? $data['customer']['name'] }} –
-        {{ $data['branch']['name'] ?? '' }}</h3>
-    <p style="margin-left: 30px">Đại diện: Ông ( bà ) : {{ $data['branch']['manager'] ?? '' }} Chức vụ :</p>
-    <h3>BÊN B: CÔNG TY TNHH DỊCH VỤ PESTKIL VIỆT NAM</h3>
-    <p style="margin-left: 30px">Đại diện: Ông ( bà ) :{{ $data['creator']['staff']['name'] ?? '' }} Chức vụ
+    <h3>BÊN A: {{ $data['customer']['name'] ?? '' }} – {{ $data['branch']['name'] ?? '' }} –
+        {{ $data['customer']['representative'] ?? '' }} - {{ $data['customer']['position'] ?? '' }}</h3>
+    <p style="margin-left: 50px">Đại diện: Ông ( bà ) : {{ $data['branch']['representative'] ?? '' }} Chức vụ :
+        {{ $data['customer']['position'] ?? '' }}</p>
+    <h3>BÊN B: {{ $data['setting']['company-name'] ?? '' }}</h3>
+    <p style="margin-left: 50px">Đại diện: Ông ( bà ) :{{ $data['creator']['staff']['name'] ?? '' }} Chức vụ
         :{{ $data['creator']['staff']['position'] ?? '' }}</p>
     <p style="margin-left: 30px">Địa điểm: {{ $data['branch']['name'] ?? '' }} </p>
     <p style="margin-left: 30px">Thời gian: từ
@@ -125,7 +125,7 @@
                         <th rowspan="2">STT</th>
                         <th rowspan="2">Tên nhiệm vụ</th>
                         <th colspan="4">Chi tiết</th>
-                        <th rowspan="2">Ảnh</th>
+                        {{-- <th rowspan="2">Ảnh</th> --}}
                         <th colspan="4">Theo dõi số liệu</th>
                         <th rowspan="2">Ghi chú</th>
                     </tr>
@@ -157,17 +157,17 @@
                                 <td>{{ $tasks[array_key_first($tasks)]['round'] ?? '' }}</td>
                                 <td>{{ $tasks[array_key_first($tasks)]['target'] ?? '' }}</td>
                                 <td>{{ count($tasks) }}</td>
-                                <td>
+                                {{-- <td>
                                     @if (!empty($tasks[0]['image']))
                                         <img src="{{ public_path($tasks[0]['image']) }}" width="20px" height="20px"
                                             alt="">
                                     @endif
-                                </td>
+                                </td> --}}
                                 <td>{{ $tasks[array_key_first($tasks)]['unit'] ?? '' }}</td>
                                 <td>{{ count($tasks) ? round($sumResult / count($tasks), 2) : $sumResult }}
                                 </td>
                                 <td>{{ count($tasks) ? round($sumKPI / count($tasks), 2) : $sumKPI }}</td>
-                                <td>{{ $sumResult < $sumKPI ? 'Không đạt' : 'Đạt' }}</td>
+                                <td></td>
                                 <td>{{ $info['note'] ?? '' }}</td>
                             </tr>
                         @endforeach
@@ -188,31 +188,46 @@
                     @if ($data['display'])
                         <table class="tbl-plan">
                             <tr>
-                                <td>Tháng {{ $data['month'] }} năm {{ $data['year'] }}</td>
-                                <td>So sánh {{ $data['month_compare'] . '-' . $data['year_compare'] }} với
-                                    {{ $data['month'] . '-' . $data['year'] }}</td>
-                                <td>Diễn biến từng tháng</td>
+                                @if (!empty($data['display_first']))
+                                    <td>Tháng
+                                        {{ $data['month'] }} năm {{ $data['year'] }}</td>
+                                @endif
+                                @if (!empty($data['display_second']))
+                                    <td style="">So sánh
+                                        {{ $data['month_compare'] . '-' . $data['year_compare'] }} với
+                                        {{ $data['month'] . '-' . $data['year'] }}</td>
+                                @endif
+                                @if (!empty($data['display_third']))
+                                    <td style="">Diễn biến từng
+                                        tháng</td>
+                                @endif
                             </tr>
                             <tr>
-                                <td>ph
-                                    @if (!empty($data['image_charts'][$keyImage]))
-                                        <img src="{{ $data['image_charts'][$keyImage] }}" alt=""
-                                            style="margin-bottom: 20px" />
-                                    @endif
-                                </td>
-                                <td style="border: 0.5px solid black;border-right: 0.5px solid black;">
-                                    @if (!empty($data['image_trend_charts'][$keyImage]))
-                                        <img src="{{ public_path($data['image_trend_charts'][$keyImage]) }}"
-                                            alt="" />
-                                    @endif
+                                @if (!empty($data['display_first']))
+                                    <td>
+                                        @if (!empty($data['image_charts'][$keyImage]))
+                                            <img src="{{ $data['image_charts'][$keyImage] }}" alt=""
+                                                style="margin-bottom: 20px" />
+                                        @endif
+                                    </td>
+                                @endif
+                                @if (!empty($data['display_second']))
+                                    <td style="border: 0.5px solid black;border-right: 0.5px solid black;">
+                                        @if (!empty($data['image_trend_charts'][$keyImage]))
+                                            <img src="{{ public_path($data['image_trend_charts'][$keyImage]) }}"
+                                                alt="" />
+                                        @endif
 
-                                </td>
-                                <td style="border: 0.5px solid black;border-right: 0.5px solid black;">
-                                    @if (!empty($data['image_annual_charts'][$keyImage]))
-                                        <img src="{{ public_path($data['image_annual_charts'][$keyImage]) }}"
-                                            alt="" />
-                                    @endif
-                                </td>
+                                    </td>
+                                @endif
+                                @if (!empty($data['display_third']))
+                                    <td style="border: 0.5px solid black;border-right: 0.5px solid black;">
+                                        @if (!empty($data['image_annual_charts'][$keyImage]))
+                                            <img src="{{ public_path($data['image_annual_charts'][$keyImage]) }}"
+                                                alt="" />
+                                        @endif
+                                    </td>
+                                @endif
                             </tr>
                         </table>
                     @endif
@@ -241,7 +256,7 @@
                             @foreach ($tasks as $task_map)
                                 @if (substr($task_map['code'], 0, 1) === $key)
                                     <td>
-                                        {{ $task_map['kpi'] != 0 ? round(($task_map['result'] / $task_map['kpi']) * 100, 2) : 0 }}%
+                                        {{ !empty($task_map['result']) ? $task_map['result'] : 'N/A' }}
                                     </td>
                                 @endif
                             @endforeach
@@ -253,7 +268,7 @@
                     <table class="tbl-plan">
                         <tr>
                             <td>Năm</td>
-                            @for ($i = 1; $i <= 12; $i++)
+                            @for ($i = 1; $i <= (int) ($data['month'] ?? 0); $i++)
                                 <td>
                                     Tháng {{ $i < 10 ? '0' . $i : $i }}
                                 </td>
@@ -263,7 +278,7 @@
                             <td>
                                 {{ $data['year'] }}
                             </td>
-                            @for ($i = 1; $i <= 12; $i++)
+                            @for ($i = 1; $i <= (int) ($data['month'] ?? 0); $i++)
                                 <td>
                                     @if (!empty($data['compare'][$info['id']]['this_year'][$i - 1]))
                                         @php
@@ -278,9 +293,9 @@
                                                 }
                                             }
                                         @endphp
-                                        {{ $kpi_this_year != 0 ? round(($result_this_year / $kpi_this_year) * 100, 2) : 0 }}%
+                                        {{ !empty($result_this_year) ? $result_this_year : 'N/A' }}
                                     @else
-                                        0%
+                                        N/A
                                     @endif
                                 </td>
                             @endfor
@@ -289,7 +304,7 @@
                             <td>
                                 {{ $data['year_compare'] }}
                             </td>
-                            @for ($i = 1; $i <= 12; $i++)
+                            @for ($i = 1; $i <= (int) ($data['month'] ?? 0); $i++)
                                 <td>
                                     @if (!empty($data['compare'][$info['id']]['last_year'][$i - 1]))
                                         @php
@@ -304,9 +319,9 @@
                                                 }
                                             }
                                         @endphp
-                                        {{ $count_last_year != 0 ? round(($result_last_year / $count_last_year) * 100, 2) : 0 }}%
+                                        {{ !empty($result_last_year) ? $result_last_year : 'N/A' }}
                                     @else
-                                        0%
+                                        N/A
                                     @endif
                                 </td>
                             @endfor
@@ -335,7 +350,7 @@
         </div>
         <div class="col3" style="text-align: center">
             <p style="font-weight:bold;"> ĐẠI DIỆN BÊN B
-                <br>CÔNG TY TNHH DỊCH VỤ PESTKIL VIỆT NAM – PVSC
+                <br>{{ $data['setting']['company-name'] ?? '' }} – PVSC
             </p>
             <p style="font-style: italic">(Ký và ghi rõ họ tên)</p>
             <div style="">{{ $data['creator']['staff']['name'] ?? '' }}</div>

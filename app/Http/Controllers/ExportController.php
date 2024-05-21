@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Contract;
+use App\Models\Setting;
 use App\Models\TaskDetail;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -44,9 +45,17 @@ class ExportController extends Controller
                 'image_annual_charts' => 'nullable|array',
                 'user_id' => 'nullable|numeric',
                 'display' => 'required|in:0,1',
+                'display_first' => 'required|in:0,1',
+                'display_second' => 'required|in:0,1',
+                'display_third' => 'required|in:0,1',
             ]);
 
-            $data['creator'] = User::with(['staff'])->firstWhere('id', $data['user_id'])?->toArray();
+            $data['creator'] = User::with(['staff'])->firstWhere('id', $data['user_id'])?->toArray() ?? [];
+            $data['setting'] = [];
+            $settings = Setting::orderBy('key')->get()?->toArray() ?? [];
+            foreach ($settings as $key => $setting) {
+                $data['setting'][$setting['key']] = $setting['value'];
+            }
             $pdf = null;
             $filename = '';
             switch ((int)$data['type_report']) {
@@ -80,6 +89,9 @@ class ExportController extends Controller
                     $pdf = MPDF::loadView('pdf.report_plan_5', ['data' => array_merge($data, $this->getReportPlanByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]);
                     break;
                 case 6:
+                    //  dd(
+                    //     ['data' => array_merge($data, $this->getReportWorkByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]
+                    // );
                     $data['file_name'] = $filename = 'BIÊN BẢN XÁC NHẬN CÔNG VIỆC/DỊCH VỤ ';
                     $pdf = MPDF::loadView('pdf.report_plan_6', ['data' => array_merge($data, $this->getReportWorkByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]);
                     break;

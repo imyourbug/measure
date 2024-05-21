@@ -20,6 +20,7 @@ class Customer extends Model
         'website',
         'representative',
         'field',
+        'position',
         'user_id',
     ];
 

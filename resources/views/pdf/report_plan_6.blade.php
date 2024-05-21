@@ -80,16 +80,15 @@
     {{-- <header>
         <div class="col10">
             <div class="col7" style="text-align: right">
-                <p style="font-size: 12px;font-weight:bold;text-align:center;postion:absolute;margin-left:0">CÔNG TY
-                    TNHH DỊCH VỤ PESTKIL VIỆT NAM - CHI NHÁNH:
-                    HÀ
-                    NỘI <br>- - - o0o - - -</p>
+                <p style="font-size: 12px;font-weight:bold;text-align:center;postion:absolute;margin-left:0">
+                    {{ $data['setting']['company-name'] ?? '' }} - CHI NHÁNH:
+                    {{ $data['setting']['branch-name'] ?? '' }} <br>- - - o0o - - -</p>
             </div>
             <div class="col3">
                 &emsp;
             </div>
         </div>
-        <p style="text-align:right">98 Nguyễn Khiêm Ích – Trâu Quỳ - Gia Lâm – TP Hà Nội, ngày {{ date('d') }} tháng
+        <p style="text-align:right">{{ $data['setting']['company-address'] ?? '' }}, ngày {{ date('d') }} tháng
             {{ date('m') }} năm
             {{ date('Y') }}</p>
     </header> --}}
@@ -229,27 +228,34 @@
                 Khuyến nghị khách hàng:_____________________________________
                 <br>Lưu ý:________________________________________________________
             </div>
-            @foreach ($info['details'] as $detail)
-                @foreach ($detail['task_maps'] as $key => $task_maps)
-                    <p>Chi tiết: {{ $task_maps[0]['area'] ?? '' }} – {{ $task_maps[0]['round'] ?? '' }} -
-                        {{ $task_maps[0]['round'] ?? '' }} - SL {{ count($task_maps) }}</p>
+            @foreach ($info['group_details'] as $areas)
+                @foreach ($areas as $key => $tasks)
+                    @php
+                        // dd($key, $tasks);
+                    @endphp
+                    <p>Chi tiết: Khu vực: {{ $key }} – Phạm vi:
+                        {{ $tasks[array_key_first($tasks)]['round'] ?? '' }} - SL: {{ count($tasks) }}</p>
                     <table class="tbl-plan tbl-solution" cellspacing="0">
                         <tbody>
                             <tr>
                                 <td>Chỉ tiêu</td>
-                                <td colspan="{{count($task_maps)}}">Mã sơ đồ</td>
+                                <td colspan="{{ count($tasks) }}">Mã sơ đồ</td>
+                                <td>Mã sơ đồ</td>
                             </tr>
                             <tr>
                                 <td>ĐVT</td>
-                                @foreach ($task_maps as $task_map)
-                                    <td>{{ $task_map['code'] ?? '' }}</td>
-                                @endforeach
+                                {{-- @php
+                                    dd($task['code']);
+                                @endphp --}}
+                                {{-- @foreach ($tasks as $task)
+                                    <td>{{ $task['code'] ?? '' }}</td>
+                                @endforeach --}}
                             </tr>
                             <tr>
                                 <td>Số liệu</td>
-                                @foreach ($task_maps as $task_map)
-                                    <td>{{ $task_map['result'] ?? '' }}</td>
-                                @endforeach
+                                {{-- @foreach ($tasks as $task)
+                                    <td>{{ $task['result'] ?? '' }}</td>
+                                @endforeach --}}
                             </tr>
                         </tbody>
                     </table>
@@ -269,7 +275,7 @@
             &emsp;
         </div>
         <div class="col3" style="text-align: right">
-            <p> <span style="font-weight:bold;">CÔNG TY TNHH DỊCH VỤ PESTKIL VIỆT NAM</p>
+            <p> <span style="font-weight:bold;">{{ $data['setting']['company-name'] ?? '' }}</p>
             <p> <span style="font-weight:bold;">PVSC</p>
             <div style="">{{ $data['creator']['staff']['name'] ?? '' }}</div>
         </div>

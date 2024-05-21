@@ -14,6 +14,7 @@ use App\Models\TaskDetail;
 use App\Models\TaskMap;
 use App\Models\Type;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Throwable;
@@ -123,6 +124,22 @@ class ReportController extends Controller
                 })
                 ->where('contract_id', $data['contract_id'])
                 ->get();
+
+            // check next month is empty
+            $check = Task::with([
+                'details',
+            ])
+                ->whereHas('details', function ($q) use ($data) {
+                    $q->whereRaw('MONTH(plan_date) = ?', $data['month_to'])
+                        ->whereRaw('YEAR(plan_date) = ?', $data['year_to']);
+                })
+                ->where('contract_id', $data['contract_id'])
+                ->get()
+                ->count();
+            if ($check) {
+                throw new Exception('Đã có dữ liệu ở tháng ' . $data['month_to'] .
+                    ' năm ' . $data['year_to'] . '! Vui lòng chọn tháng khác');
+            }
 
             DB::beginTransaction();
             foreach ($tasks as $task) {

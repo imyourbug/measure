@@ -40,6 +40,7 @@ class CustomerController extends Controller
                 'tax_code' => 'nullable|string',
                 'representative' => 'nullable|string',
                 'field' => 'nullable|string',
+                'position' => 'nullable|string',
                 'email' => 'required|regex:/^(.*?)@(.*?)$/',
             ];
             $data = $request->validate($rules);
@@ -67,6 +68,7 @@ class CustomerController extends Controller
                 'representative' => $data['representative'],
                 'avatar' => $data['avatar'],
                 'email' => $data['email'],
+                'position' => $data['position'],
                 'user_id' => $user->id
             ]);
             Toastr::success('Thành công', __('title.toastr.success'));
@@ -92,6 +94,7 @@ class CustomerController extends Controller
             'avatar' => 'nullable|string',
             'tax_code' => 'nullable|string',
             'representative' => 'nullable|string',
+            'position' => 'nullable|string',
             'field' => 'nullable|string',
             'email' => 'required|regex:/^(.*?)@(.*?)$/',
         ]);

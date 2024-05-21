@@ -131,6 +131,13 @@
             <div class="row">
                 <div class="col-lg-6 col-md-12">
                     <div class="form-group">
+                        <label for="menu">Chức vụ</label>
+                        <input type="text" class="form-control" name="position"
+                            value="{{ old('position') ?? $customer->position }}" placeholder="Nhập chức vụ">
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <div class="form-group">
                         <label for="file">Chọn ảnh</label><br>
                         <div class="">
                             <img id="image_show" style="width: 100px;height:100px" src="" alt="Avatar" />

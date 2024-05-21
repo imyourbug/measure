@@ -92,6 +92,9 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin'], function () {
     #settings
     Route::group(['prefix' => 'settings', 'as' => 'settings.'], function () {
         Route::post('uploadmap', 'SettingController@uploadmap')->name('uploadmap');
+        Route::post('/create', 'SettingController@store')->name('store');
+        Route::get('/getAll', 'SettingController@getAll')->name('getAll');
+        Route::post('/delete', 'SettingController@delete')->name('delete');
     });
 
     #tasks

@@ -256,8 +256,9 @@ $('.btn-preview').on('click', async function () {
 
                             if (dataResults.length < column) {
                                 labels.push(itemD.code);
-                                dataResults.push((itemD.all_result /
-                                    itemD.all_kpi) * 100);
+                                dataResults.push(itemD.all_result);
+                                // dataResults.push((itemD.all_result /
+                                // itemD.all_kpi) * 100);
                                 // backgroundColor.push(getRandomRGBColor());
                                 backgroundColor.push('#38A3EB');
                             }
@@ -272,7 +273,7 @@ $('.btn-preview').on('click', async function () {
                                 data: {
                                     labels: labels,
                                     datasets: [{
-                                        label: 'Tỷ lệ',
+                                        label: 'Số lượng',
                                         data: dataResults,
                                         backgroundColor: backgroundColor,
                                         borderWidth: 1,
@@ -290,8 +291,7 @@ $('.btn-preview').on('click', async function () {
                                                     index,
                                                     ticks
                                                 ) {
-                                                    return value +
-                                                        '%';
+                                                    return value;
                                                 }
                                             }
                                         }
@@ -332,7 +332,7 @@ $('.btn-preview').on('click', async function () {
                                     `Năm ${year_compare > year ? year_compare : year}`
                                 ],
                                 datasets: [{
-                                    label: 'Tỷ lệ',
+                                    label: 'Số lượng',
                                     data: [year_compare <
                                         year ? e
                                         .last_year :
@@ -356,7 +356,7 @@ $('.btn-preview').on('click', async function () {
                                                 value,
                                                 index,
                                                 ticks) {
-                                                return `${value}%`;
+                                                return `${value}`;
                                             }
                                         }
                                     }
@@ -414,20 +414,23 @@ $('.btn-preview').on('click', async function () {
                             backgroundColor: [],
                         };
                         value.forEach(item => {
-                            let itemValue = Object.keys(item).map((
-                                key) => item[key]);
-                            itemValue.forEach(v => {
-                                if (code == v.code) {
-                                    rs.value_month.push(v
-                                        .kpi != 0 ? (v
-                                            .result / v
-                                                .kpi) *
-                                    100 : 0);
-                                }
-                            });
+                            if (rs.month.length < month) {
+                                let itemValue = Object.keys(item).map((
+                                    key) => item[key]);
+                                itemValue.forEach(v => {
+                                    if (code == v.code) {
+                                        // rs.value_month.push(v
+                                        //     .kpi != 0 ? (v
+                                        //         .result / v
+                                        //             .kpi) *
+                                        // 100 : 0);
+                                        rs.value_month.push(v.result);
+                                    }
+                                });
 
-                            rs.month.push(item.month);
-                            rs.backgroundColor.push('#38A3EB');
+                                rs.month.push(item.month);
+                                rs.backgroundColor.push('#38A3EB');
+                            }
 
                         });
                         result.push(rs);
@@ -441,7 +444,8 @@ $('.btn-preview').on('click', async function () {
                             ), {
                                 type: 'bar',
                                 data: {
-                                    labels: ['Tháng 01',
+                                    labels: [
+                                        'Tháng 01',
                                         'Tháng 02',
                                         'Tháng 03',
                                         'Tháng 04',
@@ -453,9 +457,9 @@ $('.btn-preview').on('click', async function () {
                                         'Tháng 10',
                                         'Tháng 11',
                                         'Tháng 12'
-                                    ],
+                                    ].slice(0, month),
                                     datasets: [{
-                                        label: 'Tỷ lệ',
+                                        label: 'Số lượng',
                                         data: d
                                             .value_month,
                                         order: 1,
@@ -473,7 +477,7 @@ $('.btn-preview').on('click', async function () {
                                                     value,
                                                     index,
                                                     ticks) {
-                                                    return `${value}%`;
+                                                    return `${value}`;
                                                 }
                                             }
                                         }
@@ -515,6 +519,15 @@ $('.btn-preview').on('click', async function () {
         $('.year_compare').val($('.select-year-compare').val());
         $('.display').val($('#select-display').is(':checked') ? $(
             '#select-display')
+            .val() : 0);
+        $('.display-first').val($('#select-display-first').is(':checked') ? $(
+            '#select-display-first')
+            .val() : 0);
+        $('.display-second').val($('#select-display-second').is(':checked') ? $(
+            '#select-display-second')
+            .val() : 0);
+        $('.display-third').val($('#select-display-third').is(':checked') ? $(
+            '#select-display-third')
             .val() : 0);
         $('.btn-export').prop('disabled', false);
     }, 4000);

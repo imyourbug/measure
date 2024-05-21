@@ -226,6 +226,21 @@
                                         class="option-type custom-control-input">
                                     <label class="custom-control-label" for="select-display">Hiển thị ảnh</label>
                                 </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input checked value="1" type="checkbox" id="select-display-first"
+                                        class="option-type custom-control-input">
+                                    <label class="custom-control-label" for="select-display-first">Hiển thị ảnh đầu (trong 1 tháng)</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input checked value="1" type="checkbox" id="select-display-second"
+                                        class="option-type custom-control-input">
+                                    <label class="custom-control-label" for="select-display-second">Hiển thị ảnh giữa (so sánh 2 tháng)</label>
+                                </div>
+                                <div class="custom-control custom-checkbox">
+                                    <input checked value="1" type="checkbox" id="select-display-third"
+                                        class="option-type custom-control-input">
+                                    <label class="custom-control-label" for="select-display-third">Hiển thị ảnh cuối (diễn biến từng tháng)</label>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -419,6 +434,9 @@
                     <input type="hidden" class="contract_id" name="contract_id" />
                     <input type="hidden" class="user_id" name="user_id" />
                     <input type="hidden" class="display" name="display" />
+                    <input type="hidden" class="display-first" name="display_first" />
+                    <input type="hidden" class="display-second" name="display_second" />
+                    <input type="hidden" class="display-third" name="display_third" />
                     <input type="hidden" class="year_compare" name="year_compare" />
                     <input type="hidden" class="month_compare" name="month_compare" />
                     <div class="modal-footer justify-content-between">
