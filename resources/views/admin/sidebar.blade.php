@@ -457,14 +457,13 @@
                             </a>
                         </li>
                         <li
-                            class="nav-item {{ in_array(request()->route()->getName(), [])
+                            class="nav-item {{ in_array(request()->route()->getName(), ['admin.settings.index'])
                                 ? 'menu-is-opening menu-open'
                                 : '' }}">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('admin.settings.index') }}" class="nav-link">
                                 <i class="nav-icon fa-solid fa-gear"></i>
                                 <p>
                                     Hệ thống
-                                    <i class="right fas fa-angle-left"></i>
                                 </p>
                             </a>
                         </li>

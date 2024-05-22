@@ -134,7 +134,6 @@
                         @php
                             $count++;
                             $plan_dates = [];
-                            $actual_dates = [];
                             $ranges = [];
                             $targets = [];
                             $rounds = [];
@@ -169,9 +168,6 @@
                                     $plan_dates[] = \Illuminate\Support\Carbon::parse($task['plan_date'])->format(
                                         'd/m',
                                     );
-                                    $actual_dates[] = \Illuminate\Support\Carbon::parse($task['actual_date'])->format(
-                                        'd/m',
-                                    );
                                 }
                             }
                         @endphp
@@ -182,7 +178,6 @@
                         <td>{{ implode(';', $rounds) }}</td>
                         <td>{{ $info['frequence'] ?? '' }}</td>
                         <td>{{ implode(';', $plan_dates) }}</td>
-                        <td>{{ implode(';', $actual_dates) }}</td>
                         <td>{{ $info['confirm'] ?? '' }}</td>
                         <td>{{ $info['note'] ?? '' }}</td>
                     </tr>

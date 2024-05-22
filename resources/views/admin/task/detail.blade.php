@@ -174,6 +174,17 @@
                                                 aria-controls="custom-tabs-four-solutions" aria-selected="true">Phương
                                                 pháp</a>
                                         </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="custom-tabs-four-suggestion-tab" data-toggle="pill"
+                                                href="#custom-tabs-four-suggestion" role="tab"
+                                                aria-controls="custom-tabs-four-suggestion" aria-selected="true">Khuyến
+                                                nghị</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="custom-tabs-four-notice-tab" data-toggle="pill"
+                                                href="#custom-tabs-four-notice" role="tab"
+                                                aria-controls="custom-tabs-four-notice" aria-selected="true">Lưu ý</a>
+                                        </li>
                                     </ul>
                                 </div>
                                 <div class="card-body">
@@ -298,6 +309,20 @@
                                                 <tbody>
                                                 </tbody>
                                             </table>
+                                        </div>
+                                        {{-- Suggestion --}}
+                                        <div class="tab-pane fade" id="custom-tabs-four-suggestion" role="tabpanel"
+                                            aria-labelledby="custom-tabs-four-suggestion-tab">
+                                            <textarea class="form-control mb-2" name="" id="suggestion" cols="30" rows="10"
+                                                placeholder="Nhập khuyến nghị">{{$task->suggestion ?? ''}}</textarea>
+                                            <button class="btn btn-sm btn-success btn-save">Lưu</button>
+                                        </div>
+                                        {{-- Notice --}}
+                                        <div class="tab-pane fade" id="custom-tabs-four-notice" role="tabpanel"
+                                            aria-labelledby="custom-tabs-four-notice-tab">
+                                            <textarea class="form-control mb-2" name="" id="notice" cols="30" rows="10"
+                                                placeholder="Nhập lưu ý">{{$task->notice ?? ''}}</textarea>
+                                            <button class="btn btn-sm btn-success btn-save">Lưu</button>
                                         </div>
                                     </div>
                                 </div>

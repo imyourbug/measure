@@ -361,6 +361,15 @@ $('.btn-preview').on('click', async function () {
         $('.display').val($('#select-display').is(':checked') ? $(
             '#select-display')
             .val() : 0);
+        $('.display-first').val($('#select-display-first').is(':checked') ? $(
+            '#select-display-first')
+            .val() : 0);
+        $('.display-second').val($('#select-display-second').is(':checked') ? $(
+            '#select-display-second')
+            .val() : 0);
+        $('.display-third').val($('#select-display-third').is(':checked') ? $(
+            '#select-display-third')
+            .val() : 0);
         $('.btn-export').prop('disabled', false);
     }, 4000);
 });

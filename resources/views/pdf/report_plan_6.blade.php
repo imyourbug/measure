@@ -122,7 +122,10 @@
                     </tr>
                     @foreach ($info['setting_task_staffs'] as $staff)
                         <tr>
-                            <td>{{ $staff['user']['staff']['id'] ?? '' }}</td>
+                            @php
+                                $staffId = $staff['user']['staff']['id'] ?? 0;
+                            @endphp
+                            <td>{{ 'NV' . ($staffId < 10 ? '0' . $staffId : $staffId) }}</td>
                             <td>{{ $staff['user']['staff']['name'] ?? '' }}</td>
                             <td>{{ $staff['user']['staff']['tel'] ?? '' }}</td>
                             <td></td>
@@ -153,7 +156,7 @@
                     </tr>
                     @foreach ($info['setting_task_chemistries'] as $chemistry)
                         <tr>
-                            <td>{{ $chemistry['chemistry']['id'] ?? '' }}</td>
+                            <td>{{ $chemistry['chemistry']['code'] ?? '' }}</td>
                             <td>{{ $chemistry['chemistry']['name'] ?? '' }}</td>
                             <td>{{ $chemistry['chemistry']['number_register'] ?? '' }}</td>
                             <td></td>
@@ -186,7 +189,10 @@
                     </tr>
                     @foreach ($info['setting_task_items'] as $item)
                         <tr>
-                            <td>{{ $item['item']['id'] ?? '' }}</td>
+                            @php
+                                $itemId = $item['item']['id'] ?? 0;
+                            @endphp
+                            <td>{{ 'VT' . ($itemId < 10 ? '0' . $itemId : $itemId) }}</td>
                             <td>{{ $item['item']['name'] ?? '' }}</td>
                             <td>{{ $item['item']['number_register'] ?? '' }}</td>
                             <td></td>
@@ -214,7 +220,10 @@
                     </tr>
                     @foreach ($info['setting_task_solutions'] as $solution)
                         <tr>
-                            <td>{{ $solution['solution']['id'] ?? '' }}</td>
+                            @php
+                                $solutionId = $solution['solution']['id'] ?? 0;
+                            @endphp
+                            <td>{{ 'PP' . ($solutionId < 10 ? '0' . $solutionId : $solutionId) }}</td>
                             <td>{{ $solution['solution']['name'] ?? '' }}</td>
                             <td></td>
                             <td></td>
@@ -225,8 +234,8 @@
             </table>
             <br />
             <div class="" style="">
-                Khuyến nghị khách hàng:_____________________________________
-                <br>Lưu ý:________________________________________________________
+                Khuyến nghị khách hàng: {!! $info['suggestion'] ?? '' !!}
+                <br>Lưu ý: {!! $info['notice'] ?? '' !!}
             </div>
             @foreach ($info['group_details'] as $areas)
                 @foreach ($areas as $key => $tasks)
@@ -240,22 +249,18 @@
                             <tr>
                                 <td>Chỉ tiêu</td>
                                 <td colspan="{{ count($tasks) }}">Mã sơ đồ</td>
-                                <td>Mã sơ đồ</td>
                             </tr>
                             <tr>
                                 <td>ĐVT</td>
-                                {{-- @php
-                                    dd($task['code']);
-                                @endphp --}}
-                                {{-- @foreach ($tasks as $task)
+                                @foreach ($tasks as $task)
                                     <td>{{ $task['code'] ?? '' }}</td>
-                                @endforeach --}}
+                                @endforeach
                             </tr>
                             <tr>
                                 <td>Số liệu</td>
-                                {{-- @foreach ($tasks as $task)
+                                @foreach ($tasks as $task)
                                     <td>{{ $task['result'] ?? '' }}</td>
-                                @endforeach --}}
+                                @endforeach
                             </tr>
                         </tbody>
                     </table>
@@ -264,7 +269,7 @@
             @endforeach
             <div class="" style="">
                 Kết quả:______________________________________________________
-                <br>Ghi chú:______________________________________________________
+                <br>Ghi chú: {!! $info['note'] ?? '' !!}
             </div>
             <br /> <br />
         @endforeach

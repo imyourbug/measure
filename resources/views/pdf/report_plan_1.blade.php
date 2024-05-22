@@ -239,7 +239,10 @@
                         <td>Nhân sự</td>
                         <td>
                             @foreach ($taskStaff as $staff)
-                                {{ 'NV' . $staff['user']['staff']['id'] ?? '' }} -
+                                @php
+                                    $staffId = $staff['user']['staff']['id'] ?? 0;
+                                @endphp
+                                {{ 'NV' . ($staffId < 10 ? '0' . $staffId : $staffId) }} -
                                 {{ $staff['user']['staff']['name'] ?? '' }} -
                                 {{ $staff['user']['staff']['identification'] ?? '' }} -
                                 {{ $staff['user']['staff']['tel'] ?? '' }}
@@ -252,7 +255,7 @@
                         <td>Thuốc/Hóa chất</td>
                         <td>
                             @foreach ($taskChemistries as $taskChemistry)
-                                {{ $taskChemistry['chemistry']['id'] ?? '' }} -
+                                {{ $taskChemistry['chemistry']['code'] ?? '' }} -
                                 {{ $taskChemistry['chemistry']['name'] ?? '' }} -
                                 {{ $taskChemistry['chemistry']['number_regist'] ?? '' }}
                                 <br>
@@ -264,7 +267,10 @@
                         <td>Vật tư/Thiết bị</td>
                         <td>
                             @foreach ($taskItems as $taskItem)
-                                {{ $taskItem['item']['id'] ?? '' }} -
+                                @php
+                                    $itemId = $taskItem['item']['id'] ?? 0;
+                                @endphp
+                                {{ 'VT' . ($itemId < 10 ? '0' . $itemId : $itemId) }} -
                                 {{ $taskItem['item']['name'] ?? '' }} -
                                 {{ $taskItem['item']['target'] ?? '' }} -
                                 {{ $taskItem['item']['supplier'] ?? '' }}
@@ -277,7 +283,10 @@
                         <td>Phương pháp thực hiện</td>
                         <td>
                             @foreach ($taskSolutions as $taskSolution)
-                                {{ $taskSolution['solution']['id'] ?? '' }} -
+                                @php
+                                    $solutionId = $taskSolution['solution']['id'] ?? 0;
+                                @endphp
+                                {{ 'PP' . ($solutionId < 10 ? '0' . $solutionId : $solutionId) }} -
                                 {{ $taskSolution['solution']['name'] ?? '' }} -
                                 {{ $taskSolution['solution']['target'] ?? '' }}
                                 <br>
@@ -288,8 +297,8 @@
             </table>
             <br />
             <div class="" style="margin-left: 20px">
-                <p>1 - Khuyến nghị</p>
-                <p>2 - Lưu ý</p>
+                <p>1 - Khuyến nghị: {!! $info['suggestion'] ?? '' !!}</p>
+                <p>2 - Lưu ý: {!! $info['notice'] ?? '' !!}</p>
             </div>
         @endforeach
     @endif

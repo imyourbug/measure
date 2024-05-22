@@ -101,6 +101,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin'], function () {
     Route::group(['prefix' => 'tasks', 'as' => 'tasks.'], function () {
         Route::get('/getAll', 'TaskController@getAll')->name('getAll');
         Route::post('update', 'TaskController@update')->name('update');
+        Route::post('updateApart', 'TaskController@updateApart')->name('updateApart');
         Route::get('/{id}/getById', 'TaskController@getById')->name('getById');
         Route::delete('/{id}/destroy', 'TaskController@destroy')->name('destroy');
     });

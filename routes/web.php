@@ -104,6 +104,8 @@ Route::group([
 
     #settings
     Route::group(['prefix' => 'settings', 'as' => 'settings.'], function () {
+        Route::get('/', 'SettingController@index')->name('index');
+        Route::post('update', 'SettingController@update')->name('update');
         Route::get('backup', 'SettingController@backup')->name('backup');
         Route::get('reload', 'SettingController@reload')->name('reload');
     });

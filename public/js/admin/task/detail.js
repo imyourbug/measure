@@ -1008,3 +1008,29 @@ $(document).on("click", ".btn-delete-detail", function () {
         });
     }
 });
+
+
+$(document).on("click", ".btn-save", function () {
+    if (confirm("Bạn có muốn lưu")) {
+        let id = $('#task_id').val();
+        let suggestion = $('#suggestion').val();
+        let notice = $('#notice').val();
+        $.ajax({
+            type: "POST",
+            url: `/api/tasks/updateApart`,
+            data: {
+                id,
+                suggestion,
+                notice
+            },
+            success: function (response) {
+                if (response.status == 0) {
+                    toastr.success(response.message);
+                    // dataTable.ajax.reload();
+                } else {
+                    toastr.error(response.message);
+                }
+            },
+        });
+    }
+});

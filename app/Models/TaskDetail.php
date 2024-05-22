@@ -27,6 +27,8 @@ class TaskDetail extends Model
         'reason',
         'solution',
         'task_id',
+        'notice',
+        'suggestion',
     ];
 
     public function task()

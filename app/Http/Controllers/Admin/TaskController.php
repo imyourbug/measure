@@ -10,7 +10,6 @@ use App\Models\Item;
 use App\Models\Map;
 use App\Models\Solution;
 use App\Models\Task;
-use App\Models\TaskDetail;
 use App\Models\Type;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -69,6 +68,36 @@ class TaskController extends Controller
                 'solution' => 'nullable|string',
                 'type_id' => 'required|numeric',
                 'contract_id' => 'required|numeric',
+            ]);
+            unset($data['id']);
+            Task::where('id', $request->input('id'))->update($data);
+            return response()->json([
+                'status' => 0,
+                'message' => 'Cập nhật nhiệm vụ thành công'
+            ]);
+        } catch (Throwable $e) {
+            return response()->json([
+                'status' => 1,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function updateApart(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                'id' => 'required|numeric',
+                'note' => 'nullable|string',
+                'confirm' => 'nullable|string',
+                'frequence' => 'nullable|string',
+                'status' => 'nullable|string',
+                'reason' => 'nullable|string',
+                'solution' => 'nullable|string',
+                'notice' => 'nullable|string',
+                'suggestion' => 'nullable|string',
+                'type_id' => 'nullable|numeric',
+                'contract_id' => 'nullable|numeric',
             ]);
             unset($data['id']);
             Task::where('id', $request->input('id'))->update($data);
@@ -163,18 +192,14 @@ class TaskController extends Controller
     {
         $from = $request->from;
         $to = $request->to;
-        $tasks = TaskDetail::with([
-            'task',
+        $task = Task::with([
+            'details',
         ])
-            ->when($from, function ($q) use ($from) {
-                return $q->where('created_at', '>=', $from . ' 00:00:00');
-            })->when($to, function ($q) use ($to) {
-                return $q->where('created_at', '<=', $to . ' 23:59:59');
-            })->get();
+            ->firstWhere('id', $id);
 
         return view('admin.task.detail', [
             'title' => 'Danh sách chi tiết nhiệm vụ',
-            'tasks' => $tasks,
+            'task' => $task,
             'contracts' => Contract::with(['branch'])->get(),
             'types' => Type::all(),
             'solutions' => Solution::all(),
