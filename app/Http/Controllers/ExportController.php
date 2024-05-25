@@ -228,18 +228,19 @@ class ExportController extends Controller
         $year = $request->year;
         $contract_id = $request->contract_id;
 
-        $task_details = TaskDetail::with(['task', 'taskMaps.map'])
-            ->whereRaw('MONTH(plan_date) = ?', $month)
-            ->whereRaw('YEAR(plan_date) = ?', $year)
-            ->whereHas('task', function ($q) use ($contract_id) {
-                $q->where('contract_id', $contract_id);
-            })
-            ->get();
-        $result = [];
-        foreach ($task_details as $key => $task_detail) {
-            DB::enableQueryLog();
-            $data_map = DB::table('task_maps')
-                ->selectRaw('map_id, maps.code as code,
+        try {
+            $task_details = TaskDetail::with(['task', 'taskMaps.map'])
+                ->whereRaw('MONTH(plan_date) = ?', $month)
+                ->whereRaw('YEAR(plan_date) = ?', $year)
+                ->whereHas('task', function ($q) use ($contract_id) {
+                    $q->where('contract_id', $contract_id);
+                })
+                ->get();
+            $result = [];
+            foreach ($task_details as $key => $task_detail) {
+                DB::enableQueryLog();
+                $data_map = DB::table('task_maps')
+                    ->selectRaw('map_id, maps.code as code,
             SUM(CASE
                 WHEN kpi is NULL THEN 0
                 WHEN kpi = "" THEN 0
@@ -250,40 +251,46 @@ class ExportController extends Controller
                 WHEN result = "" THEN 0
                 ELSE result
             END) as all_result')
-                ->join('maps', 'maps.id', '=', 'task_maps.map_id')
-                ->whereRaw('task_id = ?', $task_detail->id)
-                ->groupByRaw('map_id, code')
-                ->orderBy('map_id')
-                ->get()
-                ?->toArray() ?? [];
-            foreach ($data_map as $key => $data) {
-                $data = (array)$data;
-                if (isset($result[$task_detail->task->id][$data['map_id']])) {
-                    $result[$task_detail->task->id][$data['map_id']]['all_kpi'] += $data['all_kpi'];
-                    $result[$task_detail->task->id][$data['map_id']]['all_result'] += $data['all_result'];
-                } else {
-                    $result[$task_detail->task->id][$data['map_id']] = $data;
+                    ->join('maps', 'maps.id', '=', 'task_maps.map_id')
+                    ->whereRaw('task_id = ?', $task_detail->id)
+                    ->groupByRaw('map_id, code')
+                    ->orderBy('map_id')
+                    ->get()
+                    ?->toArray() ?? [];
+                foreach ($data_map as $key => $data) {
+                    $data = (array)$data;
+                    if (isset($result[$task_detail->task->id][$data['map_id']])) {
+                        $result[$task_detail->task->id][$data['map_id']]['all_kpi'] += $data['all_kpi'];
+                        $result[$task_detail->task->id][$data['map_id']]['all_result'] += $data['all_result'];
+                    } else {
+                        $result[$task_detail->task->id][$data['map_id']] = $data;
+                    }
                 }
+                $result[$task_detail->task->id]['task_id'] = $task_detail->task->id;
             }
-            $result[$task_detail->task->id]['task_id'] = $task_detail->task->id;
+
+            foreach ($result as $key => &$rs) {
+                $tmp = [];
+                foreach ($rs as $keyRs => $valueRs) {
+                    if (is_numeric($keyRs)) {
+                        $tmp[substr($valueRs['code'], 0, 1)][$valueRs['map_id']] = $valueRs;
+                    }
+                }
+                $tmpTaskId = $rs['task_id'];
+                $rs = $tmp;
+                $rs['task_id'] = $tmpTaskId;
+            }
+        } catch (Throwable $e) {
+            return response()->json([
+                'status' => 0,
+                'message' => $e->getMessage(),
+            ]);
         }
 
-        foreach ($result as $key => &$rs) {
-            $tmp = [];
-            foreach ($rs as $keyRs => $valueRs) {
-                if (is_numeric($keyRs)) {
-                    $tmp[substr($valueRs['code'], 0, 1)][$valueRs['map_id']] = $valueRs;
-                }
-            }
-            $tmpTaskId = $rs['task_id'];
-            $rs = $tmp;
-            $rs['task_id'] = $tmpTaskId;
-        }
-
-        return [
+        return response()->json([
             'status' => 0,
             'data' => $result,
-        ];
+        ]);
     }
 
     public function getDataAnnualMapChart(Request $request)
@@ -348,10 +355,10 @@ class ExportController extends Controller
             ];
         }
 
-        return [
+        return response()->json([
             'status' => 0,
             'data' => $result,
-        ];
+        ]);
     }
 
     public function getTrendDataMapChart(Request $request)
@@ -401,10 +408,10 @@ class ExportController extends Controller
             ];
         }, array_keys($result), array_values($result));
 
-        return [
+        return response()->json([
             'status' => 0,
             'data' => $result,
-        ];
+        ]);
     }
 
     public function getDataTrend($month, $year, $task_id)
