@@ -83,6 +83,7 @@
 
         .table {
             width: 100% !important;
+            font-size: 12px;
         }
 
         @media (max-width: 600px) {

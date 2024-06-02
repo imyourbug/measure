@@ -190,7 +190,7 @@
                                 <th>Khách hàng</th>
                                 <th>Đại diện khách hàng</th>
                                 <th>Mã số thuế</th>
-                                <th>Địa chỉ</th>
+                                <th style="min-width: 150px">Địa chỉ</th>
                                 <th>Website</th>
                                 <th>Email</th>
                                 <th>Ảnh đại diện</th>
