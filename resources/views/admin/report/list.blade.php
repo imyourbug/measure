@@ -169,7 +169,8 @@
                         </div>
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Chọn năm <span class="required">(*)</span></label>
+                                <label for="menu">Chọn năm <span class="required">(*)</span>&emsp13;<input checked
+                                        type="checkbox" name="" id="display-year" /></label>
                                 <input class="form-control select-year" type="text" value="{{ now()->format('Y') }}"
                                     placeholder="Nhập năm..." />
                             </div>
@@ -178,7 +179,8 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Chọn tháng so sánh<span class="required">(*)</span></label>
+                                <label for="menu">Chọn tháng so sánh<span class="required">(*)</span>&emsp13;<input
+                                        checked type="checkbox" name="" id="display-month-compare" /></label>
                                 <select class="form-control select-month-compare">
                                     @for ($i = 1; $i <= 12; $i++)
                                         <option value="{{ $i }}"
@@ -190,7 +192,8 @@
                         </div>
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Năm so sánh <span class="required">(*)</span></label>
+                                <label for="menu">Năm so sánh <span class="required">(*)</span>&emsp13;<input checked
+                                        type="checkbox" name="" id="display-year-compare" /></label>
                                 <input value="{{ date('Y') - 1 }}" type="text"
                                     class="form-control year_compare select-year-compare">
                             </div>
@@ -223,23 +226,26 @@
                                 <label for="menu">Lựa chọn</label>
                                 <div class="custom-control custom-checkbox">
                                     <input checked value="1" type="checkbox" id="select-display"
-                                        class="option-type custom-control-input">
+                                        class="custom-control-input">
                                     <label class="custom-control-label" for="select-display">Hiển thị ảnh</label>
                                 </div>
                                 <div class="custom-control custom-checkbox">
                                     <input checked value="1" type="checkbox" id="select-display-first"
-                                        class="option-type custom-control-input">
-                                    <label class="custom-control-label" for="select-display-first">Hiển thị ảnh đầu (trong 1 tháng)</label>
+                                        class="custom-control-input">
+                                    <label class="custom-control-label" for="select-display-first">Hiển thị ảnh đầu (trong
+                                        1 tháng)</label>
                                 </div>
                                 <div class="custom-control custom-checkbox">
                                     <input checked value="1" type="checkbox" id="select-display-second"
-                                        class="option-type custom-control-input">
-                                    <label class="custom-control-label" for="select-display-second">Hiển thị ảnh giữa (so sánh 2 tháng)</label>
+                                        class="custom-control-input">
+                                    <label class="custom-control-label" for="select-display-second">Hiển thị ảnh giữa (so
+                                        sánh 2 tháng)</label>
                                 </div>
                                 <div class="custom-control custom-checkbox">
                                     <input checked value="1" type="checkbox" id="select-display-third"
-                                        class="option-type custom-control-input">
-                                    <label class="custom-control-label" for="select-display-third">Hiển thị ảnh cuối (diễn biến từng tháng)</label>
+                                        class="custom-control-input">
+                                    <label class="custom-control-label" for="select-display-third">Hiển thị ảnh cuối (diễn
+                                        biến từng tháng)</label>
                                 </div>
                             </div>
                         </div>
@@ -437,6 +443,11 @@
                     <input type="hidden" class="display-first" name="display_first" />
                     <input type="hidden" class="display-second" name="display_second" />
                     <input type="hidden" class="display-third" name="display_third" />
+                    {{--  --}}
+                    <input type="hidden" class="display-year" name="display_year" />
+                    <input type="hidden" class="display-month-compare" name="display_month_compare" />
+                    <input type="hidden" class="display-year-compare" name="display_year_compare" />
+                    {{--  --}}
                     <input type="hidden" class="year_compare" name="year_compare" />
                     <input type="hidden" class="month_compare" name="month_compare" />
                     <div class="modal-footer justify-content-between">

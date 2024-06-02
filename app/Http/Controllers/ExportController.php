@@ -48,6 +48,10 @@ class ExportController extends Controller
                 'display_first' => 'required|in:0,1',
                 'display_second' => 'required|in:0,1',
                 'display_third' => 'required|in:0,1',
+                //
+                'display_year' => 'required|in:0,1',
+                'display_month_compare' => 'required|in:0,1',
+                'display_year_compare' => 'required|in:0,1',
             ]);
 
             $data['creator'] = User::with(['staff'])->firstWhere('id', $data['user_id'])?->toArray() ?? [];

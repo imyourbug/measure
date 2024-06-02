@@ -188,7 +188,8 @@
                         </div>
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Chọn năm <span class="required">(*)</span></label>
+                                <label for="menu">Chọn năm <span class="required">(*)</span>&emsp13;<input checked
+                                        type="checkbox" name="" id="display-year" /></label>
                                 <input class="form-control select-year" type="text" value="{{ now()->format('Y') }}"
                                     placeholder="Nhập năm..." />
                             </div>
@@ -197,7 +198,8 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Chọn tháng so sánh<span class="required">(*)</span></label>
+                                <label for="menu">Chọn tháng so sánh<span class="required">(*)</span>&emsp13;<input
+                                        checked type="checkbox" name="" id="display-month-compare" /></label>
                                 <select class="form-control select-month-compare">
                                     @for ($i = 1; $i <= 12; $i++)
                                         <option value="{{ $i }}"
@@ -209,7 +211,8 @@
                         </div>
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Năm so sánh <span class="required">(*)</span></label>
+                                <label for="menu">Năm so sánh <span class="required">(*)</span>&emsp13;<input checked
+                                        type="checkbox" name="" id="display-year-compare" /></label>
                                 <input value="{{ date('Y') - 1 }}" type="text"
                                     class="form-control year_compare select-year-compare">
                             </div>
@@ -426,10 +429,16 @@
                     <input type="hidden" class="type_report" name="type_report" />
                     <input type="hidden" class="contract_id" value="{{ request()->id }}" name="contract_id" />
                     <input type="hidden" class="user_id" name="user_id" />
+                    {{--  --}}
                     <input type="hidden" class="display" name="display" />
                     <input type="hidden" class="display-first" name="display_first" />
                     <input type="hidden" class="display-second" name="display_second" />
                     <input type="hidden" class="display-third" name="display_third" />
+                    {{--  --}}
+                    <input type="hidden" class="display-year" name="display_year" />
+                    <input type="hidden" class="display-month-compare" name="display_month_compare" />
+                    <input type="hidden" class="display-year-compare" name="display_year_compare" />
+                    {{--  --}}
                     <input type="hidden" class="year_compare" name="year_compare" />
                     <input type="hidden" class="month_compare" name="month_compare" />
                     <div class="modal-footer justify-content-between">

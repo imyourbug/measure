@@ -98,8 +98,7 @@
         <p style="font-style:italic">Hợp đồng số {{ $data['contract']['id'] ?? '' }} ký ngày
             {{ \Illuminate\Support\Carbon::parse($data['contract']['created_at'])->format('d-m-Y') }}</p>
     </div>
-    <h3>BÊN A: {{ $data['customer']['name'] ?? '' }} – {{ $data['branch']['name'] ?? '' }} –
-        {{ $data['customer']['representative'] ?? '' }} - {{ $data['customer']['position'] ?? '' }}</h3>
+    <h3>BÊN A: {{ $data['customer']['name'] ?? '' }}</h3>
     <p style="margin-left: 50px">Đại diện: Ông ( bà ) : {{ $data['branch']['representative'] ?? '' }} Chức vụ :
         {{ $data['customer']['position'] ?? '' }}</p>
     <h3>BÊN B: {{ $data['setting']['company-name'] ?? '' }}</h3>

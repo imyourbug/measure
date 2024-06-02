@@ -358,6 +358,7 @@ $('.btn-preview').on('click', async function () {
         $('.user_id').val($('.select-user').val());
         $('.month_compare').val($('.select-month-compare').val());
         $('.year_compare').val($('.select-year-compare').val());
+        //
         $('.display').val($('#select-display').is(':checked') ? $(
             '#select-display')
             .val() : 0);
@@ -370,6 +371,11 @@ $('.btn-preview').on('click', async function () {
         $('.display-third').val($('#select-display-third').is(':checked') ? $(
             '#select-display-third')
             .val() : 0);
+        //
+        $('.display-year').val($('#display-year').is(':checked') ? 1 : 0);
+        $('.display-month-compare').val($('#display-month-compare').is(':checked') ? 1 : 0);
+        $('.display-year-compare').val($('#display-year-compare').is(':checked') ? 1 : 0);
+        //
         $('.btn-export').prop('disabled', false);
     }, 4000);
 });
