@@ -34,22 +34,22 @@ class TaskController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            // 'name' => 'required|string',
-            'type_id' => 'required|numeric',
-            'contract_id' => 'required|numeric',
-            'confirm' => 'nullable|string',
-            'frequence' => 'nullable|string',
-            'status' => 'nullable|string',
-            'reason' => 'nullable|string',
-            'solution' => 'nullable|string',
-            'note' => 'nullable|string',
-        ]);
         try {
+            $data = $request->validate([
+                // 'name' => 'required|string',
+                'type_id' => 'required|numeric',
+                'contract_id' => 'required|numeric',
+                'confirm' => 'nullable|string',
+                'frequence' => 'nullable|string',
+                'status' => 'nullable|string',
+                'reason' => 'nullable|string',
+                'solution' => 'nullable|string',
+                'note' => 'nullable|string',
+            ]);
             Task::create($data);
             Toastr::success('Tạo thành công', __('title.toastr.success'));
         } catch (Throwable $e) {
-            Toastr::error('Tạo nhiệm vụ thất bại', __('title.toastr.fail'));
+            Toastr::error($e->getMessage(), __('title.toastr.fail'));
         }
 
         return redirect()->back();

@@ -20,18 +20,18 @@ class TypeController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'name' => 'required|string',
-            'image' => 'nullable|string',
-            'suggestion' => 'nullable|string',
-            'note' => 'nullable|string',
-            'parent_id' => 'required|numeric',
-        ]);
         try {
+            $data = $request->validate([
+                'name' => 'required|string',
+                'image' => 'nullable|string',
+                'suggestion' => 'nullable|string',
+                'note' => 'nullable|string',
+                'parent_id' => 'required|numeric',
+            ]);
             Type::create($data);
             Toastr::success('Tạo loại nhiệm vụ thành công', __('title.toastr.success'));
         } catch (Throwable $e) {
-            Toastr::error('Tạo loại nhiệm vụ thất bại', __('title.toastr.fail'));
+            Toastr::error($e->getMessage(), __('title.toastr.fail'));
         }
 
         return redirect()->back();
@@ -39,29 +39,33 @@ class TypeController extends Controller
 
     public function update(Request $request)
     {
-        $data = $request->validate([
-            'id' => 'required|int',
-            'name' => 'required|string',
-            'suggestion' => 'nullable|string',
-            'note' => 'nullable|string',
-            'image' => 'nullable|string',
-            'parent_id' => 'required|numeric',
-        ]);
-        unset($data['id']);
-        $update = Type::where('id', $request->input('id'))->update($data);
-        if ($update) {
+        try {
+            $data = $request->validate([
+                'id' => 'required|int',
+                'name' => 'required|string',
+                'suggestion' => 'nullable|string',
+                'note' => 'nullable|string',
+                'image' => 'nullable|string',
+                'parent_id' => 'required|numeric',
+            ]);
+            unset($data['id']);
+            Type::where('id', $request->input('id'))->update($data);
             Toastr::success(__('message.success.update'), __('title.toastr.success'));
-        } else Toastr::error(__('message.fail.update'), __('title.toastr.fail'));
+        } catch (Throwable $e) {
+            Toastr::error($e->getMessage(), __('title.toastr.fail'));
+        }
 
         return redirect()->back();
     }
 
     public function delete($id)
     {
-        $delete = Type::firstWhere('id', $id)->delete();
-        if ($delete) {
+        try {
+            Type::firstWhere('id', $id)->delete();
             Toastr::success(__('message.success.delete'), __('title.toastr.success'));
-        } else Toastr::error(__('message.fail.delete'), __('title.toastr.fail'));
+        } catch (Throwable $e) {
+            Toastr::error($e->getMessage(), __('title.toastr.fail'));
+        }
 
         return redirect()->back();
     }

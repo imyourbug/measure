@@ -3,9 +3,6 @@
 namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Users\LoginRequest;
-use App\Http\Requests\Users\RecoverRequest;
-use App\Http\Requests\Users\RegisterRequest;
 use App\Mail\RecoverPasswordMail;
 use App\Models\InfoUser;
 use App\Models\User;
@@ -40,27 +37,34 @@ class UserController extends Controller
         ]);
     }
 
-    public function recover(RecoverRequest $request)
+    public function recover(Request $request)
     {
-        if (!$user = User::firstWhere('email', $request->input('email'))) {
-            Toastr::error('Email không tồn tại!', __('title.toastr.fail'));
+        try {
+            $data = $request->validate([
+                'email' => 'required|regex:/^(.*?)@(.*?)$/'
+            ]);
+            if (!$user = User::firstWhere('email', $data['email'])) {
+                Toastr::error('Email không tồn tại!', __('title.toastr.fail'));
 
-            return redirect()->back();
+                return redirect()->back();
+            }
+            $source = [
+                'a', 'b', 'c', 'd', 'e', 'g', 1, 2, 3, 4, 5, 6
+            ];
+            $new_password = '';
+            foreach ($source as $s) {
+                $new_password .= $source[rand(0, count($source) - 1)];
+            }
+            $reset_password = $user->update([
+                'password' => Hash::make($new_password)
+            ]);
+            if ($reset_password) {
+                Mail::to($request->input('email'))->send(new RecoverPasswordMail($new_password));
+            }
+            Toastr::success('Lấy mật khẩu thành công! Hãy kiểm tra email của bạn', __('title.toastr.success'));
+        } catch (Throwable $e) {
+            Toastr::error($e->getMessage(), __('title.toastr.fail'));
         }
-        $source = [
-            'a', 'b', 'c', 'd', 'e', 'g', 1, 2, 3, 4, 5, 6
-        ];
-        $new_password = '';
-        foreach ($source as $s) {
-            $new_password .= $source[rand(0, count($source) - 1)];
-        }
-        $reset_password = $user->update([
-            'password' => Hash::make($new_password)
-        ]);
-        if ($reset_password) {
-            Mail::to($request->input('email'))->send(new RecoverPasswordMail($new_password));
-        }
-        Toastr::success('Lấy mật khẩu thành công! Hãy kiểm tra email của bạn', __('title.toastr.success'));
 
         return redirect()->back();
     }
@@ -72,20 +76,33 @@ class UserController extends Controller
         return redirect()->route('users.login');
     }
 
-    public function checkLogin(LoginRequest $request)
+    public function checkLogin(Request $request)
     {
-        $tel_or_email = $request->input('tel_or_email');
-        if (Auth::attempt([
-            is_numeric($tel_or_email) ? 'name' : 'email' => $tel_or_email,
-            'password' => $request->input('password')
-        ])) {
-            Toastr::success('Đăng nhập thành công', __('title.toastr.success'));
-            $user = Auth::user();
+        try {
+            $tel_or_email = $request->tel_or_email;
+            $validate = [
+                'tel_or_email' => 'required|regex:/^(.*?)@(.*?)$/',
+                'password' => 'required|string',
+            ];
+            if (is_numeric($tel_or_email)) {
+                $validate['tel_or_email'] = 'required|string|regex:/^0\d{9,10}$/';
+            }
+            $request->validate($validate);
+            if (Auth::attempt([
+                is_numeric($tel_or_email) ? 'name' : 'email' => $tel_or_email,
+                'password' => $request->input('password')
+            ])) {
+                Toastr::success('Đăng nhập thành công', __('title.toastr.success'));
+                $user = Auth::user();
 
-            return redirect()->route($user->role == 1 ? 'admin.index'
-                : ($user->role == 2 ? 'customers.me' : 'users.home'));
+                return redirect()->route($user->role == 1 ? 'admin.index'
+                    : ($user->role == 2 ? 'customers.me' : 'users.home'));
+            } else {
+                Toastr::error('Tài khoản hoặc mật khẩu không chính xác', __('title.toastr.fail'));
+            }
+        } catch (Throwable $e) {
+            Toastr::error($e->getMessage(), __('title.toastr.fail'));
         }
-        Toastr::error('Tài khoản hoặc mật khẩu không chính xác', __('title.toastr.fail'));
 
         return redirect()->back();
     }
@@ -138,19 +155,25 @@ class UserController extends Controller
         ]);
     }
 
-    public function checkRegister(RegisterRequest $request)
+    public function checkRegister(Request $request)
     {
-        $tel_or_email = $request->input('tel_or_email');
-        $check = User::where(is_numeric($tel_or_email) ? 'name' : 'email', $tel_or_email)
-            ->get();
-        if ($check->count() > 0) {
-            Toastr::error('Tài khoản đã có người đăng ký!', __('title.toastr.fail'));
-
-            return redirect()->back();
-        }
         try {
+            $tel_or_email = $request->input('tel_or_email');
+            $request->validate([
+                'tel_or_email' => !is_numeric($tel_or_email) ? 'required|regex:/^(.*?)@(.*?)$/'
+                    : 'required|string|regex:/^0\d{9,10}$/',
+                'password' => 'required|string',
+                'repassword' => 'required|string|same:password',
+            ]);
+            $check = User::where(is_numeric($tel_or_email) ? 'name' : 'email', $tel_or_email)
+                ->get();
+            if ($check->count() > 0) {
+                Toastr::error('Tài khoản đã có người đăng ký!', __('title.toastr.fail'));
+
+                return redirect()->back();
+            }
             DB::beginTransaction();
-            $user = User::create([
+            User::create([
                 is_numeric($tel_or_email) ? 'name' : 'email' =>  $tel_or_email,
                 'password' => Hash::make($request->input('password')),
                 'role' => 1,
@@ -159,7 +182,7 @@ class UserController extends Controller
             DB::commit();
         } catch (Throwable $e) {
             DB::rollBack();
-            Toastr::error(__('message.fail.register'), __('title.toastr.fail'));
+            Toastr::error($e->getMessage(), __('title.toastr.fail'));
 
             return redirect()->back();
         }
@@ -169,20 +192,22 @@ class UserController extends Controller
 
     public function update(Request $request)
     {
-        $data = $request->validate([
-            'id' => 'required|int',
-            'avatar' => 'required|string',
-            'name' => 'required|string',
-            'position' => 'required|string',
-            'identification' => 'required|string|regex:/\d{12}$/',
-            'tel' => 'required|string|regex:/^0\d{9,10}$/',
-            'active' => 'required|in:0,1',
-        ]);
-        unset($data['id']);
-        $update = InfoUser::where('id', $request->input('id'))->update($data);
-        if ($update) {
+        try {
+            $data = $request->validate([
+                'id' => 'required|int',
+                'avatar' => 'required|string',
+                'name' => 'required|string',
+                'position' => 'required|string',
+                'identification' => 'required|string|regex:/\d{12}$/',
+                'tel' => 'required|string|regex:/^0\d{9,10}$/',
+                'active' => 'required|in:0,1',
+            ]);
+            unset($data['id']);
+            $update = InfoUser::where('id', $request->input('id'))->update($data);
             Toastr::success(__('message.success.update'), __('title.toastr.success'));
-        } else Toastr::error(__('message.fail.update'), __('title.toastr.fail'));
+        } catch (Throwable $e) {
+            Toastr::error($e->getMessage(), __('title.toastr.fail'));
+        }
 
         return redirect()->back();
     }

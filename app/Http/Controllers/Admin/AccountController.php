@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Accounts\CreateAccountRequest;
-use App\Http\Requests\Admin\Accounts\UpdateAccountRequest;
 use App\Models\Customer;
 use App\Models\InfoUser;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -23,22 +22,28 @@ class AccountController extends Controller
         ]);
     }
 
-    public function store(CreateAccountRequest $request)
+    public function store(Request $request)
     {
-        $tel_or_email = $request->input('tel_or_email');
-        $check = User::where(is_numeric($tel_or_email) ? 'name' : 'email', $tel_or_email)
-            ->get();
-        if ($check->count() > 0) {
-            Toastr::error('Tài khoản đã có người đăng ký!', __('title.toastr.fail'));
-
-            return redirect()->back();
-        }
         try {
+            $tel_or_email = $request->tel_or_email;
+            $data = $request->validate([
+                'tel_or_email' => !is_numeric($tel_or_email) ? 'required|regex:/^(.*?)@(.*?)$/'
+                    : 'required|string|regex:/^0\d{9,10}$/',
+                'password' => 'required|string',
+                'role' => 'integer|in:0,1,2',
+            ]);
+
+            $check = User::where(is_numeric($tel_or_email) ? 'name' : 'email', $tel_or_email)
+                ->get();
+            if ($check->count() > 0) {
+                throw new Exception('Tài khoản đã có người đăng ký!');
+            }
+
             DB::beginTransaction();
             $user = User::create([
                 is_numeric($tel_or_email) ? 'name' : 'email' =>  $tel_or_email,
-                'password' => Hash::make($request->input('password')),
-                'role' => (int) $request->role
+                'password' => Hash::make($data['password']),
+                'role' => $data['role']
             ]);
             switch ((int) $request->role) {
                 case 0:
@@ -60,20 +65,26 @@ class AccountController extends Controller
             DB::commit();
         } catch (Throwable $e) {
             DB::rollBack();
-            Toastr::error('Tạo tài khoản thất bại', __('title.toastr.fail'));
+            Toastr::error($e->getMessage(), __('title.toastr.fail'));
         }
 
         return redirect()->back();
     }
 
-    public function update(UpdateAccountRequest $request)
+    public function update(Request $request)
     {
-        $data = $request->validated();
-        unset($data['id']);
-        $update = User::where('id', $request->input('id'))->update($data);
-        if ($update) {
+        try {
+            $data = $request->validate([
+                'id' => 'required|integer',
+                'password' => 'required|string',
+                'role' => 'required|integer|in:0,1,2',
+            ]);
+            unset($data['id']);
+            User::where('id', $request->input('id'))->update($data);
             Toastr::success(__('message.success.update'), __('title.toastr.success'));
-        } else Toastr::error(__('message.fail.update'), __('title.toastr.fail'));
+        } catch (Throwable $e) {
+            Toastr::error($e->getMessage(), __('title.toastr.fail'));
+        }
 
         return redirect()->back();
     }

@@ -19,20 +19,20 @@ class ChemistryController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'code' => 'required|string',
-            'name' => 'nullable|string',
-            'number_regist' => 'nullable|string',
-            'image' => 'nullable|string',
-            'description' => 'nullable|string',
-            'supplier' => 'nullable|string',
-            'active' => 'required|in:0,1',
-        ]);
         try {
+            $data = $request->validate([
+                'code' => 'required|string',
+                'name' => 'nullable|string',
+                'number_regist' => 'nullable|string',
+                'image' => 'nullable|string',
+                'description' => 'nullable|string',
+                'supplier' => 'nullable|string',
+                'active' => 'required|in:0,1',
+            ]);
             Chemistry::create($data);
             Toastr::success('Tạo hóa chất thành công', __('title.toastr.success'));
         } catch (Throwable $e) {
-            Toastr::error('Tạo hóa chất thất bại', __('title.toastr.fail'));
+            Toastr::error($e->getMessage(), __('title.toastr.fail'));
         }
 
         return redirect()->back();
@@ -40,21 +40,23 @@ class ChemistryController extends Controller
 
     public function update(Request $request)
     {
-        $data = $request->validate([
-            'id' => 'required|numeric',
-            'code' => 'required|string',
-            'name' => 'nullable|string',
-            'number_regist' => 'nullable|string',
-            'image' => 'nullable|string',
-            'description' => 'nullable|string',
-            'supplier' => 'nullable|string',
-            'active' => 'required|in:0,1',
-        ]);
-        unset($data['id']);
-        $update = Chemistry::where('id', $request->input('id'))->update($data);
-        if ($update) {
+        try {
+            $data = $request->validate([
+                'id' => 'required|numeric',
+                'code' => 'required|string',
+                'name' => 'nullable|string',
+                'number_regist' => 'nullable|string',
+                'image' => 'nullable|string',
+                'description' => 'nullable|string',
+                'supplier' => 'nullable|string',
+                'active' => 'required|in:0,1',
+            ]);
+            unset($data['id']);
+            $update = Chemistry::where('id', $request->input('id'))->update($data);
             Toastr::success(__('message.success.update'), __('title.toastr.success'));
-        } else Toastr::error(__('message.fail.update'), __('title.toastr.fail'));
+        } catch (Throwable $e) {
+            Toastr::error($e->getMessage(), __('title.toastr.fail'));
+        }
 
         return redirect()->back();
     }

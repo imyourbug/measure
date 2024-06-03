@@ -219,7 +219,7 @@ class SettingController extends Controller
                 ]);
             }
         } catch (Throwable $e) {
-            Toastr::error(__('message.fail.update'), __('title.toastr.fail'));
+            Toastr::error($e->getMessage(), __('title.toastr.fail'));
         }
         Toastr::success(__('message.success.update'), __('title.toastr.success'));
 

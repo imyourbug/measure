@@ -83,26 +83,28 @@ class CustomerController extends Controller
 
     public function update(Request $request)
     {
-        $data = $request->validate([
-            'id' => 'required|int',
-            'name' => 'required|string',
-            'address' => 'required|string',
-            'tel' => 'required|string|regex:/^0\d{9,10}$/',
-            'province' => 'nullable|string',
-            'manager' => 'nullable|string',
-            'website' => 'nullable|string',
-            'avatar' => 'nullable|string',
-            'tax_code' => 'nullable|string',
-            'representative' => 'nullable|string',
-            'position' => 'nullable|string',
-            'field' => 'nullable|string',
-            'email' => 'required|regex:/^(.*?)@(.*?)$/',
-        ]);
-        unset($data['id']);
-        $update = Customer::where('id', $request->input('id'))->update($data);
-        if ($update) {
+        try {
+            $data = $request->validate([
+                'id' => 'required|int',
+                'name' => 'required|string',
+                'address' => 'required|string',
+                'tel' => 'required|string|regex:/^0\d{9,10}$/',
+                'province' => 'nullable|string',
+                'manager' => 'nullable|string',
+                'website' => 'nullable|string',
+                'avatar' => 'nullable|string',
+                'tax_code' => 'nullable|string',
+                'representative' => 'nullable|string',
+                'position' => 'nullable|string',
+                'field' => 'nullable|string',
+                'email' => 'required|regex:/^(.*?)@(.*?)$/',
+            ]);
+            unset($data['id']);
+            Customer::where('id', $request->input('id'))->update($data);
             Toastr::success(__('message.success.update'), __('title.toastr.success'));
-        } else Toastr::error(__('message.fail.update'), __('title.toastr.fail'));
+        } catch (Throwable $e) {
+            Toastr::error($e->getMessage(), __('title.toastr.fail'));
+        }
 
         return redirect()->back();
     }

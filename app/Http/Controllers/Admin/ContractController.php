@@ -183,30 +183,34 @@ class ContractController extends Controller
 
     public function update(Request $request)
     {
-        $data = $request->validate([
-            'customer_id' => 'required|numeric',
-            'id' => 'required|numeric',
-            'start' => 'required|date',
-            'finish' => 'required|date',
-            'content' => 'required|string',
-            'attachment' => 'nullable|string',
-            'name' => 'required|string',
-        ]);
-        unset($data['id']);
-        $update = Contract::firstWhere('id', $request->input('id'))->update($data);
-        if ($update) {
+        try {
+            $data = $request->validate([
+                'customer_id' => 'required|numeric',
+                'id' => 'required|numeric',
+                'start' => 'required|date',
+                'finish' => 'required|date',
+                'content' => 'required|string',
+                'attachment' => 'nullable|string',
+                'name' => 'required|string',
+            ]);
+            unset($data['id']);
+            Contract::firstWhere('id', $request->input('id'))->update($data);
             Toastr::success(__('message.success.update'), __('title.toastr.success'));
-        } else Toastr::error(__('message.fail.update'), __('title.toastr.fail'));
+        } catch (Throwable $e) {
+            Toastr::error($e->getMessage(), __('title.toastr.fail'));
+        }
 
         return redirect()->back();
     }
 
     public function delete($id)
     {
-        $delete = Contract::firstWhere('id', $id)->delete();
-        if ($delete) {
+        try {
+            Contract::firstWhere('id', $id)->delete();
             Toastr::success(__('message.success.delete'), __('title.toastr.success'));
-        } else Toastr::error(__('message.fail.delete'), __('title.toastr.fail'));
+        } catch (Throwable $e) {
+            Toastr::error($e->getMessage(), __('title.toastr.fail'));
+        }
 
         return redirect()->back();
     }
@@ -237,11 +241,15 @@ class ContractController extends Controller
             'title' => 'Chi tiết hợp đồng',
             'contract' => Contract::with([
                 'tasks.details', 'tasks.type',
-            ])->firstWhere('id', $id),
+            ])
+                ->firstWhere('id', $id),
             'customers' => Customer::all(),
-            'users' => User::with(['staff'])->where('role', GlobalConstant::ROLE_STAFF)->get(),
+            'users' => User::with(['staff'])
+                ->where('role', GlobalConstant::ROLE_STAFF)
+                ->get(),
             'types' => Type::all(),
-            'contracts' => Contract::with(['branch'])->get(),
+            'contracts' => Contract::with(['branch'])
+                ->get(),
         ]);
     }
 

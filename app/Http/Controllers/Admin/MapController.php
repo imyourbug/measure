@@ -20,30 +20,31 @@ class MapController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'code' => 'nullable|string',
-            'position' => 'nullable|string',
-            'number' => 'required|numeric|min:1',
-            'area' => 'required|string',
-            'target' => 'nullable|string',
-            'image' => 'nullable|string',
-            'description' => 'nullable|string',
-            'range' => 'nullable|string',
-            'active' => 'required|in:0,1',
-        ]);
-        $dataInsert = [];
-        $number = (int)$data['number'];
-        unset($data['number']);
-        for ($i = 0; $i < $number; $i++) {
-            $data['code'] = $data['area'] . '-' .
-                str_pad(((string)($i + 1)), 3, "0", STR_PAD_LEFT);;
-            $dataInsert[] = $data;
-        }
+
         try {
+            $data = $request->validate([
+                'code' => 'nullable|string',
+                'position' => 'nullable|string',
+                'number' => 'required|numeric|min:1',
+                'area' => 'required|string',
+                'target' => 'nullable|string',
+                'image' => 'nullable|string',
+                'description' => 'nullable|string',
+                'range' => 'nullable|string',
+                'active' => 'required|in:0,1',
+            ]);
+            $dataInsert = [];
+            $number = (int)$data['number'];
+            unset($data['number']);
+            for ($i = 0; $i < $number; $i++) {
+                $data['code'] = $data['area'] . '-' .
+                    str_pad(((string)($i + 1)), 3, "0", STR_PAD_LEFT);;
+                $dataInsert[] = $data;
+            }
             Map::insert($dataInsert);
             Toastr::success('Tạo sơ đồ thành công', __('title.toastr.success'));
         } catch (Throwable $e) {
-            Toastr::error('Tạo sơ đồ thất bại', __('title.toastr.fail'));
+            Toastr::error($e->getMessage(), __('title.toastr.fail'));
         }
 
         return redirect()->back();
@@ -51,22 +52,24 @@ class MapController extends Controller
 
     public function update(Request $request)
     {
-        $data = $request->validate([
-            'id' => 'required|numeric',
-            'code' => 'required|string',
-            'position' => 'nullable|string',
-            'area' => 'nullable|string',
-            'target' => 'nullable|string',
-            'image' => 'nullable|string',
-            'description' => 'nullable|string',
-            'range' => 'nullable|string',
-            'active' => 'required|in:0,1',
-        ]);
-        unset($data['id']);
-        $update = Map::where('id', $request->input('id'))->update($data);
-        if ($update) {
+        try {
+            $data = $request->validate([
+                'id' => 'required|numeric',
+                'code' => 'required|string',
+                'position' => 'nullable|string',
+                'area' => 'nullable|string',
+                'target' => 'nullable|string',
+                'image' => 'nullable|string',
+                'description' => 'nullable|string',
+                'range' => 'nullable|string',
+                'active' => 'required|in:0,1',
+            ]);
+            unset($data['id']);
+            Map::where('id', $request->input('id'))->update($data);
             Toastr::success(__('message.success.update'), __('title.toastr.success'));
-        } else Toastr::error(__('message.fail.update'), __('title.toastr.fail'));
+        } catch (Throwable $e) {
+            Toastr::error($e->getMessage(), __('title.toastr.fail'));
+        }
 
         return redirect()->back();
     }

@@ -19,19 +19,19 @@ class ItemController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            // 'code' => 'required|string',
-            'name' => 'required|string',
-            'target' => 'nullable|string',
-            'image' => 'nullable|string',
-            'supplier' => 'nullable|string',
-            'active' => 'required|in:0,1',
-        ]);
         try {
+            $data = $request->validate([
+                // 'code' => 'required|string',
+                'name' => 'required|string',
+                'target' => 'nullable|string',
+                'image' => 'nullable|string',
+                'supplier' => 'nullable|string',
+                'active' => 'required|in:0,1',
+            ]);
             Item::create($data);
             Toastr::success('Tạo vật tư thành công', __('title.toastr.success'));
         } catch (Throwable $e) {
-            Toastr::error('Tạo vật tư thất bại', __('title.toastr.fail'));
+            Toastr::error($e->getMessage(), __('title.toastr.fail'));
         }
 
         return redirect()->back();
@@ -39,20 +39,22 @@ class ItemController extends Controller
 
     public function update(Request $request)
     {
-        $data = $request->validate([
-            'id' => 'required|numeric',
-            // 'code' => 'required|string',
-            'name' => 'required|string',
-            'target' => 'nullable|string',
-            'image' => 'nullable|string',
-            'supplier' => 'nullable|string',
-            'active' => 'required|in:0,1',
-        ]);
-        unset($data['id']);
-        $update = Item::where('id', $request->input('id'))->update($data);
-        if ($update) {
+        try {
+            $data = $request->validate([
+                'id' => 'required|numeric',
+                // 'code' => 'required|string',
+                'name' => 'required|string',
+                'target' => 'nullable|string',
+                'image' => 'nullable|string',
+                'supplier' => 'nullable|string',
+                'active' => 'required|in:0,1',
+            ]);
+            unset($data['id']);
+            Item::where('id', $request->input('id'))->update($data);
             Toastr::success(__('message.success.update'), __('title.toastr.success'));
-        } else Toastr::error(__('message.fail.update'), __('title.toastr.fail'));
+        } catch (Throwable $e) {
+            Toastr::error($e->getMessage(), __('title.toastr.fail'));
+        }
 
         return redirect()->back();
     }

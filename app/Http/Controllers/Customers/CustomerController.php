@@ -7,24 +7,27 @@ use App\Models\Customer;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Throwable;
 use Toastr;
 
 class CustomerController extends Controller
 {
     public function update(Request $request)
     {
-        $data = $request->validate([
-            'id' => 'required|int',
-            'name' => 'required|string',
-            'address' => 'required|string',
-            'tel' => 'required|string|regex:/^0\d{9,10}$/',
-            'email' => 'required|regex:/^(.*?)@(.*?)$/',
-        ]);
-        unset($data['id']);
-        $update = Customer::where('id', $request->input('id'))->update($data);
-        if ($update) {
+        try {
+            $data = $request->validate([
+                'id' => 'required|int',
+                'name' => 'required|string',
+                'address' => 'required|string',
+                'tel' => 'required|string|regex:/^0\d{9,10}$/',
+                'email' => 'required|regex:/^(.*?)@(.*?)$/',
+            ]);
+            unset($data['id']);
+            Customer::where('id', $request->input('id'))->update($data);
             Toastr::success(__('message.success.update'), __('title.toastr.success'));
-        } else Toastr::error(__('message.fail.update'), __('title.toastr.fail'));
+        } catch (Throwable $e) {
+            Toastr::error($e->getMessage(), __('title.toastr.fail'));
+        }
 
         return redirect()->back();
     }

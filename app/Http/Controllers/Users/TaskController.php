@@ -41,27 +41,4 @@ class TaskController extends Controller
             'title' => 'Nhiệm vụ hôm nay: ' . now()->format('d-m-Y'),
         ]);
     }
-
-    public function updateAirTask(Request $request)
-    {
-        try {
-            $data = $request->validate([
-                'id' => 'required|numeric',
-                'dissolve' => 'required|numeric|min:0',
-                'fine_dust' => 'required|numeric|min:0',
-            ]);
-            unset($data['id']);
-            AirTask::where('id', $request->input('id'))->update($data);
-
-            return response()->json([
-                'status' => 0,
-                'message' => 'Cập nhật thành công'
-            ]);
-        } catch (Throwable $e) {
-            return response()->json([
-                'status' => 1,
-                'message' => $e->getMessage()
-            ]);
-        }
-    }
 }

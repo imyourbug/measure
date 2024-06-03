@@ -21,19 +21,19 @@ class BranchController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'name' => 'required|string',
-            'address' => 'required|string',
-            'tel' => 'required|string',
-            'email' => 'required|regex:/^(.*?)@(.*?)$/',
-            'manager' => 'required|string',
-            'user_id' => 'required|numeric',
-        ]);
         try {
+            $data = $request->validate([
+                'name' => 'required|string',
+                'address' => 'required|string',
+                'tel' => 'required|string',
+                'email' => 'required|regex:/^(.*?)@(.*?)$/',
+                'manager' => 'required|string',
+                'user_id' => 'required|numeric',
+            ]);
             Branch::create($data);
             Toastr::success('Tạo chi nhánh thành công', __('title.toastr.success'));
         } catch (Throwable $e) {
-            Toastr::error('Tạo chi nhánh thất bại', __('title.toastr.fail'));
+            Toastr::error($e->getMessage(), __('title.toastr.fail'));
         }
 
         return redirect()->back();
@@ -41,20 +41,22 @@ class BranchController extends Controller
 
     public function update(Request $request)
     {
-        $data = $request->validate([
-            'id' => 'required|numeric',
-            'name' => 'required|string',
-            'address' => 'required|string',
-            'tel' => 'required|string',
-            'email' => 'required|regex:/^(.*?)@(.*?)$/',
-            'manager' => 'required|string',
-            'user_id' => 'required|numeric',
-        ]);
-        unset($data['id']);
-        $update = Branch::where('id', $request->input('id'))->update($data);
-        if ($update) {
+        try {
+            $data = $request->validate([
+                'id' => 'required|numeric',
+                'name' => 'required|string',
+                'address' => 'required|string',
+                'tel' => 'required|string',
+                'email' => 'required|regex:/^(.*?)@(.*?)$/',
+                'manager' => 'required|string',
+                'user_id' => 'required|numeric',
+            ]);
+            unset($data['id']);
+            Branch::where('id', $request->input('id'))->update($data);
             Toastr::success(__('message.success.update'), __('title.toastr.success'));
-        } else Toastr::error(__('message.fail.update'), __('title.toastr.fail'));
+        } catch (Throwable $e) {
+            Toastr::error($e->getMessage(), __('title.toastr.fail'));
+        }
 
         return redirect()->back();
     }
@@ -103,10 +105,10 @@ class BranchController extends Controller
     {
         $id_customer = $request->id;
         $user_id = Customer::firstWhere('id', $id_customer)->user->id ?? '';
-        $branches = Branch::where('user_id', $user_id)->get();
+
         return response()->json([
             'status' => 0,
-            'data' => $branches
+            'data' => Branch::where('user_id', $user_id)->get()
         ]);
     }
 }

@@ -11,13 +11,14 @@ class TaskChemistryController extends Controller
 {
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'unit' => 'required|string',
-            'kpi' => 'required|numeric',
-            'task_id' => 'required|numeric',
-            'chemistry_id' => 'required|numeric',
-        ]);
         try {
+            $data = $request->validate([
+                'unit' => 'required|string',
+                'kpi' => 'required|numeric',
+                'task_id' => 'required|numeric',
+                'chemistry_id' => 'required|numeric',
+            ]);
+
             TaskChemistry::create($data);
             return response()->json([
                 'status' => 0,
