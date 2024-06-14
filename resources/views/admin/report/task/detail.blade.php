@@ -108,6 +108,27 @@
                                 href="#custom-tabs-four-solutions" role="tab" aria-controls="custom-tabs-four-solutions"
                                 aria-selected="true">Phương pháp</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="custom-tabs-four-suggestion-tab" data-toggle="pill"
+                                href="#custom-tabs-four-suggestion" role="tab"
+                                aria-controls="custom-tabs-four-suggestion" aria-selected="true">Khuyến
+                                nghị</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="custom-tabs-four-notice-tab" data-toggle="pill"
+                                href="#custom-tabs-four-notice" role="tab" aria-controls="custom-tabs-four-notice"
+                                aria-selected="true">Lưu ý</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="custom-tabs-four-comment-tab" data-toggle="pill"
+                                href="#custom-tabs-four-comment" role="tab" aria-controls="custom-tabs-four-comment"
+                                aria-selected="true">Nhận xét</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="custom-tabs-four-detail-tab" data-toggle="pill"
+                                href="#custom-tabs-four-detail" role="tab" aria-controls="custom-tabs-four-detail"
+                                aria-selected="true">Chi tiết</a>
+                        </li>
                     </ul>
                 </div>
                 <div class="card-body">
@@ -130,7 +151,8 @@
                                     <tr>
                                         <!-- <th>ID</th> -->
                                         <th><input type="checkbox" class="select-id-map-all" />
-                                            <button class="btn btn-danger btn-sm btn-delete-map-all" style="display: none">
+                                            <button class="btn btn-danger btn-sm btn-delete-map-all"
+                                                style="display: none">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </th>
@@ -242,6 +264,38 @@
                                 <tbody>
                                 </tbody>
                             </table>
+                        </div>
+                        {{-- Suggestion --}}
+                        <div class="tab-pane fade" id="custom-tabs-four-suggestion" role="tabpanel"
+                            aria-labelledby="custom-tabs-four-suggestion-tab">
+                            <textarea class="form-control mb-2" name="" id="suggestion" cols="30" rows="10"
+                                placeholder="Nhập khuyến nghị">{{ $taskDetail->task->suggestion ?? '' }}</textarea>
+                            <button data-id="{{ $taskDetail->task->id }}"
+                                class="btn btn-sm btn-success btn-save">Lưu</button>
+                        </div>
+                        {{-- Notice --}}
+                        <div class="tab-pane fade" id="custom-tabs-four-notice" role="tabpanel"
+                            aria-labelledby="custom-tabs-four-notice-tab">
+                            <textarea class="form-control mb-2" name="" id="notice" cols="30" rows="10"
+                                placeholder="Nhập lưu ý">{{ $taskDetail->task->notice ?? '' }}</textarea>
+                            <button data-id="{{ $taskDetail->task->id }}"
+                                class="btn btn-sm btn-success btn-save">Lưu</button>
+                        </div>
+                        {{-- Comment --}}
+                        <div class="tab-pane fade" id="custom-tabs-four-comment" role="tabpanel"
+                            aria-labelledby="custom-tabs-four-comment-tab">
+                            <textarea class="form-control mb-2" name="" id="comment" cols="30" rows="10"
+                                placeholder="Nhập nhận xét">{{ $taskDetail->task->comment ?? '' }}</textarea>
+                            <button data-id="{{ $taskDetail->task->id }}"
+                                class="btn btn-sm btn-success btn-save">Lưu</button>
+                        </div>
+                        {{-- Detail --}}
+                        <div class="tab-pane fade" id="custom-tabs-four-detail" role="tabpanel"
+                            aria-labelledby="custom-tabs-four-detail-tab">
+                            <textarea class="form-control mb-2" name="" id="detail" cols="30" rows="10"
+                                placeholder="Nhập chi tiết">{{ $taskDetail->task->detail ?? '' }}</textarea>
+                            <button data-id="{{ $taskDetail->task->id }}"
+                                class="btn btn-sm btn-success btn-save">Lưu</button>
                         </div>
                     </div>
                 </div>

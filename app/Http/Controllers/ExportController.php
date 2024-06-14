@@ -210,12 +210,12 @@ class ExportController extends Controller
             $tmp = [];
             foreach ($task['details'] as $keyDetail => &$detail) {
                 foreach ($detail['task_maps'] as $keyTaskMap => &$taskMap) {
-                    // dd($taskMap);
-                    if (!empty($tmp[$task['id']][substr($taskMap['code'], 0, 1)][$taskMap['code']])) {
-                        $taskMap['result'] = ($tmp[$task['id']][substr($taskMap['code'], 0, 1)][$taskMap['code']]['result'] ?? 0) + ($taskMap['result'] ?? 0);
-                        $taskMap['kpi'] = ($tmp[$task['id']][substr($taskMap['code'], 0, 1)][$taskMap['code']]['kpi'] ?? 0) + ($taskMap['kpi'] ?? 0);
+                    $mapCode = explode('-', $taskMap['code']);
+                    if (!empty($tmp[$task['id']][$mapCode[0]][$taskMap['code']])) {
+                        $taskMap['result'] = ($tmp[$task['id']][$mapCode[0]][$taskMap['code']]['result'] ?? 0) + ($taskMap['result'] ?? 0);
+                        $taskMap['kpi'] = ($tmp[$task['id']][$mapCode[0]][$taskMap['code']]['kpi'] ?? 0) + ($taskMap['kpi'] ?? 0);
                     }
-                    $tmp[$task['id']][substr($taskMap['code'], 0, 1)][$taskMap['code']] = $taskMap;
+                    $tmp[$task['id']][$mapCode[0]][$taskMap['code']] = $taskMap;
                 }
             }
             $detail['task_maps'] = $tmp;
@@ -277,7 +277,8 @@ class ExportController extends Controller
                 $tmp = [];
                 foreach ($rs as $keyRs => $valueRs) {
                     if (is_numeric($keyRs)) {
-                        $tmp[substr($valueRs['code'], 0, 1)][$valueRs['map_id']] = $valueRs;
+                        $mapCode = explode('-', $valueRs['code']);
+                        $tmp[$mapCode[0]][$valueRs['map_id']] = $valueRs;
                     }
                 }
                 $tmpTaskId = $rs['task_id'];
@@ -314,11 +315,18 @@ class ExportController extends Controller
             // get code
             foreach ($details as $detail) {
                 foreach ($detail['taskMaps'] as $taskMap) {
-                    $code[substr($taskMap->code, 0, 1)] = substr($taskMap->code, 0, 1);
+                    $mapCode = explode('-', $taskMap->code);
+                    $code[$mapCode[0]] = $mapCode[0];
                 }
             }
         }
 
+        DB::unprepared("DROP FUNCTION IF EXISTS SPLIT_STRING;
+        CREATE FUNCTION SPLIT_STRING(str VARCHAR(255), delim VARCHAR(12), pos INT)
+        RETURNS VARCHAR(255)
+        RETURN REPLACE(SUBSTRING(SUBSTRING_INDEX(str, delim, pos),
+            CHAR_LENGTH(SUBSTRING_INDEX(str, delim, pos-1)) + 1),
+            delim, '');");
         foreach ($contract->tasks as $task) {
             $tmp = [];
             for ($month = 1; $month <= 12; $month++) {
@@ -343,8 +351,9 @@ class ExportController extends Controller
                                     ELSE result
                                 END) as all_result')
                         ->whereIn('task_id', $key_task_details)
-                        ->whereRaw('SUBSTR(code, 1, 1) = ?', $c)
+                        ->whereRaw('SPLIT_STRING(code, "-", 1) = ?', $c)
                         ->first();
+
                     $tmp[$month][$c] = [
                         'kpi' => $value->all_kpi ?? 0,
                         'result' => $value->all_result ?? 0,
@@ -354,7 +363,7 @@ class ExportController extends Controller
                 }
             }
             $result[$task->id] = [
-                'value' => $tmp,
+                'value' => collect($tmp)->values(),
                 'task_id' => $task->id
             ];
         }
@@ -431,9 +440,11 @@ class ExportController extends Controller
         foreach ($details as $keyDetail => $detail) {
             if (!empty($detail['task_maps'])) {
                 foreach ($detail['task_maps'] as $keyTaskMap => $taskMap) {
-                    $result[substr($taskMap['code'], 0, 1)]['result'] = ($result[substr($taskMap['code'], 0, 1)]['result'] ?? 0) +  ($taskMap['result'] ?? 0);
-                    $result[substr($taskMap['code'], 0, 1)]['kpi'] = ($result[substr($taskMap['code'], 0, 1)]['kpi'] ?? 0) +  ($taskMap['kpi'] ?? 0);
-                    $result[substr($taskMap['code'], 0, 1)]['code'] = substr($taskMap['code'], 0, 1);
+                    $mapCode = explode('-', $taskMap['code']);
+
+                    $result[$mapCode[0]]['result'] = ($result[$mapCode[0]]['result'] ?? 0) +  ($taskMap['result'] ?? 0);
+                    $result[$mapCode[0]]['kpi'] = ($result[$mapCode[0]]['kpi'] ?? 0) +  ($taskMap['kpi'] ?? 0);
+                    $result[$mapCode[0]]['code'] = $mapCode[0];
                 }
             }
         }
@@ -454,9 +465,11 @@ class ExportController extends Controller
         foreach ($details as $keyDetail => $detail) {
             if (!empty($detail['task_maps'])) {
                 foreach ($detail['task_maps'] as $keyTaskMap => $taskMap) {
-                    $result[substr($taskMap['code'], 0, 1)]['result'] = ($result[substr($taskMap['code'], 0, 1)]['result'] ?? 0) +  ($taskMap['result'] ?? 0);
-                    $result[substr($taskMap['code'], 0, 1)]['kpi'] = ($result[substr($taskMap['code'], 0, 1)]['kpi'] ?? 0) +  ($taskMap['kpi'] ?? 0);
-                    $result[substr($taskMap['code'], 0, 1)]['code'] = substr($taskMap['code'], 0, 1);
+                    $mapCode = explode('-', $taskMap['code']);
+
+                    $result[$mapCode[0]]['result'] = ($result[$mapCode[0]]['result'] ?? 0) +  ($taskMap['result'] ?? 0);
+                    $result[$mapCode[0]]['kpi'] = ($result[$mapCode[0]]['kpi'] ?? 0) +  ($taskMap['kpi'] ?? 0);
+                    $result[$mapCode[0]]['code'] = $mapCode[0];
                 }
             }
         }
@@ -511,7 +524,9 @@ class ExportController extends Controller
         foreach ($details as $keyDetail => &$detail) {
             $tmp = [];
             foreach ($detail['task_maps'] as $keyTaskMap => $taskMap) {
-                $tmp[substr($taskMap['code'], 0, 1)][] = $taskMap;
+                $mapCode = explode('-', $taskMap['code']);
+
+                $tmp[$mapCode[0]][] = $taskMap;
             }
             $detail['task_maps'] = $tmp;
         }

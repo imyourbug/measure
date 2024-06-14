@@ -89,6 +89,11 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin'], function () {
         });
     });
 
+    #reports
+    Route::group(['prefix' => 'reports', 'as' => 'reports.'], function () {
+        Route::post('/checkCopyData', 'ReportController@checkCopyData')->name('checkCopyData');
+    });
+
     #settings
     Route::group(['prefix' => 'settings', 'as' => 'settings.'], function () {
         Route::post('uploadmap', 'SettingController@uploadmap')->name('uploadmap');

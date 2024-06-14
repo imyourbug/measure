@@ -1,6 +1,5 @@
 var dataTable = null;
 
-
 var dataTableMap = null;
 var dataTableStaff = null;
 var dataTableItem = null;
@@ -31,7 +30,7 @@ function getQueryUrlWithParams() {
     return query;
 }
 
-$(document).on("click", ".btn-filter", async function () {
+$(document).on("click", ".btn-filter", function () {
     Array.from(searchParams).forEach(([key, values], index) => {
         searchParams.set(key, String($('#' + key).val()).length ? $('#' + key).val() : '');
     });
@@ -41,7 +40,7 @@ $(document).on("click", ".btn-filter", async function () {
         .load();
 });
 
-$(document).on("click", ".btn-refresh", async function () {
+$(document).on("click", ".btn-refresh", function () {
     dataTable.ajax
         .url(`/api/taskdetails?id=${$("#task_id").val()}`)
         .load();
@@ -281,6 +280,7 @@ $(document).ready(function () {
             },
         ],
     });
+    //
 });
 
 // solution
@@ -902,6 +902,8 @@ $(document).ready(function () {
             },
         ],
     });
+
+    $('.btn-filter').click();
 });
 
 $(document).on("click", ".btn-edit-detail", function () {
@@ -1009,19 +1011,22 @@ $(document).on("click", ".btn-delete-detail", function () {
     }
 });
 
-
 $(document).on("click", ".btn-save", function () {
     if (confirm("Bạn có muốn lưu")) {
         let id = $('#task_id').val();
         let suggestion = $('#suggestion').val();
         let notice = $('#notice').val();
+        let detail = $('#detail').val();
+        let comment = $('#comment').val();
         $.ajax({
             type: "POST",
             url: `/api/tasks/updateApart`,
             data: {
                 id,
                 suggestion,
-                notice
+                notice,
+                detail,
+                comment,
             },
             success: function (response) {
                 if (response.status == 0) {

@@ -24,7 +24,8 @@ class ReportController extends Controller
 {
     public function reload($id, Request $request)
     {
-        $taskMaps = TaskDetail::with(['taskMaps'])->firstWhere('id', $id)->taskMaps ?? [];
+        $taskMaps = TaskDetail::with(['taskMaps'])
+            ->firstWhere('id', $id)->taskMaps ?? [];
         foreach ($taskMaps as $taskMap) {
             $taskMap->update([
                 'result' =>  $taskMap->fake_result
@@ -96,6 +97,44 @@ class ReportController extends Controller
         ]);
     }
 
+    public function checkCopyData(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                'month_from' => 'required|numeric',
+                'month_to' => 'required|numeric',
+                'year_from' => 'required|numeric',
+                'year_to' => 'required|numeric',
+                'contract_id' => 'required|numeric',
+            ]);
+
+            // check next month is empty
+            $check = Task::with([
+                'details',
+            ])
+                ->whereHas('details', function ($q) use ($data) {
+                    $q->whereRaw('MONTH(plan_date) = ?', $data['month_to'])
+                        ->whereRaw('YEAR(plan_date) = ?', $data['year_to']);
+                })
+                ->where('contract_id', $data['contract_id'])
+                ->get()
+                ->count();
+            if ($check) {
+                throw new Exception('Đã có dữ liệu ở tháng ' . $data['month_to'] .
+                    ' năm ' . $data['year_to'] . '! Vui lòng chọn tháng khác');
+            }
+        } catch (Throwable $e) {
+            return response()->json([
+                'status' => GlobalConstant::STATUS_ERROR,
+                'message' => $e->getMessage()
+            ]);
+        }
+
+        return response()->json([
+            'status' => GlobalConstant::STATUS_OK,
+        ]);
+    }
+
     public function duplicate(Request $request)
     {
         try {
@@ -124,22 +163,6 @@ class ReportController extends Controller
                 })
                 ->where('contract_id', $data['contract_id'])
                 ->get();
-
-            // check next month is empty
-            $check = Task::with([
-                'details',
-            ])
-                ->whereHas('details', function ($q) use ($data) {
-                    $q->whereRaw('MONTH(plan_date) = ?', $data['month_to'])
-                        ->whereRaw('YEAR(plan_date) = ?', $data['year_to']);
-                })
-                ->where('contract_id', $data['contract_id'])
-                ->get()
-                ->count();
-            if ($check) {
-                throw new Exception('Đã có dữ liệu ở tháng ' . $data['month_to'] .
-                    ' năm ' . $data['year_to'] . '! Vui lòng chọn tháng khác');
-            }
 
             DB::beginTransaction();
             foreach ($tasks as $task) {

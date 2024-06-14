@@ -34,6 +34,8 @@ $(document).ready(function () {
             },
         ],
     });
+    //
+    $('.btn-filter').click();
 });
 
 function closeModal() {

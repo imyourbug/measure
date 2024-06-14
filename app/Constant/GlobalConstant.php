@@ -9,4 +9,7 @@ class GlobalConstant
     public const ROLE_ADMIN = 1;
 
     public const TYPE_FILE_BACKUP = 'sql';
+
+    public const STATUS_OK = 0;
+    public const STATUS_ERROR = 1;
 }

@@ -29,6 +29,8 @@ class TaskDetail extends Model
         'task_id',
         'notice',
         'suggestion',
+        'detail',
+        'comment',
     ];
 
     public function task()

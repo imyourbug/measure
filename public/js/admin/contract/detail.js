@@ -72,8 +72,10 @@ $('.btn-preview').on('click', async function () {
                             let dataItem = Object.keys(item).map((key) =>
                                 item[
                                 key]);
+                            let mapCode = dataItem[0]['code'].substring(0, 1);
+
                             html +=
-                                `<canvas id="mapChart${e.task_id}${dataItem[0]['code'].substring(0, 1)}" style="display:block;"></canvas>`;
+                                `<canvas id="mapChart${e.task_id}${mapCode[0]}" style="display:block;"></canvas>`;
                         }
                     });
                 });
@@ -105,10 +107,12 @@ $('.btn-preview').on('click', async function () {
                             }
                         })
 
+                        //
+                        let mapCode = dataD[0].code.split('-');
                         let map = {
                             task_id: e.task_id,
                             chart: new Chart($(
-                                `#mapChart${e.task_id}${dataD[0].code.substring(0, 1)}`
+                                `#mapChart${e.task_id}${mapCode[0]}`
                             ), {
                                 type: 'bar',
                                 data: {
@@ -484,6 +488,8 @@ $(document).ready(function () {
             },
         ],
     });
+    //
+    $('.btn-filter').click();
 });
 
 $(document).on("click", ".btn-edit", function () {

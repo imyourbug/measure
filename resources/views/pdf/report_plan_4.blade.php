@@ -99,16 +99,15 @@
             {{ \Illuminate\Support\Carbon::parse($data['contract']['created_at'])->format('d-m-Y') }}</p>
     </div>
     <h3>A. Thành phần tham gia nghiệm thu</h3>
-    <h3>BÊN A: {{ $data['customer']['name'] ?? '' }}</h3>
+    <h3>BÊN A: {{ $data['customer']['name'] ?? '' }} - {{ $data['branch']['name'] ?? '' }}</h3>
     <p style="margin-left: 50px">Đại diện: Ông ( bà ) : {{ $data['branch']['representative'] ?? '' }} Chức vụ :
         {{ $data['customer']['position'] ?? '' }}</p>
     <h3>BÊN B: {{ $data['setting']['company-name'] ?? '' }}</h3>
     <p style="margin-left: 50px">Đại diện: Ông ( bà ) :{{ $data['creator']['staff']['name'] ?? '' }} Chức vụ
         :{{ $data['creator']['staff']['position'] ?? '' }}</p>
-    <p style="">Địa điểm: {{ $data['branch']['name'] ?? '' }} </p>
-    <p style="">Thời gian: từ
-        {{ \Illuminate\Support\Carbon::parse($data['contract']['start'])->format('d-m-Y') }} đến
-        {{ \Illuminate\Support\Carbon::parse($data['contract']['finish'])->format('d-m-Y') }} </p>
+    <p style="">Chi tiết địa chỉ: {{ $data['branch']['name'] ?? '' }} </p>
+    <p style="">Thời gian: {{ \Illuminate\Support\Carbon::parse($data['contract']['start'])->format('d/m/Y') }} -
+        {{ \Illuminate\Support\Carbon::parse($data['contract']['finish'])->format('d/m/Y') }} </p>
     <h3>B. Khối lượng hoàn thành </h3>
     @if (!empty($data['tasks']))
         @foreach ($data['tasks'] as $key => $info)
@@ -126,7 +125,6 @@
                         <th colspan="4">Chi tiết</th>
                         {{-- <th rowspan="2">Ảnh</th> --}}
                         <th colspan="4">Theo dõi số liệu</th>
-                        <th rowspan="2">Ghi chú</th>
                     </tr>
                     <tr>
                         <th>Khu vực</th>
@@ -152,7 +150,9 @@
                             <tr>
                                 <td>{{ $count < 10 ? '0' . $count : $count }}</td>
                                 <td>{{ $info['type']['name'] ?? '' }}</td>
-                                <td>{{ $key }} </td>
+                                <td>{{ $tasks[array_key_first($tasks)]['position'] ?? '' }} </td>
+                                {{-- <td>{{ $key }} - {{ $tasks[array_key_first($tasks)]['position'] ?? '' }}
+                                </td> --}}
                                 <td>{{ $tasks[array_key_first($tasks)]['round'] ?? '' }}</td>
                                 <td>{{ $tasks[array_key_first($tasks)]['target'] ?? '' }}</td>
                                 <td>{{ count($tasks) }}</td>
@@ -163,11 +163,11 @@
                                     @endif
                                 </td> --}}
                                 <td>{{ $tasks[array_key_first($tasks)]['unit'] ?? '' }}</td>
-                                <td>{{ count($tasks) ? round($sumResult / count($tasks), 2) : $sumResult }}
+                                <td>{{ count($info['details'] ?? []) ? round($sumResult / count($info['details']), 2) : $sumResult }}
                                 </td>
-                                <td>{{ count($tasks) ? round($sumKPI / count($tasks), 2) : $sumKPI }}</td>
+                                <td>{{ count($info['details'] ?? []) ? round($sumKPI / count($info['details']), 2) : $sumKPI }}
+                                </td>
                                 <td></td>
-                                <td>{{ $info['note'] ?? '' }}</td>
                             </tr>
                         @endforeach
                     @endforeach
@@ -230,8 +230,8 @@
                             </tr>
                         </table>
                     @endif
-                    <p style="margin-left:20px">- Nhận xét</p>
-                    <p style="margin-left:20px">- Chi tiết</p>
+                    <p style="margin-left:20px">- Nhận xét: {{ $info['comment'] }}</p>
+                    <p style="margin-left:20px">- Chi tiết: {{ $info['detail'] }}</p>
                     <p style="margin-left:10px">Kết quả theo dõi: Từ: Tháng {{ $data['month'] }} năm
                         {{ $data['year'] }}
                         đến
@@ -239,21 +239,24 @@
                     <table class="tbl-plan">
                         <tr>
                             <td>Mã sơ đồ</td>
-                            @php
-                                // dd($taskMaps);
-                            @endphp
                             @foreach ($tasks as $task_map)
-                                @if (substr($task_map['code'], 0, 1) === $key)
+                                @php
+                                    $mapCode = explode('-', $task_map['code']);
+                                @endphp
+                                @if ($mapCode[0] == $key)
                                     <td>{{ $task_map['code'] ?? '' }}</td>
                                 @endif
                             @endforeach
                         </tr>
                         <tr>
                             <td>
-                                Kết quả
+                                {{ $tasks[array_key_first($tasks)]['unit'] ?? 'Đơn vị' }}
                             </td>
                             @foreach ($tasks as $task_map)
-                                @if (substr($task_map['code'], 0, 1) === $key)
+                                @php
+                                    $mapCode = explode('-', $task_map['code']);
+                                @endphp
+                                @if ($mapCode[0] == $key)
                                     <td>
                                         {{ !empty($task_map['result']) ? $task_map['result'] : 'N/A' }}
                                     </td>

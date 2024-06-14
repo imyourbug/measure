@@ -96,6 +96,8 @@ class TaskController extends Controller
                 'solution' => 'nullable|string',
                 'notice' => 'nullable|string',
                 'suggestion' => 'nullable|string',
+                'detail' => 'nullable|string',
+                'comment' => 'nullable|string',
                 'type_id' => 'nullable|numeric',
                 'contract_id' => 'nullable|numeric',
             ]);

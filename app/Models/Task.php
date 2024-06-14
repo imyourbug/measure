@@ -25,6 +25,8 @@ class Task extends Model
         'contract_id',
         'notice',
         'suggestion',
+        'detail',
+        'comment',
     ];
 
     public function details()

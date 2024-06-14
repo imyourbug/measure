@@ -760,3 +760,32 @@ $(document).on("click", ".btn-add-chemistry", function () {
         },
     });
 });
+
+$(document).on("click", ".btn-save", function () {
+    if (confirm("Bạn có muốn lưu")) {
+        let id = $(this).data('id');
+        let suggestion = $('#suggestion').val();
+        let notice = $('#notice').val();
+        let detail = $('#detail').val();
+        let comment = $('#comment').val();
+        $.ajax({
+            type: "POST",
+            url: `/api/tasks/updateApart`,
+            data: {
+                id,
+                suggestion,
+                notice,
+                detail,
+                comment,
+            },
+            success: function (response) {
+                if (response.status == 0) {
+                    toastr.success(response.message);
+                    // dataTable.ajax.reload();
+                } else {
+                    toastr.error(response.message);
+                }
+            },
+        });
+    }
+});

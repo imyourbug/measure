@@ -76,6 +76,8 @@ $(document).ready(function () {
             },
         ],
     });
+    //
+    $('.btn-filter').click();
 });
 
 $(document).on("click", ".btn-edit", function () {
@@ -114,7 +116,6 @@ $(document).on("click", ".btn-update", function () {
             solution: $("#solution").val(),
             reason: $("#reason").val(),
         };
-        console.log(data);
         $.ajax({
             type: "POST",
             url: $(this).data("url"),
@@ -138,7 +139,6 @@ $(document).on("click", ".btn-delete", function () {
         $.ajax({
             type: "DELETE",
             url: `/api/tasks/${id}/destroy`,
-
             success: function (response) {
                 if (response.status == 0) {
                     toastr.success("Xóa thành công");
@@ -181,7 +181,7 @@ $('#form-export').submit(function (e) {
                 toastr.error(response.message);
             }
         }
-    })
+    });
 });
 
 $('.btn-preview').on('click', async function () {
@@ -230,8 +230,9 @@ $('.btn-preview').on('click', async function () {
                             let dataItem = Object.keys(item).map((key) =>
                                 item[
                                 key]);
+                            let mapCode = dataItem[0]['code'].split('-');
                             html +=
-                                `<canvas id="mapChart${e.task_id}${dataItem[0]['code'].substring(0, 1)}" style="display:block;"></canvas>`;
+                                `<canvas id="mapChart${e.task_id}${mapCode[0]}" style="display:block;"></canvas>`;
                         }
                     });
                 });
@@ -264,10 +265,12 @@ $('.btn-preview').on('click', async function () {
                             }
                         })
 
+                        //
+                        let mapCode = dataD[0].code.split('-');
                         let map = {
                             task_id: e.task_id,
                             chart: new Chart($(
-                                `#mapChart${e.task_id}${dataD[0].code.substring(0, 1)}`
+                                `#mapChart${e.task_id}${mapCode[0]}`
                             ), {
                                 type: 'bar',
                                 data: {
@@ -380,9 +383,7 @@ $('.btn-preview').on('click', async function () {
 
                 // get all code map
                 data.forEach(e => {
-                    let value = Object.keys(e.value).map((key) => e
-                        .value[key]);
-                    value.forEach(item => {
+                    e.value.forEach(item => {
                         let item_value = Object.keys(item).map((key) =>
                             item[
                             key]);

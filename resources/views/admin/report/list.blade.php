@@ -22,6 +22,24 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="/js/admin/report/index.js"></script>
+    <script>
+        $(document).on('click', '.btn-copy', function(e) {
+            $.ajax({
+                type: "POST",
+                data: $('#form-duplicate').serialize(),
+                url: $('#form-duplicate').data('url'),
+                success: function(response) {
+                    if (response.status == 1) {
+                        if (confirm('Bạn có muốn ghi đè dữ liệu?')) {
+                            $('#form-duplicate').submit();
+                        }
+                    } else {
+                        $('#form-duplicate').submit();
+                    }
+                }
+            });
+        });
+    </script>
 @endpush
 @section('content')
     <div class="row">
@@ -36,10 +54,11 @@
                     </div>
                 </div>
                 <div class="card-body" style="display: block;padding: 10px !important;">
-                    <form action="{{ route('admin.reports.duplicate') }}" method="post">
-                        @csrf
-                        <div class="card-body" style="display: block;padding: 10px !important;">
-                            <div class="row">
+
+                    <div class="card-body" style="display: block;padding: 10px !important;">
+                        <form data-url="{{ route('reports.checkCopyData') }}"
+                            action="{{ route('admin.reports.duplicate') }}" id="form-duplicate" method="POST">
+                            @csrf<div class="row">
                                 <div class="col-lg-12 col-md-12">
                                     <div class="form-group">
                                         <label for="menu">Chọn hợp đồng <span class="required">(*)</span></label>
@@ -93,9 +112,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <button class="btn btn-success">Xác nhận</button>
-                        </div>
-                    </form>
+                        </form>
+                        <button class="btn btn-success btn-copy">Xác nhận</button>
+                    </div>
+
                 </div>
             </div>
         </div>
