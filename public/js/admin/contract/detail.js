@@ -64,15 +64,14 @@ $('.btn-preview').on('click', async function () {
             url: `/api/exports/getDataMapChart?month=${month}&year=${year}&contract_id=${contract_id}`,
             success: function (response) {
                 let html = '';
-                let data = Object.keys(response.data).map((key) => response.data[key]);
-                data.forEach(e => {
+                response.data.forEach(e => {
                     let dataE = Object.keys(e).map((key) => e[key]);
                     dataE.forEach(item => {
                         if (typeof item !== 'number') {
                             let dataItem = Object.keys(item).map((key) =>
                                 item[
                                 key]);
-                            let mapCode = dataItem[0]['code'].substring(0, 1);
+                            let mapCode = dataItem[0]['code'].split('-');
 
                             html +=
                                 `<canvas id="mapChart${e.task_id}${mapCode[0]}" style="display:block;"></canvas>`;
@@ -82,7 +81,7 @@ $('.btn-preview').on('click', async function () {
                 $('.groupChart').html('');
                 $('.groupChart').html(html);
 
-                data.forEach(e => {
+                response.data.forEach(e => {
                     let dataChart = [];
                     Object.keys(e).forEach((key) => {
                         if (key != 'task_id') {

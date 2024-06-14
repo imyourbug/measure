@@ -62,16 +62,6 @@ $(document).ready(function () {
                                                 <a class="btn btn-success btn-sm" style="padding: 4px 15px" href="/admin/reports/task/${d.id}">
                                                     <i class="fa-solid fa-info"></i>
                                                 </a>`;
-                    // return `<a class="btn btn-primary btn-sm btn-edit" data-id="${d.id}" data-target="#modal" data-toggle="modal">
-                    //                             <i class="fas fa-edit"></i>
-                    //                         </a>
-                    //                         <a class="btn btn-success btn-sm" style="padding: 4px 15px" href="/admin/reports/task/${d.id}">
-                    //                             <i class="fa-solid fa-info"></i>
-                    //                         </a>
-                    //                         <button data-id="${d.id}"
-                    //                             class="btn btn-danger btn-sm btn-delete">
-                    //                             <i class="fas fa-trash"></i>
-                    //                         </button>`;
                 },
             },
         ],
@@ -222,8 +212,7 @@ $('.btn-preview').on('click', async function () {
             url: `/api/exports/getDataMapChart?month=${month}&year=${year}&contract_id=${contract_id}`,
             success: function (response) {
                 let html = '';
-                let data = Object.keys(response.data).map((key) => response.data[key]);
-                data.forEach(e => {
+                response.data.forEach(e => {
                     let dataE = Object.keys(e).map((key) => e[key]);
                     dataE.forEach(item => {
                         if (typeof item !== 'number') {
@@ -231,6 +220,7 @@ $('.btn-preview').on('click', async function () {
                                 item[
                                 key]);
                             let mapCode = dataItem[0]['code'].split('-');
+
                             html +=
                                 `<canvas id="mapChart${e.task_id}${mapCode[0]}" style="display:block;"></canvas>`;
                         }
@@ -239,7 +229,7 @@ $('.btn-preview').on('click', async function () {
                 $('.groupChart').html('');
                 $('.groupChart').html(html);
 
-                data.forEach(e => {
+                response.data.forEach(e => {
                     let dataChart = [];
                     Object.keys(e).forEach((key) => {
                         if (key != 'task_id') {

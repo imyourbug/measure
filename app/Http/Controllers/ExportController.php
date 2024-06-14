@@ -261,6 +261,7 @@ class ExportController extends Controller
                     ->orderBy('map_id')
                     ->get()
                     ?->toArray() ?? [];
+
                 foreach ($data_map as $key => $data) {
                     $data = (array)$data;
                     if (isset($result[$task_detail->task->id][$data['map_id']])) {
@@ -294,7 +295,7 @@ class ExportController extends Controller
 
         return response()->json([
             'status' => 0,
-            'data' => $result,
+            'data' => collect($result)->values(),
         ]);
     }
 
