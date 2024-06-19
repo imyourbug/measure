@@ -322,13 +322,16 @@ class ExportController extends Controller
             }
         }
 
-        DB::unprepared('SET GLOBAL log_bin_trust_function_creators = 1;');
         DB::unprepared("DROP FUNCTION IF EXISTS SPLIT_STRING;
         CREATE FUNCTION SPLIT_STRING(str VARCHAR(255), delim VARCHAR(12), pos INT)
         RETURNS VARCHAR(255)
+        -- Choose one of the following based on function behavior:
+        -- DETERMINISTIC: If the function always returns the same output for the same input
+        -- NO SQL: If the function doesn't access any database tables
+        -- READS SQL DATA: If the function reads data from tables
         RETURN REPLACE(SUBSTRING(SUBSTRING_INDEX(str, delim, pos),
-            CHAR_LENGTH(SUBSTRING_INDEX(str, delim, pos-1)) + 1),
-            delim, '');");
+                    CHAR_LENGTH(SUBSTRING_INDEX(str, delim, pos-1)) + 1),
+                    delim, '');");
         foreach ($contract->tasks as $task) {
             $tmp = [];
             for ($month = 1; $month <= 12; $month++) {
