@@ -322,6 +322,7 @@ class ExportController extends Controller
             }
         }
 
+        DB::unprepared('SET GLOBAL log_bin_trust_function_creators = 1;');
         DB::unprepared("DROP FUNCTION IF EXISTS SPLIT_STRING;
         CREATE FUNCTION SPLIT_STRING(str VARCHAR(255), delim VARCHAR(12), pos INT)
         RETURNS VARCHAR(255)

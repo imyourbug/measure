@@ -158,9 +158,13 @@ class TaskController extends Controller
                 return $q->where('type_id', $type_id);
             })
             ->when($from, function ($q) use ($from) {
-                return $q->where('created_at', '>=', $from . ' 00:00:00');
+                return $q->whereHas('details', function ($q) use ($from) {
+                    $q->where('plan_date', '>=', $from . ' 00:00:00');
+                });
             })->when($to, function ($q) use ($to) {
-                return $q->where('created_at', '<=', $to . ' 23:59:59');
+                return $q->whereHas('details', function ($q) use ($to) {
+                    $q->where('plan_date', '<=', $to . ' 23:59:59');
+                });
             })->when($user_id, function ($q) use ($user_id) {
                 return $q->whereHas('details.taskStaffs', function ($q) use ($user_id) {
                     $q->where('user_id', $user_id);
