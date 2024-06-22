@@ -2,8 +2,8 @@
 @push('styles')
 @endpush
 @push('scripts')
-<script>
-     $("#upload").change(function() {
+    <script>
+        $("#upload").change(function() {
             const form = new FormData();
             form.append("file", $(this)[0].files[0]);
             console.log(form);
@@ -24,7 +24,7 @@
                 },
             });
         });
-</script>
+    </script>
 @endpush
 @section('content')
     <form action="{{ route('admin.types.update', ['id' => $type->id]) }}" method="POST">
@@ -57,15 +57,13 @@
                 <div class="col-lg-6 col-md-12">
                     <div class="form-group">
                         <label for="menu">Khuyến nghị</label>
-                        <input type="text" class="form-control" name="suggestion" value="{{ old('suggestion') ?? $type->suggestion }}"
-                            placeholder="Nhập khuyến nghị">
+                        <textarea class="form-control" placeholder="Nhập khuyến nghị" name="suggestion" cols="30" rows="10">{{ old('suggestion') ?? $type->suggestion }}</textarea>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-12">
                     <div class="form-group">
                         <label for="menu">Ghi chú</label>
-                        <input type="text" class="form-control" name="note" value="{{ old('note')  ?? $type->note}}"
-                            placeholder="Nhập ghi chú">
+                        <textarea class="form-control" placeholder="Nhập ghi chú" name="note" cols="30" rows="10">{{ old('note') ?? $type->note }}</textarea>
                     </div>
                 </div>
             </div>
@@ -74,8 +72,9 @@
                     <div class="form-group">
                         <label for="file">Chọn ảnh</label><br>
                         <div class="">
-                            <img id="image_show" style="width: 100px;height:100px" src="{{ old('image') ?? $type->image }}" alt="image" />
-                            <input type="file" id="upload" accept=".png,.jpeg"/>
+                            <img id="image_show" style="width: 100px;height:100px" src="{{ old('image') ?? $type->image }}"
+                                alt="image" />
+                            <input type="file" id="upload" accept=".png,.jpeg" />
                         </div>
                         <input type="hidden" name="image" id="image" value="{{ old('image') ?? $type->image }}">
                     </div>

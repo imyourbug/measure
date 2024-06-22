@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('representative')->nullable();
             $table->string('tax_code')->nullable();
-            $table->string('address')->nullable();
+            $table->longText('address')->nullable();
             $table->string('website')->nullable();
             $table->string('email')->nullable();
             $table->string('avatar')->nullable();

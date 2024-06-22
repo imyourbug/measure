@@ -19,9 +19,9 @@ return new class extends Migration
             $table->string('time_out')->default('11:00:00 AM');
             $table->string('range')->nullable();
             $table->string('status')->nullable();
-            $table->string('reason')->nullable();
-            $table->string('solution')->nullable();
-            $table->string('note')->nullable();
+            $table->longText('reason')->nullable();
+            $table->longText('solution')->nullable();
+            $table->longText('note')->nullable();
             $table->unsignedBigInteger('task_id');
             $table->foreign('task_id')->references('id')->on('tasks')->onDelete('cascade');
             $table->timestamps();

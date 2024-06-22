@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('chemistries', function (Blueprint $table) {
             $table->id();
             $table->string('code')->nullable();
-            $table->string('name')->nullable();
+            $table->longText('name')->nullable();
             $table->string('number_regist')->nullable();
             $table->string('image')->nullable();
-            $table->string('description')->nullable();
+            $table->longText('description')->nullable();
             $table->string('supplier')->nullable();
             $table->integer('active')->default(0);
             $table->timestamps();

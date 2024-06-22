@@ -89,6 +89,14 @@ class AccountController extends Controller
         return redirect()->back();
     }
 
+    public function getAll(Request $request)
+    {
+        return response()->json([
+            'status' => 0,
+            'accounts' => User::with(['customer', 'staff'])->get()
+        ]);
+    }
+
     public function index(Request $request)
     {
         if ($request->ajax()) {

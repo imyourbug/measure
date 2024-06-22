@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('kpi')->nullable();
             $table->string('result')->nullable();
             $table->string('image')->nullable();
-            $table->string('detail')->nullable();
+            $table->longText('detail')->nullable();
             $table->unsignedBigInteger('task_id');
             $table->unsignedBigInteger('chemistry_id');
             $table->foreign('task_id')->references('id')->on('task_details')->onDelete('cascade');

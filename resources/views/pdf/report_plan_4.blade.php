@@ -95,19 +95,17 @@
     <div class="" style="text-align: center">
         <p style="font-size: 14px;font-weight:bold;">{{ $data['file_name'] }}</p>
         <p style="font-style:italic">V/v: {{ $data['contract']['name'] ?? '' }} năm {{ date('Y') }}</p>
-        <p style="font-style:italic">Hợp đồng số {{ $data['contract']['id'] ?? '' }} ký ngày
-            {{ \Illuminate\Support\Carbon::parse($data['contract']['created_at'])->format('d-m-Y') }}</p>
     </div>
     <h3>A. Thành phần tham gia nghiệm thu</h3>
-    <h3>BÊN A: {{ $data['customer']['name'] ?? '' }} - {{ $data['branch']['name'] ?? '' }}</h3>
-    <p style="margin-left: 50px">Đại diện: Ông ( bà ) : {{ $data['branch']['representative'] ?? '' }} Chức vụ :
+    <h3>BÊN A:
+        {{ $data['customer']['name'] ?? '' }}{{ !empty($data['branch']['name']) ? ' - ' . $data['branch']['name'] : '' }}
+    </h3>
+    <p style="margin-left: 50px">Đại diện: Ông ( bà ) : {{ $data['branch']['manager'] ?? '' }} Chức vụ :
         {{ $data['customer']['position'] ?? '' }}</p>
+    <p style="">Chi tiết địa chỉ: {{ $data['branch']['address'] ?? ($data['customer']['address'] ?? '') }} </p>
     <h3>BÊN B: {{ $data['setting']['company-name'] ?? '' }}</h3>
     <p style="margin-left: 50px">Đại diện: Ông ( bà ) :{{ $data['creator']['staff']['name'] ?? '' }} Chức vụ
         :{{ $data['creator']['staff']['position'] ?? '' }}</p>
-    <p style="">Chi tiết địa chỉ: {{ $data['branch']['name'] ?? '' }} </p>
-    <p style="">Thời gian: {{ \Illuminate\Support\Carbon::parse($data['contract']['start'])->format('d/m/Y') }} -
-        {{ \Illuminate\Support\Carbon::parse($data['contract']['finish'])->format('d/m/Y') }} </p>
     <h3>B. Khối lượng hoàn thành </h3>
     @if (!empty($data['tasks']))
         @foreach ($data['tasks'] as $key => $info)
@@ -344,8 +342,7 @@
     <div class="col10">
         <div class="col3" style="text-align: center">
             <p style="font-weight:bold;"> ĐẠI DIỆN BÊN A
-                <br>{{ $data['customer']['representative'] ?? $data['customer']['name'] }} –
-                {{ $data['branch']['name'] ?? '' }}
+                <br>{{ $data['customer']['name'] ?? '' }}
             </p>
             <p style="font-style: italic">(Ký và ghi rõ họ tên)</p>
         </div>

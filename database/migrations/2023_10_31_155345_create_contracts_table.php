@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('contracts', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->longText('name');
             $table->date('start');
             $table->date('finish');
-            $table->text('content');
+            $table->longText('content');
             $table->unsignedBigInteger('customer_id');
             $table->unsignedBigInteger('branch_id')->nullable();
-            $table->string('attachment')->nullable();
+            $table->longText('attachment')->nullable();
             $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
             // $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
             $table->timestamps();

@@ -171,6 +171,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin'], function () {
     #accounts
     Route::group(['prefix' => 'accounts', 'as' => 'accounts.'], function () {
         Route::delete('/{id}/destroy', 'AccountController@destroy')->name('destroy');
+        Route::get('/getAll', 'AccountController@getAll')->name('getAll');
     });
 
     #customers
@@ -221,6 +222,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin'], function () {
     #staffs
     Route::group(['prefix' => 'staffs', 'as' => 'staffs.'], function () {
         Route::delete('/{id}/destroy', 'InfoUserController@destroy')->name('destroy');
+        Route::get('/getAll', 'InfoUserController@getAll')->name('getAll');
     });
 });
 

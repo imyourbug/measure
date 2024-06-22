@@ -54,15 +54,13 @@
                 <div class="col-lg-6 col-md-12">
                     <div class="form-group">
                         <label for="menu">Khuyến nghị</label>
-                        <input type="text" class="form-control" name="suggestion" value="{{ old('suggestion') }}"
-                            placeholder="Nhập khuyến nghị">
+                        <textarea class="form-control" placeholder="Nhập khuyến nghị" name="suggestion" cols="30" rows="10">{{ old('suggestion') }}</textarea>
                     </div>
                 </div>
                 <div class="col-lg-6 col-md-12">
                     <div class="form-group">
                         <label for="menu">Ghi chú</label>
-                        <input type="text" class="form-control" name="note" value="{{ old('note') }}"
-                            placeholder="Nhập ghi chú">
+                        <textarea class="form-control" placeholder="Nhập Ghi chú" name="note" cols="30" rows="10">{{ old('note') }}</textarea>
                     </div>
                 </div>
             </div>

@@ -15,13 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('code')->nullable();
             $table->string('area')->nullable();
-            $table->string('position')->nullable();
-            $table->string('target')->nullable();
+            $table->longText('position')->nullable();
+            $table->longText('target')->nullable();
             $table->string('unit')->nullable();
             $table->string('kpi')->nullable();
             $table->string('result')->nullable();
             $table->string('image')->nullable();
-            $table->string('detail')->nullable();
+            $table->longText('detail')->nullable();
             $table->string('round')->nullable();
             $table->string('fake_result')->nullable();
             $table->unsignedBigInteger('task_id');

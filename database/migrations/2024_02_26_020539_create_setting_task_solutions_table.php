@@ -14,12 +14,12 @@ return new class extends Migration
         Schema::create('setting_task_solutions', function (Blueprint $table) {
             $table->id();
             $table->string('code')->nullable();
-            $table->string('name')->nullable();
+            $table->longText('name')->nullable();
             $table->string('unit')->nullable();
             $table->string('kpi')->nullable();
             $table->string('result')->nullable();
-            $table->string('image')->nullable();
-            $table->string('detail')->nullable();
+            $table->longText('image')->nullable();
+            $table->longText('detail')->nullable();
             $table->unsignedBigInteger('task_id');
             $table->unsignedBigInteger('solution_id');
             $table->foreign('task_id')->references('id')->on('tasks')->onDelete('cascade');

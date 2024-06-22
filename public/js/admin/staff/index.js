@@ -16,7 +16,7 @@ $(document).ready(function () {
             },
         },
         ajax: {
-            url: "/admin/staffs",
+            url: "/api/staffs/getAll",
             dataSrc: "staff",
         },
         columns: [
@@ -38,11 +38,11 @@ $(document).ready(function () {
                 },
             },
 
-            {
-                data: function (d) {
-                    return `${d.user.email ? d.user.email : d.user.name}`;
-                },
-            },
+            // {
+            //     data: function (d) {
+            //         return `${d.user.email ? d.user.email : d.user.name}`;
+            //     },
+            // },
 
             {
                 data: function (d) {

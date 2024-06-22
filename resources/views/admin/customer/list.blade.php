@@ -135,7 +135,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-header ui-sortable-handle header-color" style="cursor: move;">
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary">Lưu</button>
+                    </div>
+                    <!-- <div class="card-header ui-sortable-handle header-color" style="cursor: move;">
                         <h3 class="card-title text-bold">Thông tin đăng nhập</h3>
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -164,7 +167,7 @@
                         <div class="card-footer">
                             <button type="submit" class="btn btn-primary">Lưu</button>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>

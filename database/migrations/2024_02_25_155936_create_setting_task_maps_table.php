@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('kpi')->nullable();
             $table->string('result')->nullable();
             $table->string('image')->nullable();
-            $table->string('detail')->nullable();
+            $table->longText('detail')->nullable();
             $table->string('round')->nullable();
             $table->string('fake_result')->nullable();
             $table->unsignedBigInteger('task_id');

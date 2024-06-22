@@ -77,7 +77,7 @@
 </head>
 
 <body>
-    {{-- <header>
+    <header>
         <div class="col10">
             <div class="col7" style="text-align: right">
                 <p style="font-size: 12px;font-weight:bold;text-align:center;postion:absolute;margin-left:0">
@@ -91,19 +91,28 @@
         <p style="text-align:right">{{ $data['setting']['company-address'] ?? '' }}, ngày {{ date('d') }} tháng
             {{ date('m') }} năm
             {{ date('Y') }}</p>
-    </header> --}}
+    </header>
     <div class="" style="text-align: center">
         <p style="font-size: 14px;font-weight:bold;">{{ $data['file_name'] }}</p>
         <p style="font-style:italic">V/v: {{ $data['contract']['name'] ?? '' }} năm {{ date('Y') }}</p>
-        <p style="font-style:italic">Hợp đồng số {{ $data['contract']['id'] ?? '' }} ký ngày
-            {{ \Illuminate\Support\Carbon::parse($data['contract']['created_at'])->format('d-m-Y') }}</p>
     </div>
+    <h3>A. Thành phần tham gia nghiệm thu</h3>
+    <h3>BÊN A:
+        {{ $data['customer']['name'] ?? '' }}{{ !empty($data['branch']['name']) ? ' - ' . $data['branch']['name'] : '' }}
+    </h3>
+    <p style="margin-left: 50px">Đại diện: Ông ( bà ) : {{ $data['branch']['manager'] ?? '' }} Chức vụ :
+        {{ $data['customer']['position'] ?? '' }}</p>
+    <p style="">Chi tiết địa chỉ: {{ $data['branch']['address'] ?? ($data['customer']['address'] ?? '') }} </p>
+    <h3>BÊN B: {{ $data['setting']['company-name'] ?? '' }}</h3>
+    <p style="margin-left: 50px">Đại diện: Ông ( bà ) :{{ $data['creator']['staff']['name'] ?? '' }} Chức vụ
+        :{{ $data['creator']['staff']['position'] ?? '' }}</p>
     <div class="" style="text-align: left">
         <p style="font-style:italic">Ngày: ___/_____/_______________</p>
     </div>
     @if (!empty($data['tasks']))
         @foreach ($data['tasks'] as $info)
-            <p style="font-weight:bold;">{{ $info['type']['parent']['name'] ?? '' }} - {{ $info['type']['name'] ?? '' }}
+            <p style="font-weight:bold;">{{ $info['type']['parent']['name'] ?? '' }} -
+                {{ $info['type']['name'] ?? '' }}
             </p>
             <table class="tbl-plan tbl-staff" cellspacing="0">
                 <tbody>

@@ -4,7 +4,7 @@
 @push('scripts')
     {{-- <script src="/js/admin/contract/index.js"></script> --}}
     <script>
-        $("#attachment").change(function() {
+        $(document).on('change', '#attachment', function() {
             const form = new FormData();
             form.append("file", $(this)[0].files[0]);
             console.log(form);
@@ -95,7 +95,8 @@
                                 <label class="notification" for="menu">Tệp đính kèm</label>
                                 <div class="">
                                     <input type="file" id="attachment">
-                                    <input type="hidden" name="attachment" id="value-attachment" value="{{ $contract->attachment }}">
+                                    <input type="hidden" name="attachment" id="value-attachment"
+                                        value="{{ $contract->attachment }}">
                                 </div>
                             </div>
                             @if ($contract->attachment)

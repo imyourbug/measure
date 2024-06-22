@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('solutions', function (Blueprint $table) {
             $table->id();
             $table->string('code')->nullable();
-            $table->string('name')->nullable();
-            $table->string('target')->nullable();
-            $table->string('image')->nullable();
-            $table->string('description')->nullable();
+            $table->longText('name')->nullable();
+            $table->longText('target')->nullable();
+            $table->longText('image')->nullable();
+            $table->longText('description')->nullable();
             $table->integer('active')->default(0);
             $table->timestamps();
         });

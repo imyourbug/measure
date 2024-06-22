@@ -80,23 +80,6 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
-                                <label for="menu">Chi nhánh</label>
-                                <select multiple="multiple" id="branch_id"
-                                    class="select2 custom-select form-control-border select-branch">
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-12">
-                            <div class="form-group">
-                                <label for="menu">Nội dung</label>
-                                <input placeholder="Nhập nội dung..." class="form-control" id="content"
-                                    value="{{ old('content') }}" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6 col-md-12">
-                            <div class="form-group">
                                 <label for="menu">Ngày bắt đầu <span class="required">(*)</span></label>
                                 <input type="date" class="form-control" id="start"
                                     value="{{ old('start', now()->format('Y-m-d')) }}">
@@ -110,6 +93,23 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Chi nhánh</label>
+                                <select multiple="multiple" id="branch_id"
+                                    class="select2 custom-select form-control-border select-branch">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Nội dung</label>
+                                <textarea class="form-control" placeholder="Nhập nội dung..." id="content" cols="30" rows="10">{{ old('content') }} </textarea>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">

@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('branches', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
-            $table->string('address')->nullable();
+            $table->longText('name')->nullable();
+            $table->longText('address')->nullable();
             $table->string('tel')->nullable();
             $table->string('email')->nullable();
-            $table->string('manager')->nullable();
+            $table->longText('manager')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

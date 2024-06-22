@@ -122,6 +122,13 @@ class InfoUserController extends Controller
         ]);
     }
 
+    public function getAll(Request $request)
+    {
+        return response()->json([
+            'status' => 0,
+            'staff' => InfoUser::with(['user'])->get()
+        ]);
+    }
 
 
     public function destroy($user_id)

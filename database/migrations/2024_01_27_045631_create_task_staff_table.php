@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('task_staff', function (Blueprint $table) {
             $table->id();
             $table->string('code')->nullable();
-            $table->string('name')->nullable();
-            $table->string('position')->nullable();
+            $table->longText('name')->nullable();
+            $table->longText('position')->nullable();
             $table->string('tel')->nullable();
             $table->string('identification')->nullable();
             $table->unsignedBigInteger('task_id');
