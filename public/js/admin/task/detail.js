@@ -52,27 +52,6 @@ function closeModal(type) {
     $(".modal-backdrop").remove();
 }
 
-$("#upload").change(function () {
-    const form = new FormData();
-    form.append("file", $(this)[0].files[0]);
-    $.ajax({
-        processData: false,
-        contentType: false,
-        type: "POST",
-        data: form,
-        url: "/api/upload",
-        success: function (response) {
-            if (response.status == 0) {
-                //hiển thị ảnh
-                $("#image_show").attr('src', response.url);
-                $("#image").val(response.url);
-            } else {
-                toastr.error(response.message, 'Thông báo');
-            }
-        },
-    });
-});
-
 $(document).ready(function () {
     // map
     dataTableMap = $("#tableMap").DataTable({
@@ -118,11 +97,11 @@ $(document).ready(function () {
         {
             data: "round"
         },
-        {
-            data: function (d) {
-                return `<img style="width: 50px;height:50px" src="${d.image}" alt="image" />`;
-            },
-        },
+        // {
+        //     data: function (d) {
+        //         return `<img style="width: 50px;height:50px" src="${d.image}" alt="image" />`;
+        //     },
+        // },
         // {
         //     data: function(d) {
         //         return getActive(d.active);

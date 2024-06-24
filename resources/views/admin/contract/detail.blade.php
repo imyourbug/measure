@@ -19,6 +19,28 @@
     <script src="https://cdn.datatables.net/keytable/2.12.0/js/dataTables.keyTable.js"></script>
     <script src="https://cdn.datatables.net/keytable/2.12.0/js/keyTable.dataTables.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        $(document).on('change', '#attachment', function() {
+            const form = new FormData();
+            form.append("file", $(this)[0].files[0]);
+            console.log(form);
+            $.ajax({
+                processData: false,
+                contentType: false,
+                type: "POST",
+                data: form,
+                url: "/api/upload",
+                success: function(response) {
+                    if (response.status == 0) {
+                        toastr.success('Tải lên thành công', 'Thông báo');
+                        $("#value-attachment").val(response.url);
+                    } else {
+                        toastr.error(response.message, 'Thông báo');
+                    }
+                },
+            });
+        });
+    </script>
 @endpush
 @section('content')
     <div class="row">
@@ -87,7 +109,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-lg-6 col-md-12">
+                                <div class="col-lg-12 col-md-12">
                                     <div class="form-group">
                                         <label for="menu">Nội dung</label>
                                         <textarea placeholder="Nhập nội dung..." class="form-control" name="content" cols="30" rows="5">{{ old('content') ?? $contract->content }}</textarea>
@@ -101,12 +123,13 @@
                                             <input type="hidden" name="attachment" id="value-attachment"
                                                 value="{{ $contract->attachment }}">
                                         </div>
+                                        @if ($contract->attachment)
+                                            <a href="{{ $contract->attachment }}" target="_blank">Xem</a>
+                                        @else
+                                            Trống
+                                        @endif
                                     </div>
-                                    @if ($contract->attachment)
-                                        <a href="{{ $contract->attachment }}" target="_blank">Xem</a>
-                                    @else
-                                        Trống
-                                    @endif
+
                                 </div>
                             </div>
                         </div>

@@ -89,6 +89,15 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin'], function () {
         });
     });
 
+    #contracts
+    Route::group(['prefix' => 'contracts', 'as' => 'contracts.'], function () {
+        Route::post('/create', 'ContractController@store')->name('store');
+        Route::delete('/{id}/destroy', 'ContractController@destroy')->name('destroy');
+        Route::get('/getTypeByContractId', 'ContractController@getTypeByContractId')->name('getTypeByContractId');
+        Route::get('/getAll', 'ContractController@getAll')->name('getAll');
+        Route::get('/getTimeInfoContractById', 'ContractController@getTimeInfoContractById')->name('getTimeInfoContractById');
+    });
+
     #reports
     Route::group(['prefix' => 'reports', 'as' => 'reports.'], function () {
         Route::post('/checkCopyData', 'ReportController@checkCopyData')->name('checkCopyData');
@@ -183,14 +192,6 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin'], function () {
     Route::group(['prefix' => 'types', 'as' => 'types.'], function () {
         Route::delete('/{id}/destroy', 'TypeController@destroy')->name('destroy');
         Route::get('/getTypeByParentId', 'TypeController@getTypeByParentId')->name('getTypeByParentId');
-    });
-
-    #contracts
-    Route::group(['prefix' => 'contracts', 'as' => 'contracts.'], function () {
-        Route::post('/create', 'ContractController@store')->name('store');
-        Route::delete('/{id}/destroy', 'ContractController@destroy')->name('destroy');
-        Route::get('/getTypeByContractId', 'ContractController@getTypeByContractId')->name('getTypeByContractId');
-        Route::get('/getAll', 'ContractController@getAll')->name('getAll');
     });
 
     #branches

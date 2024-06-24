@@ -24,6 +24,28 @@
     <script src="https://cdn.datatables.net/keytable/2.12.0/js/keyTable.dataTables.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script>
+        $(document).on('change', '#upload', function() {
+            const form = new FormData();
+            form.append("file", $(this)[0].files[0]);
+            $.ajax({
+                processData: false,
+                contentType: false,
+                type: "POST",
+                data: form,
+                url: "/api/upload",
+                success: function(response) {
+                    if (response.status == 0) {
+                        //hiển thị ảnh
+                        $("#image_show").attr('src', response.url);
+                        $("#image").val(response.url);
+                    } else {
+                        toastr.error(response.message, 'Thông báo');
+                    }
+                },
+            });
+        });
+    </script>
 @endpush
 @section('content')
     <div class="row">
@@ -225,7 +247,7 @@
                                                         <th>Khu vực</th>
                                                         {{-- <th>Mô tả</th> --}}
                                                         <th>Phạm vi</th>
-                                                        <th>Ảnh</th>
+                                                        {{-- <th>Ảnh</th> --}}
                                                         {{-- <th>Hiệu lực</th> --}}
                                                         <th>Thao tác</th>
                                                     </tr>
@@ -545,14 +567,14 @@
                                 <input class="form-control" id="description" placeholder="Nhập mô tả" />
                             </div>
                         </div> --}}
-                        <div class="col-lg-6 col-md-12">
+                        <div class="col-lg-12 col-md-12">
                             <div class="form-group">
                                 <label for="menu">Phạm vi</label>
                                 <input type="text" class="form-control" id="range" value=""
                                     placeholder="Nhập phạm vi" />
                             </div>
                         </div>
-                        <div class="col-lg-6 col-md-12">
+                        {{-- <div class="col-lg-6 col-md-12">
                             <div class="form-group">
                                 <label for="file">Chọn ảnh</label><br>
                                 <div class="">
@@ -562,25 +584,8 @@
                                 </div>
                                 <input type="hidden" id="image" value="">
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
-                    {{-- <div class="row">
-                        <div class="col-lg-6 col-md-12">
-                            <div class="form-group">
-                                <label>Hiệu lực</label>
-                                <div class="custom-control custom-radio">
-                                    <input class="custom-control-input" type="radio" id="active" value="1"
-                                        name="active" checked>
-                                    <label for="active" class="custom-control-label">Có</label>
-                                </div>
-                                <div class="custom-control custom-radio">
-                                    <input class="custom-control-input" type="radio" id="unactive" value="0"
-                                        name="active">
-                                    <label for="unactive" class="custom-control-label">Không</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div> --}}
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>

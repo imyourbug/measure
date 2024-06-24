@@ -94,7 +94,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-6 col-md-12">
+                        <div class="col-lg-12 col-md-12">
                             <div class="form-group">
                                 <label for="menu">Chi nhánh</label>
                                 <select multiple="multiple" id="branch_id"
@@ -102,10 +102,10 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-lg-6 col-md-12">
+                        <div class="col-lg-12 col-md-12">
                             <div class="form-group">
                                 <label for="menu">Nội dung</label>
-                                <textarea class="form-control" placeholder="Nhập nội dung..." id="content" cols="30" rows="10">{{ old('content') }} </textarea>
+                                <textarea class="form-control" placeholder="Nhập nội dung..." id="content" cols="30" rows="5">{{ old('content') }} </textarea>
                             </div>
                         </div>
                     </div>

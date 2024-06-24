@@ -205,7 +205,6 @@ Route::group([
     Route::group(['prefix' => 'contracts', 'as' => 'contracts.'], function () {
         Route::get('/', 'ContractController@index')->name('index');
         Route::get('/create', 'ContractController@create')->name('create');
-        Route::get('/update/{id}', 'ContractController@show')->name('show');
         Route::get('/detail/{id}', 'ContractController@detail')->name('detail');
         Route::post('/update', 'ContractController@update')->name('update');
     });

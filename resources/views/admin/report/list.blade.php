@@ -39,6 +39,20 @@
                 }
             });
         });
+
+        $(document).on('change', '.select-contract-copy', function(e) {
+            let contract_id = $(this).val();
+            if (contract_id) {
+                $.ajax({
+                    type: "GET",
+                    url: `/api/contracts/getTimeInfoContractById?contract_id=${contract_id}`,
+                    success: function(response) {
+                        $('.info-time-contract').text(
+                            `Các tháng có dữ liệu: ${response.times.length > 0 ? response.times.join(', ') : ''}`);
+                    }
+                });
+            }
+        });
     </script>
 @endpush
 @section('content')
@@ -58,11 +72,13 @@
                     <div class="card-body" style="display: block;padding: 10px !important;">
                         <form data-url="{{ route('reports.checkCopyData') }}"
                             action="{{ route('admin.reports.duplicate') }}" id="form-duplicate" method="POST">
-                            @csrf<div class="row">
+                            @csrf
+                            <div class="row">
                                 <div class="col-lg-12 col-md-12">
                                     <div class="form-group">
                                         <label for="menu">Chọn hợp đồng <span class="required">(*)</span></label>
-                                        <select name="contract_id" class="form-control">
+                                        <select name="contract_id" class="form-control select-contract-copy">
+                                            <option value="">--Chọn hợp đồng--</option>
                                             @foreach ($contracts as $contract)
                                                 <option value="{{ $contract->id }}">
                                                     {{ $contract->customer->name . ' | ' . $contract->name . ' | ' . ($contract->branch->name ?? '') }}
@@ -113,6 +129,12 @@
                                 </div>
                             </div>
                         </form>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12 info-time-contract">
+                                Các tháng có dữ liệu:
+                            </div>
+                        </div>
+                        <br>
                         <button class="btn btn-success btn-copy">Xác nhận</button>
                     </div>
 

@@ -19,6 +19,28 @@ use Toastr;
 
 class ContractController extends Controller
 {
+    public function getTimeInfoContractById(Request $request)
+    {
+        $contract_id = $request->contract_id;
+
+        $taskDetails = TaskDetail::whereHas('task.contract', function ($q) use ($contract_id) {
+            $q->where('id', $contract_id);
+        })
+            ->get();
+
+        $times = [];
+        foreach ($taskDetails as $taskDetail) {
+            $month = $taskDetail->plan_date->format('m');
+            $year = $taskDetail->plan_date->format('Y');
+            $times["{$month}{$year}"] = "$month/$year";
+        }
+
+        return response()->json([
+            'status' => 0,
+            'times' => collect($times)->values()
+        ]);
+    }
+
     public function getAll(Request $request)
     {
         $customer_id = $request->customer_id;
@@ -223,15 +245,6 @@ class ContractController extends Controller
             'customers' => Customer::all(),
             'parent_types' => Type::where('parent_id', 0)
                 ->get(),
-        ]);
-    }
-
-    public function show($id)
-    {
-        return view('admin.contract.edit', [
-            'title' => 'Cập nhật hợp đồng',
-            'contract' => Contract::with(['tasks'])->firstWhere('id', $id),
-            'customers' => Customer::all(),
         ]);
     }
 
