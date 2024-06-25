@@ -120,67 +120,63 @@
                     <tr>
                         <th rowspan="2">STT</th>
                         <th rowspan="2">Tên nhiệm vụ</th>
-                        <th colspan="4">Chi tiết</th>
-                        {{-- <th rowspan="2">Ảnh</th> --}}
-                        <th colspan="4">Theo dõi số liệu</th>
+                        <th colspan="8">Chi tiết</th>
                     </tr>
                     <tr>
                         <th>Khu vực</th>
                         <th>Phạm vi</th>
                         <th>Đối tượng</th>
-                        <th>Số lượng</th>
-                        <th>Đơn vị</th>
-                        <th>Kết quả</th>
-                        <th>KPI</th>
-                        <th>Đánh giá</th>
+                        <th>Tần suất</th>
+                        <th>Biện pháp</th>
+                        <th>Ghi chú</th>
+                        <th>Hiện trạng</th>
+                        <th>Nguyên nhân</th>
                     </tr>
-                    @foreach ($info['group_details'] as $areas)
-                        @foreach ($areas as $key => $tasks)
-                            @php
-                                $count++;
-                                $sumResult = 0;
-                                $sumKPI = 0;
+
+                    @php
+                        $positions = [];
+                        $targets = [];
+                        $rounds = [];
+                        foreach ($info['group_details'] as $areas) {
+                            foreach ($areas as $key => $tasks) {
                                 foreach ($tasks as $taskMapInfo) {
-                                    $sumResult += $taskMapInfo['result'] ?? 0;
-                                    $sumKPI += $taskMapInfo['kpi'] ?? 0;
+                                    if (!in_array($taskMapInfo['position'], $positions)) {
+                                        $positions[] = $taskMapInfo['position'] ?? '';
+                                    }
+                                    if (!in_array($taskMapInfo['target'], $targets)) {
+                                        $targets[] = $taskMapInfo['target'] ?? '';
+                                    }
+                                    if (!in_array($taskMapInfo['round'], $rounds)) {
+                                        $rounds[] = $taskMapInfo['round'] ?? '';
+                                    }
                                 }
-                            @endphp
-                            <tr>
-                                <td>{{ $count < 10 ? '0' . $count : $count }}</td>
-                                <td>{{ $info['type']['name'] ?? '' }}</td>
-                                <td>{{ $tasks[array_key_first($tasks)]['position'] ?? '' }} </td>
-                                {{-- <td>{{ $key }} - {{ $tasks[array_key_first($tasks)]['position'] ?? '' }}
-                                </td> --}}
-                                <td>{{ $tasks[array_key_first($tasks)]['round'] ?? '' }}</td>
-                                <td>{{ $tasks[array_key_first($tasks)]['target'] ?? '' }}</td>
-                                <td>{{ count($tasks) }}</td>
-                                {{-- <td>
-                                    @if (!empty($tasks[0]['image']))
-                                        <img src="{{ public_path($tasks[0]['image']) }}" width="20px" height="20px"
-                                            alt="">
-                                    @endif
-                                </td> --}}
-                                <td>{{ $tasks[array_key_first($tasks)]['unit'] ?? '' }}</td>
-                                <td>{{ count($info['details'] ?? []) ? round($sumResult / count($info['details']), 2) : $sumResult }}
-                                </td>
-                                <td>{{ count($info['details'] ?? []) ? round($sumKPI / count($info['details']), 2) : $sumKPI }}
-                                </td>
-                                <td></td>
-                            </tr>
-                        @endforeach
-                    @endforeach
+                            }
+                        }
+                    @endphp
+                    <tr>
+                        <td>{{ 01 }}</td>
+                        <td>{{ $info['type']['name'] ?? '' }}</td>
+                        <td>{{ implode(',', $positions) }} </td>
+                        <td>{{ implode(',', $rounds) }} </td>
+                        <td>{{ implode(',', $targets) }} </td>
+                        <td>{{ $info['frequence'] ?? '' }}</td>
+                        <td>{{ $info['solution'] ?? '' }}</td>
+                        <td>{{ $info['notice'] ?? '' }}</td>
+                        <td>{{ $info['detail'] ?? '' }}</td>
+                        <td>{{ $info['reason'] ?? '' }}</td>
+                    </tr>
 
                 </tbody>
             </table>
-            <br />
-            <br />
+            <p style="">- Nhận xét: {{ $info['comment'] }}</p>
+            <p style="">- Chi tiết: {{ $info['detail'] }}</p>
             <p style="">Báo cáo phân tích</p>
             @foreach ($info['group_details'] as $areas)
                 @foreach ($areas as $key => $tasks)
                     @php
                         $keyImage = ($info['id'] ?? '') . $key;
                     @endphp
-                    <p>Khu vực {{ $key }}</p>
+                    <p>Khu vực {{ $tasks[array_key_first($tasks)]['position'] ?? '' }}</p>
 
                     @if ($data['display'])
                         <table class="tbl-plan">
@@ -228,8 +224,6 @@
                             </tr>
                         </table>
                     @endif
-                    <p style="margin-left:20px">- Nhận xét: {{ $info['comment'] }}</p>
-                    <p style="margin-left:20px">- Chi tiết: {{ $info['detail'] }}</p>
                     <p style="margin-left:10px">Kết quả theo dõi: Từ: Tháng {{ $data['month'] }} năm
                         {{ $data['year'] }}
                         đến

@@ -200,7 +200,7 @@ class ExportController extends Controller
                 }
             }
             unset($task['details']);
-            $result['tasks'][] = [
+            $result['tasks'][$task['id']] = [
                 'details' => $tmp,
                 ...$task,
             ];
@@ -221,7 +221,7 @@ class ExportController extends Controller
             $detail['task_maps'] = $tmp;
             $task['group_details'] = $tmp;
         }
-        // dd($result);
+        krsort($result['tasks']);
 
         return $result;
     }
