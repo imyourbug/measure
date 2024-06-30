@@ -34,6 +34,11 @@ class Task extends Model
         return $this->hasMany(TaskDetail::class, 'task_id', 'id');
     }
 
+    public function images()
+    {
+        return $this->hasMany(TaskImage::class, 'task_id', 'id');
+    }
+
     public function type()
     {
         return $this->belongsTo(Type::class, 'type_id', 'id');

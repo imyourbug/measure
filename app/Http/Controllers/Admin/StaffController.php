@@ -2,25 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Constant\GlobalConstant;
-use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\Controller;
 use App\Models\InfoUser;
-use App\Models\User;
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Throwable;
 use Toastr;
 
-class InfoUserController extends Controller
+class StaffController extends Controller
 {
-
-    public function __construct(private AccountController $controller)
-    {
-    }
-
     public function create()
     {
         return view('admin.staff.add', [
@@ -31,11 +21,7 @@ class InfoUserController extends Controller
     public function store(Request $request)
     {
         try {
-            $tel_or_email = $request->tel_or_email;
             $rules = [
-                'tel_or_email' => !is_numeric($tel_or_email) ? 'required|regex:/^(.*?)@(.*?)$/'
-                    : 'required|string|regex:/^0\d{9,10}$/',
-                'password' => 'required|string',
                 'name' => 'required|string',
                 'avatar' => 'nullable|string',
                 'position' => 'required|string',
@@ -45,19 +31,7 @@ class InfoUserController extends Controller
             ];
             $data = $request->validate($rules);
 
-            $tel_or_email = $data['tel_or_email'];
-            $check = User::where(is_numeric($tel_or_email) ? 'name' : 'email', $tel_or_email)
-                ->get();
-            if ($check->count() > 0) {
-                throw new Exception('Tài khoản đã có người đăng ký!');
-            }
-
             DB::beginTransaction();
-            $user = User::create([
-                is_numeric($tel_or_email) ? 'name' : 'email' =>  $tel_or_email,
-                'password' => Hash::make($data['password']),
-                'role' => GlobalConstant::ROLE_STAFF
-            ]);
             InfoUser::create([
                 'name' => $data['name'],
                 'avatar' => $data['avatar'],
@@ -65,7 +39,6 @@ class InfoUserController extends Controller
                 'identification' => $data['identification'],
                 'tel' => $data['tel'],
                 'active' => $data['active'],
-                'user_id' => $user->id
             ]);
             Toastr::success('Tạo thành công', __('title.toastr.success'));
             DB::commit();
@@ -82,9 +55,9 @@ class InfoUserController extends Controller
         try {
             $data = $request->validate([
                 'id' => 'required|int',
-                'avatar' => 'required|string',
+                'avatar' => 'nullable|string',
                 'name' => 'required|string',
-                'position' => 'required|string',
+                'position' => 'nullable|string',
                 'identification' => 'required|string|regex:/\d{12}$/',
                 'tel' => 'required|string|regex:/^0\d{9,10}$/',
                 'active' => 'required|in:0,1',
@@ -126,13 +99,24 @@ class InfoUserController extends Controller
     {
         return response()->json([
             'status' => 0,
-            'staff' => InfoUser::with(['user'])->get()
+            'staff' => InfoUser::all()
         ]);
     }
 
 
-    public function destroy($user_id)
+    public function destroy($id)
     {
-        return $this->controller->destroy($user_id);
+        try {
+            InfoUser::firstWhere('id', $id)->delete();
+
+            return response()->json([
+                'status' => 0,
+            ]);
+        } catch (Throwable $e) {
+            return response()->json([
+                'status' => 1,
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 }

@@ -25,7 +25,7 @@ function getStatusContract(endTime = "") {
 
 function getActive(active = "") {
     let renderActive = "";
-    switch (active) {
+    switch (parseInt(active)) {
         case 0:
             renderActive = '<span class="btn btn-danger">Không</span>';
             break;

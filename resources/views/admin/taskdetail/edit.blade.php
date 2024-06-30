@@ -18,7 +18,6 @@
     <script src="https://cdn.datatables.net/datetime/1.5.2/js/dataTables.dateTime.min.js"></script>
     <script src="https://cdn.datatables.net/keytable/2.12.0/js/dataTables.keyTable.js"></script>
     <script src="https://cdn.datatables.net/keytable/2.12.0/js/keyTable.dataTables.js"></script>
-    <script></script>
 @endpush
 @section('content')
     <div class="">
@@ -382,9 +381,9 @@
                             <div class="form-group">
                                 <label for="menu">Nhân sự</label>
                                 <select class="form-control" name="" id="staff_id">
-                                    @foreach ($staffs as $staff)
-                                        <option value="{{ $staff->id }}">
-                                            {{ $staff->id . '-' . $staff->staff->name ?? '' }}</option>
+                                    @foreach ($staff as $s)
+                                        <option value="{{ $s->id }}">
+                                            {{ $s->id . '-' . $s->name ?? '' }}</option>
                                     @endforeach
                                 </select>
                             </div>

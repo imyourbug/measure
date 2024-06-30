@@ -42,24 +42,29 @@ Route::group([
     'prefix' => 'customer', 'namespace' => 'App\Http\Controllers\Customers',
     'as' => 'customers.', 'middleware' => 'auth'
 ], function () {
-    Route::get('me', 'CustomerController@me')->name('me');
-    Route::post('me/update', 'CustomerController@update')->name('update');
+    Route::get('/', function () {
+        return redirect()->route('customers.plans.index');
+    })->name('index');
 
-    #contract
+    #plan
+    Route::group(['prefix' => 'plans', 'as' => 'plans.'], function () {
+        Route::get('/', 'PlanController@index')->name('index');
+    });
+
+    #reports
+    Route::group(['prefix' => 'reports', 'as' => 'reports.'], function () {
+        Route::get('/', 'ReportController@index')->name('index');
+        Route::get('/reload/{id}', 'ReportController@reload')->name('reload');
+        Route::get('/task/{id}', 'ReportController@task')->name('task');
+        Route::get('/task/detail/{id}', 'ReportController@detail')->name('detail');
+        Route::post('/duplicate', 'ReportController@duplicate')->name('duplicate');
+    });
+
+    #contracts
     Route::group(['prefix' => 'contracts', 'as' => 'contracts.'], function () {
         Route::get('/', 'ContractController@index')->name('index');
         Route::get('/detail/{id}', 'ContractController@detail')->name('detail');
-        // Route::get('/{id}', 'contractController@show')->name('show');
-    });
-
-    #tasks
-    Route::group(['prefix' => 'tasks', 'as' => 'tasks.'], function () {
-        Route::get('/detail/{id}', 'TaskController@show')->name('detail');
-    });
-
-    #taskdetails
-    Route::group(['prefix' => 'taskdetails', 'as' => 'taskdetails.'], function () {
-        Route::get('/{id}', 'TaskDetailController@show')->name('show');
+        Route::post('/update', 'ContractController@update')->name('update');
     });
 });
 
@@ -149,11 +154,11 @@ Route::group([
 
     #staffs
     Route::group(['prefix' => 'staffs', 'as' => 'staffs.'], function () {
-        Route::get('/', 'InfoUserController@index')->name('index');
-        Route::get('/create', 'InfoUserController@create')->name('create');
-        Route::post('/create', 'InfoUserController@store')->name('store');
-        Route::get('/update/{id}', 'InfoUserController@show')->name('show');
-        Route::post('/update', 'InfoUserController@update')->name('update');
+        Route::get('/', 'StaffController@index')->name('index');
+        Route::get('/create', 'StaffController@create')->name('create');
+        Route::post('/create', 'StaffController@store')->name('store');
+        Route::get('/update/{id}', 'StaffController@show')->name('show');
+        Route::post('/update', 'StaffController@update')->name('update');
     });
 
     #types

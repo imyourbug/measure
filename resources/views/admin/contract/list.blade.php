@@ -213,4 +213,24 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="modalDelete" style="display: none;" aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Xác nhận</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Bạn có chắc chắn muốn xóa?</p>
+                </div>
+                <input type="hidden" id="id_electask">
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default btn-close-modal-confirm-delete" data-dismiss="modal">Đóng</button>
+                    <button type="button" data-id="" class="btn btn-danger btn-confirm-delete">Đồng ý</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection

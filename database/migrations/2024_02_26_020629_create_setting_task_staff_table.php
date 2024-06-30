@@ -19,9 +19,9 @@ return new class extends Migration
             $table->string('tel')->nullable();
             $table->string('identification')->nullable();
             $table->unsignedBigInteger('task_id');
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('staff_id');
             $table->foreign('task_id')->references('id')->on('tasks')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('staff_id')->references('id')->on('info_users')->onDelete('cascade');
             $table->timestamps();
         });
     }

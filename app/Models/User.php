@@ -45,18 +45,8 @@ class User extends Authenticatable
         'created_at' => 'date:d-m-Y',
     ];
 
-    // public function task()
-    // {
-    //     return $this->hasOne(Task::class, 'user_id', 'id');
-    // }
-
-    public function staff()
-    {
-        return $this->hasOne(InfoUser::class, 'user_id', 'id');
-    }
-
     public function customer()
     {
-        return $this->hasOne(Customer::class, 'user_id', 'id');
+        return $this->hasOne(Customer::class, 'email', 'email');
     }
 }

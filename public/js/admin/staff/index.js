@@ -51,7 +51,7 @@ $(document).ready(function () {
             },
             {
                 data: function (d) {
-                    let btnDelete = `<button data-id="${d.user.id}" class="btn btn-danger btn-sm btn-delete">
+                    let btnDelete = `<button data-id="${d.id}" class="btn btn-danger btn-sm btn-delete">
                                     <i class="fas fa-trash"></i>
                                 </button>`;
                     return `<a class="btn btn-primary btn-sm" href='/admin/staffs/update/${d.id

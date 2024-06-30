@@ -11,6 +11,23 @@ use Toastr;
 
 class BranchController extends Controller
 {
+    public function getAll(Request $request)
+    {
+        $customer_id = $request->customer_id;
+        $branches = Branch::with(['customer'])
+            ->when($customer_id, function ($q) use ($customer_id) {
+                return $q->whereHas('customer', function ($q) use ($customer_id) {
+                    $q->where('id', $customer_id);
+                });
+            })
+            ->get();
+
+        return response()->json([
+            'status' => 0,
+            'branches' => $branches
+        ]);
+    }
+
     public function create()
     {
         return view('admin.branch.add', [
@@ -28,7 +45,7 @@ class BranchController extends Controller
                 'tel' => 'required|string',
                 'email' => 'required|regex:/^(.*?)@(.*?)$/',
                 'manager' => 'required|string',
-                'user_id' => 'required|numeric',
+                'customer_id' => 'required|numeric',
             ]);
             Branch::create($data);
             Toastr::success('Tạo chi nhánh thành công', __('title.toastr.success'));
@@ -49,7 +66,7 @@ class BranchController extends Controller
                 'tel' => 'required|string',
                 'email' => 'required|regex:/^(.*?)@(.*?)$/',
                 'manager' => 'required|string',
-                'user_id' => 'required|numeric',
+                'customer_id' => 'required|numeric',
             ]);
             unset($data['id']);
             Branch::where('id', $request->input('id'))->update($data);
@@ -66,13 +83,13 @@ class BranchController extends Controller
         if ($request->ajax()) {
             return response()->json([
                 'status' => 0,
-                'branches' => Branch::with(['user.customer'])->get(),
+                'branches' => Branch::with(['customer'])->get(),
             ]);
         }
 
         return view('admin.branch.list', [
             'title' => 'Danh sách chi nhánh',
-            'branches' => Branch::with(['user.customer'])->get(),
+            'branches' => Branch::with(['customer'])->get(),
         ]);
     }
 
@@ -103,12 +120,9 @@ class BranchController extends Controller
 
     public function getBranchById(Request $request)
     {
-        $id_customer = $request->id;
-        $user_id = Customer::firstWhere('id', $id_customer)->user->id ?? '';
-
         return response()->json([
             'status' => 0,
-            'data' => Branch::where('user_id', $user_id)->get()
+            'data' => Branch::where('customer_id', $request->id)->get()
         ]);
     }
 }

@@ -39,32 +39,13 @@ class AccountController extends Controller
                 throw new Exception('Tài khoản đã có người đăng ký!');
             }
 
-            DB::beginTransaction();
-            $user = User::create([
+            User::create([
                 is_numeric($tel_or_email) ? 'name' : 'email' =>  $tel_or_email,
                 'password' => Hash::make($data['password']),
                 'role' => $data['role']
             ]);
-            switch ((int) $request->role) {
-                case 0:
-                    InfoUser::create([
-                        'name' =>  $tel_or_email,
-                        'user_id' => $user->id
-                    ]);
-                    break;
-                case 2:
-                    Customer::create([
-                        'name' =>  $tel_or_email,
-                        'user_id' => $user->id
-                    ]);
-                    break;
-                default:
-                    break;
-            };
             Toastr::success('Tạo tài khoản thành công', __('title.toastr.success'));
-            DB::commit();
         } catch (Throwable $e) {
-            DB::rollBack();
             Toastr::error($e->getMessage(), __('title.toastr.fail'));
         }
 
@@ -80,7 +61,10 @@ class AccountController extends Controller
                 'role' => 'required|integer|in:0,1,2',
             ]);
             unset($data['id']);
-            User::where('id', $request->input('id'))->update($data);
+            $data['password'] = Hash::make($data['password']);
+
+            User::where('id', $request->input('id'))
+                ->update($data);
             Toastr::success(__('message.success.update'), __('title.toastr.success'));
         } catch (Throwable $e) {
             Toastr::error($e->getMessage(), __('title.toastr.fail'));
@@ -93,7 +77,7 @@ class AccountController extends Controller
     {
         return response()->json([
             'status' => 0,
-            'accounts' => User::with(['customer', 'staff'])->get()
+            'accounts' => User::all()
         ]);
     }
 
@@ -102,7 +86,7 @@ class AccountController extends Controller
         if ($request->ajax()) {
             return response()->json([
                 'status' => 0,
-                'accounts' => User::with(['customer', 'staff'])->get()
+                'accounts' => User::all()->get()
             ]);
         }
 

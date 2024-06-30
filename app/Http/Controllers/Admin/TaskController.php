@@ -6,6 +6,7 @@ use App\Constant\GlobalConstant;
 use App\Http\Controllers\Controller;
 use App\Models\Chemistry;
 use App\Models\Contract;
+use App\Models\InfoUser;
 use App\Models\Item;
 use App\Models\Map;
 use App\Models\Solution;
@@ -22,7 +23,7 @@ class TaskController extends Controller
     {
         return view('admin.task.add', [
             'title' => 'Thêm nhiệm vụ',
-            'staffs' => User::with('staff')->where('role', GlobalConstant::ROLE_STAFF)->get(),
+            'staff' => InfoUser::all(),
             'contracts' => Contract::with(['branch'])->get(),
             'items' => Item::all(),
             'maps' => Map::all(),
@@ -133,7 +134,7 @@ class TaskController extends Controller
             'tasks' => $tasks,
             'contracts' => Contract::with(['branch'])->get(),
             'types' => Type::all(),
-            'staffs' => User::with('staff')->where('role', GlobalConstant::ROLE_STAFF)->get(),
+            'staff' => InfoUser::all(),
             'items' => Item::all(),
             'maps' => Map::all(),
             'solutions' => Solution::all(),
@@ -196,8 +197,6 @@ class TaskController extends Controller
 
     public function show($id, Request $request)
     {
-        $from = $request->from;
-        $to = $request->to;
         $task = Task::with([
             'details',
         ])
@@ -212,7 +211,7 @@ class TaskController extends Controller
             'items' => Item::all(),
             'chemistries' => Chemistry::all(),
             'maps' => Map::all(),
-            'staffs' => User::with(['staff'])->where('role', GlobalConstant::ROLE_STAFF)->get(),
+            'staff' => InfoUser::all(),
         ]);
     }
 

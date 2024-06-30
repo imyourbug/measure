@@ -36,9 +36,8 @@
                     <table id="table" class="table display nowrap dataTable dtr-inline collapsed">
                         <thead>
                             <tr>
-                                <!-- <th>ID</th> -->
-                                <th>Tên chi nhánh</th>
                                 <th>Khách hàng</th>
+                                <th>Tên chi nhánh</th>
                                 <th>Địa chỉ</th>
                                 <th>Số điện thoại</th>
                                 <th>Email</th>

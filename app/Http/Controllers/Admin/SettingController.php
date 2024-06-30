@@ -169,7 +169,7 @@ class SettingController extends Controller
             }, $settingTaskStaffs);
             foreach ($settingTaskStaffs as $key => $value) {
                 TaskStaff::updateOrCreate(
-                    ['user_id' => $value['user_id'], 'task_id' => $value['task_id']],
+                    ['staff_id' => $value['staff_id'], 'task_id' => $value['task_id']],
                     [
                         'code' => $value['code'],
                         'name' => $value['name'],

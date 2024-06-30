@@ -162,7 +162,7 @@
                                         <th>Đơn vị</th>
                                         <th>KPI</th>
                                         <th>Kết quả</th>
-                                        <th>Ảnh</th>
+                                        {{-- <th>Ảnh</th> --}}
                                         <th>Chi tiết</th>
                                         <th>Thao tác</th>
                                     </tr>
@@ -480,14 +480,12 @@
                                 </select>
                             </div>
                         </div> --}}
-                        <div class="col-lg-12 col-md-12">
+                        <div class="col-lg-6 col-md-12">
                             <div class="form-group">
                                 <label for="menu">Mã sơ đồ <span class="required">(*)</span></label>
                                 <input class="form-control" type="text" id="code" />
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
                                 <label for="menu">Chỉ số <span class="required">(*)</span></label>
@@ -500,15 +498,13 @@
                                 <input class="form-control" type="text" id="kpi" />
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
                                 <label for="menu">Kết quả <span class="required">(*)</span></label>
                                 <input class="form-control" type="text" id="result" />
                             </div>
                         </div>
-                        <div class="col-lg-6 col-md-12">
+                        {{-- <div class="col-lg-6 col-md-12">
                             <div class="form-group">
                                 <label for="file">Chọn ảnh <span class="required">(*)</span></label><br>
                                 <div class="">
@@ -518,9 +514,7 @@
                                 </div>
                                 <input type="hidden" id="image_map" value="">
                             </div>
-                        </div>
-                    </div>
-                    <div class="row">
+                        </div> --}}
                         <div class="col-lg-12 col-md-12">
                             <div class="form-group">
                                 <label for="menu">Chi tiết</label>
@@ -556,9 +550,9 @@
                             <div class="form-group">
                                 <label for="menu">Nhân sự <span class="required">(*)</span></label>
                                 <select class="form-control" name="" id="staff_id">
-                                    @foreach ($staffs as $staff)
-                                        <option value="{{ $staff->id }}">
-                                            {{ $staff->id . '-' . $staff->staff->name ?? '' }}</option>
+                                    @foreach ($staff as $s)
+                                        <option value="{{ $s->id }}">
+                                            {{ $s->id . '-' . $s->name ?? '' }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -599,8 +593,6 @@
                                 </select>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
                                 <label for="menu">Đơn vị <span class="required">(*)</span></label>
@@ -613,8 +605,6 @@
                                 <input class="form-control" type="text" id="chemistry_kpi" />
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
                                 <label for="menu">Kết quả <span class="required">(*)</span></label>
@@ -632,8 +622,6 @@
                                 <input type="hidden" id="image_chemistry" value="">
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-lg-12 col-md-12">
                             <div class="form-group">
                                 <label for="menu">Chi tiết</label>

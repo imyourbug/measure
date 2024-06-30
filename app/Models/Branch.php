@@ -15,12 +15,12 @@ class Branch extends Model
         'tel',
         'email',
         'manager',
-        'user_id',
+        'customer_id',
     ];
 
-    public function user()
+    public function customer()
     {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsTo(Customer::class, 'customer_id', 'id');
     }
 
     public function contracts()

@@ -240,18 +240,21 @@ $('.btn-preview').on('click', async function () {
                     dataChart.forEach(d => {
                         let labels = [];
                         let dataResults = [];
-                        let dataKpi = [];
-                        let backgroundColor = [];
+                        let dataKpis = [];
+                        let backgroundColorResult = [];
+                        let backgroundColorKpi = [];
                         let dataD = Object.keys(d).map((key) => d[key]);
                         dataD.forEach((itemD) => {
 
                             if (dataResults.length < column) {
                                 labels.push(itemD.code);
                                 dataResults.push(itemD.all_result);
+                                dataKpis.push(itemD.all_kpi);
                                 // dataResults.push((itemD.all_result /
                                 // itemD.all_kpi) * 100);
                                 // backgroundColor.push(getRandomRGBColor());
-                                backgroundColor.push('#38A3EB');
+                                backgroundColorResult.push('#38A3EB');
+                                backgroundColorKpi.push('#F16C16');
                             }
                         })
 
@@ -266,12 +269,19 @@ $('.btn-preview').on('click', async function () {
                                 data: {
                                     labels: labels,
                                     datasets: [{
-                                        label: 'Số lượng',
+                                        label: 'Kết quả',
                                         data: dataResults,
-                                        backgroundColor: backgroundColor,
+                                        backgroundColor: backgroundColorResult,
                                         borderWidth: 1,
-                                        order: 2,
-                                    },]
+                                        order: 1,
+                                    }, {
+                                        label: 'KPI',
+                                        data: dataKpis,
+                                        borderColor: '#F16C16',
+                                        backgroundColor: backgroundColorKpi,
+                                        type: 'line',
+                                        order: 0
+                                    }]
                                 },
                                 options: {
                                     scales: {
@@ -302,64 +312,132 @@ $('.btn-preview').on('click', async function () {
             type: "GET",
             url: `/api/exports/getTrendDataMapChart?month_compare=${month_compare}&year_compare=${year_compare}&month=${month}&year=${year}&contract_id=${contract_id}`,
             success: function (response) {
+                console.log(response);
                 let html = '';
                 let data = Object.keys(response.data).map((key) => response.data[key]);
+                let allCodeMap = [];
 
+                // get all code map
                 data.forEach(e => {
-                    html +=
-                        `<canvas id="trendMapChart${e.code}" style="display:block;"></canvas>`;
+                    e.value.forEach(item => {
+                        let item_value = Object.keys(item).map((key) =>
+                            item[
+                            key]);
+                        item_value.forEach((v) => {
+                            if (!allCodeMap.includes(v.code)) {
+                                allCodeMap.push(v.code);
+                            }
+                        })
+                    });
+                });
+                data.forEach(e => {
+                    allCodeMap.forEach(code => {
+                        html +=
+                            `<canvas id="trendMapChart${code}" style="display:block;"></canvas>`;
+                    })
                 });
                 $('.groupTrendChart').html('');
                 $('.groupTrendChart').html(html);
 
                 data.forEach(e => {
-                    let backgroundColor = ['#38A3EB', '#38A3EB'];
-                    let map = {
-                        chart: new Chart($(
-                            `#trendMapChart${e.code}`
-                        ), {
-                            type: 'bar',
-                            data: {
-                                labels: [
-                                    `Năm ${year_compare < year ? year_compare : year}`,
-                                    `Năm ${year_compare > year ? year_compare : year}`
-                                ],
-                                datasets: [{
-                                    label: 'Số lượng',
-                                    data: [year_compare <
-                                        year ? e
-                                        .last_year :
-                                        e.this_year,
-                                    year_compare >
-                                        year ?
-                                        e.last_year :
-                                        e.this_year
-                                    ],
-                                    order: 1,
-                                    backgroundColor
-                                }]
-                            },
-                            options: {
-                                scales: {
-                                    y: {
-                                        beginAtZero: true,
-                                        ticks: {
-                                            // Include a dollar sign in the ticks
-                                            callback: function (
-                                                value,
-                                                index,
-                                                ticks) {
-                                                return `${value}`;
+                    let result = [];
+                    let value = Object.keys(e.value).map((key) => e
+                        .value[key]);
+                    allCodeMap.forEach(code => {
+                        let rs = {
+                            code: code,
+                            month: [],
+                            value_kpi_this_year: [],
+                            value_month_this_year: [],
+                            value_month_last_year: [],
+                            backgroundColorThisYear: [],
+                            backgroundColorLastYear: [],
+                            backgroundColorKpiThisYear: [],
+                        };
+                        value.forEach(item => {
+                            if (rs.month.length < month) {
+                                let itemValue = Object.keys(item).map((
+                                    key) => item[key]);
+                                itemValue.forEach(v => {
+                                    if (code == v.code) {
+                                        rs.value_month_this_year.push(v.this_year.result);
+                                        rs.value_month_last_year.push(v.result);
+                                    }
+                                });
+
+                                rs.month.push(item.month);
+                                rs.backgroundColorThisYear.push('#38A3EB');
+                            }
+
+                        });
+                        result.push(rs);
+                    });
+
+                    result.forEach(d => {
+                        let map = {
+                            task_id: e.task_id,
+                            chart: new Chart($(
+                                `#trendMapChart${d.code}`
+                            ), {
+                                type: 'bar',
+                                data: {
+                                    labels: [
+                                        'Tháng 01',
+                                        'Tháng 02',
+                                        'Tháng 03',
+                                        'Tháng 04',
+                                        'Tháng 05',
+                                        'Tháng 06',
+                                        'Tháng 07',
+                                        'Tháng 08',
+                                        'Tháng 09',
+                                        'Tháng 10',
+                                        'Tháng 11',
+                                        'Tháng 12'
+                                    ].slice(0, month),
+                                    datasets: [{
+                                        label: 'Số lượng ',
+                                        data: d.value_month,
+                                        order: 1,
+                                        backgroundColor: d.backgroundColor
+                                    },
+                                    {
+                                        label: 'Số lượng',
+                                        data: d.value_month,
+                                        order: 1,
+                                        backgroundColor: d.backgroundColor
+                                    },
+                                    {
+                                        label: 'KPI',
+                                        data: dataKpis,
+                                        borderColor: '#F16C16',
+                                        backgroundColor: backgroundColorKpi,
+                                        type: 'line',
+                                        order: 0
+                                    }]
+                                },
+                                options: {
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true,
+                                            ticks: {
+                                                // Include a dollar sign in the ticks
+                                                callback: function (
+                                                    value,
+                                                    index,
+                                                    ticks) {
+                                                    return `${value}`;
+                                                }
                                             }
                                         }
                                     }
                                 }
-                            }
-                        })
-                    }
-                    listTrendMapChart.push(map);
-                });
+                            })
+                        }
+                        listTrendMapChart.push(map);
+                    });
 
+                });
             },
         });
 
@@ -524,6 +602,8 @@ $('.btn-preview').on('click', async function () {
         $('.display-year').val($('#display-year').is(':checked') ? 1 : 0);
         $('.display-month-compare').val($('#display-month-compare').is(':checked') ? 1 : 0);
         $('.display-year-compare').val($('#display-year-compare').is(':checked') ? 1 : 0);
+        //
+        $('.task_id').val($('.select-task').val());
         //
         $('.btn-export').prop('disabled', false);
     }, 4000);

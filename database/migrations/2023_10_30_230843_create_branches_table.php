@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('tel')->nullable();
             $table->string('email')->nullable();
             $table->longText('manager')->nullable();
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedBigInteger('customer_id');
+            $table->foreign('customer_id')->references('id')->on('customers')->onDelete('cascade');
             $table->timestamps();
         });
     }

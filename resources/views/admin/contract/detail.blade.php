@@ -187,9 +187,9 @@
                             <div class="form-group">
                                 <label for="menu">Chọn người lập báo cáo <span class="required">(*)</span></label>
                                 <select class="form-control select-user">
-                                    @foreach ($users as $user)
-                                        <option value="{{ $user->id }}">
-                                            {{ $user->staff->name }}
+                                    @foreach ($staff as $s)
+                                        <option value="{{ $s->id }}">
+                                            {{ $s->name }}
                                         </option>
                                     @endforeach
                                 </select>
