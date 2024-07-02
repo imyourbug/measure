@@ -6,6 +6,7 @@ use App\Constant\GlobalConstant;
 use App\Http\Controllers\Controller;
 use App\Models\Chemistry;
 use App\Models\Contract;
+use App\Models\InfoUser;
 use App\Models\Item;
 use App\Models\Map;
 use App\Models\Solution;
@@ -108,34 +109,41 @@ class TaskDetailController extends Controller
 
     public function index(Request $request)
     {
-        $user_id = $request->user_id;
         $task_id = $request->id;
         $from = $request->from;
         $to = $request->to;
+        $customer_id = $request->customer_id;
+        $month = $request->month;
+        $month = strlen($month) === 1 ? '0' . $month : $month;
+        $fromMonth = $month ? date('Y-' . $month . '-01') : '';
+        $toMonth = $month ? date('Y-' . $month . '-t') : '';
+
         try {
-            $task_details = TaskDetail::with(['task.type', 'taskStaffs'])
-                // user_id
-                ->when($user_id, function ($q) use ($user_id) {
-                    return $q->whereHas('taskStaffs', function ($q) use ($user_id) {
-                        $q->where('user_id', $user_id);
+            $task_details = TaskDetail::with(['task.type'])
+                ->when($customer_id, function ($q) use ($customer_id) {
+                    return $q->whereHas('task.contract.customer', function ($q) use ($customer_id) {
+                        $q->where('id', $customer_id);
                     });
                 })
                 // task_id
                 ->when($task_id, function ($q) use ($task_id) {
                     return $q->where('task_id', $task_id);
                 })
-                // date
-                ->when($from, function ($q) use ($from, $to) {
-                    return $q->when($to, function ($q) use ($from, $to) {
-                        return $q->whereRaw('plan_date <= ?', $to . ' 23:59:59')
-                            ->whereRaw('plan_date >= ?', $from);
-                    }, function ($q) use ($from) {
-                        return $q->whereRaw('plan_date >= ?', $from);
-                    });
-                }, function ($q) use ($to) {
-                    return $q->when($to, function ($q) use ($to) {
-                        return $q->whereRaw('plan_date <= ?', $to . ' 23:59:59');
-                    });
+                // from
+                ->when($from, function ($q) use ($from) {
+                    return $q->whereRaw('plan_date >= ?', $from);
+                })
+                // to
+                ->when($to, function ($q) use ($to) {
+                    return $q->whereRaw('plan_date <= ?', $to . ' 23:59:59');
+                })
+                // fromMonth
+                ->when($fromMonth, function ($q) use ($fromMonth) {
+                    return $q->whereRaw('plan_date >= ?', $fromMonth);
+                })
+                // toMonth
+                ->when($toMonth, function ($q) use ($toMonth) {
+                    return $q->whereRaw('plan_date <= ?', $toMonth . ' 23:59:59');
                 })
                 ->get();
 
@@ -164,7 +172,7 @@ class TaskDetailController extends Controller
         return view('admin.taskdetail.edit', [
             'title' => 'Chi tiết nhiệm vụ',
             'taskDetail' => TaskDetail::with(['task.type'])->firstWhere('id', $id),
-            'staffs' => User::with('staff')->where('role', GlobalConstant::ROLE_STAFF)->get(),
+            'staff' => InfoUser::all(),
             'types' => Type::all(),
             'chemistries' => Chemistry::all(),
             'solutions' => Solution::all(),

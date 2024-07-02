@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Contract;
+use App\Models\InfoUser;
 use App\Models\Setting;
 use App\Models\TaskDetail;
 use App\Models\User;
@@ -52,9 +53,11 @@ class ExportController extends Controller
                 'display_year' => 'required|in:0,1',
                 'display_month_compare' => 'required|in:0,1',
                 'display_year_compare' => 'required|in:0,1',
+                //
+                'task_id' => 'nullable|required_if:type_report,6',
             ]);
 
-            $data['creator'] = User::with(['staff'])->firstWhere('id', $data['user_id'])?->toArray() ?? [];
+            $data['creator'] = InfoUser::firstWhere('id', $data['user_id'])?->toArray() ?? [];
             $data['setting'] = [];
             $settings = Setting::orderBy('key')->get()?->toArray() ?? [];
             foreach ($settings as $key => $setting) {
@@ -93,9 +96,6 @@ class ExportController extends Controller
                     $pdf = MPDF::loadView('pdf.report_plan_5', ['data' => array_merge($data, $this->getReportPlanByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]);
                     break;
                 case 6:
-                    //  dd(
-                    //     ['data' => array_merge($data, $this->getReportWorkByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]
-                    // );
                     $data['file_name'] = $filename = 'BIÊN BẢN XÁC NHẬN CÔNG VIỆC/DỊCH VỤ ';
                     $pdf = MPDF::loadView('pdf.report_plan_6', ['data' => array_merge($data, $this->getReportWorkByMonthAndYear($data['month'], $data['year'], $data['contract_id']))]);
                     break;
@@ -133,12 +133,12 @@ class ExportController extends Controller
             'tasks.details.taskItems.item',
             'tasks.details.taskSolutions.solution',
             'tasks.details.taskChemitries.chemistry',
-            'tasks.details.taskStaffs.user.staff',
+            'tasks.details.taskStaffs.staff',
             'tasks.settingTaskMaps.map',
             'tasks.settingTaskChemistries.chemistry',
             'tasks.settingTaskSolutions.solution',
             'tasks.settingTaskItems.item',
-            'tasks.settingTaskStaffs.user.staff',
+            'tasks.settingTaskStaffs.staff',
         ])
             ->where('id', $contract_id)
             ->first()
@@ -171,17 +171,18 @@ class ExportController extends Controller
         $contract = Contract::with([
             'customer',
             'branch',
+            'tasks.images',
             'tasks.type.parent',
             'tasks.details.taskMaps.map',
             'tasks.details.taskItems.item',
             'tasks.details.taskSolutions.solution',
             'tasks.details.taskChemitries.chemistry',
-            'tasks.details.taskStaffs.user.staff',
+            'tasks.details.taskStaffs.staff',
             'tasks.settingTaskMaps.map',
             'tasks.settingTaskChemistries.chemistry',
             'tasks.settingTaskSolutions.solution',
             'tasks.settingTaskItems.item',
-            'tasks.settingTaskStaffs.user.staff',
+            'tasks.settingTaskStaffs.staff',
         ])
             ->where('id', $contract_id)
             ->first()
@@ -226,6 +227,7 @@ class ExportController extends Controller
         return $result;
     }
 
+    // first chart
     public function getDataMapChart(Request $request)
     {
         $month = $request->month;
@@ -240,6 +242,7 @@ class ExportController extends Controller
                     $q->where('contract_id', $contract_id);
                 })
                 ->get();
+
             $result = [];
             foreach ($task_details as $key => $task_detail) {
                 DB::enableQueryLog();
@@ -272,13 +275,18 @@ class ExportController extends Controller
                     }
                 }
                 $result[$task_detail->task->id]['task_id'] = $task_detail->task->id;
+                $result[$task_detail->task->id]['count_detail'] = isset($result[$task_detail->task->id]['count_detail']) ?
+                    ($result[$task_detail->task->id]['count_detail'] + 1) : 1;
             }
 
             foreach ($result as $key => &$rs) {
                 $tmp = [];
+                $countDetail = $rs['count_detail'];
                 foreach ($rs as $keyRs => $valueRs) {
                     if (is_numeric($keyRs)) {
                         $mapCode = explode('-', $valueRs['code']);
+                        $valueRs['all_kpi'] = (int) ($valueRs['all_kpi'] / $countDetail);
+                        $valueRs['all_result'] = (int) ($valueRs['all_result'] / $countDetail);
                         $tmp[$mapCode[0]][$valueRs['map_id']] = $valueRs;
                     }
                 }
@@ -299,53 +307,58 @@ class ExportController extends Controller
         ]);
     }
 
+    // third chart
     public function getDataAnnualMapChart(Request $request)
     {
-        $contract_id = $request->contract_id;
-        $year = $request->year;
+        try {
+            $contract_id = $request->contract_id;
+            $year = $request->year;
 
-        $contract = Contract::with(['tasks.details'])->firstWhere('id', $contract_id);
+            $contract = Contract::with(['tasks.details'])->firstWhere('id', $contract_id);
 
-        $result = [];
-        $code = [];
-        foreach ($contract->tasks as $task) {
-            $details = TaskDetail::with(['task', 'taskMaps.map'])
-                ->whereRaw('YEAR(plan_date) = ?', $year)
-                ->where('task_id', $task->id)
-                ->get();
-            // get code
-            foreach ($details as $detail) {
-                foreach ($detail['taskMaps'] as $taskMap) {
-                    $mapCode = explode('-', $taskMap->code);
-                    $code[$mapCode[0]] = $mapCode[0];
-                }
-            }
-        }
-
-        DB::unprepared("DROP FUNCTION IF EXISTS SPLIT_STRING;
-        CREATE FUNCTION SPLIT_STRING(str VARCHAR(255), delim VARCHAR(12), pos INT)
-        RETURNS VARCHAR(255)
-        -- Choose one of the following based on function behavior:
-        -- DETERMINISTIC: If the function always returns the same output for the same input
-        -- NO SQL: If the function doesn't access any database tables
-        -- READS SQL DATA: If the function reads data from tables
-        RETURN REPLACE(SUBSTRING(SUBSTRING_INDEX(str, delim, pos),
-                    CHAR_LENGTH(SUBSTRING_INDEX(str, delim, pos-1)) + 1),
-                    delim, '');");
-        foreach ($contract->tasks as $task) {
-            $tmp = [];
-            for ($month = 1; $month <= 12; $month++) {
+            $result = [];
+            $code = [];
+            foreach ($contract->tasks as $task) {
                 $details = TaskDetail::with(['task', 'taskMaps.map'])
-                    ->whereRaw('MONTH(plan_date) = ?', $month)
                     ->whereRaw('YEAR(plan_date) = ?', $year)
                     ->where('task_id', $task->id)
                     ->get();
-                // get key
-                $key_task_details = $details->pluck('id');
-                // get value
-                foreach ($code as $c) {
-                    $value = DB::table('task_maps')
-                        ->selectRaw('SUM(CASE
+                // get code
+                foreach ($details as $detail) {
+                    foreach ($detail['taskMaps'] as $taskMap) {
+                        $mapCode = explode('-', $taskMap->code);
+                        $code[$mapCode[0]] = $mapCode[0];
+                    }
+                }
+            }
+
+            DB::unprepared("DROP FUNCTION IF EXISTS SPLIT_STRING;
+            -- DELIMITER ;;
+            CREATE FUNCTION SPLIT_STRING(str VARCHAR(255), delim VARCHAR(12), pos INT)
+            RETURNS VARCHAR(255)
+            -- Since this function doesn't access any database tables, use NO SQL
+            -- DETERMINISTIC could also be used if the function always returns the same output for the same input.
+            -- Choose the most appropriate keyword based on your function's behavior.
+            NO SQL
+            RETURN REPLACE(SUBSTRING(SUBSTRING_INDEX(str, delim, pos),
+                CHAR_LENGTH(SUBSTRING_INDEX(str, delim, pos-1)) + 1),
+                delim, '');
+            --  DELIMITER ;;");
+            foreach ($contract->tasks as $task) {
+                $tmp = [];
+                for ($month = 1; $month <= 12; $month++) {
+                    $details = TaskDetail::with(['task', 'taskMaps.map'])
+                        ->whereRaw('MONTH(plan_date) = ?', $month)
+                        ->whereRaw('YEAR(plan_date) = ?', $year)
+                        ->where('task_id', $task->id)
+                        ->get();
+                    // get key
+                    $key_task_details = $details->pluck('id');
+                    $countDetail = !empty(count($key_task_details)) ? count($key_task_details) : 1;
+                    // get value
+                    foreach ($code as $c) {
+                        $value = DB::table('task_maps')
+                            ->selectRaw('SUM(CASE
                                     WHEN kpi is NULL THEN 0
                                     WHEN kpi = "" THEN 0
                                     ELSE kpi
@@ -355,106 +368,146 @@ class ExportController extends Controller
                                     WHEN result = "" THEN 0
                                     ELSE result
                                 END) as all_result')
-                        ->whereIn('task_id', $key_task_details)
-                        ->whereRaw('SPLIT_STRING(code, "-", 1) = ?', $c)
-                        ->first();
+                            ->whereIn('task_id', $key_task_details)
+                            ->whereRaw('SPLIT_STRING(code, "-", 1) = ?', $c)
+                            ->first();
 
-                    $tmp[$month][$c] = [
-                        'kpi' => $value->all_kpi ?? 0,
-                        'result' => $value->all_result ?? 0,
-                        'code' => $c,
-                        'month' => $month,
-                    ];
+                        $tmp[$month][$c] = [
+                            'kpi' => (int)(($value->all_kpi ?? 0) / $countDetail),
+                            'result' => (int)(($value->all_result ?? 0) / $countDetail),
+                            'code' => $c,
+                            'month' => $month,
+                        ];
+                    }
                 }
+                $result[$task->id] = [
+                    'value' => collect($tmp)->values(),
+                    'task_id' => $task->id
+                ];
             }
-            $result[$task->id] = [
-                'value' => collect($tmp)->values(),
-                'task_id' => $task->id
-            ];
-        }
 
-        return response()->json([
-            'status' => 0,
-            'data' => $result,
-        ]);
+            return response()->json([
+                'status' => 0,
+                'data' => $result,
+            ]);
+        } catch (Throwable $e) {
+            return response()->json([
+                'status' => 1,
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 
+    // second chart
     public function getTrendDataMapChart(Request $request)
     {
-        $year = $request->year;
-        $year_compare = $request->year_compare;
-        $month = $request->month;
-        $month_compare = $request->month_compare;
-        $contract = Contract::with(['tasks.details'])->firstWhere('id', $request->contract_id);
-        $tmpResult = [];
-        foreach ($contract->tasks as $task) {
-            $tmp_this_year = [];
-            $tmp_last_year = [];
-            $tmp_this_year = $this->getDataTrend($month, $year, $task->id);
-            $tmp_last_year = $this->getDataTrend($month_compare, $year_compare, $task->id);
-            $tmpResult[$task->id] = [
-                'task_id' => $task->id,
-                'last_year' => $tmp_last_year,
-                'this_year' => $tmp_this_year,
-            ];
-        }
-        // get all code
-        $result = [];
-        foreach ($tmpResult as $key => $valueTmp) {
-            foreach ($valueTmp['last_year'] as $keyLastYear => $valueLastYear) {
-                if (!in_array($key . $keyLastYear, $result)) {
-                    $result[$key . $keyLastYear]['last_year'] = $valueLastYear['kpi'] != 0 ?
-                        ($valueLastYear['result'] / $valueLastYear['kpi']) * 100 : 0;
-                    $result[$key . $keyLastYear]['task_id'] = $key;
+        try {
+            $contract_id = $request->contract_id;
+            $year = $request->year;
+            $year_compare = $request->year_compare;
+
+            $contract = Contract::with(['tasks.details'])->firstWhere('id', $contract_id);
+
+            $result = [];
+            $code = [];
+            // get code
+            foreach ($contract->tasks as $task) {
+                $details = TaskDetail::with(['task', 'taskMaps.map'])
+                    ->whereRaw('YEAR(plan_date) = ?', $year)
+                    ->where('task_id', $task->id)
+                    ->get();
+                foreach ($details as $detail) {
+                    foreach ($detail['taskMaps'] as $taskMap) {
+                        $mapCode = explode('-', $taskMap->code);
+                        $code[$mapCode[0]] = $mapCode[0];
+                    }
                 }
             }
-            foreach ($valueTmp['this_year'] as $keyThisYear => $valueThisYear) {
-                if (!in_array($key . $keyThisYear, $result)) {
-                    $result[$key . $keyThisYear]['this_year'] = $valueThisYear['kpi'] != 0 ?
-                        ($valueThisYear['result'] / $valueThisYear['kpi']) * 100 : 0;
-                    $result[$key . $keyThisYear]['task_id'] = $key;
+
+            DB::unprepared("DROP FUNCTION IF EXISTS SPLIT_STRING;
+            -- DELIMITER ;;
+            CREATE FUNCTION SPLIT_STRING(str VARCHAR(255), delim VARCHAR(12), pos INT)
+            RETURNS VARCHAR(255)
+            -- Since this function doesn't access any database tables, use NO SQL
+            -- DETERMINISTIC could also be used if the function always returns the same output for the same input.
+            -- Choose the most appropriate keyword based on your function's behavior.
+            NO SQL
+            RETURN REPLACE(SUBSTRING(SUBSTRING_INDEX(str, delim, pos),
+                CHAR_LENGTH(SUBSTRING_INDEX(str, delim, pos-1)) + 1),
+                delim, '');
+            --  DELIMITER ;;");
+
+            foreach ($contract->tasks as $task) {
+                $tmp = [];
+                for ($month = 1; $month <= 12; $month++) {
+                    // get value
+                    foreach ($code as $c) {
+                        $tmp[$month][$c] = [
+                            'this_year' => $this->getDataTrend($task->id, $month, $year, $c),
+                            'last_year' => $this->getDataTrend($task->id, $month, $year_compare, $c),
+                            'code' => $c,
+                            'month' => $month,
+                        ];
+                    }
                 }
+                $result[$task->id] = [
+                    'value' => collect($tmp)->values(),
+                    'task_id' => $task->id
+                ];
             }
+
+            return response()->json([
+                'status' => 0,
+                'data' => $result,
+            ]);
+        } catch (Throwable $e) {
+            return response()->json([
+                'status' => 1,
+                'message' => $e->getMessage()
+            ]);
         }
-
-        $result = array_map(function ($key, $item) {
-            return [
-                'last_year' => $item['last_year'] ?? 0,
-                'this_year' => $item['this_year'] ?? 0,
-                'code' => $key,
-                'task_id' =>  $item['task_id'] ?? '',
-            ];
-        }, array_keys($result), array_values($result));
-
-        return response()->json([
-            'status' => 0,
-            'data' => $result,
-        ]);
     }
 
-    public function getDataTrend($month, $year, $task_id)
+    public function getDataTrend($task_id, $month, $year, $code)
     {
-        $details = TaskDetail::with(['task', 'taskMaps.map'])
-            ->whereRaw('MONTH(plan_date) = ?', $month)
-            ->whereRaw('YEAR(plan_date) = ?', $year)
-            ->where('task_id',  $task_id)
-            ->get()
-            ?->toArray() ?? [];
+        try {
+            $result = [];
+            $details = TaskDetail::with(['task', 'taskMaps.map'])
+                ->whereRaw('MONTH(plan_date) = ?', $month)
+                ->whereRaw('YEAR(plan_date) = ?', $year)
+                ->where('task_id', $task_id)
+                ->get();
+            // get key
+            $key_task_details = $details->pluck('id')->toArray() ?? [];
+            $countDetail = count($key_task_details) == 0 ? 1 : count($key_task_details);
+            // get value
+            $value = DB::table('task_maps')
+                ->selectRaw('SUM(CASE
+                                    WHEN kpi is NULL THEN 0
+                                    WHEN kpi = "" THEN 0
+                                    ELSE kpi
+                                END) as all_kpi,
+                                SUM(CASE
+                                    WHEN result is NULL THEN 0
+                                    WHEN result = "" THEN 0
+                                    ELSE result
+                                END) as all_result')
+                ->whereIn('task_id', $key_task_details)
+                ->whereRaw('SPLIT_STRING(code, "-", 1) = ?', $code)
+                ->first();
 
-        $result = [];
-        foreach ($details as $keyDetail => $detail) {
-            if (!empty($detail['task_maps'])) {
-                foreach ($detail['task_maps'] as $keyTaskMap => $taskMap) {
-                    $mapCode = explode('-', $taskMap['code']);
+            $result = [
+                'kpi' => (int)(($value->all_kpi ?? 0) / $countDetail),
+                'result' => (int)(($value->all_result ?? 0) / $countDetail),
+            ];
 
-                    $result[$mapCode[0]]['result'] = ($result[$mapCode[0]]['result'] ?? 0) +  ($taskMap['result'] ?? 0);
-                    $result[$mapCode[0]]['kpi'] = ($result[$mapCode[0]]['kpi'] ?? 0) +  ($taskMap['kpi'] ?? 0);
-                    $result[$mapCode[0]]['code'] = $mapCode[0];
-                }
-            }
+            return $result;
+        } catch (Throwable $e) {
+            return response()->json([
+                'status' => 1,
+                'message' => $e->getMessage(),
+            ]);
         }
-
-        return $result;
     }
 
     public function getDataByMonthAndYear($month, $year, $task_id)
@@ -518,7 +571,7 @@ class ExportController extends Controller
             'taskItems.item',
             'taskSolutions.solution',
             'taskChemitries.chemistry',
-            'taskStaffs.user.staff',
+            'taskStaffs.staff',
         ])
             ->whereRaw('MONTH(plan_date) = ?', $month)
             ->whereRaw('YEAR(plan_date) = ?', $year)

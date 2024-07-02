@@ -68,21 +68,19 @@ class DatabaseSeeder extends Seeder
         );
 
         Customer::create([
+            'email' => 'khachhang1@gmail.com',
             'name' =>  'Khách hàng 1',
-            'user_id' => 2
         ]);
 
         InfoUser::insert(
             [
                 [
                     'name' => 'Nhân viên 1',
-                    'user_id' => 3,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
                 [
                     'name' => 'Nhân viên 2',
-                    'user_id' => 4,
                     'created_at' => now(),
                     'updated_at' => now(),
                 ],
@@ -145,16 +143,6 @@ class DatabaseSeeder extends Seeder
                 'parent_id' => 3, 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            // [
-            //     'name' => 'Giặt',
-            //     'parent_id' => 3, 'created_at' => now(),
-            //     'updated_at' => now(),
-            // ],
-            // [
-            //     'name' => 'Thu gom rác',
-            //     'parent_id' => 3, 'created_at' => now(),
-            //     'updated_at' => now(),
-            // ]
         ]);
 
         Setting::insert([
@@ -174,40 +162,23 @@ class DatabaseSeeder extends Seeder
         Branch::insert([
             [
                 'name' => 'Chi nhánh Gia Lâm',
-                'user_id' => 2,
                 'created_at' => now(),
                 'updated_at' => now(),
+                'customer_id' => 1,
             ],
             [
                 'name' => 'Chi nhánh Long Biên',
-                'user_id' => 2,
                 'created_at' => now(),
                 'updated_at' => now(),
+                'customer_id' => 1,
             ],
             [
                 'name' => 'Chi nhánh Hoàng Mai',
-                'user_id' => 2,
                 'created_at' => now(),
                 'updated_at' => now(),
+                'customer_id' => 1,
             ]
         ]);
-
-        // Map::insert([
-        //     [
-        //         'area' => 'A',
-        //         'position' => 'Cửa ra vào',
-        //         'target' => 'Ruồi',
-        //         'created_at' => now(),
-        //         'updated_at' => now(),
-        //     ],
-        //     [
-        //         'area' => 'A',
-        //         'position' => 'Cửa ra vào',
-        //         'target' => 'Muỗi',
-        //         'created_at' => now(),
-        //         'updated_at' => now(),
-        //     ],
-        // ]);
 
         Chemistry::insert([
             [

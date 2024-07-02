@@ -6,6 +6,7 @@ use App\Constant\GlobalConstant;
 use App\Http\Controllers\Controller;
 use App\Models\Contract;
 use App\Models\Customer;
+use App\Models\InfoUser;
 use App\Models\Task;
 use App\Models\TaskDetail;
 use App\Models\Type;
@@ -38,6 +39,21 @@ class ContractController extends Controller
         return response()->json([
             'status' => 0,
             'times' => collect($times)->values()
+        ]);
+    }
+
+    public function getContractById(Request $request)
+    {
+        $contract_id = $request->contract_id;
+        $contract = Contract::with([
+            'customer', 'branch',
+            'tasks.details', 'tasks.type'
+        ])
+            ->firstWhere('id', $contract_id);
+
+        return response()->json([
+            'status' => 0,
+            'contract' => $contract
         ]);
     }
 
@@ -257,9 +273,7 @@ class ContractController extends Controller
             ])
                 ->firstWhere('id', $id),
             'customers' => Customer::all(),
-            'users' => User::with(['staff'])
-                ->where('role', GlobalConstant::ROLE_STAFF)
-                ->get(),
+            'staff' => InfoUser::all(),
             'types' => Type::all(),
             'contracts' => Contract::with(['branch'])
                 ->get(),

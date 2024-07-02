@@ -6,12 +6,9 @@ $(document).ready(function () {
             dataSrc: "branches",
         },
         columns: [
-            // {
-            //     data: "id"
-            // },
             {
                 data: function (d) {
-                    return d.user.customer.name;
+                    return d.customer ? d.customer.name : '';
                 },
             },
             {

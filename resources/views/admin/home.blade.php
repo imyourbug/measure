@@ -95,7 +95,7 @@
                     },
                     {
                         data: function(d) {
-                            return d.user.customer.name;
+                            return d.customer ? d.customer.name : '';
                         },
                     },
                     {

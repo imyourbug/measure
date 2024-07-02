@@ -190,7 +190,7 @@
         <div class="col3" style="text-align: right">
             <p> <span style="font-weight:bold;">{{ $data['setting']['company-name'] ?? '' }}</p>
             <p> <span style="font-weight:bold;">PVSC</p>
-            <div style="">{{ $data['creator']['staff']['name'] ?? '' }}</div>
+            <div style="">{{ $data['creator']['name'] ?? '' }}</div>
         </div>
     </div>
 </body>

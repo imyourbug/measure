@@ -21,12 +21,12 @@ class Customer extends Model
         'representative',
         'field',
         'position',
-        'user_id',
+        'status',
     ];
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsTo(User::class, 'email', 'email');
     }
 
     public function contracts()

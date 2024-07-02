@@ -6,6 +6,7 @@ use App\Constant\GlobalConstant;
 use App\Http\Controllers\Controller;
 use App\Models\Chemistry;
 use App\Models\Contract;
+use App\Models\InfoUser;
 use App\Models\Item;
 use App\Models\Map;
 use App\Models\Solution;
@@ -54,7 +55,7 @@ class ReportController extends Controller
             'tasks' => $tasks,
             'contracts' => Contract::with(['branch'])->get(),
             'types' => Type::all(),
-            'users' => User::with(['staff'])->where('role', GlobalConstant::ROLE_STAFF)->get(),
+            'staff' =>InfoUser::all(),
         ]);
     }
 
@@ -86,7 +87,7 @@ class ReportController extends Controller
         return view('admin.report.task.detail', [
             'title' => 'Chi tiết nhiệm vụ',
             'taskDetail' => TaskDetail::with(['task.type'])->firstWhere('id', $id),
-            'staffs' => User::with('staff')->where('role', GlobalConstant::ROLE_STAFF)->get(),
+            'staff' => InfoUser::all(),
             'types' => Type::all(),
             'chemistries' => Chemistry::all(),
             'solutions' => Solution::all(),

@@ -52,16 +52,16 @@ $(document).ready(function () {
             {
                 data: function (d) {
                     return `NV${
-                        d.user.staff.id >= 10
-                            ? d.user.staff.id
-                            : "0" + d.user.staff.id
+                        d.staff.id >= 10
+                            ? d.staff.id
+                            : "0" + d.staff.id
                     }`;
                 },
             },
-            { data: "user.staff.name" },
-            { data: "user.staff.position" },
-            { data: "user.staff.identification" },
-            { data: "user.staff.tel" },
+            { data: "staff.name" },
+            { data: "staff.position" },
+            { data: "staff.identification" },
+            { data: "staff.tel" },
             {
                 data: function (d) {
                     return `<a class="btn btn-primary btn-sm btn-edit-staff" data-id="${d.id}" data-target="#modal-staff" data-toggle="modal">
@@ -449,7 +449,7 @@ $(document).on("click", ".btn-edit-staff", function () {
             if (response.status == 0) {
                 let taskStaff = response.taskStaff;
                 $(".modal-title-staff").text("Cập nhật nhân sự");
-                $("#staff_id").val(taskStaff.user_id);
+                $("#staff_id").val(taskStaff.staff_id);
                 //
                 $(".btn-add-staff").css("display", "none");
                 $(".btn-update-staff").css("display", "block");
@@ -472,7 +472,7 @@ $(document).on("click", ".btn-update-staff", function () {
         let data = {
             id: $("#taskstaff_id").val(),
             task_id: $("#task_id").val(),
-            user_id: $("#staff_id").val(),
+            staff_id: $("#staff_id").val(),
         };
         $.ajax({
             type: "POST",
@@ -513,7 +513,7 @@ $(document).on("click", ".btn-delete-staff", function () {
 $(document).on("click", ".btn-add-staff", function () {
     let data = {
         task_id: $("#task_id").val(),
-        user_id: $("#staff_id").val(),
+        staff_id: $("#staff_id").val(),
     };
     $.ajax({
         type: "POST",

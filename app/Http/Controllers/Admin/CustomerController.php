@@ -25,11 +25,8 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         try {
-            $tel_or_email = $request->tel_or_email;
             $rules = [
-                'tel_or_email' => !is_numeric($tel_or_email) ? 'required|regex:/^(.*?)@(.*?)$/'
-                    : 'required|string|regex:/^0\d{9,10}$/',
-                'password' => 'required|string',
+                'password' => 'nullable|string',
                 'name' => 'required|string',
                 'address' => 'required|string',
                 'tel' => 'required|string|regex:/^0\d{9,10}$/',
@@ -41,23 +38,26 @@ class CustomerController extends Controller
                 'representative' => 'nullable|string',
                 'field' => 'nullable|string',
                 'position' => 'nullable|string',
+                'status' => 'required|in:0,1',
                 'email' => 'required|regex:/^(.*?)@(.*?)$/',
             ];
             $data = $request->validate($rules);
 
-            $tel_or_email = $data['tel_or_email'];
-            $check = User::where(is_numeric($tel_or_email) ? 'name' : 'email', $tel_or_email)
-                ->get();
-            if ($check->count() > 0) {
-                throw new Exception('Tài khoản đã có người đăng ký!');
+            DB::beginTransaction();
+            if (strlen($data['password'])) {
+                $check = User::where('email', $data['email'])
+                    ->first();
+                if ($check) {
+                    throw new Exception('Tài khoản đã có người đăng ký!');
+                }
+
+                User::create([
+                    'email' =>  $data['email'],
+                    'password' => Hash::make($data['password']),
+                    'role' => GlobalConstant::ROLE_CUSTOMER
+                ]);
             }
 
-            DB::beginTransaction();
-            $user = User::create([
-                is_numeric($tel_or_email) ? 'name' : 'email' =>  $tel_or_email,
-                'password' => Hash::make($data['password']),
-                'role' => GlobalConstant::ROLE_CUSTOMER
-            ]);
             Customer::create([
                 'name' => $data['name'],
                 'address' => $data['address'],
@@ -68,8 +68,8 @@ class CustomerController extends Controller
                 'representative' => $data['representative'],
                 'avatar' => $data['avatar'],
                 'email' => $data['email'],
+                'status' => $data['status'],
                 'position' => $data['position'],
-                'user_id' => $user->id
             ]);
             Toastr::success('Thành công', __('title.toastr.success'));
             DB::commit();
@@ -97,6 +97,7 @@ class CustomerController extends Controller
                 'representative' => 'nullable|string',
                 'position' => 'nullable|string',
                 'field' => 'nullable|string',
+                'status' => 'required|in:0,1',
                 'email' => 'required|regex:/^(.*?)@(.*?)$/',
             ]);
             unset($data['id']);
@@ -146,7 +147,7 @@ class CustomerController extends Controller
     public function destroy($id)
     {
         try {
-            User::firstWhere('id', $id)->delete();
+            Customer::firstWhere('id', $id)->delete();
 
             return response()->json([
                 'status' => 0,

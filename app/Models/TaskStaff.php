@@ -16,7 +16,7 @@ class TaskStaff extends Model
         'tel',
         'identification',
         'task_id',
-        'user_id',
+        'staff_id',
     ];
 
     public function task()
@@ -24,8 +24,8 @@ class TaskStaff extends Model
         return $this->belongsTo(TaskDetail::class, 'task_id', 'id');
     }
 
-    public function user()
+    public function staff()
     {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->belongsTo(InfoUser::class, 'staff_id', 'id');
     }
 }

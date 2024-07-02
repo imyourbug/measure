@@ -43,6 +43,11 @@ $(document).ready(function () {
             },
             {
                 data: function (d) {
+                    return getActive(d.status);
+                },
+            },
+            {
+                data: function (d) {
                     return `<img style="width: 50px;height:50px" src="${d.avatar}" alt="avatar" />`;
                 },
             },
@@ -57,15 +62,11 @@ $(document).ready(function () {
             },
             {
                 data: function (d) {
-                    return d.user.email ? d.user.email : d.user.name;
-                },
-            },
-            {
-                data: function (d) {
                     return `<a class="btn btn-primary btn-sm" href="/admin/customers/detail/${d.id}">
                             <i class="fas fa-edit"></i>
                         </a>
-                        <button data-id="${d.user_id}" class="btn btn-danger btn-sm btn-delete">
+                        <button data-id="${d.id}" data-target="#modalDelete" 
+                            data-toggle="modal" class="btn btn-danger btn-sm btn-delete">
                             <i class="fas fa-trash"></i>
                         </button>`;
                 },
@@ -74,9 +75,14 @@ $(document).ready(function () {
     });
 });
 
-$(document).on("click", ".btn-delete", function () {
-    if (confirm("Bạn có muốn xóa")) {
-        let id = $(this).data("id");
+$(document).on('click', '.btn-delete', function () {
+    let id = $(this).data('id');
+    $('.btn-confirm-delete').data('id', id);
+});
+
+$(document).on("click", ".btn-confirm-delete", function () {
+    let id = $(this).data("id");
+    if (id) {
         $.ajax({
             type: "DELETE",
             url: `/api/customers/${id}/destroy`,
@@ -84,6 +90,7 @@ $(document).on("click", ".btn-delete", function () {
                 if (response.status == 0) {
                     toastr.success("Xóa thành công");
                     dataTable.ajax.reload();
+                    $('.btn-close-modal-confirm-delete').click();
                 } else {
                     toastr.error(response.message);
                 }

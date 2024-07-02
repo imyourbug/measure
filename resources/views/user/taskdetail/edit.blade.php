@@ -465,9 +465,9 @@
                             <div class="form-group">
                                 <label for="menu">Nhân sự</label>
                                 <select class="form-control" name="" id="staff_id">
-                                    @foreach ($staffs as $staff)
-                                        <option value="{{ $staff->id }}">
-                                            {{ $staff->id . '-' . $staff->staff->name ?? '' }}</option>
+                                    @foreach ($staff as $s)
+                                        <option value="{{ $s->id }}">
+                                            {{ $s->id . '-' . $s->name ?? '' }}</option>
                                     @endforeach
                                 </select>
                             </div>

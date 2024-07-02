@@ -109,6 +109,9 @@
     <h3>B. Khối lượng hoàn thành </h3>
     @if (!empty($data['tasks']))
         @foreach ($data['tasks'] as $key => $info)
+            @php
+                $countDetail = !empty(count($info['details'])) ? count($info['details']) : 1;
+            @endphp
             <p style="font-weight:bold;">{{ $info['type']['name'] ?? '' }} - {{ $data['contract']['name'] ?? '' }}
                 Tháng
                 {{ $data['month'] }} năm {{ $data['year'] }}, cụ thể như sau:</p>
@@ -161,8 +164,8 @@
                         <td>{{ implode(',', $targets) }} </td>
                         <td>{{ $info['frequence'] ?? '' }}</td>
                         <td>{{ $info['solution'] ?? '' }}</td>
-                        <td>{{ $info['notice'] ?? '' }}</td>
-                        <td>{{ $info['detail'] ?? '' }}</td>
+                        <td>{{ $info['note'] ?? '' }}</td>
+                        <td>{{ $info['status'] ?? '' }}</td>
                         <td>{{ $info['reason'] ?? '' }}</td>
                     </tr>
 
@@ -177,86 +180,44 @@
                         $keyImage = ($info['id'] ?? '') . $key;
                     @endphp
                     <p>Khu vực {{ $tasks[array_key_first($tasks)]['position'] ?? '' }}</p>
-
-                    @if ($data['display'])
+                    @if (count($tasks) > 0)
+                        <p style="margin-left:10px">Kết quả theo dõi: Từ: Tháng {{ $data['month'] }} năm
+                            {{ $data['year'] }}
+                            đến
+                            Tháng {{ $data['month'] }} năm {{ $data['year'] }}</p>
                         <table class="tbl-plan">
                             <tr>
-                                @if (!empty($data['display_first']))
-                                    <td>Tháng
-                                        {{ $data['month'] }} năm {{ $data['year'] }}</td>
-                                @endif
-                                @if (!empty($data['display_second']) && !empty($data['display_month_compare']))
-                                    <td style="">So sánh
-                                        {{ $data['month_compare'] . '-' . $data['year_compare'] }} với
-                                        {{ $data['month'] . '-' . $data['year'] }}</td>
-                                @endif
-                                @if (!empty($data['display_third']) && !empty($data['display_year']))
-                                    <td style="">Diễn biến từng
-                                        tháng</td>
-                                @endif
+                                <td>Mã sơ đồ</td>
+                                @foreach ($tasks as $task_map)
+                                    @php
+                                        $mapCode = explode('-', $task_map['code']);
+                                    @endphp
+                                    @if ($mapCode[0] == $key)
+                                        <td>{{ $task_map['code'] ?? '' }}</td>
+                                    @endif
+                                @endforeach
                             </tr>
                             <tr>
-                                @if (!empty($data['display_first']))
-                                    <td>
-                                        @if (!empty($data['image_charts'][$keyImage]))
-                                            <img src="{{ $data['image_charts'][$keyImage] }}" alt=""
-                                                style="margin-bottom: 20px" />
-                                        @endif
-                                    </td>
-                                @endif
-                                @if (!empty($data['display_second']) && !empty($data['display_month_compare']))
-                                    <td style="border: 0.5px solid black;border-right: 0.5px solid black;">
-                                        @if (!empty($data['image_trend_charts'][$keyImage]))
-                                            <img src="{{ public_path($data['image_trend_charts'][$keyImage]) }}"
-                                                alt="" />
-                                        @endif
-
-                                    </td>
-                                @endif
-                                @if (!empty($data['display_third']) && !empty($data['display_year']))
-                                    <td style="border: 0.5px solid black;border-right: 0.5px solid black;">
-                                        @if (!empty($data['image_annual_charts'][$keyImage]))
-                                            <img src="{{ public_path($data['image_annual_charts'][$keyImage]) }}"
-                                                alt="" />
-                                        @endif
-                                    </td>
-                                @endif
+                                <td>
+                                    {{ $tasks[array_key_first($tasks)]['unit'] ?? 'Đơn vị' }}
+                                </td>
+                                @foreach ($tasks as $task_map)
+                                    @php
+                                        $mapCode = explode('-', $task_map['code']);
+                                    @endphp
+                                    @if ($mapCode[0] == $key)
+                                        <td>
+                                            {{ strlen($task_map['result']) ? (int) ($task_map['result'] / $countDetail) : 'N/A' }}
+                                        </td>
+                                    @endif
+                                @endforeach
                             </tr>
                         </table>
                     @endif
-                    <p style="margin-left:10px">Kết quả theo dõi: Từ: Tháng {{ $data['month'] }} năm
-                        {{ $data['year'] }}
-                        đến
-                        Tháng {{ $data['month'] }} năm {{ $data['year'] }}</p>
-                    <table class="tbl-plan">
-                        <tr>
-                            <td>Mã sơ đồ</td>
-                            @foreach ($tasks as $task_map)
-                                @php
-                                    $mapCode = explode('-', $task_map['code']);
-                                @endphp
-                                @if ($mapCode[0] == $key)
-                                    <td>{{ $task_map['code'] ?? '' }}</td>
-                                @endif
-                            @endforeach
-                        </tr>
-                        <tr>
-                            <td>
-                                {{ $tasks[array_key_first($tasks)]['unit'] ?? 'Đơn vị' }}
-                            </td>
-                            @foreach ($tasks as $task_map)
-                                @php
-                                    $mapCode = explode('-', $task_map['code']);
-                                @endphp
-                                @if ($mapCode[0] == $key)
-                                    <td>
-                                        {{ !empty($task_map['result']) ? $task_map['result'] : 'N/A' }}
-                                    </td>
-                                @endif
-                            @endforeach
-                        </tr>
-                    </table>
-                    @if (!empty($data['display_year_compare']))
+                    @if ($data['display'] && !empty($data['display_first']) && !empty($data['image_charts'][$keyImage]))
+                        <img src="{{ $data['image_charts'][$keyImage] }}" alt="" style="margin-bottom: 20px" />
+                    @endif
+                    @if (!empty($data['display_year_compare']) && count($tasks) > 0)
                         <p style="margin-left:10px">Kết quả theo dõi: Năm {{ $data['year'] }} so với
                             {{ $data['year_compare'] }}
                         </p>
@@ -279,16 +240,18 @@
                                             @php
                                                 $result_this_year = 0;
                                                 $kpi_this_year = 0;
+                                                $count_this_year = 0;
                                                 foreach ($data['compare'][$info['id']]['this_year'][$i - 1] as $value) {
                                                     if (!empty($value['task_maps'][$key])) {
                                                         foreach ($value['task_maps'][$key] as $item) {
                                                             $result_this_year += $item['result'] ?? 0;
                                                             $kpi_this_year += $item['kpi'] ?? 0;
+                                                            $count_this_year++;
                                                         }
                                                     }
                                                 }
                                             @endphp
-                                            {{ !empty($result_this_year) ? $result_this_year : 'N/A' }}
+                                            {{ $count_this_year == 0 ? 'N/A' : (int) ($result_this_year / $countDetail) }}
                                         @else
                                             N/A
                                         @endif
@@ -314,7 +277,7 @@
                                                     }
                                                 }
                                             @endphp
-                                            {{ !empty($result_last_year) ? $result_last_year : 'N/A' }}
+                                            {{ $count_last_year == 0 ? 'N/A' : (int) ($result_last_year / $countDetail) }}
                                         @else
                                             N/A
                                         @endif
@@ -323,14 +286,41 @@
                             </tr>
                         </table>
                     @endif
+
+                    @if (
+                        !empty($data['display_second']) &&
+                            !empty($data['display_month_compare']) &&
+                            !empty($data['image_trend_charts'][$keyImage]))
+                        <img src="{{ public_path($data['image_trend_charts'][$keyImage]) }}" alt="" />
+                    @endif
+
+                    @if (!empty($data['display_third']) && !empty($data['display_year']) && !empty($data['image_annual_charts'][$keyImage]))
+                        <div class="" style="margin-top: 20px">
+                            Diễn biến từng tháng
+                            <img src="{{ public_path($data['image_annual_charts'][$keyImage]) }}" alt="" />
+                        </div>
+                    @endif
                 @endforeach
             @endforeach
+            <br />
+            <p style="font-weight:bold;">Các ý kiến khác</p>
+            {{-- <p style="font-weight:bold;">C. Các ý kiến khác</p> --}}
+            <table class="tbl-plan1" cellspacing="0">
+                <tbody>
+                    <tr>
+                        @foreach ($info['images'] as $image)
+                        <td>
+                            <img style="width: 100px; height:100px" src="{{ public_path($image['url']) }}" alt="" />
+                        </td>
+                        @endforeach
+                    </tr>
+                </tbody>
+            </table>
+            <br><br>
         @endforeach
     @endif
-
-    <br />
-    <p style="font-weight:bold;">C. Các ý kiến khác</p>
-    <p style="font-weight:bold;">D. Kết luận</p>
+    <p style="font-weight:bold;">C. Kết luận</p>
+    {{-- <p style="font-weight:bold;">D. Kết luận</p> --}}
     <input type="checkbox" name="" id=""> <label for="">Đồng ý</label><br>
     <input type="checkbox" name="" id=""> <label for="">Không đồng ý</label>
     <div class="col10">

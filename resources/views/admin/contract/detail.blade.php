@@ -23,7 +23,6 @@
         $(document).on('change', '#attachment', function() {
             const form = new FormData();
             form.append("file", $(this)[0].files[0]);
-            console.log(form);
             $.ajax({
                 processData: false,
                 contentType: false,
@@ -34,6 +33,54 @@
                     if (response.status == 0) {
                         toastr.success('Tải lên thành công', 'Thông báo');
                         $("#value-attachment").val(response.url);
+                    } else {
+                        toastr.error(response.message, 'Thông báo');
+                    }
+                },
+            });
+        });
+
+        $(document).on('click', '.btn-remove-image', function(event) {
+            let id = $(this).data('id');
+
+            $.ajax({
+                type: "DELETE",
+                url: `/api/upload/deleteImage/${id}`,
+                success: function(response) {
+                    if (response.status == 0) {
+                        $(`.image-task[data-id="${id}"]`).remove();
+                    } else {
+                        toastr.error(response.message, 'Thông báo');
+                    }
+                },
+            });
+        });
+
+        $(document).on('submit', '#upload-form', function(event) {
+            event.preventDefault(); // Prevent default form submission
+            var formData = new FormData(this); // Create FormData object
+            let task_id = $('#task_id').val();
+            formData.append('task_id', task_id);
+
+            $.ajax({
+                processData: false,
+                contentType: false,
+                type: "POST",
+                data: formData,
+                url: "/api/upload/multipleimages",
+                success: function(response) {
+                    if (response.status == 0) {
+                        //hiển thị ảnh
+                        response.images.forEach((image) => {
+                            $('.block-image').append(`<span class="image-task" data-id="${image.id}" style="position: relative;">
+                                <img style="width: 100px;height:100px" src="${image.url}" data-id="${image.id}" data-task_id="${image.task_id}"
+                                    alt="image" />
+                                <span class="btn btn-sm btn-danger" style="right:0px;position: absolute;">
+                                    <i data-id="${image.id}"
+                                        class="fa-solid fa-trash btn-remove-image"></i>
+                                </span>
+                            </span>`);
+                        })
                     } else {
                         toastr.error(response.message, 'Thông báo');
                     }
@@ -187,9 +234,9 @@
                             <div class="form-group">
                                 <label for="menu">Chọn người lập báo cáo <span class="required">(*)</span></label>
                                 <select class="form-control select-user">
-                                    @foreach ($users as $user)
-                                        <option value="{{ $user->id }}">
-                                            {{ $user->staff->name }}
+                                    @foreach ($staff as $s)
+                                        <option value="{{ $s->id }}">
+                                            {{ $s->name }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -413,6 +460,21 @@
                                 <label for="menu">Ghi chú <span class="required">(*)</span></label>
                                 <input class="form-control" type="text" placeholder="Nhập ghi chú..."
                                     id="note" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12">
+                            <div class="form-group">
+                                <label for="file">Chọn ảnh</label><br>
+                                <div class="block-image">
+                                </div>
+                                <input type="hidden" name="images[]" id="images" accept=".png,.jpeg" />
+                                <form id="upload-form" enctype="multipart/form-data">
+                                    <input type="file" id="files" name="files[]" multiple>
+                                    <br>
+                                    <button class="btn btn-sm btn-success mt-2" type="submit">Tải lên file</button>
+                                </form>
                             </div>
                         </div>
                     </div>

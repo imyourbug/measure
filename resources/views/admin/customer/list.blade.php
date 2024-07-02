@@ -65,8 +65,6 @@
                                         value="{{ old('representative') }}" placeholder="Nhập người đại diện">
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-lg-6 col-md-12">
                                 <div class="form-group">
                                     <label for="menu">Mã số thuế</label>
@@ -81,8 +79,6 @@
                                         placeholder="Nhập địa chỉ">
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-lg-6 col-md-12">
                                 <div class="form-group">
                                     <label for="menu">Website</label>
@@ -97,8 +93,6 @@
                                         placeholder="Nhập email">
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-lg-6 col-md-12">
                                 <div class="form-group">
                                     <label for="menu">Người liên hệ</label>
@@ -113,8 +107,6 @@
                                         placeholder="Nhập số điện thoại">
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
                             <div class="col-lg-6 col-md-12">
                                 <div class="form-group">
                                     <label for="menu">Chức vụ</label>
@@ -122,7 +114,29 @@
                                         placeholder="Nhập chức vụ">
                                 </div>
                             </div>
-                            <div class="col-lg-6 col-md-12 my-5 ml-4">
+                            <div class="col-lg-6 col-md-12">
+                                <div class="form-group">
+                                    <label for="menu">Mật khẩu (Để trống nếu không muốn tự tạo tài khoản)</label>
+                                    <input type="text" class="form-control" name="password" value="{{ old('password') }}"
+                                        placeholder="Nhập mật khẩu">
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-12">
+                                <div class="form-group">
+                                    <label for="menu">Kích hoạt <span class="required">(*)</span></label>
+                                    <div class="custom-control custom-radio">
+                                        <input class="custom-control-input" type="radio" id="active" value="1"
+                                            name="status" checked>
+                                        <label for="active" class="custom-control-label">Có</label>
+                                    </div>
+                                    <div class="custom-control custom-radio">
+                                        <input class="custom-control-input" type="radio" id="unactive" value="0"
+                                            name="status">
+                                        <label for="unactive" class="custom-control-label">Không</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-12">
                                 <div class="form-group">
                                     <label for="file">Ảnh đại diện</label><br>
                                     <div class="">
@@ -139,35 +153,35 @@
                         <button type="submit" class="btn btn-primary">Lưu</button>
                     </div>
                     <!-- <div class="card-header ui-sortable-handle header-color" style="cursor: move;">
-                        <h3 class="card-title text-bold">Thông tin đăng nhập</h3>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="card-body" style="display: block;padding: 10px !important;">
-                        <div class="row">
-                            <div class="col-lg-6 col-sm-12">
-                                <div class="form-group">
-                                    <label for="menu">Tài khoản (Số điện thoại hoặc email) <span
-                                            class="required">(*)</span></label>
-                                    <input type="text" class="form-control" name="tel_or_email"
-                                        value="{{ old('tel_or_email') }}" placeholder="Nhập tài khoản">
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-sm-12">
-                                <div class="form-group">
-                                    <label for="menu">Mật khẩu <span class="required">(*)</span></label>
-                                    <input type="password" class="form-control" name="password"
-                                        value="{{ old('password') }}" placeholder="Nhập mật khẩu">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <button type="submit" class="btn btn-primary">Lưu</button>
-                        </div>
-                    </div> -->
+                                                <h3 class="card-title text-bold">Thông tin đăng nhập</h3>
+                                                <div class="card-tools">
+                                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                                        <i class="fas fa-minus"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="card-body" style="display: block;padding: 10px !important;">
+                                                <div class="row">
+                                                    <div class="col-lg-6 col-sm-12">
+                                                        <div class="form-group">
+                                                            <label for="menu">Tài khoản (Số điện thoại hoặc email) <span
+                                                                    class="required">(*)</span></label>
+                                                            <input type="text" class="form-control" name="tel_or_email"
+                                                                value="{{ old('tel_or_email') }}" placeholder="Nhập tài khoản">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6 col-sm-12">
+                                                        <div class="form-group">
+                                                            <label for="menu">Mật khẩu <span class="required">(*)</span></label>
+                                                            <input type="password" class="form-control" name="password"
+                                                                value="{{ old('password') }}" placeholder="Nhập mật khẩu">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="card-footer">
+                                                    <button type="submit" class="btn btn-primary">Lưu</button>
+                                                </div>
+                                            </div> -->
                 </div>
             </div>
         </div>
@@ -196,17 +210,39 @@
                                 <th style="min-width: 150px">Địa chỉ</th>
                                 <th>Website</th>
                                 <th>Email</th>
+                                <th>Hoạt động</th>
                                 <th>Ảnh đại diện</th>
                                 <th>Người liên hệ</th>
                                 <th>Số điện thoại</th>
                                 <th>Chức vụ</th>
-                                <th>Tài khoản</th>
+                                {{-- <th>Tài khoản</th> --}}
                                 <th>Thao tác</th>
                             </tr>
                         </thead>
                         <tbody>
                         </tbody>
                     </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalDelete" style="display: none;" aria-modal="true" role="dialog">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Xác nhận</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Bạn có chắc chắn muốn xóa?</p>
+                </div>
+                <input type="hidden" id="id_electask">
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default btn-close-modal-confirm-delete"
+                        data-dismiss="modal">Đóng</button>
+                    <button type="button" data-id="" class="btn btn-danger btn-confirm-delete">Đồng ý</button>
                 </div>
             </div>
         </div>

@@ -61,9 +61,6 @@
                             placeholder="Nhập người đại diện">
                     </div>
                 </div>
-
-            </div>
-            <div class="row">
                 <div class="col-lg-6 col-md-12">
                     <div class="form-group">
                         <label for="menu">Mã số thuế</label>
@@ -78,8 +75,6 @@
                             value="{{ old('address') ?? $customer->address }}" placeholder="Nhập địa chỉ">
                     </div>
                 </div>
-            </div>
-            <div class="row">
                 <div class="col-lg-6 col-md-12">
                     <div class="form-group">
                         <label for="menu">Website</label>
@@ -94,8 +89,6 @@
                             value="{{ old('email') ?? $customer->email }}" placeholder="Nhập email">
                     </div>
                 </div>
-            </div>
-            <div class="row">
                 <div class="col-lg-6 col-md-12">
                     <div class="form-group">
                         <label for="menu">Người liên hệ</label>
@@ -110,8 +103,43 @@
                             placeholder="Nhập số điện thoại">
                     </div>
                 </div>
+                <div class="col-lg-6 col-md-12">
+                    <div class="form-group">
+                        <label for="menu">Chức vụ</label>
+                        <input type="text" class="form-control" name="position"
+                            value="{{ old('position') ?? $customer->position }}" placeholder="Nhập chức vụ">
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <div class="form-group">
+                        <label for="menu">Kích hoạt <span class="required">(*)</span></label>
+                        <div class="custom-control custom-radio">
+                            <input class="custom-control-input" type="radio" id="active" value="1"
+                                name="status" {{ $customer->status == 1 ? 'checked' : '' }}>
+                            <label for="active" class="custom-control-label">Có</label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                            <input class="custom-control-input" type="radio" id="unactive" value="0"
+                                name="status"  {{ $customer->status == 0 ? 'checked' : '' }}>
+                            <label for="unactive" class="custom-control-label">Không</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-12">
+                    <div class="form-group">
+                        <label for="file">Chọn ảnh</label><br>
+                        <div class="">
+                            <img id="image_show" style="width: 100px;height:100px" src="{{ $customer->avatar }}"
+                                alt="Avatar" />
+                            <input type="file" id="upload" accept=".png,.jpeg">
+                        </div>
+                        <input type="hidden" name="avatar" id="avatar"
+                            value="{{ old('avatar') ?? $customer->avatar }}">
+                    </div>
+                </div>
             </div>
-            {{-- <div class="row">
+        </div>
+        {{-- <div class="row">
                 <div class="col-lg-6 col-sm-12">
                     <div class="form-group">
                         <label for="menu">Tài khoản (Số điện thoại hoặc email) <span class="required">(*)</span></label>
@@ -128,30 +156,6 @@
                     </div>
                 </div>
             </div> --}}
-            <div class="row">
-                <div class="col-lg-6 col-md-12">
-                    <div class="form-group">
-                        <label for="menu">Chức vụ</label>
-                        <input type="text" class="form-control" name="position"
-                            value="{{ old('position') ?? $customer->position }}" placeholder="Nhập chức vụ">
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-12">
-                    <div class="form-group">
-                        <label for="file">Chọn ảnh</label><br>
-                        <div class="">
-                            <img id="image_show" style="width: 100px;height:100px" src="{{ $customer->avatar }}" alt="Avatar" />
-                            <input type="file" id="upload" accept=".png,.jpeg">
-                        </div>
-                        <input type="hidden" name="avatar" id="avatar"
-                            value="{{ old('avatar') ?? $customer->avatar }}">
-                    </div>
-                </div>
-
-            </div>
-            <div class="row">
-
-            </div>
         </div>
         <div class="card-footer">
             <button type="submit" class="btn btn-primary">Lưu</button>

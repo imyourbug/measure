@@ -14,7 +14,7 @@ class SettingTaskStaffController extends Controller
         try {
             $data = $request->validate([
                 'task_id' => 'required|numeric',
-                'user_id' => 'required|numeric',
+                'staff_id' => 'required|numeric',
             ]);
             SettingTaskStaff::create($data);
             return response()->json([
@@ -35,7 +35,7 @@ class SettingTaskStaffController extends Controller
             $data = $request->validate([
                 'id' => 'required|numeric',
                 'task_id' => 'required|numeric',
-                'user_id' => 'required|numeric',
+                'staff_id' => 'required|numeric',
             ]);
             unset($data['id']);
             SettingTaskStaff::where('id', $request->input('id'))->update($data);
@@ -55,7 +55,7 @@ class SettingTaskStaffController extends Controller
     {
         return response()->json([
             'status' => 0,
-            'taskStaff' => SettingTaskStaff::with(['task', 'user.staff'])
+            'taskStaff' => SettingTaskStaff::with(['task', 'staff'])
                 ->where('task_id', $request->id)
                 ->get(),
         ]);
@@ -65,7 +65,7 @@ class SettingTaskStaffController extends Controller
     {
         return response()->json([
             'status' => 0,
-            'taskStaff' => SettingTaskStaff::with(['task', 'user'])->firstWhere('id', $id),
+            'taskStaff' => SettingTaskStaff::with(['task', 'staff'])->firstWhere('id', $id),
         ]);
     }
 

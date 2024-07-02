@@ -36,6 +36,8 @@ Route::group(['namespace' => 'App\Http\Controllers', 'prefix' => 'exports', 'as'
 #upload
 Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::post('/upload', 'UploadController@upload')->name('upload');
+    Route::delete('/upload/deleteImage/{id}', 'UploadController@deleteImage')->name('deleteImage');
+    Route::post('/upload/multipleimages', 'UploadController@uploadMultipleImages')->name('uploadMultipleImages');
     Route::post('/restore', 'UploadController@restore')->name('restore');
 });
 
@@ -96,6 +98,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin'], function () {
         Route::get('/getTypeByContractId', 'ContractController@getTypeByContractId')->name('getTypeByContractId');
         Route::get('/getAll', 'ContractController@getAll')->name('getAll');
         Route::get('/getTimeInfoContractById', 'ContractController@getTimeInfoContractById')->name('getTimeInfoContractById');
+        Route::get('/getContractById', 'ContractController@getContractById')->name('getContractById');
     });
 
     #reports
@@ -122,7 +125,6 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin'], function () {
 
     #taskdetails
     Route::group(['prefix' => 'taskdetails', 'as' => 'taskdetails.'], function () {
-        // Route::get('/getAll', 'TaskController@getAll')->name('getAll');
         Route::post('create', 'TaskDetailController@store')->name('store');
         Route::post('update', 'TaskDetailController@update')->name('update');
         Route::get('/', 'TaskDetailController@index')->name('index');
@@ -198,6 +200,7 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin'], function () {
     Route::group(['prefix' => 'branches', 'as' => 'branches.'], function () {
         Route::delete('/{id}/destroy', 'BranchController@destroy')->name('destroy');
         Route::get('/getBranchById', 'BranchController@getBranchById')->name('getBranchById');
+        Route::get('/getAll', 'BranchController@getAll')->name('getAll');
     });
 
     #maps
@@ -222,8 +225,8 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin'], function () {
 
     #staffs
     Route::group(['prefix' => 'staffs', 'as' => 'staffs.'], function () {
-        Route::delete('/{id}/destroy', 'InfoUserController@destroy')->name('destroy');
-        Route::get('/getAll', 'InfoUserController@getAll')->name('getAll');
+        Route::delete('/{id}/destroy', 'StaffController@destroy')->name('destroy');
+        Route::get('/getAll', 'StaffController@getAll')->name('getAll');
     });
 });
 

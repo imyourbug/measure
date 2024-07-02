@@ -48,10 +48,88 @@
                     url: `/api/contracts/getTimeInfoContractById?contract_id=${contract_id}`,
                     success: function(response) {
                         $('.info-time-contract').text(
-                            `Các tháng có dữ liệu: ${response.times.length > 0 ? response.times.join(', ') : ''}`);
+                            `Các tháng có dữ liệu: ${response.times.length > 0 ? response.times.join(', ') : ''}`
+                        );
                     }
                 });
             }
+        });
+
+        $(document).on('change', '.select-type', function(e) {
+            let type = $(this).val();
+            if (type == 6) {
+                $('.select-task').html('');
+                $.ajax({
+                    type: "GET",
+                    url: `/api/contracts/getContractById?contract_id=${$('.select-contract').val()}`,
+                    success: function(response) {
+                        if (response.status == 0) {
+                            console.log(response.contract);
+                            let contract = response.contract;
+                            let html = '';
+                            contract.tasks.forEach(task => {
+                                html += `
+                                    <option value="${task.id}">
+                                        ${task.type.name}
+                                    </option>
+                                `;
+                            });
+                            $('.block-select-task').css('display', 'block');
+                            $('.select-task').html(html);
+                        }
+                    }
+                });
+            } else {
+                $('.block-select-task').css('display', 'none');
+            }
+        });
+
+        $(document).on('click', '.btn-remove-image', function(event) {
+            let id = $(this).data('id');
+
+            $.ajax({
+                type: "DELETE",
+                url: `/api/upload/deleteImage/${id}`,
+                success: function(response) {
+                    if (response.status == 0) {
+                        $(`.image-task[data-id="${id}"]`).remove();
+                    } else {
+                        toastr.error(response.message, 'Thông báo');
+                    }
+                },
+            });
+        });
+
+        $(document).on('submit', '#upload-form', function(event) {
+            event.preventDefault(); // Prevent default form submission
+            var formData = new FormData(this); // Create FormData object
+            let task_id = $('#task_id').val();
+            formData.append('task_id', task_id);
+
+            $.ajax({
+                processData: false,
+                contentType: false,
+                type: "POST",
+                data: formData,
+                url: "/api/upload/multipleimages",
+                success: function(response) {
+                    if (response.status == 0) {
+                        //hiển thị ảnh
+                        response.images.forEach((image) => {
+                            $('.block-image').append(`<span class="image-task" data-id="${image.id}" style="position: relative;">
+                                <img style="width: 100px;height:100px" src="${image.url}" data-id="${image.id}" data-task_id="${image.task_id}"
+                                    alt="image" />
+                                <span class="btn btn-sm btn-danger" style="right:0px;position: absolute;">
+                                    <i data-id="${image.id}"
+                                        class="fa-solid fa-trash btn-remove-image"></i>
+                                </span>
+                            </span>`);
+                        })
+                    } else {
+                        toastr.error(response.message, 'Thông báo');
+                    }
+                },
+            });
         });
     </script>
 @endpush
@@ -68,76 +146,72 @@
                     </div>
                 </div>
                 <div class="card-body" style="display: block;padding: 10px !important;">
-
-                    <div class="card-body" style="display: block;padding: 10px !important;">
-                        <form data-url="{{ route('reports.checkCopyData') }}"
-                            action="{{ route('admin.reports.duplicate') }}" id="form-duplicate" method="POST">
-                            @csrf
-                            <div class="row">
-                                <div class="col-lg-12 col-md-12">
-                                    <div class="form-group">
-                                        <label for="menu">Chọn hợp đồng <span class="required">(*)</span></label>
-                                        <select name="contract_id" class="form-control select-contract-copy">
-                                            <option value="">--Chọn hợp đồng--</option>
-                                            @foreach ($contracts as $contract)
-                                                <option value="{{ $contract->id }}">
-                                                    {{ $contract->customer->name . ' | ' . $contract->name . ' | ' . ($contract->branch->name ?? '') }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-3 col-md-12">
-                                    <div class="form-group">
-                                        <label for="menu">Từ tháng <span class="required">(*)</span></label>
-                                        <select name="month_from" class="form-control">
-                                            @for ($i = 1; $i <= 12; $i++)
-                                                <option value="{{ $i }}"
-                                                    {{ $i == now()->format('m') ? 'selected' : '' }}>{{ $i }}
-                                                </option>
-                                            @endfor
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3 col-md-12">
-                                    <div class="form-group">
-                                        <label for="menu">Từ năm <span class="required">(*)</span></label>
-                                        <input name="year_from" class="form-control" type="text"
-                                            value="{{ now()->format('Y') }}" placeholder="Nhập năm..." />
-                                    </div>
-                                </div>
-                                <div class="col-lg-3 col-md-12">
-                                    <div class="form-group">
-                                        <label for="menu">Sang tháng <span class="required">(*)</span></label>
-                                        <select name="month_to" class="form-control">
-                                            @for ($i = 1; $i <= 12; $i++)
-                                                <option value="{{ $i }}"
-                                                    {{ $i == now()->format('m') ? 'selected' : '' }}>{{ $i }}
-                                                </option>
-                                            @endfor
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3 col-md-12">
-                                    <div class="form-group">
-                                        <label for="menu">Sang năm <span class="required">(*)</span></label>
-                                        <input name="year_to" class="form-control" type="text"
-                                            value="{{ now()->format('Y') }}" placeholder="Nhập năm..." />
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+                    <form data-url="{{ route('reports.checkCopyData') }}" action="{{ route('admin.reports.duplicate') }}"
+                        id="form-duplicate" method="POST">
+                        @csrf
                         <div class="row">
-                            <div class="col-lg-12 col-md-12 info-time-contract">
-                                Các tháng có dữ liệu:
+                            <div class="col-lg-12 col-md-12">
+                                <div class="form-group">
+                                    <label for="menu">Chọn hợp đồng <span class="required">(*)</span></label>
+                                    <select name="contract_id" class="form-control select-contract-copy">
+                                        <option value="">--Chọn hợp đồng--</option>
+                                        @foreach ($contracts as $contract)
+                                            <option value="{{ $contract->id }}">
+                                                {{ $contract->customer->name . ' | ' . $contract->name . ' | ' . ($contract->branch->name ?? '') }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                        <br>
-                        <button class="btn btn-success btn-copy">Xác nhận</button>
+                        <div class="row">
+                            <div class="col-lg-3 col-md-12">
+                                <div class="form-group">
+                                    <label for="menu">Từ tháng <span class="required">(*)</span></label>
+                                    <select name="month_from" class="form-control">
+                                        @for ($i = 1; $i <= 12; $i++)
+                                            <option value="{{ $i }}"
+                                                {{ $i == now()->format('m') ? 'selected' : '' }}>{{ $i }}
+                                            </option>
+                                        @endfor
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <div class="form-group">
+                                    <label for="menu">Từ năm <span class="required">(*)</span></label>
+                                    <input name="year_from" class="form-control" type="text"
+                                        value="{{ now()->format('Y') }}" placeholder="Nhập năm..." />
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <div class="form-group">
+                                    <label for="menu">Sang tháng <span class="required">(*)</span></label>
+                                    <select name="month_to" class="form-control">
+                                        @for ($i = 1; $i <= 12; $i++)
+                                            <option value="{{ $i }}"
+                                                {{ $i == now()->format('m') ? 'selected' : '' }}>{{ $i }}
+                                            </option>
+                                        @endfor
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-12">
+                                <div class="form-group">
+                                    <label for="menu">Sang năm <span class="required">(*)</span></label>
+                                    <input name="year_to" class="form-control" type="text"
+                                        value="{{ now()->format('Y') }}" placeholder="Nhập năm..." />
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 info-time-contract">
+                            Các tháng có dữ liệu:
+                        </div>
                     </div>
-
+                    <br>
+                    <button class="btn btn-success btn-copy">Xác nhận</button>
                 </div>
             </div>
         </div>
@@ -183,6 +257,16 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="col-lg-6 col-md-12 block-select-task" style="display: none">
+                            <div class="form-group">
+                                <label for="menu">Chọn nhiệm vụ <span class="required">(*)</span></label>
+                                <select class="form-control select-task">
+                                    <option value="0">
+                                        Diệt chuột
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
                                 <label for="menu">Chọn hợp đồng <span class="required">(*)</span></label>
@@ -195,8 +279,6 @@
                                 </select>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
                                 <label for="menu">Chọn tháng <span class="required">(*)</span></label>
@@ -217,8 +299,6 @@
                                     placeholder="Nhập năm..." />
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
                                 <label for="menu">Chọn tháng so sánh<span class="required">(*)</span>&emsp13;<input
@@ -240,15 +320,13 @@
                                     class="form-control year_compare select-year-compare">
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
                                 <label for="menu">Chọn người lập báo cáo <span class="required">(*)</span></label>
                                 <select class="form-control select-user">
-                                    @foreach ($users as $user)
-                                        <option value="{{ $user->id }}">
-                                            {{ $user->staff->name }}
+                                    @foreach ($staff as $s)
+                                        <option value="{{ $s->id }}">
+                                            {{ $s->name }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -261,8 +339,6 @@
                                     class="form-control select-column" />
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
                                 <label for="menu">Lựa chọn</label>
@@ -443,6 +519,21 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12">
+                            <div class="form-group">
+                                <label for="file">Chọn ảnh</label><br>
+                                <div class="block-image">
+                                </div>
+                                <input type="hidden" name="images[]" id="images" accept=".png,.jpeg" />
+                                <form id="upload-form" enctype="multipart/form-data">
+                                    <input type="file" id="files" name="files[]" multiple>
+                                    <br>
+                                    <button class="btn btn-sm btn-success mt-2" type="submit">Tải lên file</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
@@ -489,6 +580,8 @@
                     <input type="hidden" class="display-year" name="display_year" />
                     <input type="hidden" class="display-month-compare" name="display_month_compare" />
                     <input type="hidden" class="display-year-compare" name="display_year_compare" />
+                    {{--  --}}
+                    <input type="hidden" class="task_id" name="task_id" />
                     {{--  --}}
                     <input type="hidden" class="year_compare" name="year_compare" />
                     <input type="hidden" class="month_compare" name="month_compare" />
