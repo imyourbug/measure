@@ -36,6 +36,8 @@ Route::group(['namespace' => 'App\Http\Controllers', 'prefix' => 'exports', 'as'
 #upload
 Route::group(['namespace' => 'App\Http\Controllers'], function () {
     Route::post('/upload', 'UploadController@upload')->name('upload');
+    Route::delete('/upload/deleteImage/{id}', 'UploadController@deleteImage')->name('deleteImage');
+    Route::post('/upload/multipleimages', 'UploadController@uploadMultipleImages')->name('uploadMultipleImages');
     Route::post('/restore', 'UploadController@restore')->name('restore');
 });
 

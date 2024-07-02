@@ -295,17 +295,32 @@
                     @endif
 
                     @if (!empty($data['display_third']) && !empty($data['display_year']) && !empty($data['image_annual_charts'][$keyImage]))
-                        Diễn biến từng tháng
-                        <img src="{{ public_path($data['image_annual_charts'][$keyImage]) }}" alt="" />
+                        <div class="" style="margin-top: 20px">
+                            Diễn biến từng tháng
+                            <img src="{{ public_path($data['image_annual_charts'][$keyImage]) }}" alt="" />
+                        </div>
                     @endif
                 @endforeach
             @endforeach
+            <br />
+            <p style="font-weight:bold;">Các ý kiến khác</p>
+            {{-- <p style="font-weight:bold;">C. Các ý kiến khác</p> --}}
+            <table class="tbl-plan1" cellspacing="0">
+                <tbody>
+                    <tr>
+                        @foreach ($info['images'] as $image)
+                        <td>
+                            <img style="width: 100px; height:100px" src="{{ public_path($image['url']) }}" alt="" />
+                        </td>
+                        @endforeach
+                    </tr>
+                </tbody>
+            </table>
+            <br><br>
         @endforeach
     @endif
-
-    <br />
-    <p style="font-weight:bold;">C. Các ý kiến khác</p>
-    <p style="font-weight:bold;">D. Kết luận</p>
+    <p style="font-weight:bold;">C. Kết luận</p>
+    {{-- <p style="font-weight:bold;">D. Kết luận</p> --}}
     <input type="checkbox" name="" id=""> <label for="">Đồng ý</label><br>
     <input type="checkbox" name="" id=""> <label for="">Không đồng ý</label>
     <div class="col10">

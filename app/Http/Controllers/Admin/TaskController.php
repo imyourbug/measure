@@ -191,7 +191,8 @@ class TaskController extends Controller
     {
         return response()->json([
             'status' => 0,
-            'task' => Task::with(['contract', 'type',])->firstWhere('id', $id)
+            'task' => Task::with(['contract', 'type', 'images'])
+                ->firstWhere('id', $id)
         ]);
     }
 

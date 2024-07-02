@@ -171,6 +171,7 @@ class ExportController extends Controller
         $contract = Contract::with([
             'customer',
             'branch',
+            'tasks.images',
             'tasks.type.parent',
             'tasks.details.taskMaps.map',
             'tasks.details.taskItems.item',

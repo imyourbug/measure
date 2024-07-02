@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Constant\GlobalConstant;
+use App\Models\TaskImage;
+use App\Models\TaskItem;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -42,6 +44,42 @@ class UploadController extends Controller
         ]);
     }
 
+    public function uploadMultipleImages(Request $request)
+    {
+        try {
+            $data = $request->validate([
+                'files.*' =>  'max:500000',
+                'files' =>  'nullable|array',
+                'task_id' =>  'required|integer',
+            ]);
+
+            $images = [];
+            foreach ($data['files'] as $file) {
+                # code...
+                $file_name = time() . $file->getClientOriginalName();
+                $pathFull = 'upload/' . date('Y-m-d');
+                $file->storeAs(
+                    'public/' . $pathFull,
+                    $file_name
+                );
+                $images[] =  TaskImage::create([
+                    'task_id' => $data['task_id'],
+                    'url' => '/storage/' . $pathFull . '/' . $file_name,
+                ]);
+            }
+        } catch (Throwable $e) {
+            return response()->json([
+                'status' => 1,
+                'message' => $e->getMessage()
+            ]);
+        }
+
+        return response()->json([
+            'status' => 0,
+            'images' => $images
+        ]);
+    }
+
     public function restore(Request $request)
     {
         if ($request->hasFile('file')) {
@@ -68,5 +106,21 @@ class UploadController extends Controller
             'status' => 0,
             'message' => 'Phục hồi dữ liệu thành công'
         ]);
+    }
+
+    public function deleteImage($id)
+    {
+        try {
+            TaskImage::firstWhere('id', $id)->delete();
+
+            return response()->json([
+                'status' => 0,
+            ]);
+        } catch (Throwable $e) {
+            return response()->json([
+                'status' => 1,
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 }

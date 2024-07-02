@@ -86,6 +86,20 @@ $(document).on("click", ".btn-edit", function () {
                 $("#status").val(task.status);
                 $("#solution").val(task.solution);
                 $("#task_id").val(task.id);
+                // render images
+                $('.block-image').html('');
+                let html = '';
+                response.task.images.forEach((image) => {
+                    html += `<span class="image-task" data-id="${image.id}" style="position: relative;">
+                                <img style="width: 100px;height:100px" src="${image.url}" data-id="${image.id}" data-task_id="${image.task_id}"
+                                    alt="image" />
+                                <span class="btn btn-sm btn-danger" style="right:0px;position: absolute;">
+                                    <i data-id="${image.id}"
+                                        class="fa-solid fa-trash btn-remove-image"></i>
+                                </span>
+                            </span>`;
+                });
+                $('.block-image').html(html);
             } else {
                 toastr.error(response.message);
             }
@@ -151,6 +165,30 @@ function closeModal() {
 var listMapChart = [];
 var listTrendMapChart = [];
 var listAnnualMapChart = [];
+
+$(document).on('submit', '#form-export', function (e) {
+    e.preventDefault();
+    // let pattern = /^\d{4}$/;
+    // let year = $('.select-year').val();
+    // let month = $('.select-month').val();
+    // let column = $('.select-column').val();
+    // let contract_id = $('.select-contract').val();
+    // let url = $(this).attr('action');
+
+    $.ajax({
+        type: "POST",
+        data: $(this).serialize(),
+        url: $(this).attr('action'),
+        success: function (response) {
+            if (response.status == 0) {
+                window.open(response.url);
+            } else {
+                toastr.error(response.message);
+            }
+        }
+    });
+});
+
 $('#form-export').submit(function (e) {
     e.preventDefault();
     // let pattern = /^\d{4}$/;
@@ -174,7 +212,7 @@ $('#form-export').submit(function (e) {
     });
 });
 
-$('.btn-preview').on('click', async function () {
+$(document).on('click', '.btn-preview', async function () {
     // reset
     $('.btn-export').prop('disabled', true);
     $('.groupAnnualImage').html('');
@@ -333,7 +371,7 @@ $('.btn-preview').on('click', async function () {
                 data.forEach(e => {
                     allCodeMap.forEach(code => {
                         html +=
-                            `<canvas id="trendMapChart${code}" style="display:block;"></canvas>`;
+                            `<canvas id="trendMapChart${e.task_id}${code}" style="display:block;"></canvas>`;
                     })
                 });
                 $('.groupTrendChart').html('');
@@ -360,13 +398,16 @@ $('.btn-preview').on('click', async function () {
                                     key) => item[key]);
                                 itemValue.forEach(v => {
                                     if (code == v.code) {
+                                        rs.value_kpi_this_year.push(v.this_year.kpi);
                                         rs.value_month_this_year.push(v.this_year.result);
-                                        rs.value_month_last_year.push(v.result);
+                                        rs.value_month_last_year.push(v.last_year.result);
                                     }
                                 });
 
                                 rs.month.push(item.month);
                                 rs.backgroundColorThisYear.push('#38A3EB');
+                                rs.backgroundColorLastYear.push('#3E7B35');
+                                rs.backgroundColorKpiThisYear.push('#F37519');
                             }
 
                         });
@@ -377,7 +418,7 @@ $('.btn-preview').on('click', async function () {
                         let map = {
                             task_id: e.task_id,
                             chart: new Chart($(
-                                `#trendMapChart${d.code}`
+                                `#trendMapChart${e.task_id}${d.code}`
                             ), {
                                 type: 'bar',
                                 data: {
@@ -396,22 +437,22 @@ $('.btn-preview').on('click', async function () {
                                         'Tháng 12'
                                     ].slice(0, month),
                                     datasets: [{
-                                        label: 'Số lượng ',
-                                        data: d.value_month,
+                                        label: `Số lượng ${year}`,
+                                        data: d.value_month_this_year,
                                         order: 1,
-                                        backgroundColor: d.backgroundColor
+                                        backgroundColor: d.backgroundColorThisYear
                                     },
                                     {
-                                        label: 'Số lượng',
-                                        data: d.value_month,
-                                        order: 1,
-                                        backgroundColor: d.backgroundColor
+                                        label: `Số lượng ${year_compare}`,
+                                        data: d.value_month_last_year,
+                                        order: 2,
+                                        backgroundColor: d.backgroundColorLastYear
                                     },
                                     {
                                         label: 'KPI',
-                                        data: dataKpis,
-                                        borderColor: '#F16C16',
-                                        backgroundColor: backgroundColorKpi,
+                                        data: d.value_month_last_year,
+                                        borderColor: '#F37519',
+                                        backgroundColor: d.backgroundColorKpiThisYear,
                                         type: 'line',
                                         order: 0
                                     }]
@@ -619,7 +660,6 @@ function getRandomRGBColor() {
 
 $(document).on('click', function (e) {
     const clickedElement = $(e.target);
-    const clickedElementId = clickedElement.attr('id'); // or use any other identifier
     const targetElement = $('.modal-content-export'); // Replace with your element's ID
 
     if (!clickedElement.is(targetElement) && !clickedElement.parents().is(targetElement) &&
