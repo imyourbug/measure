@@ -17,25 +17,23 @@ class UploadController extends Controller
     public function upload(Request $request)
     {
         $url = '';
-        if ($request->hasFile('file')) {
-            try {
-                $request->validate([
-                    // 'file' =>  'max:500000|mimes:jpeg,png,pdf,docx,pptx,cad,xlsx,xls,csv',
-                    'file' =>  'max:500000',
-                ]);
-                $file_name = date('H-i-s') . $request->file('file')->getClientOriginalName();
-                $pathFull = 'upload/' . date('Y-m-d');
-                $request->file('file')->storeAs(
-                    'public/' . $pathFull,
-                    $file_name
-                );
-                $url = '/storage/' . $pathFull . '/' . $file_name;
-            } catch (Throwable $e) {
-                return response()->json([
-                    'status' => 1,
-                    'message' => $e->getMessage()
-                ]);
-            }
+        try {
+            $request->validate([
+                // 'file' =>  'max:500000|mimes:jpeg,png,pdf,docx,pptx,cad,xlsx,xls,csv',
+                'file' =>  'max:500000',
+            ]);
+            $file_name = time() . $request->file('file')->getClientOriginalName();
+            $pathFull = 'upload/';
+            $request->file('file')->storeAs(
+                'public/' . $pathFull,
+                $file_name
+            );
+            $url = '/storage/' . $pathFull . '/' . $file_name;
+        } catch (Throwable $e) {
+            return response()->json([
+                'status' => 1,
+                'message' => $e->getMessage()
+            ]);
         }
 
         return response()->json([
@@ -57,7 +55,7 @@ class UploadController extends Controller
             foreach ($data['files'] as $file) {
                 # code...
                 $file_name = time() . $file->getClientOriginalName();
-                $pathFull = 'upload/' . date('Y-m-d');
+                $pathFull = 'upload/';
                 $file->storeAs(
                     'public/' . $pathFull,
                     $file_name
@@ -87,7 +85,7 @@ class UploadController extends Controller
                 if ($request->file('file')->getClientOriginalExtension() !== GlobalConstant::TYPE_FILE_BACKUP) {
                     throw new Exception('File không hợp lệ');
                 }
-                $file_name = date('Y-m-d-H-i-s') . $request->file('file')->getClientOriginalName();
+                $file_name = time() . $request->file('file')->getClientOriginalName();
                 $request->file('file')->storeAs('public/restore', $file_name);
                 $file_location = public_path() . '/storage/restore/' . $file_name;
 
