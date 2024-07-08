@@ -75,9 +75,6 @@
                                     placeholder="Nhập tên hợp đồng..." />
                             </div>
                         </div>
-
-                    </div>
-                    <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
                                 <label for="menu">Ngày bắt đầu <span class="required">(*)</span></label>
@@ -92,9 +89,14 @@
                                     value="{{ old('finish', now()->format('Y-m-d')) }}">
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12">
+                        <div class="col-lg-6 col-md-12">
+                            <div class="form-group">
+                                <label for="menu">Ngày</label>
+                                <input type="date" class="form-control" id="date"
+                                    value="{{ old('date') ?? now()->format('Y-m-d') }}">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
                             <div class="form-group">
                                 <label for="menu">Chi nhánh</label>
                                 <select multiple="multiple" id="branch_id"
@@ -108,9 +110,7 @@
                                 <textarea class="form-control" placeholder="Nhập nội dung..." id="content" cols="30" rows="5">{{ old('content') }} </textarea>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
                                 <label for="menu">Nhiệm vụ <span class="required">(*)</span></label>
@@ -227,7 +227,8 @@
                 </div>
                 <input type="hidden" id="id_electask">
                 <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default btn-close-modal-confirm-delete" data-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-default btn-close-modal-confirm-delete"
+                        data-dismiss="modal">Đóng</button>
                     <button type="button" data-id="" class="btn btn-danger btn-confirm-delete">Đồng ý</button>
                 </div>
             </div>

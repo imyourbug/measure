@@ -145,10 +145,6 @@ function renderOption(type, id_type) {
     $(".select2").select2();
 }
 
-// $(document).on('click', '.btn-open-modal', function () {
-
-// })
-
 //btn save
 $(document).on("click", ".btn-save", function () {
     let dataStorage = JSON.parse(localStorage.getItem("data")) || [];
@@ -228,7 +224,7 @@ $(document).on("change", ".select-type", function () {
     renderOption(type_time, id);
 });
 
-//select parent type
+// select parent type
 $(".select-parent-type").on("change", function () {
     $(".option").remove();
     let parent_id = $(this).val();
@@ -254,7 +250,7 @@ $(".select-parent-type").on("change", function () {
     }
 });
 
-//select customer
+// select customer
 $(document).on("change", ".select-customer", function () {
     reset();
     let id_customer = $(this).val();
@@ -277,7 +273,7 @@ $(document).on("change", ".select-customer", function () {
     }
 });
 
-//add
+// add
 $(document).on("click", ".btn-create", function () {
     if (confirm("Xác nhận tạo hợp đồng mới?")) {
         let data = JSON.parse(localStorage.getItem("data")) || [];
@@ -290,6 +286,7 @@ $(document).on("click", ".btn-create", function () {
             name: $("#name").val(),
             start: $("#start").val(),
             finish: $("#finish").val(),
+            date: $("#date").val(),
             content: $("#content").val(),
             branch_ids: branch_ids,
             attachment: $("#value-attachment").val(),

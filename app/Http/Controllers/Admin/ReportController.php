@@ -55,7 +55,7 @@ class ReportController extends Controller
             'tasks' => $tasks,
             'contracts' => Contract::with(['branch'])->get(),
             'types' => Type::all(),
-            'staff' =>InfoUser::all(),
+            'staff' => InfoUser::all(),
         ]);
     }
 
@@ -120,6 +120,7 @@ class ReportController extends Controller
                 ->where('contract_id', $data['contract_id'])
                 ->get()
                 ->count();
+
             if ($check) {
                 throw new Exception('Đã có dữ liệu ở tháng ' . $data['month_to'] .
                     ' năm ' . $data['year_to'] . '! Vui lòng chọn tháng khác');

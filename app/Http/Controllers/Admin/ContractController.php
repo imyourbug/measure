@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Constant\GlobalConstant;
 use App\Http\Controllers\Controller;
 use App\Models\Contract;
 use App\Models\Customer;
@@ -10,7 +9,6 @@ use App\Models\InfoUser;
 use App\Models\Task;
 use App\Models\TaskDetail;
 use App\Models\Type;
-use App\Models\User;
 use DateInterval;
 use DateTime;
 use Illuminate\Http\Request;
@@ -26,6 +24,9 @@ class ContractController extends Controller
 
         $taskDetails = TaskDetail::whereHas('task.contract', function ($q) use ($contract_id) {
             $q->where('id', $contract_id);
+        })->whereHas('taskMaps', function ($q) use ($contract_id) {
+            $q->whereNotNull('result')
+                ->orWhere('result', '!=', '');
         })
             ->get();
 
@@ -158,6 +159,7 @@ class ContractController extends Controller
                 'customer_id' => 'required|numeric',
                 'start' => 'required|date',
                 'finish' => 'required|date',
+                'date' => 'required|date',
                 'content' => 'required|string',
                 'attachment' => 'nullable|string',
                 'branch_ids' => 'nullable|array',
@@ -176,6 +178,7 @@ class ContractController extends Controller
                         'customer_id' =>  $data['customer_id'],
                         'start' =>  $data['start'],
                         'finish' =>  $data['finish'],
+                        'date' =>  $data['date'],
                         'content' =>  $data['content'],
                         'attachment' =>  $data['attachment'],
                         'branch_id' =>  $branch_id,
@@ -193,6 +196,7 @@ class ContractController extends Controller
                     'customer_id' =>  $data['customer_id'],
                     'start' =>  $data['start'],
                     'finish' =>  $data['finish'],
+                    'date' =>  $data['date'],
                     'content' =>  $data['content'],
                     'attachment' =>  $data['attachment'],
                 ]);
@@ -227,6 +231,7 @@ class ContractController extends Controller
                 'id' => 'required|numeric',
                 'start' => 'required|date',
                 'finish' => 'required|date',
+                'date' => 'required|date',
                 'content' => 'required|string',
                 'attachment' => 'nullable|string',
                 'name' => 'required|string',

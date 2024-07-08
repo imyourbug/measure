@@ -196,10 +196,11 @@
                         $taskItems = [];
                         $taskSolutions = [];
                         foreach ($info['details'] as $task) {
+                            // dd($task);
                             $date = explode('-', $task['plan_date']);
                             if ($date[0] == $data['year'] && $date[1] == $data['month']) {
                                 foreach ($task['task_staffs'] as $task_staff) {
-                                    $taskStaff[$task_staff['user']['staff']['id']] = $task_staff;
+                                    $taskStaff[$task_staff['staff']['id']] = $task_staff;
                                 }
                                 foreach ($task['task_chemitries'] as $task_chemitry) {
                                     $taskChemistries[$task_chemitry['chemistry']['id']] = $task_chemitry;
@@ -240,12 +241,12 @@
                         <td>
                             @foreach ($taskStaff as $staff)
                                 @php
-                                    $staffId = $staff['user']['staff']['id'] ?? 0;
+                                    $staffId = $staff['staff']['id'] ?? 0;
                                 @endphp
                                 {{ 'NV' . ($staffId < 10 ? '0' . $staffId : $staffId) }} -
-                                {{ $staff['user']['staff']['name'] ?? '' }} -
-                                {{ $staff['user']['staff']['identification'] ?? '' }} -
-                                {{ $staff['user']['staff']['tel'] ?? '' }}
+                                {{ $staff['staff']['name'] ?? '' }} -
+                                {{ $staff['staff']['identification'] ?? '' }} -
+                                {{ $staff['staff']['tel'] ?? '' }}
                                 <br>
                             @endforeach
                         </td>

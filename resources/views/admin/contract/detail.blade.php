@@ -129,17 +129,6 @@
                                         </select>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-lg-12 col-md-12">
-                                    <div class="form-group">
-                                        <label for="menu">Chi nhánh</label>
-                                        <input class="form-control" type="text" disabled
-                                            value="{{ $contract->branch->name ?? '' }}" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
                                 <div class="col-lg-6 col-md-12">
                                     <div class="form-group">
                                         <label for="menu">Ngày bắt đầu <span class="required">(*)</span></label>
@@ -154,8 +143,20 @@
                                             value="{{ old('finish') ?? $contract->finish }}">
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
+                                <div class="col-lg-6 col-md-12">
+                                    <div class="form-group">
+                                        <label for="menu">Ngày</label>
+                                        <input type="date" class="form-control" id="date"
+                                            value="{{ old('date') ?? $contract->date }}">
+                                    </div>
+                                </div>
+                                 <div class="col-lg-6 col-md-12">
+                                    <div class="form-group">
+                                        <label for="menu">Chi nhánh</label>
+                                        <input class="form-control" type="text" disabled
+                                            value="{{ $contract->branch->name ?? '' }}" />
+                                    </div>
+                                </div>
                                 <div class="col-lg-12 col-md-12">
                                     <div class="form-group">
                                         <label for="menu">Nội dung</label>
