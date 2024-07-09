@@ -146,7 +146,7 @@
                                 <div class="col-lg-6 col-md-12">
                                     <div class="form-group">
                                         <label for="menu">Ngày</label>
-                                        <input type="date" class="form-control" id="date"
+                                        <input type="date" class="form-control" id="date" name="date"
                                             value="{{ old('date') ?? $contract->date }}">
                                     </div>
                                 </div>

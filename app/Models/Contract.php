@@ -13,6 +13,7 @@ class Contract extends Model
         'name',
         'start',
         'finish',
+        'date',
         'content',
         'attachment',
         'customer_id',

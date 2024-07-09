@@ -133,11 +133,11 @@
                         @foreach ($info['setting_task_staffs'] as $staff)
                             <tr>
                                 @php
-                                    $staffId = $staff['user']['staff']['id'] ?? 0;
+                                    $staffId = $staff['staff']['id'] ?? 0;
                                 @endphp
                                 <td>{{ 'NV' . ($staffId < 10 ? '0' . $staffId : $staffId) }}</td>
-                                <td>{{ $staff['user']['staff']['name'] ?? '' }}</td>
-                                <td>{{ $staff['user']['staff']['tel'] ?? '' }}</td>
+                                <td>{{ $staff['staff']['name'] ?? '' }}</td>
+                                <td>{{ $staff['staff']['tel'] ?? '' }}</td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
