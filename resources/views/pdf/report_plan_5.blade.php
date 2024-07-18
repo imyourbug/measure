@@ -77,21 +77,9 @@
 </head>
 
 <body>
-    <header>
-        <div class="col10">
-            <div class="col7" style="text-align: right">
-                <p style="font-size: 12px;font-weight:bold;text-align:center;postion:absolute;margin-left:0">
-                    {{ $data['setting']['company-name'] ?? '' }} - CHI NHÁNH:
-                    {{ $data['setting']['branch-name'] ?? '' }} <br>- - - o0o - - -</p>
-            </div>
-            <div class="col3">
-                &emsp;
-            </div>
-        </div>
-        <p style="text-align:right">{{ $data['setting']['company-address'] ?? '' }}, ngày {{ date('d') }} tháng
-            {{ date('m') }} năm
-            {{ date('Y') }}</p>
-    </header>
+    {{-- header --}}
+    @include('pdf.header', ['data' => $data])
+    {{-- body --}}
     <div class="" style="text-align: center">
         <p style="font-size: 14px;font-weight:bold;">{{ $data['file_name'] }}</p>
         <p style="font-style:italic">V/v: {{ $data['contract']['name'] ?? '' }} năm {{ date('Y') }}</p>
@@ -194,7 +182,7 @@
         <div class="col3" style="text-align: right">
             <p> <span style="font-weight:bold;">{{ $data['setting']['company-name'] ?? '' }}</p>
             <p> <span style="font-weight:bold;">PVSC</p>
-            <div style="">{{ $data['creator']['staff']['name'] ?? '' }}</div>
+            <div style="">{{ $data['creator']['name'] ?? '' }}</div>
         </div>
     </div>
 </body>
