@@ -515,6 +515,7 @@
                     <input type="hidden" class="type_report" name="type_report" />
                     <input type="hidden" class="contract_id" value="{{ request()->id }}" name="contract_id" />
                     <input type="hidden" class="user_id" name="user_id" />
+                    <input type="hidden" class="column" name="column" />
                     {{--  --}}
                     <input type="hidden" class="display" name="display" />
                     <input type="hidden" class="display-first" name="display_first" />

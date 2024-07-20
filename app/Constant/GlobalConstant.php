@@ -12,4 +12,5 @@ class GlobalConstant
 
     public const STATUS_OK = 0;
     public const STATUS_ERROR = 1;
+    public const DEFAULT_NUMBER_COLUMN = 10;
 }

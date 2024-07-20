@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Constant\GlobalConstant;
 use App\Http\Controllers\Controller;
 use App\Models\Contract;
 use App\Models\InfoUser;
@@ -45,6 +46,7 @@ class ExportController extends Controller
                 'image_trend_charts' => 'nullable|array',
                 'image_annual_charts' => 'nullable|array',
                 'user_id' => 'nullable|numeric',
+                'column' => 'nullable|numeric',
                 'display' => 'required|in:0,1',
                 'display_first' => 'required|in:0,1',
                 'display_second' => 'required|in:0,1',
@@ -58,6 +60,7 @@ class ExportController extends Controller
             ]);
 
             $data['creator'] = InfoUser::firstWhere('id', $data['user_id'])?->toArray() ?? [];
+            $data['column'] = (int) ($data['column'] ?? GlobalConstant::DEFAULT_NUMBER_COLUMN);
             $data['setting'] = [];
             $settings = Setting::orderBy('key')->get()?->toArray() ?? [];
             foreach ($settings as $key => $setting) {
@@ -119,7 +122,6 @@ class ExportController extends Controller
                 'url' => '/storage/pdf/' . $filename
             ]);
         } catch (Throwable $e) {
-            dd($e);
             return response()->json([
                 'status' => 1,
                 'message' => $e->getMessage()
@@ -178,7 +180,6 @@ class ExportController extends Controller
                     // compare month
                     $taskMap['this_month'] = $this->getDataAnnual($task['id'], $thisMonth, $thisYear, $taskMap['code']);
                     $taskMap['last_month'] = $this->getDataAnnual($task['id'], $lastMonth, $lastYear, $taskMap['code']);
-
 
                     $tmp[$task['id']][$mapCode[0]][$taskMap['code']] = $taskMap;
                 }

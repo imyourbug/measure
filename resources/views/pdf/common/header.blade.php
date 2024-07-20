@@ -1,4 +1,4 @@
-<header>
+<header style="margin-bottom: 40px">
     <div class="col10" style="align-items:center;line-height: 2px;">
         <div class="col2" style="text-align: center;border:">
             <img src="{{ public_path($data['setting']['company-logo'] ?? '/images/logo.png') }}" alt=""

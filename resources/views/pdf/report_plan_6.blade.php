@@ -78,7 +78,7 @@
 
 <body>
     {{-- header --}}
-    @include('pdf.header', ['data' => $data])
+    @include('pdf.common.header', ['data' => $data])
     {{-- body --}}
     <div class="" style="text-align: center">
         <p style="font-size: 14px;font-weight:bold;">{{ $data['file_name'] }}</p>
@@ -88,12 +88,11 @@
     <h3>BÊN A:
         {{ $data['customer']['name'] ?? '' }}{{ !empty($data['branch']['name']) ? ' - ' . $data['branch']['name'] : '' }}
     </h3>
-    <p style="margin-left: 50px">Đại diện: Ông ( bà ) : {{ $data['branch']['manager'] ?? '' }} Chức vụ :
+    <p style="margin-left: 50px">Đại diện: Ông (bà): {{ $data['branch']['manager'] ?? ($data['customer']['manager'] ?? '') }} Chức vụ:
         {{ $data['customer']['position'] ?? '' }}</p>
     <p style="">Chi tiết địa chỉ: {{ $data['branch']['address'] ?? ($data['customer']['address'] ?? '') }} </p>
     <h3>BÊN B: {{ $data['setting']['company-name'] ?? '' }}</h3>
-    <p style="margin-left: 50px">Đại diện: Ông ( bà ) :{{ $data['creator']['name'] ?? '' }} Chức vụ
-        :{{ $data['creator']['position'] ?? '' }}</p>
+    <p style="margin-left: 50px">Đại diện: Ông (bà): {{ $data['creator']['name'] ?? '' }} Chức vụ: {{ $data['creator']['position'] ?? '' }}</p>
     <div class="" style="text-align: left">
         <p style="font-style:italic">Ngày: ___/_____/_______________</p>
     </div>

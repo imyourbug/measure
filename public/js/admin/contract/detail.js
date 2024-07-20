@@ -59,6 +59,7 @@ $(document).on('click', '.btn-preview', async function () {
     let contract_id = $('#request_contract_id').val();
     let column = $('.select-column').val();
     if (type_report == 4) {
+        // first chart
         await $.ajax({
             type: "GET",
             url: `/api/exports/getDataMapChart?month=${month}&year=${year}&contract_id=${contract_id}`,
@@ -155,7 +156,133 @@ $(document).on('click', '.btn-preview', async function () {
                 });
             }
         });
+        // second chart
+        await $.ajax({
+            type: "GET",
+            url: `/api/exports/getDataAnnualMapChart?month_compare=${month_compare}&year_compare=${year_compare}&month=${month}&year=${year}&contract_id=${contract_id}`,
+            success: function (response) {
+                let html = '';
+                let allCodeMap = [];
+                // get id chart
+                response.data.forEach(e => {
+                    let value = Object.keys(e.value).map((key) => e
+                        .value[key]);
+                    value.forEach(item => {
+                        let mapCode = item.code.split('-');
+                        if (!allCodeMap.includes(`${e.task_id}${mapCode[0]}`)) {
+                            allCodeMap.push(`${e.task_id}${mapCode[0]}`);
+                        }
+                    });
+                });
+                // create chart
+                allCodeMap.forEach(item => {
+                    html +=
+                        `<canvas id="annualMapChart${item}" style="display:block;"></canvas>`;
+                });
+                $('.groupAnnualChart').html('');
+                $('.groupAnnualChart').html(html);
 
+                response.data.forEach(e => {
+                    let value = Object.keys(e.value).map((key) => e
+                        .value[key]);
+                    let codeGroup = [];
+                    value.forEach(item => {
+                        let mapCode = item.code.split('-');
+                        if (!codeGroup.includes(mapCode[0])) {
+                            codeGroup.push(mapCode[0]);
+                        }
+                    });
+
+
+                    let dataCreateCharts = [];
+                    codeGroup.forEach(code => {
+                        let labels = [];
+                        let last_month = [];
+                        let this_month = [];
+                        let kpi_this_month = [];
+                        let backgroundColorLastMonth = [];
+                        let backgroundColorThisMonth = [];
+                        let backgroundColorKpiThisMonth = [];
+                        let count = 0;
+                        value.forEach(item => {
+                            let mapCode = item.code.split('-');
+                            if (mapCode[0] == code && count < column) {
+                                labels.push(item.code);
+                                last_month.push(item.last_month.result);
+                                this_month.push(item.this_month.result);
+                                kpi_this_month.push(item.this_month.kpi);
+                                backgroundColorLastMonth.push('#38A3EB');
+                                backgroundColorThisMonth.push('#3E7B35');
+                                backgroundColorKpiThisMonth.push('#F37519');
+                                count++;
+                            }
+                        });
+                        dataCreateCharts.push({
+                            code: code,
+                            labels,
+                            last_month,
+                            this_month,
+                            kpi_this_month,
+                            backgroundColorLastMonth,
+                            backgroundColorThisMonth,
+                            backgroundColorKpiThisMonth,
+                        });
+                    });
+
+                    dataCreateCharts.forEach(dataCreateChart => {
+                        let map = {
+                            task_id: e.task_id,
+                            chart: new Chart($(
+                                `#annualMapChart${e.task_id}${dataCreateChart.code}`
+                            ), {
+                                type: 'bar',
+                                data: {
+                                    labels: dataCreateChart.labels,
+                                    datasets: [{
+                                        label: `Số lượng ${month}/${year}`,
+                                        data: dataCreateChart.this_month,
+                                        order: 1,
+                                        backgroundColor: dataCreateChart.backgroundColorThisMonth
+                                    },
+                                    {
+                                        label: `Số lượng ${month_compare}/${year_compare}`,
+                                        data: dataCreateChart.last_month,
+                                        order: 2,
+                                        backgroundColor: dataCreateChart.backgroundColorLastMonth
+                                    },
+                                    {
+                                        label: 'KPI',
+                                        data: dataCreateChart.kpi_this_month,
+                                        borderColor: '#F37519',
+                                        backgroundColor: dataCreateChart.backgroundColorKpiThisMonth,
+                                        type: 'line',
+                                        order: 0
+                                    }]
+                                },
+                                options: {
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true,
+                                            ticks: {
+                                                // Include a dollar sign in the ticks
+                                                callback: function (
+                                                    value,
+                                                    index,
+                                                    ticks) {
+                                                    return `${value}`;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            })
+                        }
+                        listAnnualMapChart.push(map);
+                    });
+                });
+            },
+        });
+        // third chart
         await $.ajax({
             type: "GET",
             url: `/api/exports/getTrendDataMapChart?month_compare=${month_compare}&year_compare=${year_compare}&month=${month}&year=${year}&contract_id=${contract_id}`,
@@ -290,130 +417,6 @@ $(document).on('click', '.btn-preview', async function () {
                 });
             },
         });
-
-        await $.ajax({
-            type: "GET",
-            url: `/api/exports/getDataAnnualMapChart?month_compare=${month_compare}&year_compare=${year_compare}&month=${month}&year=${year}&contract_id=${contract_id}`,
-            success: function (response) {
-                let html = '';
-                let allCodeMap = [];
-                // get id chart
-                response.data.forEach(e => {
-                    let value = Object.keys(e.value).map((key) => e
-                        .value[key]);
-                    value.forEach(item => {
-                        let mapCode = item.code.split('-');
-                        if (!allCodeMap.includes(`${e.task_id}${mapCode[0]}`)) {
-                            allCodeMap.push(`${e.task_id}${mapCode[0]}`);
-                        }
-                    });
-                });
-                // create chart
-                allCodeMap.forEach(item => {
-                    html +=
-                        `<canvas id="annualMapChart${item}" style="display:block;"></canvas>`;
-                });
-                $('.groupAnnualChart').html('');
-                $('.groupAnnualChart').html(html);
-
-                response.data.forEach(e => {
-                    let value = Object.keys(e.value).map((key) => e
-                        .value[key]);
-                    let codeGroup = [];
-                    value.forEach(item => {
-                        let mapCode = item.code.split('-');
-                        if (!codeGroup.includes(mapCode[0])) {
-                            codeGroup.push(mapCode[0]);
-                        }
-                    });
-
-
-                    let dataCreateCharts = [];
-                    codeGroup.forEach(code => {
-                        let labels = [];
-                        let last_month = [];
-                        let this_month = [];
-                        let kpi_this_month = [];
-                        let backgroundColorLastMonth = [];
-                        let backgroundColorThisMonth = [];
-                        let backgroundColorKpiThisMonth = [];
-                        value.forEach(item => {
-                            let mapCode = item.code.split('-');
-                            if (mapCode[0] == code) {
-                                labels.push(item.code);
-                                last_month.push(item.last_month.result);
-                                this_month.push(item.this_month.result);
-                                kpi_this_month.push(item.this_month.kpi);
-                                backgroundColorLastMonth.push('#38A3EB');
-                                backgroundColorThisMonth.push('#3E7B35');
-                                backgroundColorKpiThisMonth.push('#F37519');
-                            }
-                        });
-                        dataCreateCharts.push({
-                            code: code,
-                            labels,
-                            last_month,
-                            this_month,
-                            kpi_this_month,
-                            backgroundColorLastMonth,
-                            backgroundColorThisMonth,
-                            backgroundColorKpiThisMonth,
-                        });
-                    });
-
-                    dataCreateCharts.forEach(dataCreateChart => {
-                        let map = {
-                            task_id: e.task_id,
-                            chart: new Chart($(
-                                `#annualMapChart${e.task_id}${dataCreateChart.code}`
-                            ), {
-                                type: 'bar',
-                                data: {
-                                    labels: dataCreateChart.labels,
-                                    datasets: [{
-                                        label: `Số lượng ${month}/${year}`,
-                                        data: dataCreateChart.this_month,
-                                        order: 1,
-                                        backgroundColor: dataCreateChart.backgroundColorThisMonth
-                                    },
-                                    {
-                                        label: `Số lượng ${month_compare}/${year_compare}`,
-                                        data: dataCreateChart.last_month,
-                                        order: 2,
-                                        backgroundColor: dataCreateChart.backgroundColorLastMonth
-                                    },
-                                    {
-                                        label: 'KPI',
-                                        data: dataCreateChart.kpi_this_month,
-                                        borderColor: '#F37519',
-                                        backgroundColor: dataCreateChart.backgroundColorKpiThisMonth,
-                                        type: 'line',
-                                        order: 0
-                                    }]
-                                },
-                                options: {
-                                    scales: {
-                                        y: {
-                                            beginAtZero: true,
-                                            ticks: {
-                                                // Include a dollar sign in the ticks
-                                                callback: function (
-                                                    value,
-                                                    index,
-                                                    ticks) {
-                                                    return `${value}`;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            })
-                        }
-                        listAnnualMapChart.push(map);
-                    });
-                });
-            },
-        });
         setTimeout(() => {
             listMapChart.forEach(e => {
                 $('.groupImage').append(
@@ -433,13 +436,14 @@ $(document).on('click', '.btn-preview', async function () {
         }, 2000);
     }
     setTimeout(() => {
-        $('.month').val($('.select-month').val());
-        $('.year').val($('.select-year').val());
-        $('.type_report').val($('.select-type').val());
-        $('.contract_id').val($('#request_contract_id').val());
+        $('.month').val(month);
+        $('.year').val(year);
+        $('.type_report').val(type_report);
+        $('.contract_id').val(contract_id);
         $('.user_id').val($('.select-user').val());
-        $('.month_compare').val($('.select-month-compare').val());
-        $('.year_compare').val($('.select-year-compare').val());
+        $('.month_compare').val(month_compare);
+        $('.year_compare').val(year_compare);
+        $('.column').val(column);
         $('.display').val($('#select-display').is(':checked') ? $(
             '#select-display')
             .val() : 0);

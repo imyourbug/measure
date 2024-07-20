@@ -576,6 +576,7 @@
                     <input type="hidden" class="display-first" name="display_first" />
                     <input type="hidden" class="display-second" name="display_second" />
                     <input type="hidden" class="display-third" name="display_third" />
+                    <input type="hidden" class="column" name="column" />
                     {{--  --}}
                     <input type="hidden" class="display-year" name="display_year" />
                     <input type="hidden" class="display-month-compare" name="display_month_compare" />
