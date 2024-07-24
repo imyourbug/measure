@@ -561,7 +561,7 @@ class ExportController extends Controller
         }
     }
 
-    // for second chart
+    // for third chart
     public function getDataAnnualByYear($task_id, $month, $year, $code)
     {
         try {
@@ -580,7 +580,7 @@ class ExportController extends Controller
 
             $result = [];
             $details = TaskDetail::with(['task', 'taskMaps.map'])
-                ->whereRaw('MONTH(plan_date) = ?', $month)
+            ->whereRaw('MONTH(plan_date) = ?', $month)
                 ->whereRaw('YEAR(plan_date) = ?', $year)
                 ->where('task_id', $task_id)
                 ->get();
@@ -589,7 +589,7 @@ class ExportController extends Controller
             $countDetail = count($key_task_details) == 0 ? 1 : count($key_task_details);
             // get value
             $value = DB::table('task_maps')
-                ->selectRaw('SUM(CASE
+            ->selectRaw('SUM(CASE
                                     WHEN kpi is NULL THEN 0
                                     WHEN kpi = "" THEN 0
                                     ELSE kpi
@@ -599,13 +599,18 @@ class ExportController extends Controller
                                     WHEN result = "" THEN 0
                                     ELSE result
                                 END) as all_result')
-                ->whereIn('task_id', $key_task_details)
+            ->whereIn('task_id', $key_task_details)
                 ->whereRaw('SPLIT_STRING(code, "-", 1) = ?', $code)
                 ->first();
+            $count = DB::table('task_maps')
+            ->whereIn('task_id', $key_task_details)
+                ->whereRaw('SPLIT_STRING(code, "-", 1) = ?', $code)
+                ->get()
+                ->count();
 
             $result = [
-                'kpi' => (int)(($value->all_kpi ?? 0) / $countDetail),
-                'result' => (int)(($value->all_result ?? 0) / $countDetail),
+                'kpi' => (int)(($value->all_kpi ?? 0) / ($count === 0 ? 1 : $count)),
+                'result' => (int)(($value->all_result ?? 0) / ($count === 0 ? 1 : $count)),
             ];
 
             return $result;
@@ -645,10 +650,15 @@ class ExportController extends Controller
                 ->whereIn('task_id', $key_task_details)
                 ->whereRaw('SPLIT_STRING(code, "-", 1) = ?', $code)
                 ->first();
+            $count = DB::table('task_maps')
+                ->whereIn('task_id', $key_task_details)
+                ->whereRaw('SPLIT_STRING(code, "-", 1) = ?', $code)
+                ->get()
+                ->count();
 
             $result = [
-                'kpi' => (int)(($value->all_kpi ?? 0) / $countDetail),
-                'result' => (int)(($value->all_result ?? 0) / $countDetail),
+                'kpi' => (int)(($value->all_kpi ?? 0) / ($count === 0 ? 1 : $count)),
+                'result' => (int)(($value->all_result ?? 0) / ($count === 0 ? 1 : $count)),
             ];
 
             return $result;

@@ -86,8 +86,7 @@
         <p style="font-style:italic">Hợp đồng số {{ $data['contract']['id'] ?? '' }} ký ngày
             {{ \Illuminate\Support\Carbon::parse($data['contract']['created_at'])->format('d-m-Y') }}</p>
     </div>
-    <h3 style="font-weight:bold;">Kính gửi: {{ $data['customer']['name'] ?? '' }} -
-        {{ $data['branch']['name'] ?? ('' ?? '') }} </h3>
+    <h3 style="font-weight:bold;">Kính gửi: {{ $data['customer']['name'] ?? '' }}{{ !empty($data['branch']['name']) ? ' - ' . $data['branch']['name'] : '' }}</h3>
     <p style="margin-left: 50px">Đại diện: Ông (bà): {{ $data['branch']['manager'] ?? ($data['customer']['manager'] ?? '') }} Chức vụ: {{ $data['customer']['position'] ?? '' }}</p>
     @if (!empty($data['tasks']))
         <p style="font-weight:bold;">Nội dung: Kế hoạch công việc thực hiện dịch vụ {{ $info['type']['name'] ?? '' }}

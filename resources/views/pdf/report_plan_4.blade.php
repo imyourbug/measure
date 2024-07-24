@@ -88,11 +88,13 @@
     <h3>BÊN A:
         {{ $data['customer']['name'] ?? '' }}{{ !empty($data['branch']['name']) ? ' - ' . $data['branch']['name'] : '' }}
     </h3>
-    <p style="margin-left: 50px">Đại diện: Ông (bà): {{ $data['branch']['manager'] ?? ($data['customer']['manager'] ?? '') }} Chức vụ:
+    <p style="margin-left: 50px">Đại diện: Ông (bà):
+        {{ $data['branch']['manager'] ?? ($data['customer']['manager'] ?? '') }} Chức vụ:
         {{ $data['customer']['position'] ?? '' }}</p>
     <p style="">Chi tiết địa chỉ: {{ $data['branch']['address'] ?? ($data['customer']['address'] ?? '') }} </p>
     <h3>BÊN B: {{ $data['setting']['company-name'] ?? '' }}</h3>
-    <p style="margin-left: 50px">Đại diện: Ông (bà): {{ $data['creator']['name'] ?? '' }} Chức vụ: {{ $data['creator']['position'] ?? '' }}</p>
+    <p style="margin-left: 50px">Đại diện: Ông (bà): {{ $data['creator']['name'] ?? '' }} Chức vụ:
+        {{ $data['creator']['position'] ?? '' }}</p>
     <h3>B. Khối lượng hoàn thành </h3>
     @if (!empty($data['tasks']))
         @foreach ($data['tasks'] as $key => $info)
@@ -167,7 +169,8 @@
                         @php
                             $keyImage = ($info['id'] ?? '') . $key;
                         @endphp
-                        <p>Khu vực {{ $tasks[array_key_first($tasks)]['position'] ?? '' }}</p>
+                        <p style="font-weight: bold">Khu vực {{ $tasks[array_key_first($tasks)]['position'] ?? '' }}
+                        </p>
                         @if (count($tasks) > 0)
                             <p style="">BÁO CÁO: DIỄN BIẾN THÁNG</p>
                             <p style="">Tháng {{ $data['month'] }} năm {{ $data['year'] }}</p>
@@ -218,7 +221,7 @@
                                         {{ (int) ($sum_result / ($count_column ?? 1)) }}
                                     </td>
                                 </tr>
-                                <tr>
+                                {{-- <tr>
                                     <td>
                                         KPI
                                     </td>
@@ -245,7 +248,7 @@
                                     <td>
                                         {{ (int) ($sum_kpi / ($count_kpi ?? 1)) }}
                                     </td>
-                                </tr>
+                                </tr> --}}
                             </table>
                         @endif
                         @if ($data['display'] && !empty($data['display_first']) && !empty($data['image_charts'][$keyImage]))
@@ -390,18 +393,19 @@
                                                 $dataThisYear =
                                                     $data['dataCompareYear'][$info['id']][$key]['this_year'][$i] ?? '';
                                             @endphp
+
                                             @if (!empty($dataThisYear))
                                                 @php
                                                     $sum_result_this_year += $dataThisYear['result'] ?? 0;
                                                 @endphp
-                                                {{ (int) ($dataThisYear['result'] / ($countDetail ?? 1)) }}
+                                                {{ (int) ($dataThisYear['result']) }}
                                             @else
                                                 N/A
                                             @endif
                                         </td>
                                     @endfor
                                     <td>
-                                        {{ (int) ($sum_result_this_year / $data['month'] / ($countDetail ?? 1)) }}
+                                        {{ (int) ($sum_result_this_year / $data['month']) }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -421,14 +425,14 @@
                                                 @php
                                                     $sum_result_last_year += $dataLastYear['result'] ?? 0;
                                                 @endphp
-                                                {{ (int) ($dataLastYear['result'] / ($countDetail ?? 1)) }}
+                                                {{ (int) ($dataLastYear['result']) }}
                                             @else
                                                 N/A
                                             @endif
                                         </td>
                                     @endfor
                                     <td>
-                                        {{ (int) ($sum_result_last_year / $data['month'] / ($countDetail ?? 1)) }}
+                                        {{ (int) ($sum_result_last_year / $data['month']) }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -448,14 +452,14 @@
                                                 @php
                                                     $sum_kpi_this_year += $dataThisYear['kpi'] ?? 0;
                                                 @endphp
-                                                {{ (int) ($dataThisYear['kpi'] / ($countDetail ?? 1)) }}
+                                                {{ (int) ($dataThisYear['kpi']) }}
                                             @else
                                                 N/A
                                             @endif
                                         </td>
                                     @endfor
                                     <td>
-                                        {{ (int) ($sum_kpi_this_year / $data['month'] / ($countDetail ?? 1)) }}
+                                        {{ (int) ($sum_kpi_this_year / $data['month']) }}
                                     </td>
                                 </tr>
                             </table>
