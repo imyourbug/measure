@@ -167,7 +167,7 @@
                         @php
                             $keyImage = ($info['id'] ?? '') . $key;
                         @endphp
-                        <p>Khu vực {{ $tasks[array_key_first($tasks)]['position'] ?? '' }}</p>
+                        <p style="font-weight: bold">Khu vực {{ $tasks[array_key_first($tasks)]['position'] ?? '' }}</p>
                         @if (count($tasks) > 0)
                             <p style="">BÁO CÁO: DIỄN BIẾN THÁNG</p>
                             <p style="">Tháng {{ $data['month'] }} năm {{ $data['year'] }}</p>
@@ -218,7 +218,7 @@
                                         {{ (int) ($sum_result / ($count_column ?? 1)) }}
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr style="display: none">
                                     <td>
                                         KPI
                                     </td>
