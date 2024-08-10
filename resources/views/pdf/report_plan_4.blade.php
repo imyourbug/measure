@@ -88,11 +88,13 @@
     <h3>BÊN A:
         {{ $data['customer']['name'] ?? '' }}{{ !empty($data['branch']['name']) ? ' - ' . $data['branch']['name'] : '' }}
     </h3>
-    <p style="margin-left: 50px">Đại diện: Ông (bà): {{ $data['branch']['manager'] ?? ($data['customer']['manager'] ?? '') }} Chức vụ:
+    <p style="margin-left: 50px">Đại diện: Ông (bà):
+        {{ $data['branch']['manager'] ?? ($data['customer']['manager'] ?? '') }} Chức vụ:
         {{ $data['customer']['position'] ?? '' }}</p>
     <p style="">Chi tiết địa chỉ: {{ $data['branch']['address'] ?? ($data['customer']['address'] ?? '') }} </p>
     <h3>BÊN B: {{ $data['setting']['company-name'] ?? '' }}</h3>
-    <p style="margin-left: 50px">Đại diện: Ông (bà): {{ $data['creator']['name'] ?? '' }} Chức vụ: {{ $data['creator']['position'] ?? '' }}</p>
+    <p style="margin-left: 50px">Đại diện: Ông (bà): {{ $data['creator']['name'] ?? '' }} Chức vụ:
+        {{ $data['creator']['position'] ?? '' }}</p>
     <h3>B. Khối lượng hoàn thành </h3>
     @if (!empty($data['tasks']))
         @foreach ($data['tasks'] as $key => $info)
@@ -167,7 +169,8 @@
                         @php
                             $keyImage = ($info['id'] ?? '') . $key;
                         @endphp
-                        <p style="font-weight: bold">Khu vực {{ $tasks[array_key_first($tasks)]['position'] ?? '' }}</p>
+                        <p style="font-weight: bold">Khu vực {{ $tasks[array_key_first($tasks)]['position'] ?? '' }}
+                        </p>
                         @if (count($tasks) > 0)
                             <p style="">BÁO CÁO: DIỄN BIẾN THÁNG</p>
                             <p style="">Tháng {{ $data['month'] }} năm {{ $data['year'] }}</p>
@@ -390,6 +393,7 @@
                                                 $dataThisYear =
                                                     $data['dataCompareYear'][$info['id']][$key]['this_year'][$i] ?? '';
                                             @endphp
+
                                             @if (!empty($dataThisYear))
                                                 @php
                                                     $sum_result_this_year += $dataThisYear['result'] ?? 0;

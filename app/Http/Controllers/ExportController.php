@@ -122,6 +122,7 @@ class ExportController extends Controller
                 'url' => '/storage/pdf/' . $filename
             ]);
         } catch (Throwable $e) {
+            dd($e);
             return response()->json([
                 'status' => 1,
                 'message' => $e->getMessage()
@@ -353,8 +354,10 @@ class ExportController extends Controller
                     if (isset($result[$task_detail->task->id][$data['map_id']])) {
                         $result[$task_detail->task->id][$data['map_id']]['all_kpi'] += $data['all_kpi'];
                         $result[$task_detail->task->id][$data['map_id']]['all_result'] += $data['all_result'];
+                        $result[$task_detail->task->id][$data['map_id']]['count'] += 1;
                     } else {
                         $result[$task_detail->task->id][$data['map_id']] = $data;
+                        $result[$task_detail->task->id][$data['map_id']]['count'] = 1;
                     }
                 }
                 $result[$task_detail->task->id]['task_id'] = $task_detail->task->id;
@@ -364,12 +367,12 @@ class ExportController extends Controller
 
             foreach ($result as $key => &$rs) {
                 $tmp = [];
-                $countDetail = $rs['count_detail'];
                 foreach ($rs as $keyRs => $valueRs) {
                     if (is_numeric($keyRs)) {
+                        $count = (int) ($valueRs['count'] ?? 1);
                         $mapCode = explode('-', $valueRs['code']);
-                        $valueRs['all_kpi'] = (int) ($valueRs['all_kpi'] / $countDetail);
-                        $valueRs['all_result'] = (int) ($valueRs['all_result'] / $countDetail);
+                        $valueRs['all_kpi'] = (int) ($valueRs['all_kpi'] / $count);
+                        $valueRs['all_result'] = (int) ($valueRs['all_result'] / $count);
                         $tmp[$mapCode[0]][$valueRs['map_id']] = $valueRs;
                     }
                 }
@@ -602,10 +605,15 @@ class ExportController extends Controller
                 ->whereIn('task_id', $key_task_details)
                 ->whereRaw('SPLIT_STRING(code, "-", 1) = ?', $code)
                 ->first();
+            $count = DB::table('task_maps')
+                ->whereIn('task_id', $key_task_details)
+                ->whereRaw('SPLIT_STRING(code, "-", 1) = ?', $code)
+                ->get()
+                ->count();
 
             $result = [
-                'kpi' => (int)(($value->all_kpi ?? 0) / $countDetail),
-                'result' => (int)(($value->all_result ?? 0) / $countDetail),
+                'kpi' => (int)(($value->all_kpi ?? 0) / ($count === 0 ? 1 : $count)),
+                'result' => (int)(($value->all_result ?? 0) / ($count === 0 ? 1 : $count)),
             ];
 
             return $result;
@@ -645,10 +653,15 @@ class ExportController extends Controller
                 ->whereIn('task_id', $key_task_details)
                 ->whereRaw('SPLIT_STRING(code, "-", 1) = ?', $code)
                 ->first();
+            $count = DB::table('task_maps')
+                ->whereIn('task_id', $key_task_details)
+                ->whereRaw('SPLIT_STRING(code, "-", 1) = ?', $code)
+                ->get()
+                ->count();
 
             $result = [
-                'kpi' => (int)(($value->all_kpi ?? 0) / $countDetail),
-                'result' => (int)(($value->all_result ?? 0) / $countDetail),
+                'kpi' => (int)(($value->all_kpi ?? 0) / ($count === 0 ? 1 : $count)),
+                'result' => (int)(($value->all_result ?? 0) / ($count === 0 ? 1 : $count)),
             ];
 
             return $result;
