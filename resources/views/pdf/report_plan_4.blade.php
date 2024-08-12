@@ -227,7 +227,7 @@
                                         @endif
                                     @endforeach
                                     <td>
-                                        {{ (int) ($sum_result / ($count_column ?? 1)) }}
+                                        {{ (int) ($sum_result / ($count_column == 0 ? 1 : $count_column)) }}
                                     </td>
                                 </tr>
                                 {{-- <tr>
@@ -319,7 +319,7 @@
                                             @endif
                                         @endforeach
                                         <td>
-                                            {{ (int) ($sum_result / ($count_column ?? 1)) }}
+                                            {{ (int) ($sum_result / ($count_column == 0 ? 1 : $count_column)) }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -350,7 +350,7 @@
                                             @endif
                                         @endforeach
                                         <td>
-                                            {{ (int) ($sum_result / ($count_column ?? 1)) }}
+                                            {{ (int) ($sum_result / ($count_column == 0 ? 1 : $count_column)) }}
                                         </td>
                                     </tr>
                                     {{-- <tr>
@@ -376,7 +376,7 @@
                                             @endif
                                         @endforeach
                                         <td>
-                                            {{ (int) ($sum_kpi / ($count_column ?? 1)) }}
+                                            {{ (int) ($sum_kpi / ($count_column == 0 ? 1 : $count_column)) }}
                                         </td>
                                     </tr> --}}
                                 </table>
