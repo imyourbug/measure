@@ -202,18 +202,16 @@
                                     @php
                                         $sum_result = 0;
                                         $count_column = 0;
+                                        $count = 0;
                                     @endphp
                                     @foreach ($tasks as $task_map)
                                         @php
                                             $mapCode = explode('-', $task_map['code']);
                                         @endphp
                                         @if ($mapCode[0] == $key && $count_column < $data['column'])
-                                            @php
-                                                $count_column++;
-                                                $sum_result += (int) $task_map['this_month']['result'];
-                                            @endphp
                                             <td>
                                                 @php
+                                                    $count_column++;
                                                     $result_this_month = strlen($task_map['this_month']['result']) ? (int) $task_map['this_month']['result'] : 'N/A';
                                                 @endphp
                                                 {{ $result_this_month }}
@@ -221,13 +219,13 @@
                                             @php
                                                 if ($result_this_month != 'N/A' && $result_this_month > 0) {
                                                     $sum_result += $result_this_month;
-                                                    $count_column++;
+                                                    $count++;
                                                 }
                                             @endphp
                                         @endif
                                     @endforeach
                                     <td>
-                                        {{ (int) ($sum_result / ($count_column == 0 ? 1 : $count_column)) }}
+                                        {{ (int) ($sum_result / ($count == 0 ? 1 : $count)) }}
                                     </td>
                                 </tr>
                                 {{-- <tr>
@@ -298,6 +296,7 @@
                                         @php
                                             $sum_result = 0;
                                             $count_column = 0;
+                                            $count = 0;
                                         @endphp
                                         @foreach ($tasks as $task_map)
                                             @php
@@ -306,6 +305,7 @@
                                             @if ($mapCode[0] == $key && $count_column < $data['column'])
                                                 <td>
                                                     @php
+                                                        $count_column++;
                                                         $result_this_month = strlen($task_map['this_month']['result']) ? (int) $task_map['this_month']['result'] : 'N/A';
                                                     @endphp
                                                     {{ $result_this_month }}
@@ -313,13 +313,13 @@
                                                 @php
                                                     if ($result_this_month != 'N/A' && $result_this_month > 0) {
                                                         $sum_result += $result_this_month;
-                                                        $count_column++;
+                                                        $count++;
                                                     }
                                                 @endphp
                                             @endif
                                         @endforeach
                                         <td>
-                                            {{ (int) ($sum_result / ($count_column == 0 ? 1 : $count_column)) }}
+                                            {{ (int) ($sum_result / ($count == 0 ? 1 : $count)) }}
                                         </td>
                                     </tr>
                                     <tr>
@@ -329,6 +329,7 @@
                                         @php
                                             $sum_result = 0;
                                             $count_column = 0;
+                                            $count = 0;
                                         @endphp
                                         @foreach ($tasks as $task_map)
                                             @php
@@ -337,6 +338,7 @@
                                             @if ($mapCode[0] == $key && $count_column < $data['column'])
                                                 <td>
                                                     @php
+                                                        $count_column++;
                                                         $result_last_month = strlen($task_map['last_month']['result']) ? (int) $task_map['last_month']['result'] : 'N/A';
                                                     @endphp
                                                     {{ $result_last_month }}
@@ -344,13 +346,13 @@
                                                 @php
                                                     if ($result_last_month != 'N/A' && $result_last_month > 0) {
                                                         $sum_result += $result_last_month;
-                                                        $count_column++;
+                                                        $count++;
                                                     }
                                                 @endphp
                                             @endif
                                         @endforeach
                                         <td>
-                                            {{ (int) ($sum_result / ($count_column == 0 ? 1 : $count_column)) }}
+                                            {{ (int) ($sum_result / ($count == 0 ? 1 : $count)) }}
                                         </td>
                                     </tr>
                                     {{-- <tr>
