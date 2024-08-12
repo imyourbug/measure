@@ -213,8 +213,17 @@
                                                 $sum_result += (int) $task_map['this_month']['result'];
                                             @endphp
                                             <td>
-                                                {{ strlen($task_map['this_month']['result']) ? (int) $task_map['this_month']['result'] : 'N/A' }}
+                                                @php
+                                                    $result_this_month = strlen($task_map['this_month']['result']) ? (int) $task_map['this_month']['result'] : 'N/A';
+                                                @endphp
+                                                {{ $result_this_month }}
                                             </td>
+                                            @php
+                                                if ($result_this_month != 'N/A' && $result_this_month > 0) {
+                                                    $sum_result += $result_this_month;
+                                                    $count_column++;
+                                                }
+                                            @endphp
                                         @endif
                                     @endforeach
                                     <td>
@@ -296,11 +305,16 @@
                                             @endphp
                                             @if ($mapCode[0] == $key && $count_column < $data['column'])
                                                 <td>
-                                                    {{ strlen($task_map['this_month']['result']) ? (int) $task_map['this_month']['result'] : 'N/A' }}
+                                                    @php
+                                                        $result_this_month = strlen($task_map['this_month']['result']) ? (int) $task_map['this_month']['result'] : 'N/A';
+                                                    @endphp
+                                                    {{ $result_this_month }}
                                                 </td>
                                                 @php
-                                                    $sum_result += (int) $task_map['this_month']['result'];
-                                                    $count_column++;
+                                                    if ($result_this_month != 'N/A' && $result_this_month > 0) {
+                                                        $sum_result += $result_this_month;
+                                                        $count_column++;
+                                                    }
                                                 @endphp
                                             @endif
                                         @endforeach
@@ -322,11 +336,16 @@
                                             @endphp
                                             @if ($mapCode[0] == $key && $count_column < $data['column'])
                                                 <td>
-                                                    {{ strlen($task_map['last_month']['result']) ? (int) $task_map['last_month']['result'] : 'N/A' }}
+                                                    @php
+                                                        $result_last_month = strlen($task_map['last_month']['result']) ? (int) $task_map['last_month']['result'] : 'N/A';
+                                                    @endphp
+                                                    {{ $result_last_month }}
                                                 </td>
                                                 @php
-                                                    $sum_result += (int) $task_map['last_month']['result'];
-                                                    $count_column++;
+                                                    if ($result_last_month != 'N/A' && $result_last_month > 0) {
+                                                        $sum_result += $result_last_month;
+                                                        $count_column++;
+                                                    }
                                                 @endphp
                                             @endif
                                         @endforeach
@@ -334,7 +353,7 @@
                                             {{ (int) ($sum_result / ($count_column ?? 1)) }}
                                         </td>
                                     </tr>
-                                    <tr>
+                                    {{-- <tr>
                                         <td>
                                             KPI
                                         </td>
@@ -359,7 +378,7 @@
                                         <td>
                                             {{ (int) ($sum_kpi / ($count_column ?? 1)) }}
                                         </td>
-                                    </tr>
+                                    </tr> --}}
                                 </table>
                                 <p style="text-align:center">SO SÁNH THÁNG</p>
                                 <img src="{{ public_path($data['image_annual_charts'][$keyImage]) }}" alt="" />
@@ -386,6 +405,7 @@
                                     </td>
                                     @php
                                         $sum_result_this_year = 0;
+                                        $count = 0;
                                     @endphp
                                     @for ($i = 1; $i <= (int) ($data['month'] ?? 0); $i++)
                                         <td>
@@ -393,19 +413,22 @@
                                                 $dataThisYear =
                                                     $data['dataCompareYear'][$info['id']][$key]['this_year'][$i] ?? '';
                                             @endphp
-
                                             @if (!empty($dataThisYear))
                                                 @php
-                                                    $sum_result_this_year += $dataThisYear['result'] ?? 0;
+                                                    $result_this_year = (int) (($dataThisYear['result']) ?? 0);
+                                                    if ($result_this_year > 0) {
+                                                        $sum_result_this_year += $result_this_year;
+                                                        $count++;
+                                                    }
                                                 @endphp
-                                                {{ (int) ($dataThisYear['result']) }}
+                                                {{ $result_this_year }}
                                             @else
                                                 N/A
                                             @endif
                                         </td>
                                     @endfor
                                     <td>
-                                        {{ (int) ($sum_result_this_year / $data['month']) }}
+                                        {{ (int) ($sum_result_this_year / ($count == 0 ? 1 : $count)) }}
                                     </td>
                                 </tr>
                                 <tr>
@@ -414,6 +437,7 @@
                                     </td>
                                     @php
                                         $sum_result_last_year = 0;
+                                        $count = 0;
                                     @endphp
                                     @for ($i = 1; $i <= (int) ($data['month'] ?? 0); $i++)
                                         <td>
@@ -423,7 +447,11 @@
                                             @endphp
                                             @if (!empty($dataLastYear))
                                                 @php
-                                                    $sum_result_last_year += $dataLastYear['result'] ?? 0;
+                                                    $result_last_year = (int) (($dataLastYear['result']) ?? 0);
+                                                    if ($result_last_year > 0) {
+                                                        $sum_result_last_year += $result_last_year;
+                                                        $count++;
+                                                    }
                                                 @endphp
                                                 {{ (int) ($dataLastYear['result']) }}
                                             @else
@@ -432,10 +460,10 @@
                                         </td>
                                     @endfor
                                     <td>
-                                        {{ (int) ($sum_result_last_year / $data['month']) }}
+                                        {{ (int) ($sum_result_last_year / ($count == 0 ? 1 : $count)) }}
                                     </td>
                                 </tr>
-                                <tr>
+                                {{-- <tr>
                                     <td>
                                         KPI
                                     </td>
@@ -461,7 +489,7 @@
                                     <td>
                                         {{ (int) ($sum_kpi_this_year / $data['month']) }}
                                     </td>
-                                </tr>
+                                </tr> --}}
                             </table>
                         @endif
 
