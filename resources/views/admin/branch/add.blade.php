@@ -49,10 +49,10 @@
                 <div class="col-lg-6 col-md-12">
                     <div class="form-group">
                         <label for="menu">Khách hàng <span class="required">(*)</span></label>
-                        <select class="form-control" name="user_id">
+                        <select class="form-control" name="customer_id">
                             <option value="">--Khách hàng--</option>
                             @foreach ($customers as $customer)
-                                <option value="{{ $customer->user_id }}">{{ $customer->name }}</option>
+                                <option value="{{ $customer->id }}">{{ $customer->name }}</option>
                             @endforeach
                         </select>
                     </div>
