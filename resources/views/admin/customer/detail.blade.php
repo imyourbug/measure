@@ -98,7 +98,7 @@
                 </div>
                 <div class="col-lg-6 col-md-12">
                     <div class="form-group">
-                        <label for="menu">Số điện thoại <span class="required">(*)</span></label>
+                        <label for="menu">Số điện thoại - Gồm 9 hoặc 10 số bắt đầu bằng 0 <span class="required">(*)</span></label>
                         <input type="text" class="form-control" name="tel" value="{{ old('tel') ?? $customer->tel }}"
                             placeholder="Nhập số điện thoại">
                     </div>

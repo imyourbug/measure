@@ -367,12 +367,12 @@
                     <tr>
                         <th>Nhiệm vụ</th>
                         <th>Hợp đồng</th>
-                        <th>Ghi chú</th>
                         <th>Tần suất</th>
                         <th>Xác nhận</th>
                         <th>Hiện trạng</th>
                         <th>Nguyên nhân</th>
                         <th>Biện pháp</th>
+                        <th>Ghi chú</th>
                         <th>Ngày lập</th>
                         <th>Thao tác</th>
                     </tr>

@@ -48,7 +48,7 @@
             <div class="row">
                 <div class="col-lg-6 col-md-12">
                     <div class="form-group">
-                        <label for="menu">Căn cước công dân</label>
+                        <label for="menu">Căn cước công dân - Gồm 12 số từ 0 đến 9 </label>
                         <input type="text" class="form-control" name="identification"
                             value="{{ old('identification') ?? $staff->identification }}"
                             placeholder="Nhập căn cước công dân">
@@ -56,7 +56,7 @@
                 </div>
                 <div class="col-lg-6 col-md-12">
                     <div class="form-group">
-                        <label for="menu">Điện thoại</label>
+                        <label for="menu">Điện thoại - Gồm 9 hoặc 10 số bắt đầu bằng 0 </label>
                         <input type="text" class="form-control" name="tel" value="{{ old('tel') ?? $staff->tel }}"
                             placeholder="Nhập điện thoại">
                     </div>

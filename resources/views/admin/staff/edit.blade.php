@@ -54,14 +54,14 @@
                             <div class="row">
                                 <div class="col-lg-6 col-md-12">
                                     <div class="form-group">
-                                        <label for="menu">Họ tên</label>
+                                        <label for="menu">Họ tên <span class="required">(*)</span></label>
                                         <input type="text" class="form-control" name="name"
                                             value="{{ old('name') ?? $staff->name }}" placeholder="Nhập họ tên">
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-md-12">
                                     <div class="form-group">
-                                        <label for="menu">Chức vụ</label>
+                                        <label for="menu">Chức vụ <span class="required">(*)</span></label>
                                         <input type="text" class="form-control" name="position"
                                             value="{{ old('position') ?? $staff->position }}" placeholder="Nhập chức vụ">
                                     </div>
@@ -70,7 +70,7 @@
                             <div class="row">
                                 <div class="col-lg-6 col-md-12">
                                     <div class="form-group">
-                                        <label for="menu">Căn cước công dân</label>
+                                        <label for="menu">Căn cước công dân - Gồm 12 số từ 0 đến 9 <span class="required">(*)</span></label>
                                         <input type="text" class="form-control" name="identification"
                                             value="{{ old('identification') ?? $staff->identification }}"
                                             placeholder="Nhập căn cước công dân">
@@ -78,7 +78,7 @@
                                 </div>
                                 <div class="col-lg-6 col-md-12">
                                     <div class="form-group">
-                                        <label for="menu">Điện thoại</label>
+                                        <label for="menu">Điện thoại - Gồm 9 hoặc 10 số bắt đầu bằng 0 <span class="required">(*)</span></label>
                                         <input type="text" class="form-control" name="tel"
                                             value="{{ old('tel') ?? $staff->tel }}" placeholder="Nhập điện thoại">
                                     </div>
