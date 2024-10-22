@@ -657,3 +657,28 @@ $(document).on('click', '.close', function (e) {
 $(document).on('click', '.display-year', function (e) {
     $('.blockChart').html('');
 });
+
+$(document.body).on("change", "#contracts", function (e) {
+    let selectedContracts = $('#contracts').select2('data');
+    if (selectedContracts.length > 0) {
+        let contract_id = selectedContracts[0].id;
+        $('.select-contract-copy').select2().val(contract_id).trigger('change');
+        $('.select-contract').select2().val(contract_id).trigger('change');
+    }
+});
+
+// $(document.body).on("change", ".select-contract-copy", function (e) {
+//     let selectedContracts = $('.select-contract-copy').select2('data');
+//     if (selectedContracts.length > 0) {
+//         let contract_id = selectedContracts[0].id;
+//         $('.select-contract').select2().val(contract_id).trigger('change');
+//     }
+// });
+
+// $(document.body).on("change", ".select-contract", function (e) {
+//     let selectedContracts = $('.select-contract').select2('data');
+//     if (selectedContracts.length > 0) {
+//         let contract_id = selectedContracts[0].id;
+//         $('.select-contract-copy').select2().val(contract_id).trigger('change');
+//     }
+// });

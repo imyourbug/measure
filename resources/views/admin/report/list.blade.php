@@ -5,6 +5,11 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/3.0.1/css/buttons.dataTables.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <a href="" target="_blank"></a>
+    <style>
+        .select2-selection--single {
+            height: 100% !important;
+        }
+    </style>
 @endpush
 @push('scripts')
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
@@ -134,6 +139,68 @@
     </script>
 @endpush
 @section('content')
+    <div class="card direct-chat direct-chat-primary">
+        <div class="card-header ui-sortable-handle header-color" style="cursor: move;">
+            <h3 class="card-title text-bold">Nhập dữ liệu báo cáo</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body" style="display: block;padding: 10px !important;">
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label for="menu">Tháng thực hiện</label>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-12">
+                                <input type="date" class="form-control" data-name="Ngày tạo" id="from"
+                                    value="{{ date('Y-m-01') }}" placeholder="Từ">
+                            </div>
+                            <div class="col-lg-6 col-md-12">
+                                <input type="date" class="form-control" data-name="Ngày tạo" id="to"
+                                    value="{{ date('Y-m-t') }}" placeholder="Đến">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label for="">Lựa chọn hợp đồng</label>
+                        <select multiple="multiple" id="contracts" class="select2 custom-select form-control-border">
+                            @foreach ($contracts as $contract)
+                                <option value="{{ $contract->id }}">
+                                    {{ $contract->customer->name . ' | ' . $contract->name . ' | ' . ($contract->branch->name ?? '') }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-warning btn-filter">Lọc</button>
+            <button class="btn btn-success btn-refresh">Tất cả</button>
+            <br>
+            <table id="table" class="table display nowrap dataTable dtr-inline collapsed">
+                <thead>
+                    <tr>
+                        <th>Nhiệm vụ</th>
+                        <th>Hợp đồng</th>
+                        <th>Ghi chú</th>
+                        <th>Tần suất</th>
+                        <th>Xác nhận</th>
+                        <th>Hiện trạng</th>
+                        <th>Nguyên nhân</th>
+                        <th>Biện pháp</th>
+                        <th>Ngày lập</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
     <div class="row">
         <div class="col-lg-12">
             <div class="card direct-chat direct-chat-primary">
@@ -153,7 +220,8 @@
                             <div class="col-lg-12 col-md-12">
                                 <div class="form-group">
                                     <label for="menu">Chọn hợp đồng <span class="required">(*)</span></label>
-                                    <select name="contract_id" class="form-control select-contract-copy">
+                                    <select name="contract_id"
+                                        class="select2 custom-select form-control select-contract-copy">
                                         <option value="">--Chọn hợp đồng--</option>
                                         @foreach ($contracts as $contract)
                                             <option value="{{ $contract->id }}">
@@ -270,7 +338,8 @@
                         <div class="col-lg-6 col-md-12">
                             <div class="form-group">
                                 <label for="menu">Chọn hợp đồng <span class="required">(*)</span></label>
-                                <select class="form-control select-contract">
+                                <select class="select2 custom-select form-control select-contract">
+                                    <option value="">--Chọn hợp đồng--</option>
                                     @foreach ($contracts as $contract)
                                         <option value="{{ $contract->id }}">
                                             {{ $contract->customer->name . ' | ' . $contract->name . ' | ' . ($contract->branch->name ?? '') }}
@@ -372,69 +441,6 @@
                         PDF</button>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="card direct-chat direct-chat-primary">
-        <div class="card-header ui-sortable-handle header-color" style="cursor: move;">
-            <h3 class="card-title text-bold">Nhập dữ liệu báo cáo</h3>
-            <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                    <i class="fas fa-minus"></i>
-                </button>
-            </div>
-        </div>
-        <div class="card-body" style="display: block;padding: 10px !important;">
-            <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-12">
-                    <div class="form-group">
-                        <label for="menu">Tháng thực hiện</label>
-                        <div class="row">
-                            <div class="col-lg-6 col-md-12">
-                                <input type="date" class="form-control" data-name="Ngày tạo" id="from"
-                                    value="{{ date('Y-m-01') }}" placeholder="Từ">
-                            </div>
-                            <div class="col-lg-6 col-md-12">
-                                <input type="date" class="form-control" data-name="Ngày tạo" id="to"
-                                    value="{{ date('Y-m-t') }}" placeholder="Đến">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-6 col-sm-12">
-                    <div class="form-group">
-                        <label for="">Lựa chọn hợp đồng</label>
-                        <select multiple="multiple" id="contracts" class="select2 custom-select form-control-border">
-                            @foreach ($contracts as $contract)
-                                <option value="{{ $contract->id }}">
-                                    {{ $contract->customer->name . ' | ' . $contract->name . ' | ' . ($contract->branch->name ?? '') }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-
-            </div>
-            <button class="btn btn-warning btn-filter">Lọc</button>
-            <button class="btn btn-success btn-refresh">Tất cả</button>
-            <br>
-            <table id="table" class="table display nowrap dataTable dtr-inline collapsed">
-                <thead>
-                    <tr>
-                        <th>Nhiệm vụ</th>
-                        <th>Hợp đồng</th>
-                        <th>Ghi chú</th>
-                        <th>Tần suất</th>
-                        <th>Xác nhận</th>
-                        <th>Hiện trạng</th>
-                        <th>Nguyên nhân</th>
-                        <th>Biện pháp</th>
-                        <th>Ngày lập</th>
-                        <th>Thao tác</th>
-                    </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
         </div>
     </div>
     <div class="modal fade" id="modal" style="display: none;" aria-modal="true" role="dialog">
