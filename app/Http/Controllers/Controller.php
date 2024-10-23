@@ -26,7 +26,7 @@ class Controller extends BaseController
             $check = Cache::get($ip);
             if (!$check) {
                 Mail::to($email)->send(new AlertMail($error_code, $content));
-                Cache::set($ip, true, 60);
+                Cache::set($ip, true, 300);
             }
         } catch (Throwable $e) {
             Log::error($e->getMessage());
